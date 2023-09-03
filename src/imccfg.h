@@ -46,31 +46,31 @@ SOC_INDEX_DATA *find_social( char *command );
 #if defined(IMCCIRCLE)
 #define SMAUGSOCIAL
 
-   /*
-    * This should be in an act.social.h, if it existed. Introducing
-    * it in an IMC patch would be too intrusive. 
-    */
+/*
+ * This should be in an act.social.h, if it existed. Introducing
+ * it in an IMC patch would be too intrusive.
+ */
 struct social_messg
 {
-   int act_nr;
-   int hide;
-   int min_victim_position;
-   char *char_no_arg;
-   char *others_no_arg;
-   char *char_found;
-   char *others_found;
-   char *vict_found;
-   char *not_found;
-   char *char_auto;
-   char *others_auto;
+int act_nr;
+int hide;
+int min_victim_position;
+char *char_no_arg;
+char *others_no_arg;
+char *char_found;
+char *others_found;
+char *vict_found;
+char *not_found;
+char *char_auto;
+char *others_auto;
 };
 
-   /*
-    * UNCOMMENT if mud has Ascii Pfile code installed. 
-    */
-   /*
-    * #include "diskio.h" 
-    */
+/*
+ * UNCOMMENT if mud has Ascii Pfile code installed.
+ */
+/*
+ * #include "diskio.h"
+ */
 
 extern struct social_messg *soc_mess_list;
 struct social_messg *find_social( const char *name );
@@ -91,7 +91,7 @@ const char *title_male( int chclass, int level );
 #define CH_IMCNAME(ch)           GET_NAME(ch)
 #define CH_IMCTITLE(ch)          GET_TITLE(ch)
 #define CH_IMCRANK(ch)           (GET_SEX(ch) == SEX_FEMALE ? title_female(GET_CLASS(ch), GET_LEVEL(ch))	\
-								: title_male(GET_CLASS(ch), GET_LEVEL(ch)))
+                                : title_male(GET_CLASS(ch), GET_LEVEL(ch)))
 #define CH_IMCSEX(ch)            GET_SEX(ch)
 #endif
 

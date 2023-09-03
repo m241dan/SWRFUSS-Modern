@@ -28,86 +28,93 @@
  *                      Enhanced ANSI parser by Samson                      *
  ****************************************************************************/
 
-void reset_colors( CHAR_DATA * );
-void set_char_color( short AType, CHAR_DATA * ch );
-void set_pager_color( short AType, CHAR_DATA * ch );
-const char *color_str( short AType, CHAR_DATA * ch );
-char *color_align( const char *argument, int size, int align );
-int color_strlen( const char *src );
-char *colorize( const char *txt, DESCRIPTOR_DATA * d );
-int colorcode( const char *src, char *dst, DESCRIPTOR_DATA * d, int dstlen, int *vislen );
+void reset_colors(CHAR_DATA*);
+
+void set_char_color(short AType, CHAR_DATA* ch);
+
+void set_pager_color(short AType, CHAR_DATA* ch);
+
+const char* color_str(short AType, CHAR_DATA* ch);
+
+char* color_align(const char* argument, int size, int align);
+
+int color_strlen(const char* src);
+
+char* colorize(const char* txt, DESCRIPTOR_DATA* d);
+
+int colorcode(const char* src, char* dst, DESCRIPTOR_DATA* d, int dstlen, int* vislen);
 
 
 #define COLOR_DIR "../color/"
-DECLARE_DO_FUN( do_color );
+DECLARE_DO_FUN(do_color);
 
 /*
  * Color Alignment Parameters
  */
-#define ALIGN_LEFT	1
-#define ALIGN_CENTER	2
-#define ALIGN_RIGHT	3
+#define ALIGN_LEFT    1
+#define ALIGN_CENTER    2
+#define ALIGN_RIGHT    3
 
 /* These are the ANSI codes for foreground text colors */
-#define ANSI_BLACK    	"\033[0;30m"
-#define ANSI_DRED    	"\033[0;31m"
+#define ANSI_BLACK        "\033[0;30m"
+#define ANSI_DRED        "\033[0;31m"
 #define ANSI_DGREEN     "\033[0;32m"
-#define ANSI_ORANGE    	"\033[0;33m"
-#define ANSI_DBLUE    	"\033[0;34m"
-#define ANSI_PURPLE    	"\033[0;35m"
-#define ANSI_CYAN	  	"\033[0;36m"
-#define ANSI_GREY		"\033[0;37m"
-#define ANSI_DGREY	"\033[1;30m"
-#define ANSI_RED		"\033[1;31m"
-#define ANSI_GREEN	"\033[1;32m"
-#define ANSI_YELLOW   	"\033[1;33m"
-#define ANSI_BLUE		"\033[1;34m"
-#define ANSI_PINK		"\033[1;35m"
-#define ANSI_LBLUE   	"\033[1;36m"
-#define ANSI_WHITE   	"\033[1;37m"
+#define ANSI_ORANGE        "\033[0;33m"
+#define ANSI_DBLUE        "\033[0;34m"
+#define ANSI_PURPLE        "\033[0;35m"
+#define ANSI_CYAN        "\033[0;36m"
+#define ANSI_GREY        "\033[0;37m"
+#define ANSI_DGREY    "\033[1;30m"
+#define ANSI_RED        "\033[1;31m"
+#define ANSI_GREEN    "\033[1;32m"
+#define ANSI_YELLOW    "\033[1;33m"
+#define ANSI_BLUE        "\033[1;34m"
+#define ANSI_PINK        "\033[1;35m"
+#define ANSI_LBLUE    "\033[1;36m"
+#define ANSI_WHITE    "\033[1;37m"
 
 /* These are the ANSI codes for blinking foreground text colors */
-#define BLINK_BLACK		"\033[0;5;30m"
-#define BLINK_DRED		"\033[0;5;31m"
-#define BLINK_DGREEN		"\033[0;5;32m"
-#define BLINK_ORANGE		"\033[0;5;33m"
-#define BLINK_DBLUE		"\033[0;5;34m"
-#define BLINK_PURPLE		"\033[0;5;35m"
-#define BLINK_CYAN		"\033[0;5;36m"
-#define BLINK_GREY		"\033[0;5;37m"
-#define BLINK_DGREY		"\033[1;5;30m"
-#define BLINK_RED			"\033[1;5;31m"
-#define BLINK_GREEN		"\033[1;5;32m"
-#define BLINK_YELLOW		"\033[1;5;33m"
-#define BLINK_BLUE		"\033[1;5;34m"
-#define BLINK_PINK		"\033[1;5;35m"
-#define BLINK_LBLUE		"\033[1;5;36m"
-#define BLINK_WHITE		"\033[1;5;37m"
+#define BLINK_BLACK        "\033[0;5;30m"
+#define BLINK_DRED        "\033[0;5;31m"
+#define BLINK_DGREEN        "\033[0;5;32m"
+#define BLINK_ORANGE        "\033[0;5;33m"
+#define BLINK_DBLUE        "\033[0;5;34m"
+#define BLINK_PURPLE        "\033[0;5;35m"
+#define BLINK_CYAN        "\033[0;5;36m"
+#define BLINK_GREY        "\033[0;5;37m"
+#define BLINK_DGREY        "\033[1;5;30m"
+#define BLINK_RED            "\033[1;5;31m"
+#define BLINK_GREEN        "\033[1;5;32m"
+#define BLINK_YELLOW        "\033[1;5;33m"
+#define BLINK_BLUE        "\033[1;5;34m"
+#define BLINK_PINK        "\033[1;5;35m"
+#define BLINK_LBLUE        "\033[1;5;36m"
+#define BLINK_WHITE        "\033[1;5;37m"
 
 /* These are the ANSI codes for background colors */
-#define BACK_BLACK 	"\033[40m"
-#define BACK_DRED  	"\033[41m"
-#define BACK_DGREEN	"\033[42m"
+#define BACK_BLACK    "\033[40m"
+#define BACK_DRED    "\033[41m"
+#define BACK_DGREEN    "\033[42m"
 #define BACK_ORANGE     "\033[43m"
 #define BACK_DBLUE      "\033[44m"
 #define BACK_PURPLE     "\033[45m"
 #define BACK_CYAN       "\033[46m"
 #define BACK_GREY       "\033[47m"
-#define BACK_DGREY    	"\033[50m"
-#define BACK_RED       	"\033[51m"
-#define BACK_GREEN    	"\033[52m"
-#define BACK_YELLOW    	"\033[53m"
-#define BACK_BLUE    	"\033[54m"
-#define BACK_PINK   	"\033[55m"
-#define BACK_LBLUE    	"\033[56m"
-#define BACK_WHITE    	"\033[57m"
+#define BACK_DGREY        "\033[50m"
+#define BACK_RED        "\033[51m"
+#define BACK_GREEN        "\033[52m"
+#define BACK_YELLOW        "\033[53m"
+#define BACK_BLUE        "\033[54m"
+#define BACK_PINK    "\033[55m"
+#define BACK_LBLUE        "\033[56m"
+#define BACK_WHITE        "\033[57m"
 
 /* Other miscelaneous ANSI tags that can be used */
-#define ANSI_RESET	"\033[0m"   /* Reset to terminal default */
-#define ANSI_BOLD		"\033[1m"   /* For bright color stuff */
-#define ANSI_ITALIC	"\033[3m"   /* Italic text */
+#define ANSI_RESET    "\033[0m"   /* Reset to terminal default */
+#define ANSI_BOLD        "\033[1m"   /* For bright color stuff */
+#define ANSI_ITALIC    "\033[3m"   /* Italic text */
 #define ANSI_UNDERLINE  "\033[4m"   /* Underline text */
-#define ANSI_BLINK	"\033[5m"   /* Blinking text */
+#define ANSI_BLINK    "\033[5m"   /* Blinking text */
 #define ANSI_REVERSE    "\033[7m"   /* Reverse colors */
 #define ANSI_STRIKEOUT  "\033[9m"   /* Overstrike line */
 
