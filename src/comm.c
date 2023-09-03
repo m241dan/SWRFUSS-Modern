@@ -46,6 +46,7 @@
 #include <arpa/inet.h>
 #include <arpa/telnet.h>
 #include <netdb.h>
+#include <ranges>
 
 #define MAX_NEST        100
 static OBJ_DATA* rgObjNest[MAX_NEST];
@@ -1879,24 +1880,23 @@ void nanny_get_new_sex(DESCRIPTOR_DATA* d, const char* argument)
     write_to_buffer(d, "\r\nYou may choose from the following races, or type help [race] to learn more:\r\n[", 0);
     buf[0] = '\0';
 
-    for (iRace = 0; iRace < MAX_RACE; iRace++)
+    // there is a better way to do this but the c++23 standard library is just not fully implemented yet... (sigh)
+    for (const auto& [index, name] : race_table | std::views::transform([](const auto& race) {return race.race_name;}) | std::views::enumerate)
     {
-        if (race_table[iRace].race_name && race_table[iRace].race_name[0] != '\0')
+        if (index > 0)
         {
-            if (iRace > 0)
+            if (strlen(buf) + strlen(name) > 77)
             {
-                if (strlen(buf) + strlen(race_table[iRace].race_name) > 77)
-                {
-                    mudstrlcat(buf, "\r\n", MAX_STRING_LENGTH);
-                    write_to_buffer(d, buf, 0);
-                    buf[0] = '\0';
-                }
-                else
-                    mudstrlcat(buf, " ", MAX_STRING_LENGTH);
+                mudstrlcat(buf, "\r\n", MAX_STRING_LENGTH);
+                write_to_buffer(d, buf, 0);
+                buf[0] = '\0';
             }
-            mudstrlcat(buf, race_table[iRace].race_name, MAX_STRING_LENGTH);
+            else
+                mudstrlcat(buf, " ", MAX_STRING_LENGTH);
         }
+        mudstrlcat(buf, name, MAX_STRING_LENGTH);
     }
+
     mudstrlcat(buf, "]\r\n: ", MAX_STRING_LENGTH);
     write_to_buffer(d, buf, 0);
     d->connected = CON_GET_NEW_RACE;

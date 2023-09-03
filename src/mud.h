@@ -22,6 +22,7 @@
 #include <limits.h>
 #include <sys/cdefs.h>
 #include <sys/time.h>
+#include <vector>
 
 #ifndef __cplusplus
 typedef unsigned char bool;
@@ -3133,7 +3134,27 @@ extern const struct cha_app_type cha_app[26];
 extern const struct lck_app_type lck_app[26];
 extern const struct frc_app_type frc_app[26];
 
-extern const struct race_type race_table[MAX_RACE];
+const std::vector<race_type> race_table {
+    /*
+     * race name     DEF_AFF      st dx ws in cn ch lk fc hp mn re su   RESTRICTION  LANGUAGE
+     */
+    {"Human",     0,                  0,  0,  0,  0,  0,  0,  0, 0, 0, 0,   0, 0, 0, LANG_COMMON},
+    {"Wookiee",   0,                  8,  -1, -3, 0,  2,  -2, 0, 0, 3, 0,   0, 0, 0, LANG_WOOKIEE},
+    {"Twi'lek",   0,                  0,  2,  2,  2,  -1, -1, 0, 0, 0, 0,   0, 0, 0, LANG_TWI_LEK},
+    {"Rodian",    0,                  0,  3,  0,  0,  1,  -1, 0, 0, 0, 0,   0, 0, 0, LANG_RODIAN},
+    {"Hutt",      0,                  -3, -9, -3, 3,  5,  -6, 0, 0, 3, 0,   0, 0, 0, LANG_HUTT},
+    {"Mon Calamari", AFF_AQUA_BREATH, 0,  -1, 2,  4,  0,  0,  0, 0, 0, 0,   0, 0, 0, LANG_MON_CALAMARI},
+    {"Noghri",       AFF_SNEAK,       0,  8,  -2, -1, 0,  -3, 0, 0, 0, 0,   0, 0, 0, LANG_NOGHRI},
+    {"Gamorrean", 0,                  6,  0,  -5, -5, 5,  -2, 0, 0, 3, 0,   0, 0, 0, LANG_GAMORREAN},
+    {"Jawa",      0,                  -3, 3,  1,  0,  0,  -2, 0, 0, 0, 0,   0, 0, 0, LANG_JAWA},
+    {"Adarian",   0,                  -2, -1, +2, +2, -1, +2, 0, 0, 0, 0,   0, 0, 0, LANG_ADARIAN},
+    {"Ewok",      0,                  -2, -1, -5, -5, -2, +8, 0, 0, 0, 0,   0, 0, 0, LANG_EWOK},
+    {"Verpine",   0,                  -1, 0,  +1, +6, -1, 0,  0, 0, 0, 0,   0, 0, 0, LANG_VERPINE},
+    {"Defel",        AFF_INVISIBLE,   +1, +3, -3, -3, +1, 0,  0, 0, 0, 0,   0, 0, 0, LANG_DEFEL},
+    {"Trandoshan",   AFF_INFRARED,    +2, 0,  0,  0,  +6, -1, 0, 0, 0, 0,   0, 0, 0, LANG_TRANDOSHAN},
+    {"Chadra-Fan",   AFF_INFRARED,    -3, +3, 0,  +2, -1, 0,  0, 0, 0, 0,   0, 0, 0, LANG_CHADRA_FAN},
+    {"Quarren",      AFF_AQUA_BREATH + AFF_INFRARED, -1, +1, 0, +1, -1, 0, 0, 0, 0, 0, 0, 0, 0, LANG_MON_CALAMARI},
+};
 extern const struct liq_type  liq_table[LIQ_MAX];
 extern const char* const attack_table[13];
 extern const char* const ability_name[MAX_ABILITY];
