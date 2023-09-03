@@ -183,7 +183,7 @@ bool check_skill(CHAR_DATA* ch, const char* command, const char* argument)
     if (IS_NPC(ch) && (IS_AFFECTED(ch, AFF_CHARM) || IS_AFFECTED(ch, AFF_POSSESS)))
     {
         send_to_char("For some reason, you seem unable to perform that...\r\n", ch);
-        act(AT_GREY, "$n looks around.", ch, NULL, NULL, TO_ROOM);
+        act(AT_GREY, "$n looks around.", ch, nullptr, nullptr, TO_ROOM);
         return TRUE;
     }
 
@@ -211,9 +211,9 @@ bool check_skill(CHAR_DATA* ch, const char* command, const char* argument)
     if (!skill_table[sn]->skill_fun)
     {
         ch_ret   retcode  = rNONE;
-        void     * vo     = NULL;
-        CHAR_DATA* victim = NULL;
-        OBJ_DATA * obj    = NULL;
+        void     * vo     = nullptr;
+        CHAR_DATA* victim = nullptr;
+        OBJ_DATA * obj    = nullptr;
 
         target_name = "";
 
@@ -223,10 +223,10 @@ bool check_skill(CHAR_DATA* ch, const char* command, const char* argument)
                 send_to_char("Something went wrong...\r\n", ch);
                 return TRUE;
 
-            case TAR_IGNORE:vo = NULL;
+            case TAR_IGNORE:vo = nullptr;
                 if (argument[0] == '\0')
                 {
-                    if ((victim = who_fighting(ch)) != NULL)
+                    if ((victim = who_fighting(ch)) != nullptr)
                         target_name = victim->name;
                 }
                 else
@@ -234,12 +234,12 @@ bool check_skill(CHAR_DATA* ch, const char* command, const char* argument)
                 break;
 
             case TAR_CHAR_OFFENSIVE:
-                if (argument[0] == '\0' && (victim = who_fighting(ch)) == NULL)
+                if (argument[0] == '\0' && (victim = who_fighting(ch)) == nullptr)
                 {
                     ch_printf(ch, "%s who?\r\n", capitalize(skill_table[sn]->name));
                     return TRUE;
                 }
-                else if (argument[0] != '\0' && (victim = get_char_room(ch, argument)) == NULL)
+                else if (argument[0] != '\0' && (victim = get_char_room(ch, argument)) == nullptr)
                 {
                     send_to_char("They aren't here.\r\n", ch);
                     return TRUE;
@@ -250,7 +250,7 @@ bool check_skill(CHAR_DATA* ch, const char* command, const char* argument)
                 break;
 
             case TAR_CHAR_DEFENSIVE:
-                if (argument[0] != '\0' && (victim = get_char_room(ch, argument)) == NULL)
+                if (argument[0] != '\0' && (victim = get_char_room(ch, argument)) == nullptr)
                 {
                     send_to_char("They aren't here.\r\n", ch);
                     return TRUE;
@@ -264,7 +264,7 @@ bool check_skill(CHAR_DATA* ch, const char* command, const char* argument)
                 break;
 
             case TAR_OBJ_INV:
-                if ((obj = get_obj_carry(ch, argument)) == NULL)
+                if ((obj = get_obj_carry(ch, argument)) == nullptr)
                 {
                     send_to_char("You can't find that.\r\n", ch);
                     return TRUE;
@@ -355,7 +355,7 @@ void do_slookup(CHAR_DATA* ch, const char* argument)
     char     buf[MAX_STRING_LENGTH];
     char     arg[MAX_INPUT_LENGTH];
     int      sn;
-    SKILLTYPE* skill = NULL;
+    SKILLTYPE* skill = nullptr;
 
     one_argument(argument, arg);
     if (arg[0] == '\0')
@@ -395,7 +395,7 @@ void do_slookup(CHAR_DATA* ch, const char* argument)
         else if (is_number(arg))
         {
             sn         = atoi(arg);
-            if ((skill = get_skilltype(sn)) == NULL)
+            if ((skill = get_skilltype(sn)) == nullptr)
             {
                 send_to_char("Invalid sn.\r\n", ch);
                 return;
@@ -674,7 +674,7 @@ void do_sset(CHAR_DATA* ch, const char* argument)
         }
         else
         {
-            if ((skill = get_skilltype(sn)) == NULL)
+            if ((skill = get_skilltype(sn)) == nullptr)
             {
                 send_to_char("Skill number out of range.\r\n", ch);
                 return;
@@ -787,14 +787,14 @@ void do_sset(CHAR_DATA* ch, const char* argument)
             if (!str_prefix("do_", argument) && (dofun = skill_function(argument)) != skill_notfound)
             {
                 skill->skill_fun = dofun;
-                skill->spell_fun = NULL;
+                skill->spell_fun = nullptr;
                 DISPOSE(skill->skill_fun_name);
                 skill->skill_fun_name = str_dup(argument);
             }
             else if ((spellfun = spell_function(argument)) != spell_notfound)
             {
                 skill->spell_fun = spellfun;
-                skill->skill_fun = NULL;
+                skill->skill_fun = nullptr;
                 DISPOSE(skill->skill_fun_name);
                 skill->spell_fun_name = str_dup(argument);
             }
@@ -1132,7 +1132,7 @@ void do_sset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg1)) == NULL)
+    if ((victim = get_char_world(ch, arg1)) == nullptr)
     {
         if ((sn = skill_lookup(arg1)) >= 0)
         {
@@ -1281,7 +1281,7 @@ void do_gouge(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = who_fighting(ch)) == NULL)
+    if ((victim = who_fighting(ch)) == nullptr)
     {
         send_to_char("You aren't fighting anyone.\r\n", ch);
         return;
@@ -1303,7 +1303,7 @@ void do_gouge(CHAR_DATA* ch, const char* argument)
                 af.duration  = 3 + (ch->skill_level[COMBAT_ABILITY] / 20);
                 af.bitvector = AFF_BLIND;
                 affect_to_char(victim, &af);
-                act(AT_SKILL, "You can't see a thing!", victim, NULL, NULL, TO_CHAR);
+                act(AT_SKILL, "You can't see a thing!", victim, nullptr, nullptr, TO_CHAR);
             }
             WAIT_STATE(ch, PULSE_VIOLENCE);
             WAIT_STATE(victim, PULSE_VIOLENCE);
@@ -1319,8 +1319,8 @@ void do_gouge(CHAR_DATA* ch, const char* argument)
                 AT_BLOOD,
                 "Your fingers plunge into your victim's brain, causing immediate death!",
                 ch,
-                NULL,
-                NULL,
+                nullptr,
+                nullptr,
                 TO_CHAR
             );
         }
@@ -1388,8 +1388,8 @@ void do_detrap(CHAR_DATA* ch, const char* argument)
                 send_to_char("You can't find that here.\r\n", ch);
                 return;
             }
-            act(AT_ACTION, "You carefully begin your attempt to remove a trap from $p...", ch, obj, NULL, TO_CHAR);
-            act(AT_ACTION, "$n carefully attempts to remove a trap from $p...", ch, obj, NULL, TO_ROOM);
+            act(AT_ACTION, "You carefully begin your attempt to remove a trap from $p...", ch, obj, nullptr, TO_CHAR);
+            act(AT_ACTION, "$n carefully attempts to remove a trap from $p...", ch, obj, nullptr, TO_ROOM);
             ch->dest_buf = str_dup(obj->name);
             add_timer(ch, TIMER_DO_FUN, 3, do_detrap, 1);
             /*	    WAIT_STATE( ch, skill_table[gsn_detrap]->beats ); */
@@ -1398,12 +1398,12 @@ void do_detrap(CHAR_DATA* ch, const char* argument)
             if (!ch->dest_buf)
             {
                 send_to_char("Your detrapping was interrupted!\r\n", ch);
-                bug("%s: ch->dest_buf NULL!", __func__);
+                bug("%s: ch->dest_buf nullptr!", __func__);
                 return;
             }
             mudstrlcpy(arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH);
             DISPOSE(ch->dest_buf);
-            ch->dest_buf = NULL;
+            ch->dest_buf = nullptr;
             ch->substate = SUB_NONE;
             break;
         case SUB_TIMER_DO_ABORT:DISPOSE(ch->dest_buf);
@@ -1430,7 +1430,7 @@ void do_detrap(CHAR_DATA* ch, const char* argument)
         send_to_char("You can't find that here.\r\n", ch);
         return;
     }
-    if ((trap = get_trap(obj)) == NULL)
+    if ((trap = get_trap(obj)) == nullptr)
     {
         send_to_char("You find no trap on that.\r\n", ch);
         return;
@@ -1477,7 +1477,7 @@ void do_dig(CHAR_DATA* ch, const char* argument)
             one_argument(argument, arg);
             if (arg[0] != '\0')
             {
-                if ((pexit = find_door(ch, arg, TRUE)) == NULL && get_dir(arg) == -1)
+                if ((pexit = find_door(ch, arg, TRUE)) == nullptr && get_dir(arg) == -1)
                 {
                     send_to_char("What direction is that?\r\n", ch);
                     return;
@@ -1509,15 +1509,15 @@ void do_dig(CHAR_DATA* ch, const char* argument)
             add_timer(ch, TIMER_DO_FUN, UMIN(skill_table[gsn_dig]->beats / 10, 3), do_dig, 1);
             ch->dest_buf = str_dup(arg);
             send_to_char("You begin digging...\r\n", ch);
-            act(AT_PLAIN, "$n begins digging...", ch, NULL, NULL, TO_ROOM);
+            act(AT_PLAIN, "$n begins digging...", ch, nullptr, nullptr, TO_ROOM);
             return;
 
         case 1:
             if (!ch->dest_buf)
             {
                 send_to_char("Your digging was interrupted!\r\n", ch);
-                act(AT_PLAIN, "$n's digging was interrupted!", ch, NULL, NULL, TO_ROOM);
-                bug("%s: dest_buf NULL", __func__);
+                act(AT_PLAIN, "$n's digging was interrupted!", ch, nullptr, nullptr, TO_ROOM);
+                bug("%s: dest_buf nullptr", __func__);
                 return;
             }
             mudstrlcpy(arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH);
@@ -1527,7 +1527,7 @@ void do_dig(CHAR_DATA* ch, const char* argument)
         case SUB_TIMER_DO_ABORT:DISPOSE(ch->dest_buf);
             ch->substate = SUB_NONE;
             send_to_char("You stop digging...\r\n", ch);
-            act(AT_PLAIN, "$n stops digging...", ch, NULL, NULL, TO_ROOM);
+            act(AT_PLAIN, "$n stops digging...", ch, nullptr, nullptr, TO_ROOM);
             return;
     }
 
@@ -1549,7 +1549,7 @@ void do_dig(CHAR_DATA* ch, const char* argument)
     */
     if (arg[0] != '\0')
     {
-        if ((pexit = find_door(ch, arg, TRUE)) != NULL
+        if ((pexit = find_door(ch, arg, TRUE)) != nullptr
             && IS_SET(pexit->exit_info, EX_DIG) && IS_SET(pexit->exit_info, EX_CLOSED))
         {
             /*
@@ -1559,14 +1559,14 @@ void do_dig(CHAR_DATA* ch, const char* argument)
             {
                 REMOVE_BIT(pexit->exit_info, EX_CLOSED);
                 send_to_char("You dig open a passageway!\r\n", ch);
-                act(AT_PLAIN, "$n digs open a passageway!", ch, NULL, NULL, TO_ROOM);
+                act(AT_PLAIN, "$n digs open a passageway!", ch, nullptr, nullptr, TO_ROOM);
                 learn_from_success(ch, gsn_dig);
                 return;
             }
         }
         learn_from_failure(ch, gsn_dig);
         send_to_char("Your dig did not discover any exit...\r\n", ch);
-        act(AT_PLAIN, "$n's dig did not discover any exit...", ch, NULL, NULL, TO_ROOM);
+        act(AT_PLAIN, "$n's dig did not discover any exit...", ch, nullptr, nullptr, TO_ROOM);
         return;
     }
 
@@ -1589,22 +1589,22 @@ void do_dig(CHAR_DATA* ch, const char* argument)
     if (!found)
     {
         send_to_char("Your dig uncovered nothing.\r\n", ch);
-        act(AT_PLAIN, "$n's dig uncovered nothing.", ch, NULL, NULL, TO_ROOM);
+        act(AT_PLAIN, "$n's dig uncovered nothing.", ch, nullptr, nullptr, TO_ROOM);
         learn_from_failure(ch, gsn_dig);
         return;
     }
 
     separate_obj(obj);
     REMOVE_BIT(obj->extra_flags, ITEM_BURRIED);
-    act(AT_SKILL, "Your dig uncovered $p!", ch, obj, NULL, TO_CHAR);
-    act(AT_SKILL, "$n's dig uncovered $p!", ch, obj, NULL, TO_ROOM);
+    act(AT_SKILL, "Your dig uncovered $p!", ch, obj, nullptr, TO_CHAR);
+    act(AT_SKILL, "$n's dig uncovered $p!", ch, obj, nullptr, TO_ROOM);
     learn_from_success(ch, gsn_dig);
 }
 
 void do_search(CHAR_DATA* ch, const char* argument)
 {
     char    arg[MAX_INPUT_LENGTH];
-    OBJ_DATA* obj = NULL;
+    OBJ_DATA* obj = nullptr;
     OBJ_DATA* container;
     OBJ_DATA* startobj;
     int     percent, door;
@@ -1653,7 +1653,7 @@ void do_search(CHAR_DATA* ch, const char* argument)
             if (!ch->dest_buf)
             {
                 send_to_char("Your search was interrupted!\r\n", ch);
-                bug("%s: dest_buf NULL", __func__);
+                bug("%s: dest_buf nullptr", __func__);
                 return;
             }
             mudstrlcpy(arg, (const char*)ch->dest_buf, MAX_INPUT_LENGTH);
@@ -1672,7 +1672,7 @@ void do_search(CHAR_DATA* ch, const char* argument)
     else
     {
         if ((door = get_door(arg)) != -1)
-            startobj = NULL;
+            startobj = nullptr;
         else
         {
             container = get_obj_here(ch, arg);
@@ -1700,13 +1700,13 @@ void do_search(CHAR_DATA* ch, const char* argument)
     {
         EXIT_DATA* pexit;
 
-        if ((pexit = get_exit(ch->in_room, door)) != NULL
+        if ((pexit = get_exit(ch->in_room, door)) != nullptr
             && IS_SET(pexit->exit_info, EX_SECRET)
             && IS_SET(pexit->exit_info, EX_xSEARCHABLE)
             && percent < (IS_NPC(ch) ? 80 : ch->pcdata->learned[gsn_search]))
         {
-            act(AT_SKILL, "Your search reveals the $d!", ch, NULL, pexit->keyword, TO_CHAR);
-            act(AT_SKILL, "$n finds the $d!", ch, NULL, pexit->keyword, TO_ROOM);
+            act(AT_SKILL, "Your search reveals the $d!", ch, nullptr, pexit->keyword, TO_CHAR);
+            act(AT_SKILL, "$n finds the $d!", ch, nullptr, pexit->keyword, TO_ROOM);
             REMOVE_BIT(pexit->exit_info, EX_SECRET);
             learn_from_success(ch, gsn_search);
             return;
@@ -1731,8 +1731,8 @@ void do_search(CHAR_DATA* ch, const char* argument)
 
     separate_obj(obj);
     REMOVE_BIT(obj->extra_flags, ITEM_HIDDEN);
-    act(AT_SKILL, "Your search reveals $p!", ch, obj, NULL, TO_CHAR);
-    act(AT_SKILL, "$n finds $p!", ch, obj, NULL, TO_ROOM);
+    act(AT_SKILL, "Your search reveals $p!", ch, obj, nullptr, TO_CHAR);
+    act(AT_SKILL, "$n finds $p!", ch, obj, nullptr, TO_ROOM);
     learn_from_success(ch, gsn_search);
 }
 
@@ -1763,7 +1763,7 @@ void do_steal(CHAR_DATA* ch, const char* argument)
     if (ms_find_obj(ch))
         return;
 
-    if ((victim = get_char_room(ch, arg2)) == NULL)
+    if ((victim = get_char_room(ch, arg2)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -1798,8 +1798,8 @@ void do_steal(CHAR_DATA* ch, const char* argument)
        * Failure.
        */
         send_to_char("Oops...\r\n", ch);
-        act(AT_ACTION, "$n tried to steal from you!\r\n", ch, NULL, victim, TO_VICT);
-        act(AT_ACTION, "$n tried to steal from $N.\r\n", ch, NULL, victim, TO_NOTVICT);
+        act(AT_ACTION, "$n tried to steal from you!\r\n", ch, nullptr, victim, TO_VICT);
+        act(AT_ACTION, "$n tried to steal from $N.\r\n", ch, nullptr, victim, TO_NOTVICT);
 
         snprintf(buf, MAX_STRING_LENGTH, "%s is a bloody thief!", ch->name);
         do_yell(victim, buf);
@@ -1818,7 +1818,7 @@ void do_steal(CHAR_DATA* ch, const char* argument)
              */
                 if (IS_NPC(ch))
                 {
-                    if ((mst = ch->master) == NULL)
+                    if ((mst = ch->master) == nullptr)
                         return;
                 }
                 else
@@ -1865,11 +1865,11 @@ void do_steal(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((obj = get_obj_carry(victim, arg1)) == NULL)
+    if ((obj = get_obj_carry(victim, arg1)) == nullptr)
     {
         if (victim->position <= POS_SLEEPING)
         {
-            if ((obj = get_obj_wear(victim, arg1)) != NULL)
+            if ((obj = get_obj_wear(victim, arg1)) != nullptr)
             {
                 if ((obj_next = get_eq_char(victim, obj->wear_loc)) != obj)
                 {
@@ -1954,7 +1954,7 @@ void do_backstab(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -1972,7 +1972,7 @@ void do_backstab(CHAR_DATA* ch, const char* argument)
     /*
     * Added stabbing weapon. -Narn
     */
-    if ((obj = get_eq_char(ch, WEAR_WIELD)) == NULL || (obj->value[3] != WEAPON_VIBRO_BLADE))
+    if ((obj = get_eq_char(ch, WEAR_WIELD)) == nullptr || (obj->value[3] != WEAPON_VIBRO_BLADE))
     {
         send_to_char("You need to wield a stabbing weapon.\r\n", ch);
         return;
@@ -1989,7 +1989,7 @@ void do_backstab(CHAR_DATA* ch, const char* argument)
     */
     if (victim->hit < victim->max_hit && IS_AWAKE(victim))
     {
-        act(AT_PLAIN, "$N is hurt and suspicious ... you can't sneak up.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$N is hurt and suspicious ... you can't sneak up.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -2029,7 +2029,7 @@ void do_rescue(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -2053,7 +2053,7 @@ void do_rescue(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((fch = who_fighting(victim)) == NULL)
+    if ((fch = who_fighting(victim)) == nullptr)
     {
         send_to_char("They are not fighting right now.\r\n", ch);
         return;
@@ -2074,15 +2074,15 @@ void do_rescue(CHAR_DATA* ch, const char* argument)
     if (!IS_NPC(ch) && percent > ch->pcdata->learned[gsn_rescue])
     {
         send_to_char("You fail the rescue.\r\n", ch);
-        act(AT_SKILL, "$n tries to rescue you!", ch, NULL, victim, TO_VICT);
-        act(AT_SKILL, "$n tries to rescue $N!", ch, NULL, victim, TO_NOTVICT);
+        act(AT_SKILL, "$n tries to rescue you!", ch, nullptr, victim, TO_VICT);
+        act(AT_SKILL, "$n tries to rescue $N!", ch, nullptr, victim, TO_NOTVICT);
         learn_from_failure(ch, gsn_rescue);
         return;
     }
 
-    act(AT_SKILL, "You rescue $N!", ch, NULL, victim, TO_CHAR);
-    act(AT_SKILL, "$n rescues you!", ch, NULL, victim, TO_VICT);
-    act(AT_SKILL, "$n moves in front of $N!", ch, NULL, victim, TO_NOTVICT);
+    act(AT_SKILL, "You rescue $N!", ch, nullptr, victim, TO_CHAR);
+    act(AT_SKILL, "$n rescues you!", ch, nullptr, victim, TO_VICT);
+    act(AT_SKILL, "$n moves in front of $N!", ch, nullptr, victim, TO_NOTVICT);
 
     ch->alignment = ch->alignment + 50;
     ch->alignment = URANGE(-1000, ch->alignment, 1000);
@@ -2110,7 +2110,7 @@ void do_kick(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = who_fighting(ch)) == NULL)
+    if ((victim = who_fighting(ch)) == nullptr)
     {
         send_to_char("You aren't fighting anyone.\r\n", ch);
         return;
@@ -2145,7 +2145,7 @@ void do_punch(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = who_fighting(ch)) == NULL)
+    if ((victim = who_fighting(ch)) == nullptr)
     {
         send_to_char("You aren't fighting anyone.\r\n", ch);
         return;
@@ -2197,7 +2197,7 @@ void do_bash(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = who_fighting(ch)) == NULL)
+    if ((victim = who_fighting(ch)) == nullptr)
     {
         send_to_char("You aren't fighting anyone.\r\n", ch);
         return;
@@ -2249,7 +2249,7 @@ void do_stun(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = who_fighting(ch)) == NULL)
+    if ((victim = who_fighting(ch)) == nullptr)
     {
         send_to_char("You aren't fighting anyone.\r\n", ch);
         return;
@@ -2289,9 +2289,9 @@ void do_stun(CHAR_DATA* ch, const char* argument)
         ch->move -= 15;
         WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
         WAIT_STATE(victim, PULSE_VIOLENCE);
-        act(AT_SKILL, "$N smashes into you, leaving you stunned!", victim, NULL, ch, TO_CHAR);
-        act(AT_SKILL, "You smash into $N, leaving $M stunned!", ch, NULL, victim, TO_CHAR);
-        act(AT_SKILL, "$n smashes into $N, leaving $M stunned!", ch, NULL, victim, TO_NOTVICT);
+        act(AT_SKILL, "$N smashes into you, leaving you stunned!", victim, nullptr, ch, TO_CHAR);
+        act(AT_SKILL, "You smash into $N, leaving $M stunned!", ch, nullptr, victim, TO_CHAR);
+        act(AT_SKILL, "$n smashes into $N, leaving $M stunned!", ch, nullptr, victim, TO_NOTVICT);
         if (!IS_AFFECTED(victim, AFF_PARALYSIS))
         {
             af.type      = gsn_stun;
@@ -2308,9 +2308,9 @@ void do_stun(CHAR_DATA* ch, const char* argument)
         WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
         ch->move -= 5;
         learn_from_failure(ch, gsn_stun);
-        act(AT_SKILL, "$N charges at you screaming, but you dodge out of the way.", victim, NULL, ch, TO_CHAR);
-        act(AT_SKILL, "Your attempt to stun $N leaves you racing past $E as $e laughs.", ch, NULL, victim, TO_CHAR);
-        act(AT_SKILL, "$n charges screaming at $N, but keeps going right on past.", ch, NULL, victim, TO_NOTVICT);
+        act(AT_SKILL, "$N charges at you screaming, but you dodge out of the way.", victim, nullptr, ch, TO_CHAR);
+        act(AT_SKILL, "Your attempt to stun $N leaves you racing past $E as $e laughs.", ch, nullptr, victim, TO_CHAR);
+        act(AT_SKILL, "$n charges screaming at $N, but keeps going right on past.", ch, nullptr, victim, TO_NOTVICT);
     }
 }
 
@@ -2328,13 +2328,13 @@ void disarm(CHAR_DATA* ch, CHAR_DATA* victim)
 {
     OBJ_DATA* obj, * tmpobj;
 
-    if ((obj = get_eq_char(victim, WEAR_WIELD)) == NULL)
+    if ((obj = get_eq_char(victim, WEAR_WIELD)) == nullptr)
         return;
 
-    if ((tmpobj = get_eq_char(victim, WEAR_DUAL_WIELD)) != NULL && number_bits(1) == 0)
+    if ((tmpobj = get_eq_char(victim, WEAR_DUAL_WIELD)) != nullptr && number_bits(1) == 0)
         obj = tmpobj;
 
-    if (get_eq_char(ch, WEAR_WIELD) == NULL && number_bits(1) == 0)
+    if (get_eq_char(ch, WEAR_WIELD) == nullptr && number_bits(1) == 0)
     {
         learn_from_failure(ch, gsn_disarm);
         return;
@@ -2352,12 +2352,12 @@ void disarm(CHAR_DATA* ch, CHAR_DATA* victim)
         return;
     }
 
-    act(AT_SKILL, "$n DISARMS you!", ch, NULL, victim, TO_VICT);
-    act(AT_SKILL, "You disarm $N!", ch, NULL, victim, TO_CHAR);
-    act(AT_SKILL, "$n disarms $N!", ch, NULL, victim, TO_NOTVICT);
+    act(AT_SKILL, "$n DISARMS you!", ch, nullptr, victim, TO_VICT);
+    act(AT_SKILL, "You disarm $N!", ch, nullptr, victim, TO_CHAR);
+    act(AT_SKILL, "$n disarms $N!", ch, nullptr, victim, TO_NOTVICT);
     learn_from_success(ch, gsn_disarm);
 
-    if (obj == get_eq_char(victim, WEAR_WIELD) && (tmpobj = get_eq_char(victim, WEAR_DUAL_WIELD)) != NULL)
+    if (obj == get_eq_char(victim, WEAR_WIELD) && (tmpobj = get_eq_char(victim, WEAR_DUAL_WIELD)) != nullptr)
         tmpobj->wear_loc = WEAR_WIELD;
 
     obj_from_char(obj);
@@ -2382,19 +2382,19 @@ void do_disarm(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (get_eq_char(ch, WEAR_WIELD) == NULL)
+    if (get_eq_char(ch, WEAR_WIELD) == nullptr)
     {
         send_to_char("You must wield a weapon to disarm.\r\n", ch);
         return;
     }
 
-    if ((victim = who_fighting(ch)) == NULL)
+    if ((victim = who_fighting(ch)) == nullptr)
     {
         send_to_char("You aren't fighting anyone.\r\n", ch);
         return;
     }
 
-    if ((obj = get_eq_char(victim, WEAR_WIELD)) == NULL)
+    if ((obj = get_eq_char(victim, WEAR_WIELD)) == nullptr)
     {
         send_to_char("Your opponent is not wielding a weapon.\r\n", ch);
         return;
@@ -2426,11 +2426,11 @@ void trip(CHAR_DATA* ch, CHAR_DATA* victim)
     {
         if (IS_AFFECTED(victim->mount, AFF_FLYING) || IS_AFFECTED(victim->mount, AFF_FLOATING))
             return;
-        act(AT_SKILL, "$n trips your mount and you fall off!", ch, NULL, victim, TO_VICT);
-        act(AT_SKILL, "You trip $N's mount and $N falls off!", ch, NULL, victim, TO_CHAR);
-        act(AT_SKILL, "$n trips $N's mount and $N falls off!", ch, NULL, victim, TO_NOTVICT);
+        act(AT_SKILL, "$n trips your mount and you fall off!", ch, nullptr, victim, TO_VICT);
+        act(AT_SKILL, "You trip $N's mount and $N falls off!", ch, nullptr, victim, TO_CHAR);
+        act(AT_SKILL, "$n trips $N's mount and $N falls off!", ch, nullptr, victim, TO_NOTVICT);
         REMOVE_BIT(victim->mount->act, ACT_MOUNTED);
-        victim->mount = NULL;
+        victim->mount = nullptr;
         WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
         WAIT_STATE(victim, 2 * PULSE_VIOLENCE);
         victim->position = POS_RESTING;
@@ -2438,9 +2438,9 @@ void trip(CHAR_DATA* ch, CHAR_DATA* victim)
     }
     if (victim->wait == 0)
     {
-        act(AT_SKILL, "$n trips you and you go down!", ch, NULL, victim, TO_VICT);
-        act(AT_SKILL, "You trip $N and $N goes down!", ch, NULL, victim, TO_CHAR);
-        act(AT_SKILL, "$n trips $N and $N goes down!", ch, NULL, victim, TO_NOTVICT);
+        act(AT_SKILL, "$n trips you and you go down!", ch, nullptr, victim, TO_VICT);
+        act(AT_SKILL, "You trip $N and $N goes down!", ch, nullptr, victim, TO_CHAR);
+        act(AT_SKILL, "$n trips $N and $N goes down!", ch, nullptr, victim, TO_NOTVICT);
 
         WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
         WAIT_STATE(victim, 2 * PULSE_VIOLENCE);
@@ -2488,13 +2488,13 @@ void do_pick(CHAR_DATA* ch, const char* argument)
     {
         if (IS_NPC(gch) && IS_AWAKE(gch) && ch->skill_level[SMUGGLING_ABILITY] < gch->top_level)
         {
-            act(AT_PLAIN, "$N is standing too close to the lock.", ch, NULL, gch, TO_CHAR);
+            act(AT_PLAIN, "$N is standing too close to the lock.", ch, nullptr, gch, TO_CHAR);
             return;
         }
     }
 
 
-    if ((pexit = find_door(ch, arg, TRUE)) != NULL)
+    if ((pexit = find_door(ch, arg, TRUE)) != nullptr)
     {
         /*
        * 'pick door'
@@ -2538,12 +2538,12 @@ void do_pick(CHAR_DATA* ch, const char* argument)
 
         REMOVE_BIT(pexit->exit_info, EX_LOCKED);
         send_to_char("*Click*\r\n", ch);
-        act(AT_ACTION, "$n picks the $d.", ch, NULL, pexit->keyword, TO_ROOM);
+        act(AT_ACTION, "$n picks the $d.", ch, nullptr, pexit->keyword, TO_ROOM);
         learn_from_success(ch, gsn_pick_lock);
         /*
        * pick the other side
        */
-        if ((pexit_rev = pexit->rexit) != NULL && pexit_rev->to_room == ch->in_room)
+        if ((pexit_rev = pexit->rexit) != nullptr && pexit_rev->to_room == ch->in_room)
         {
             REMOVE_BIT(pexit_rev->exit_info, EX_LOCKED);
         }
@@ -2551,7 +2551,7 @@ void do_pick(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((obj = get_obj_here(ch, arg)) != NULL)
+    if ((obj = get_obj_here(ch, arg)) != nullptr)
     {
         if (obj->item_type != ITEM_CONTAINER)
         {
@@ -2591,13 +2591,13 @@ void do_pick(CHAR_DATA* ch, const char* argument)
         separate_obj(obj);
         REMOVE_BIT(obj->value[1], CONT_LOCKED);
         send_to_char("*Click*\r\n", ch);
-        act(AT_ACTION, "$n picks $p.", ch, obj, NULL, TO_ROOM);
+        act(AT_ACTION, "$n picks $p.", ch, obj, nullptr, TO_ROOM);
         learn_from_success(ch, gsn_pick_lock);
         check_for_trap(ch, obj, TRAP_PICK);
         return;
     }
 
-    if ((ship = ship_in_room(ch->in_room, arg)) != NULL)
+    if ((ship = ship_in_room(ch->in_room, arg)) != nullptr)
     {
         char buf[MAX_STRING_LENGTH];
 
@@ -2627,8 +2627,8 @@ void do_pick(CHAR_DATA* ch, const char* argument)
         if (!ship->hatchopen)
         {
             ship->hatchopen = TRUE;
-            act(AT_PLAIN, "You pick the lock and open the hatch on $T.", ch, NULL, ship->name, TO_CHAR);
-            act(AT_PLAIN, "$n picks open the hatch on $T.", ch, NULL, ship->name, TO_ROOM);
+            act(AT_PLAIN, "You pick the lock and open the hatch on $T.", ch, nullptr, ship->name, TO_CHAR);
+            act(AT_PLAIN, "$n picks open the hatch on $T.", ch, nullptr, ship->name, TO_ROOM);
             echo_to_room(AT_YELLOW, get_room_index(ship->entrance), "The hatch opens from the outside.");
             learn_from_success(ch, gsn_pickshiplock);
         }
@@ -2720,7 +2720,7 @@ void do_recall(CHAR_DATA* ch, const char* argument)
     ROOM_INDEX_DATA* location;
     CHAR_DATA      * opponent;
 
-    location = NULL;
+    location = nullptr;
 
     location = get_room_index(wherehome(ch));
 
@@ -2762,7 +2762,7 @@ void do_recall(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((opponent = who_fighting(ch)) != NULL)
+    if ((opponent = who_fighting(ch)) != nullptr)
     {
 
         if (number_bits(1) == 0 || (!IS_NPC(opponent) && number_bits(3) > 1))
@@ -2776,7 +2776,7 @@ void do_recall(CHAR_DATA* ch, const char* argument)
         stop_fighting(ch, TRUE);
     }
 
-    act(AT_ACTION, "$n disappears in a swirl of the Force.", ch, NULL, NULL, TO_ROOM);
+    act(AT_ACTION, "$n disappears in a swirl of the Force.", ch, nullptr, nullptr, TO_ROOM);
     char_from_room(ch);
     char_to_room(ch, location);
     if (ch->mount)
@@ -2784,7 +2784,7 @@ void do_recall(CHAR_DATA* ch, const char* argument)
         char_from_room(ch->mount);
         char_to_room(ch->mount, location);
     }
-    act(AT_ACTION, "$n appears in a swirl of the Force.", ch, NULL, NULL, TO_ROOM);
+    act(AT_ACTION, "$n appears in a swirl of the Force.", ch, nullptr, nullptr, TO_ROOM);
     do_look(ch, "auto");
 }
 
@@ -2807,7 +2807,7 @@ void do_aid(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -2827,13 +2827,13 @@ void do_aid(CHAR_DATA* ch, const char* argument)
 
     if (victim->position > POS_STUNNED)
     {
-        act(AT_PLAIN, "$N doesn't need your help.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$N doesn't need your help.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
     if (victim->hit <= -400)
     {
-        act(AT_PLAIN, "$N's condition is beyond your aiding ability.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$N's condition is beyond your aiding ability.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -2852,14 +2852,14 @@ void do_aid(CHAR_DATA* ch, const char* argument)
     ch->alignment = ch->alignment + 20;
     ch->alignment = URANGE(-1000, ch->alignment, 1000);
 
-    act(AT_SKILL, "You aid $N!", ch, NULL, victim, TO_CHAR);
-    act(AT_SKILL, "$n aids $N!", ch, NULL, victim, TO_NOTVICT);
+    act(AT_SKILL, "You aid $N!", ch, nullptr, victim, TO_CHAR);
+    act(AT_SKILL, "$n aids $N!", ch, nullptr, victim, TO_NOTVICT);
     learn_from_success(ch, gsn_aid);
     if (victim->hit < 1)
         victim->hit = 1;
 
     update_pos(victim);
-    act(AT_SKILL, "$n aids you!", ch, NULL, victim, TO_VICT);
+    act(AT_SKILL, "$n aids you!", ch, nullptr, victim, TO_VICT);
 }
 
 void do_mount(CHAR_DATA* ch, const char* argument)
@@ -2878,7 +2878,7 @@ void do_mount(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, argument)) == NULL)
+    if ((victim = get_char_room(ch, argument)) == nullptr)
     {
         send_to_char("You can't find that here.\r\n", ch);
         return;
@@ -2913,17 +2913,17 @@ void do_mount(CHAR_DATA* ch, const char* argument)
     {
         SET_BIT(victim->act, ACT_MOUNTED);
         ch->mount = victim;
-        act(AT_SKILL, "You mount $N.", ch, NULL, victim, TO_CHAR);
-        act(AT_SKILL, "$n skillfully mounts $N.", ch, NULL, victim, TO_NOTVICT);
-        act(AT_SKILL, "$n mounts you.", ch, NULL, victim, TO_VICT);
+        act(AT_SKILL, "You mount $N.", ch, nullptr, victim, TO_CHAR);
+        act(AT_SKILL, "$n skillfully mounts $N.", ch, nullptr, victim, TO_NOTVICT);
+        act(AT_SKILL, "$n mounts you.", ch, nullptr, victim, TO_VICT);
         learn_from_success(ch, gsn_mount);
         ch->position = POS_MOUNTED;
     }
     else
     {
-        act(AT_SKILL, "You unsuccessfully try to mount $N.", ch, NULL, victim, TO_CHAR);
-        act(AT_SKILL, "$n unsuccessfully attempts to mount $N.", ch, NULL, victim, TO_NOTVICT);
-        act(AT_SKILL, "$n tries to mount you.", ch, NULL, victim, TO_VICT);
+        act(AT_SKILL, "You unsuccessfully try to mount $N.", ch, nullptr, victim, TO_CHAR);
+        act(AT_SKILL, "$n unsuccessfully attempts to mount $N.", ch, nullptr, victim, TO_NOTVICT);
+        act(AT_SKILL, "$n tries to mount you.", ch, nullptr, victim, TO_VICT);
         learn_from_failure(ch, gsn_mount);
     }
 }
@@ -2932,7 +2932,7 @@ void do_dismount(CHAR_DATA* ch, const char* argument)
 {
     CHAR_DATA* victim;
 
-    if ((victim = ch->mount) == NULL)
+    if ((victim = ch->mount) == nullptr)
     {
         send_to_char("You're not mounted.\r\n", ch);
         return;
@@ -2941,22 +2941,22 @@ void do_dismount(CHAR_DATA* ch, const char* argument)
     WAIT_STATE(ch, skill_table[gsn_mount]->beats);
     if (IS_NPC(ch) || number_percent() < ch->pcdata->learned[gsn_mount])
     {
-        act(AT_SKILL, "You dismount $N.", ch, NULL, victim, TO_CHAR);
-        act(AT_SKILL, "$n skillfully dismounts $N.", ch, NULL, victim, TO_NOTVICT);
-        act(AT_SKILL, "$n dismounts you.  Whew!", ch, NULL, victim, TO_VICT);
+        act(AT_SKILL, "You dismount $N.", ch, nullptr, victim, TO_CHAR);
+        act(AT_SKILL, "$n skillfully dismounts $N.", ch, nullptr, victim, TO_NOTVICT);
+        act(AT_SKILL, "$n dismounts you.  Whew!", ch, nullptr, victim, TO_VICT);
         REMOVE_BIT(victim->act, ACT_MOUNTED);
-        ch->mount    = NULL;
+        ch->mount    = nullptr;
         ch->position = POS_STANDING;
         learn_from_success(ch, gsn_mount);
     }
     else
     {
-        act(AT_SKILL, "You fall off while dismounting $N.  Ouch!", ch, NULL, victim, TO_CHAR);
-        act(AT_SKILL, "$n falls off of $N while dismounting.", ch, NULL, victim, TO_NOTVICT);
-        act(AT_SKILL, "$n falls off your back.", ch, NULL, victim, TO_VICT);
+        act(AT_SKILL, "You fall off while dismounting $N.  Ouch!", ch, nullptr, victim, TO_CHAR);
+        act(AT_SKILL, "$n falls off of $N while dismounting.", ch, nullptr, victim, TO_NOTVICT);
+        act(AT_SKILL, "$n falls off your back.", ch, nullptr, victim, TO_VICT);
         learn_from_failure(ch, gsn_mount);
         REMOVE_BIT(victim->act, ACT_MOUNTED);
-        ch->mount    = NULL;
+        ch->mount    = nullptr;
         ch->position = POS_SITTING;
         global_retcode = damage(ch, ch, 1, TYPE_UNDEFINED);
     }
@@ -2988,9 +2988,9 @@ bool check_parry(CHAR_DATA* ch, CHAR_DATA* victim)
     }
     else
     {
-        if ((wield = get_eq_char(victim, WEAR_WIELD)) == NULL || (wield->value[3] != WEAPON_LIGHTSABER))
+        if ((wield = get_eq_char(victim, WEAR_WIELD)) == nullptr || (wield->value[3] != WEAPON_LIGHTSABER))
         {
-            if ((wield = get_eq_char(victim, WEAR_DUAL_WIELD)) == NULL || (wield->value[3] != WEAPON_LIGHTSABER))
+            if ((wield = get_eq_char(victim, WEAR_DUAL_WIELD)) == nullptr || (wield->value[3] != WEAPON_LIGHTSABER))
                 return FALSE;
         }
         chances    = (int)(victim->pcdata->learned[gsn_parry]);
@@ -3004,10 +3004,10 @@ bool check_parry(CHAR_DATA* ch, CHAR_DATA* victim)
         return FALSE;
     }
     if (!IS_NPC(victim) && !IS_SET(victim->pcdata->flags, PCFLAG_GAG))
-        /*SB*/ act(AT_SKILL, "You parry $n's attack.", ch, NULL, victim, TO_VICT);
+        /*SB*/ act(AT_SKILL, "You parry $n's attack.", ch, nullptr, victim, TO_VICT);
 
     if (!IS_NPC(ch) && !IS_SET(ch->pcdata->flags, PCFLAG_GAG))   /* SB */
-        act(AT_SKILL, "$N parries your attack.", ch, NULL, victim, TO_CHAR);
+        act(AT_SKILL, "$N parries your attack.", ch, nullptr, victim, TO_CHAR);
 
     learn_from_success(victim, gsn_parry);
     return TRUE;
@@ -3038,10 +3038,10 @@ bool check_dodge(CHAR_DATA* ch, CHAR_DATA* victim)
     }
 
     if (!IS_NPC(victim) && !IS_SET(victim->pcdata->flags, PCFLAG_GAG))
-        act(AT_SKILL, "You dodge $n's attack.", ch, NULL, victim, TO_VICT);
+        act(AT_SKILL, "You dodge $n's attack.", ch, nullptr, victim, TO_VICT);
 
     if (!IS_NPC(ch) && !IS_SET(ch->pcdata->flags, PCFLAG_GAG))
-        act(AT_SKILL, "$N dodges your attack.", ch, NULL, victim, TO_CHAR);
+        act(AT_SKILL, "$N dodges your attack.", ch, nullptr, victim, TO_CHAR);
 
     learn_from_success(victim, gsn_dodge);
     return TRUE;
@@ -3140,7 +3140,7 @@ void do_poison_weapon(CHAR_DATA* ch, const char* argument)
         send_to_char("You failed and spill some on yourself.  Ouch!\r\n", ch);
         set_char_color(AT_GREY, ch);
         damage(ch, ch, ch->skill_level[HUNTING_ABILITY], gsn_poison_weapon);
-        act(AT_RED, "$n spills the poison all over!", ch, NULL, NULL, TO_ROOM);
+        act(AT_RED, "$n spills the poison all over!", ch, nullptr, nullptr, TO_ROOM);
         extract_obj(pobj);
         extract_obj(wobj);
         learn_from_failure(ch, gsn_poison_weapon);
@@ -3152,8 +3152,8 @@ void do_poison_weapon(CHAR_DATA* ch, const char* argument)
     */
     act(AT_RED, "You mix $p in $P, creating a deadly poison!", ch, pobj, wobj, TO_CHAR);
     act(AT_RED, "$n mixes $p in $P, creating a deadly poison!", ch, pobj, wobj, TO_ROOM);
-    act(AT_GREEN, "You pour the poison over $p, which glistens wickedly!", ch, obj, NULL, TO_CHAR);
-    act(AT_GREEN, "$n pours the poison over $p, which glistens wickedly!", ch, obj, NULL, TO_ROOM);
+    act(AT_GREEN, "You pour the poison over $p, which glistens wickedly!", ch, obj, nullptr, TO_CHAR);
+    act(AT_GREEN, "$n pours the poison over $p, which glistens wickedly!", ch, obj, nullptr, TO_ROOM);
     SET_BIT(obj->extra_flags, ITEM_POISONED);
     obj->cost *= ch->skill_level[HUNTING_ABILITY] / 2;
     /*
@@ -3170,8 +3170,8 @@ void do_poison_weapon(CHAR_DATA* ch, const char* argument)
     /*
     * WHAT?  All of that, just for that one bit?  How lame. ;)
     */
-    act(AT_BLUE, "The remainder of the poison eats through $p.", ch, wobj, NULL, TO_CHAR);
-    act(AT_BLUE, "The remainder of the poison eats through $p.", ch, wobj, NULL, TO_ROOM);
+    act(AT_BLUE, "The remainder of the poison eats through $p.", ch, wobj, nullptr, TO_CHAR);
+    act(AT_BLUE, "The remainder of the poison eats through $p.", ch, wobj, nullptr, TO_ROOM);
     extract_obj(pobj);
     extract_obj(wobj);
     learn_from_success(ch, gsn_poison_weapon);
@@ -3210,8 +3210,8 @@ bool check_grip(CHAR_DATA* ch, CHAR_DATA* victim)
         learn_from_failure(victim, gsn_grip);
         return FALSE;
     }
-    act(AT_SKILL, "You evade $n's attempt to disarm you.", ch, NULL, victim, TO_VICT);
-    act(AT_SKILL, "$N holds $S weapon strongly, and is not disarmed.", ch, NULL, victim, TO_CHAR);
+    act(AT_SKILL, "You evade $n's attempt to disarm you.", ch, nullptr, victim, TO_VICT);
+    act(AT_SKILL, "$N holds $S weapon strongly, and is not disarmed.", ch, nullptr, victim, TO_CHAR);
     learn_from_success(victim, gsn_grip);
     return TRUE;
 }
@@ -3243,7 +3243,7 @@ void do_circle(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -3258,7 +3258,7 @@ void do_circle(CHAR_DATA* ch, const char* argument)
     if (is_safe(ch, victim))
         return;
 
-    if ((obj = get_eq_char(ch, WEAR_WIELD)) == NULL || (obj->value[3] != 11 && obj->value[3] != 2))
+    if ((obj = get_eq_char(ch, WEAR_WIELD)) == nullptr || (obj->value[3] != 11 && obj->value[3] != 2))
     {
         send_to_char("You need to wield a piercing or stabbing weapon.\r\n", ch);
         return;
@@ -3278,7 +3278,7 @@ void do_circle(CHAR_DATA* ch, const char* argument)
 
     if (victim->num_fighting < 2)
     {
-        act(AT_PLAIN, "You can't circle around them without a distraction.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "You can't circle around them without a distraction.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -3433,19 +3433,19 @@ void do_scan(CHAR_DATA* ch, const char* argument)
     }
 
     was_in_room = ch->in_room;
-    act(AT_GREY, "Scanning $t...", ch, dir_name[dir], NULL, TO_CHAR);
-    act(AT_GREY, "$n scans $t.", ch, dir_name[dir], NULL, TO_ROOM);
+    act(AT_GREY, "Scanning $t...", ch, dir_name[dir], nullptr, TO_CHAR);
+    act(AT_GREY, "$n scans $t.", ch, dir_name[dir], nullptr, TO_ROOM);
 
     if (IS_NPC(ch) || (number_percent() > ch->pcdata->learned[gsn_scan]))
     {
-        act(AT_GREY, "You stop scanning $t as your vision blurs.", ch, dir_name[dir], NULL, TO_CHAR);
+        act(AT_GREY, "You stop scanning $t as your vision blurs.", ch, dir_name[dir], nullptr, TO_CHAR);
         learn_from_failure(ch, gsn_scan);
         return;
     }
 
-    if ((pexit = get_exit(ch->in_room, dir)) == NULL)
+    if ((pexit = get_exit(ch->in_room, dir)) == nullptr)
     {
-        act(AT_GREY, "You can't see $t.", ch, dir_name[dir], NULL, TO_CHAR);
+        act(AT_GREY, "You can't see $t.", ch, dir_name[dir], nullptr, TO_CHAR);
         return;
     }
 
@@ -3459,22 +3459,22 @@ void do_scan(CHAR_DATA* ch, const char* argument)
         if (IS_SET(pexit->exit_info, EX_CLOSED))
         {
             if (IS_SET(pexit->exit_info, EX_SECRET))
-                act(AT_GREY, "Your view $t is blocked by a wall.", ch, dir_name[dir], NULL, TO_CHAR);
+                act(AT_GREY, "Your view $t is blocked by a wall.", ch, dir_name[dir], nullptr, TO_CHAR);
             else
-                act(AT_GREY, "Your view $t is blocked by a door.", ch, dir_name[dir], NULL, TO_CHAR);
+                act(AT_GREY, "Your view $t is blocked by a door.", ch, dir_name[dir], nullptr, TO_CHAR);
             break;
         }
 
-        to_room     = NULL;
+        to_room     = nullptr;
         if (pexit->distance > 1)
             to_room = generate_exit(ch->in_room, &pexit);
 
-        if (to_room == NULL)
+        if (to_room == nullptr)
             to_room = pexit->to_room;
 
         if (room_is_private(ch, to_room) && get_trust(ch) < LEVEL_GREATER)
         {
-            act(AT_GREY, "Your view $t is blocked by a private room.", ch, dir_name[dir], NULL, TO_CHAR);
+            act(AT_GREY, "Your view $t is blocked by a private room.", ch, dir_name[dir], nullptr, TO_CHAR);
             break;
         }
         char_from_room(ch);
@@ -3518,14 +3518,14 @@ void do_scan(CHAR_DATA* ch, const char* argument)
                 "Your vision blurs with distance and you see no " "farther $t.",
                 ch,
                 dir_name[dir],
-                NULL,
+                nullptr,
                 TO_CHAR
             );
             break;
         }
-        if ((pexit = get_exit(ch->in_room, dir)) == NULL)
+        if ((pexit = get_exit(ch->in_room, dir)) == nullptr)
         {
-            act(AT_GREY, "Your view $t is blocked by a wall.", ch, dir_name[dir], NULL, TO_CHAR);
+            act(AT_GREY, "Your view $t is blocked by a wall.", ch, dir_name[dir], nullptr, TO_CHAR);
             break;
         }
     }

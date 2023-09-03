@@ -79,7 +79,7 @@ int advatoi(const char* s)
             ++s;
             break;
         case '\0':break;
-        default:return 0;   /* not k nor m nor NULL - return 0! */
+        default:return 0;   /* not k nor m nor nullptr - return 0! */
     }
 
     /*
@@ -95,7 +95,7 @@ int advatoi(const char* s)
     }
 
     /*
-     * return 0 if non-digit character was found, other than NULL
+     * return 0 if non-digit character was found, other than nullptr
      */
     if (s[0] != '\0' && !isdigit(s[0]))
         return 0;

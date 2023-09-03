@@ -74,7 +74,7 @@ void save_home(CHAR_DATA* ch)
         OBJ_DATA* contents;
 
         snprintf(filename, 256, "%s%c/%s.home", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name));
-        if ((fp = fopen(filename, "w")) == NULL)
+        if ((fp = fopen(filename, "w")) == nullptr)
         {
         }
         else
@@ -102,7 +102,7 @@ void de_equip_char(CHAR_DATA* ch)
 
     for (x = 0; x < MAX_WEAR; x++)
         for (y = 0; y < MAX_LAYERS; y++)
-            save_equipment[x][y] = NULL;
+            save_equipment[x][y] = nullptr;
     for (obj = ch->first_carrying; obj; obj = obj->next_content)
         if (obj->wear_loc > -1 && obj->wear_loc < MAX_WEAR)
         {
@@ -133,11 +133,11 @@ void re_equip_char(CHAR_DATA* ch)
 
     for (x = 0; x < MAX_WEAR; x++)
         for (y = 0; y < MAX_LAYERS; y++)
-            if (save_equipment[x][y] != NULL)
+            if (save_equipment[x][y] != nullptr)
             {
                 if (quitting_char != ch)
                     equip_char(ch, save_equipment[x][y], x);
-                save_equipment[x][y] = NULL;
+                save_equipment[x][y] = nullptr;
             }
             else
                 break;
@@ -198,7 +198,7 @@ void save_char_obj(CHAR_DATA* ch)
     {
         snprintf(strback, 256, "%s%s", GOD_DIR, capitalize(ch->name));
 
-        if ((fp = fopen(strback, "w")) == NULL)
+        if ((fp = fopen(strback, "w")) == nullptr)
         {
             bug("%s: fopen", __func__);
             perror(strback);
@@ -217,7 +217,7 @@ void save_char_obj(CHAR_DATA* ch)
         }
     }
 
-    if ((fp = fopen(strsave, "w")) == NULL)
+    if ((fp = fopen(strsave, "w")) == nullptr)
     {
         bug("%s: fopen", __func__);
         perror(strsave);
@@ -235,9 +235,9 @@ void save_char_obj(CHAR_DATA* ch)
 
     re_equip_char(ch);
 
-    write_corpses(ch, NULL);
-    quitting_char = NULL;
-    saving_char   = NULL;
+    write_corpses(ch, nullptr);
+    quitting_char = nullptr;
+    saving_char   = nullptr;
 }
 
 void save_clone(CHAR_DATA* ch)
@@ -272,7 +272,7 @@ void save_clone(CHAR_DATA* ch)
         rename(strsave, strback);
     }
 
-    if ((fp = fopen(strsave, "w")) == NULL)
+    if ((fp = fopen(strsave, "w")) == nullptr)
     {
         bug("%s: fopen", __func__);
         perror(strsave);
@@ -288,9 +288,9 @@ void save_clone(CHAR_DATA* ch)
 
     re_equip_char(ch);
 
-    write_corpses(ch, NULL);
-    quitting_char = NULL;
-    saving_char   = NULL;
+    write_corpses(ch, nullptr);
+    quitting_char = nullptr;
+    saving_char   = nullptr;
 }
 
 /*
@@ -300,7 +300,7 @@ void fwrite_char(CHAR_DATA* ch, FILE* fp)
 {
     AFFECT_DATA* paf;
     int        sn, track, drug;
-    SKILLTYPE  * skill = NULL;
+    SKILLTYPE  * skill = nullptr;
 
     fprintf(fp, "#%s\n", IS_NPC(ch) ? "MOB" : "PLAYER");
 
@@ -327,7 +327,7 @@ void fwrite_char(CHAR_DATA* ch, FILE* fp)
             && ch->was_in_room
         ) ? ch->was_in_room->vnum : ch->in_room->vnum
     );
-    if (ch->plr_home != NULL)
+    if (ch->plr_home != nullptr)
         fprintf(fp, "PlrHome      %d\n", ch->plr_home->vnum);
 
     fprintf(fp, "HpManaMove   %d %d 0 0 %d %d\n", ch->hit, ch->max_hit, ch->move, ch->max_move);
@@ -496,7 +496,7 @@ void fwrite_char(CHAR_DATA* ch, FILE* fp)
 
     for (paf = ch->first_affect; paf; paf = paf->next)
     {
-        if (paf->type >= 0 && (skill = get_skilltype(paf->type)) == NULL)
+        if (paf->type >= 0 && (skill = get_skilltype(paf->type)) == nullptr)
             continue;
 
         if (paf->type >= 0 && paf->type < TYPE_PERSONAL)
@@ -554,7 +554,7 @@ void fwrite_obj(CHAR_DATA* ch, OBJ_DATA* obj, FILE* fp, int iNest, short os_type
 
     if (!obj)
     {
-        bug("%s: NULL obj", __func__);
+        bug("%s: nullptr obj", __func__);
         return;
     }
 
@@ -738,7 +738,7 @@ bool load_char_obj(DESCRIPTOR_DATA* d, char* name, bool preload, bool copyover)
     CREATE(ch, CHAR_DATA, 1);
     for (x = 0; x < MAX_WEAR; x++)
         for (i = 0; i < MAX_LAYERS; i++)
-            save_equipment[x][i] = NULL;
+            save_equipment[x][i] = nullptr;
     clear_char(ch);
     loading_char = ch;
 
@@ -763,17 +763,17 @@ bool load_char_obj(DESCRIPTOR_DATA* d, char* name, bool preload, bool copyover)
     for (i = 0; i < MAX_SKILL; i++)
         ch->pcdata->learned[i] = 0;
     ch->pcdata->release_date = 0;
-    ch->pcdata->helled_by    = NULL;
+    ch->pcdata->helled_by    = nullptr;
     ch->saving_poison_death  = 0;
     ch->saving_wand          = 0;
     ch->saving_para_petri    = 0;
     ch->saving_breath        = 0;
     ch->saving_spell_staff   = 0;
-    ch->comments             = NULL; /* comments */
+    ch->comments             = nullptr; /* comments */
     ch->pcdata->pagerlen     = 24;
     ch->mob_clan             = STRALLOC("");
-    ch->was_sentinel         = NULL;
-    ch->plr_home             = NULL;
+    ch->was_sentinel         = nullptr;
+    ch->plr_home             = nullptr;
     ch->pcdata->hotboot      = FALSE;  /* Never changed except when PC is saved during hotboot save */
 #ifdef IMC
     imc_initchar( ch );
@@ -800,12 +800,12 @@ bool load_char_obj(DESCRIPTOR_DATA* d, char* name, bool preload, bool copyover)
     * else no player file
     */
 
-    if ((fp = fopen(strsave, "r")) != NULL)
+    if ((fp = fopen(strsave, "r")) != nullptr)
     {
         int iNest;
 
         for (iNest = 0; iNest < MAX_NEST; iNest++)
-            rgObjNest[iNest] = NULL;
+            rgObjNest[iNest] = nullptr;
 
         found  = TRUE;
         /*
@@ -851,7 +851,7 @@ bool load_char_obj(DESCRIPTOR_DATA* d, char* name, bool preload, bool copyover)
             }
         }
         FCLOSE(fp);
-        fpArea = NULL;
+        fpArea = nullptr;
         mudstrlcpy(strArea, "$", MAX_INPUT_LENGTH);
     }
 
@@ -860,9 +860,9 @@ bool load_char_obj(DESCRIPTOR_DATA* d, char* name, bool preload, bool copyover)
         ch->short_descr          = STRALLOC("");
         ch->long_descr           = STRALLOC("");
         ch->description          = STRALLOC("");
-        ch->editor               = NULL;
+        ch->editor               = nullptr;
         ch->pcdata->clan_name    = STRALLOC("");
-        ch->pcdata->clan         = NULL;
+        ch->pcdata->clan         = nullptr;
         ch->pcdata->pwd          = str_dup("");
         ch->pcdata->email        = str_dup("");
         ch->pcdata->bamfin       = str_dup("");
@@ -888,7 +888,7 @@ bool load_char_obj(DESCRIPTOR_DATA* d, char* name, bool preload, bool copyover)
         if (!ch->pcdata->clan_name)
         {
             ch->pcdata->clan_name = STRALLOC("");
-            ch->pcdata->clan      = NULL;
+            ch->pcdata->clan      = nullptr;
         }
         if (!ch->pcdata->bio)
             ch->pcdata->bio = STRALLOC("");
@@ -909,7 +909,7 @@ bool load_char_obj(DESCRIPTOR_DATA* d, char* name, bool preload, bool copyover)
                     if (save_equipment[i][x])
                     {
                         equip_char(ch, save_equipment[i][x], i);
-                        save_equipment[i][x] = NULL;
+                        save_equipment[i][x] = nullptr;
                     }
                     else
                         break;
@@ -919,12 +919,12 @@ bool load_char_obj(DESCRIPTOR_DATA* d, char* name, bool preload, bool copyover)
 
     if (found)
     {
-        if (ch->plr_home != NULL)
+        if (ch->plr_home != nullptr)
             load_plr_home(ch);
     }
 
 
-    loading_char = NULL;
+    loading_char = nullptr;
     return found;
 }
 
@@ -1095,7 +1095,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     if (!preload
                         &&
                         ch->pcdata->clan_name[0] != '\0' &&
-                        (ch->pcdata->clan = get_clan(ch->pcdata->clan_name)) == NULL)
+                        (ch->pcdata->clan = get_clan(ch->pcdata->clan_name)) == nullptr)
                     {
                         ch_printf(
                             ch,
@@ -1186,7 +1186,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     if (!preload
                         &&
                         ch->pcdata->clan_name[0] != '\0' &&
-                        (ch->pcdata->clan = get_clan(ch->pcdata->clan_name)) == NULL)
+                        (ch->pcdata->clan = get_clan(ch->pcdata->clan_name)) == nullptr)
                     {
                         ch_printf(
                             ch,
@@ -1209,7 +1209,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     if (ch->pcdata->release_date < current_time)
                     {
                         STRFREE(ch->pcdata->helled_by);
-                        ch->pcdata->helled_by    = NULL;
+                        ch->pcdata->helled_by    = nullptr;
                         ch->pcdata->release_date = 0;
                     }
                     fMatch = TRUE;
@@ -1338,7 +1338,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 KEY("Prompt", ch->pcdata->prompt, fread_string(fp));
                 if (!str_cmp(word, "PTimer"))
                 {
-                    add_timer(ch, TIMER_PKILLED, fread_number(fp), NULL, 0);
+                    add_timer(ch, TIMER_PKILLED, fread_number(fp), nullptr, 0);
                     fMatch = TRUE;
                     break;
                 }
@@ -1346,7 +1346,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 {
                     ch->plr_home     = get_room_index(fread_number(fp));
                     if (!ch->plr_home)
-                        ch->plr_home = NULL;
+                        ch->plr_home = nullptr;
                     fMatch = TRUE;
                     break;
                 }
@@ -1494,7 +1494,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                         ch->pcdata->authed_by   = STRALLOC("");
                     if (!ch->pcdata->prompt)
                         ch->pcdata->prompt      = STRALLOC("");
-                    ch->editor                  = NULL;
+                    ch->editor                  = nullptr;
                     killcnt = URANGE(2, ((ch->top_level + 3) * MAX_KILLTRACK) / LEVEL_AVATAR, MAX_KILLTRACK);
                     if (killcnt < MAX_KILLTRACK)
                         ch->pcdata->killed[killcnt].vnum = 0;
@@ -1638,7 +1638,7 @@ void fread_obj(CHAR_DATA* ch, FILE* fp, short os_type)
     bool           fMatch;
     bool           fNest;
     bool           fVnum;
-    ROOM_INDEX_DATA* room = NULL;
+    ROOM_INDEX_DATA* room = nullptr;
 
     if (ch)
     {
@@ -1778,7 +1778,7 @@ void fread_obj(CHAR_DATA* ch, FILE* fp, short os_type)
                             }
                             obj = obj_to_room(obj, room);
                         }
-                        else if (iNest == 0 || rgObjNest[iNest] == NULL)
+                        else if (iNest == 0 || rgObjNest[iNest] == nullptr)
                         {
                             int  slot   = 0;
                             bool reslot = FALSE;
@@ -1891,7 +1891,7 @@ void fread_obj(CHAR_DATA* ch, FILE* fp, short os_type)
                     int vnum;
 
                     vnum = fread_number(fp);
-                    if ((obj->pIndexData = get_obj_index(vnum)) == NULL)
+                    if ((obj->pIndexData = get_obj_index(vnum)) == nullptr)
                     {
                         fVnum = FALSE;
                         bug("%s: bad vnum %d.", __func__, vnum);
@@ -1929,14 +1929,14 @@ void fread_obj(CHAR_DATA* ch, FILE* fp, short os_type)
                 STRFREE(obj->description);
             if (obj->short_descr)
                 STRFREE(obj->short_descr);
-            while ((ed = obj->first_extradesc) != NULL)
+            while ((ed = obj->first_extradesc) != nullptr)
             {
                 STRFREE(ed->keyword);
                 STRFREE(ed->description);
                 UNLINK(ed, obj->first_extradesc, obj->last_extradesc, next, prev);
                 DISPOSE(ed);
             }
-            while ((paf = obj->first_affect) != NULL)
+            while ((paf = obj->first_affect) != nullptr)
             {
                 UNLINK(paf, obj->first_affect, obj->last_affect, next, prev);
                 DISPOSE(paf);
@@ -1978,7 +1978,7 @@ void do_last(CHAR_DATA* ch, const char* argument)
 void write_corpses(CHAR_DATA* ch, const char* name)
 {
     OBJ_DATA* corpse;
-    FILE    * fp = NULL;
+    FILE    * fp = nullptr;
 
     /*
     * Name and ch support so that we dont have to have a char to save their
@@ -1996,7 +1996,7 @@ void write_corpses(CHAR_DATA* ch, const char* name)
     */
     for (corpse = first_object; corpse; corpse = corpse->next)
         if (corpse->pIndexData->vnum == OBJ_VNUM_CORPSE_PC &&
-            corpse->in_room != NULL && !str_cmp(corpse->short_descr + 14, name))
+            corpse->in_room != nullptr && !str_cmp(corpse->short_descr + 14, name))
         {
             if (!fp)
             {
@@ -2040,7 +2040,7 @@ void load_corpses(void)
     }
 
     falling    = 1;   /* Arbitrary, must be >0 though. */
-    while ((de = readdir(dp)) != NULL)
+    while ((de = readdir(dp)) != nullptr)
     {
         if (de->d_name[0] != '.')
         {
@@ -2069,9 +2069,9 @@ void load_corpses(void)
                 }
                 word = fread_word(fpArea);
                 if (!str_cmp(word, "CORPSE"))
-                    fread_obj(NULL, fpArea, OS_CORPSE);
+                    fread_obj(nullptr, fpArea, OS_CORPSE);
                 else if (!str_cmp(word, "OBJECT"))
-                    fread_obj(NULL, fpArea, OS_CARRY);
+                    fread_obj(nullptr, fpArea, OS_CARRY);
                 else if (!str_cmp(word, "END"))
                     break;
                 else
@@ -2096,7 +2096,7 @@ void load_plr_home(CHAR_DATA* ch)
     OBJ_DATA       * obj;
     OBJ_DATA       * obj_next;
 
-    if (IS_NPC(ch) || ch->plr_home == NULL)
+    if (IS_NPC(ch) || ch->plr_home == nullptr)
         return;
 
     for (obj = storeroom->first_content; obj; obj = obj_next)
@@ -2106,14 +2106,14 @@ void load_plr_home(CHAR_DATA* ch)
     }
 
     snprintf(filename, 256, "%s%c/%s.home", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name));
-    if ((fph = fopen(filename, "r")) != NULL)
+    if ((fph = fopen(filename, "r")) != nullptr)
     {
         int     iNest;
         OBJ_DATA* tobj, * tobj_next;
 
         rset_supermob(storeroom);
         for (iNest = 0; iNest < MAX_NEST; iNest++)
-            rgObjNest[iNest] = NULL;
+            rgObjNest[iNest] = nullptr;
 
         for (;;)
         {

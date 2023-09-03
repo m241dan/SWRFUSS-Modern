@@ -63,7 +63,7 @@ CLAN_DATA* get_clan(const char* name)
     for (clan = first_clan; clan; clan = clan->next)
         if (!str_cmp(name, clan->name))
             return clan;
-    return NULL;
+    return nullptr;
 }
 
 PLANET_DATA* get_planet(const char* name)
@@ -73,7 +73,7 @@ PLANET_DATA* get_planet(const char* name)
     for (planet = first_planet; planet; planet = planet->next)
         if (!str_cmp(name, planet->name))
             return planet;
-    return NULL;
+    return nullptr;
 }
 
 void write_clan_list()
@@ -136,7 +136,7 @@ void save_clan(CLAN_DATA* clan)
 
     snprintf(filename, 256, "%s%s", CLAN_DIR, clan->filename);
 
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         bug("%s: fopen", __func__);
         perror(filename);
@@ -193,7 +193,7 @@ void save_planet(PLANET_DATA* planet)
 
     snprintf(filename, 256, "%s%s", PLANET_DIR, planet->filename);
 
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         bug("%s: fopen", __func__);
         perror(filename);
@@ -418,16 +418,16 @@ bool load_clan_file(const char* clanfile)
     bool     found;
 
     CREATE(clan, CLAN_DATA, 1);
-    clan->next_subclan  = NULL;
-    clan->prev_subclan  = NULL;
-    clan->last_subclan  = NULL;
-    clan->first_subclan = NULL;
-    clan->mainclan      = NULL;
+    clan->next_subclan  = nullptr;
+    clan->prev_subclan  = nullptr;
+    clan->last_subclan  = nullptr;
+    clan->first_subclan = nullptr;
+    clan->mainclan      = nullptr;
 
     found = FALSE;
     snprintf(filename, 256, "%s%s", CLAN_DIR, clanfile);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
         found = TRUE;
         for (;;)
@@ -471,14 +471,14 @@ bool load_clan_file(const char* clanfile)
 
         LINK(clan, first_clan, last_clan, next, prev);
 
-        if (clan->storeroom == 0 || (storeroom = get_room_index(clan->storeroom)) == NULL)
+        if (clan->storeroom == 0 || (storeroom = get_room_index(clan->storeroom)) == nullptr)
         {
             log_string("Storeroom not found");
             return found;
         }
 
         snprintf(filename, 256, "%s%s.vault", CLAN_DIR, clan->filename);
-        if ((fp = fopen(filename, "r")) != NULL)
+        if ((fp = fopen(filename, "r")) != nullptr)
         {
             int     iNest;
             OBJ_DATA* tobj, * tobj_next;
@@ -486,7 +486,7 @@ bool load_clan_file(const char* clanfile)
             log_string("Loading clan storage room");
             rset_supermob(storeroom);
             for (iNest = 0; iNest < MAX_NEST; iNest++)
-                rgObjNest[iNest] = NULL;
+                rgObjNest[iNest] = nullptr;
 
             for (;;)
             {
@@ -544,19 +544,19 @@ bool load_planet_file(const char* planetfile)
 
     CREATE(planet, PLANET_DATA, 1);
 
-    planet->governed_by    = NULL;
-    planet->next_in_system = NULL;
-    planet->prev_in_system = NULL;
-    planet->starsystem     = NULL;
-    planet->first_area     = NULL;
-    planet->last_area      = NULL;
-    planet->first_guard    = NULL;
-    planet->last_guard     = NULL;
+    planet->governed_by    = nullptr;
+    planet->next_in_system = nullptr;
+    planet->prev_in_system = nullptr;
+    planet->starsystem     = nullptr;
+    planet->first_area     = nullptr;
+    planet->last_area      = nullptr;
+    planet->first_guard    = nullptr;
+    planet->last_guard     = nullptr;
 
     found = FALSE;
     snprintf(filename, 256, "%s%s", PLANET_DIR, planetfile);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
 
         found = TRUE;
@@ -614,13 +614,13 @@ void load_clans()
     CLAN_DATA * clan;
     CLAN_DATA * bosclan;
 
-    first_clan = NULL;
-    last_clan  = NULL;
+    first_clan = nullptr;
+    last_clan  = nullptr;
 
     log_string("Loading clans...");
 
     snprintf(clanlist, 256, "%s%s", CLAN_DIR, CLAN_LIST);
-    if ((fpList = fopen(clanlist, "r")) == NULL)
+    if ((fpList = fopen(clanlist, "r")) == nullptr)
     {
         perror(clanlist);
         exit(1);
@@ -663,13 +663,13 @@ void load_planets()
     const char* filename;
     char      planetlist[256];
 
-    first_planet = NULL;
-    last_planet  = NULL;
+    first_planet = nullptr;
+    last_planet  = nullptr;
 
     log_string("Loading planets...");
 
     snprintf(planetlist, 256, "%s%s", PLANET_DIR, PLANET_LIST);
-    if ((fpList = fopen(planetlist, "r")) == NULL)
+    if ((fpList = fopen(planetlist, "r")) == nullptr)
     {
         perror(planetlist);
         exit(1);
@@ -728,7 +728,7 @@ void do_induct(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("That player is not here.\r\n", ch);
         return;
@@ -833,7 +833,7 @@ void do_outcast(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("That player is not here.\r\n", ch);
         return;
@@ -879,7 +879,7 @@ void do_outcast(CHAR_DATA* ch, const char* argument)
         STRFREE(ch->pcdata->clan->number2);
         ch->pcdata->clan->number2 = STRALLOC("");
     }
-    victim->pcdata->clan = NULL;
+    victim->pcdata->clan = nullptr;
     STRFREE(victim->pcdata->clan_name);
     victim->pcdata->clan_name = STRALLOC("");
     act(AT_MAGIC, "You outcast $N from $t", ch, clan->name, victim, TO_CHAR);
@@ -1083,7 +1083,7 @@ void do_setclan(CHAR_DATA* ch, const char* argument)
         if (clan->mainclan)
         {
             UNLINK(clan, clan->mainclan->first_subclan, clan->mainclan->last_subclan, next_subclan, prev_subclan);
-            clan->mainclan = NULL;
+            clan->mainclan = nullptr;
         }
         if (!str_cmp(argument, "crime"))
             clan->clan_type = CLAN_CRIME;
@@ -1100,7 +1100,7 @@ void do_setclan(CHAR_DATA* ch, const char* argument)
 
     if (!str_cmp(arg2, "name"))
     {
-        CLAN_DATA* uclan = NULL;
+        CLAN_DATA* uclan = nullptr;
 
         if (!argument || argument[0] == '\0')
         {
@@ -1189,7 +1189,7 @@ void do_setplanet(CHAR_DATA* ch, const char* argument)
             send_to_char("You must choose a name.\r\n", ch);
             return;
         }
-        if ((tplanet = get_planet(argument)) != NULL)
+        if ((tplanet = get_planet(argument)) != nullptr)
         {
             send_to_char("A planet with that name already Exists!\r\n", ch);
             return;
@@ -1221,7 +1221,7 @@ void do_setplanet(CHAR_DATA* ch, const char* argument)
     {
         SPACE_DATA* starsystem;
 
-        if ((starsystem = planet->starsystem) != NULL)
+        if ((starsystem = planet->starsystem) != nullptr)
             UNLINK(planet, starsystem->first_planet, starsystem->last_planet, next_in_system, prev_in_system);
         if ((planet->starsystem = starsystem_from_name(argument)))
         {
@@ -1389,11 +1389,11 @@ void do_makeclan(CHAR_DATA* ch, const char* argument)
 
     CREATE(clan, CLAN_DATA, 1);
     LINK(clan, first_clan, last_clan, next, prev);
-    clan->next_subclan  = NULL;
-    clan->prev_subclan  = NULL;
-    clan->last_subclan  = NULL;
-    clan->first_subclan = NULL;
-    clan->mainclan      = NULL;
+    clan->next_subclan  = nullptr;
+    clan->prev_subclan  = nullptr;
+    clan->last_subclan  = nullptr;
+    clan->first_subclan = nullptr;
+    clan->mainclan      = nullptr;
     clan->name          = STRALLOC(argument);
     clan->description   = STRALLOC("");
     clan->leader        = STRALLOC("");
@@ -1425,14 +1425,14 @@ void do_makeplanet(CHAR_DATA* ch, const char* argument)
 
     CREATE(planet, PLANET_DATA, 1);
     LINK(planet, first_planet, last_planet, next, prev);
-    planet->governed_by    = NULL;
-    planet->next_in_system = NULL;
-    planet->prev_in_system = NULL;
-    planet->starsystem     = NULL;
-    planet->first_area     = NULL;
-    planet->last_area      = NULL;
-    planet->first_guard    = NULL;
-    planet->last_guard     = NULL;
+    planet->governed_by    = nullptr;
+    planet->next_in_system = nullptr;
+    planet->prev_in_system = nullptr;
+    planet->starsystem     = nullptr;
+    planet->first_area     = nullptr;
+    planet->last_area      = nullptr;
+    planet->first_guard    = nullptr;
+    planet->last_guard     = nullptr;
     planet->name           = STRALLOC(argument);
     planet->flags          = 0;
 }
@@ -1581,7 +1581,7 @@ void do_shove(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -1595,7 +1595,7 @@ void do_shove(CHAR_DATA* ch, const char* argument)
 
     if ((victim->position) != POS_STANDING)
     {
-        act(AT_PLAIN, "$N isn't standing up.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$N isn't standing up.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -1613,7 +1613,7 @@ void do_shove(CHAR_DATA* ch, const char* argument)
     }
     victim->position = POS_SHOVE;
     nogo       = FALSE;
-    if ((pexit = get_exit(ch->in_room, exit_dir)) == NULL)
+    if ((pexit = get_exit(ch->in_room, exit_dir)) == nullptr)
         nogo = TRUE;
     else if (IS_SET(pexit->exit_info, EX_CLOSED)
              && (!IS_AFFECTED(victim, AFF_PASS_DOOR) || IS_SET(pexit->exit_info, EX_NOPASSDOOR)))
@@ -1652,8 +1652,8 @@ void do_shove(CHAR_DATA* ch, const char* argument)
         victim->position = POS_STANDING;
         return;
     }
-    act(AT_ACTION, "You shove $M.", ch, NULL, victim, TO_CHAR);
-    act(AT_ACTION, "$n shoves you.", ch, NULL, victim, TO_VICT);
+    act(AT_ACTION, "You shove $M.", ch, nullptr, victim, TO_CHAR);
+    act(AT_ACTION, "$n shoves you.", ch, nullptr, victim, TO_VICT);
     move_char(victim, get_exit(ch->in_room, exit_dir), 0);
     if (!char_died(victim))
         victim->position = POS_STANDING;
@@ -1662,7 +1662,7 @@ void do_shove(CHAR_DATA* ch, const char* argument)
     * Remove protection from shove/drag if char shoves -- Blodkai
     */
     if (IS_SET(ch->in_room->room_flags, ROOM_SAFE) && get_timer(ch, TIMER_SHOVEDRAG) <= 0)
-        add_timer(ch, TIMER_SHOVEDRAG, 10, NULL, 0);
+        add_timer(ch, TIMER_SHOVEDRAG, 10, nullptr, 0);
 }
 
 void do_drag(CHAR_DATA* ch, const char* argument)
@@ -1685,7 +1685,7 @@ void do_drag(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -1724,7 +1724,7 @@ void do_drag(CHAR_DATA* ch, const char* argument)
     }
 
     nogo       = FALSE;
-    if ((pexit = get_exit(ch->in_room, exit_dir)) == NULL)
+    if ((pexit = get_exit(ch->in_room, exit_dir)) == nullptr)
         nogo = TRUE;
     else if (IS_SET(pexit->exit_info, EX_CLOSED)
              && (!IS_AFFECTED(victim, AFF_PASS_DOOR) || IS_SET(pexit->exit_info, EX_NOPASSDOOR)))
@@ -1758,8 +1758,8 @@ void do_drag(CHAR_DATA* ch, const char* argument)
 
         temp = victim->position;
         victim->position = POS_DRAG;
-        act(AT_ACTION, "You drag $M into the next room.", ch, NULL, victim, TO_CHAR);
-        act(AT_ACTION, "$n grabs your hair and drags you.", ch, NULL, victim, TO_VICT);
+        act(AT_ACTION, "You drag $M into the next room.", ch, nullptr, victim, TO_CHAR);
+        act(AT_ACTION, "$n grabs your hair and drags you.", ch, nullptr, victim, TO_VICT);
         move_char(victim, get_exit(ch->in_room, exit_dir), 0);
         if (!char_died(victim))
             victim->position = temp;
@@ -1834,7 +1834,7 @@ void do_resign(CHAR_DATA* ch, const char* argument)
 
     clan = ch->pcdata->clan;
 
-    if (clan == NULL)
+    if (clan == nullptr)
     {
         send_to_char("You have to join an organization before you can quit it.\r\n", ch);
         return;
@@ -1860,10 +1860,10 @@ void do_resign(CHAR_DATA* ch, const char* argument)
         STRFREE(ch->pcdata->clan->number2);
         ch->pcdata->clan->number2 = STRALLOC("");
     }
-    ch->pcdata->clan = NULL;
+    ch->pcdata->clan = nullptr;
     STRFREE(ch->pcdata->clan_name);
     ch->pcdata->clan_name = STRALLOC("");
-    act(AT_MAGIC, "You resign your position in $t", ch, clan->name, NULL, TO_CHAR);
+    act(AT_MAGIC, "You resign your position in $t", ch, clan->name, nullptr, TO_CHAR);
     snprintf(buf, MAX_STRING_LENGTH, "%s has quit %s!", ch->name, clan->name);
     echo_to_all(AT_MAGIC, buf, ECHOTAR_ALL);
 
@@ -2124,7 +2124,7 @@ void do_capture(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((planet = ch->in_room->area->planet) == NULL)
+    if ((planet = ch->in_room->area->planet) == nullptr)
     {
         send_to_char("You must be on a planet to capture it.\r\n", ch);
         return;
@@ -2228,7 +2228,7 @@ void do_empower(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("That player is not here.\r\n", ch);
         return;
@@ -2349,8 +2349,8 @@ void save_senate()
 
 void load_senate()
 {
-    first_senator = NULL;
-    last_senator  = NULL;
+    first_senator = nullptr;
+    last_senator  = nullptr;
     /*
     FILE *fpList;
     char *target;
@@ -2358,16 +2358,16 @@ void load_senate()
     BOUNTY_DATA *bounty;
     long int  amount;
 
-    first_bounty = NULL;
-    last_bounty	= NULL;
+    first_bounty = nullptr;
+    last_bounty	= nullptr;
 
-    first_disintigration = NULL;
-    last_disintigration	= NULL;
+    first_disintigration = nullptr;
+    last_disintigration	= nullptr;
 
     log_string( "Loading disintigrations..." );
 
     snprintf( bountylist, 256, "%s%s", SYSTEM_DIR, DISINTIGRATION_LIST );
-    if ( ( fpList = fopen( bountylist, "r" ) ) == NULL )
+    if ( ( fpList = fopen( bountylist, "r" ) ) == nullptr )
     {
 	perror( bountylist );
 	exit( 1 );

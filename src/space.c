@@ -111,7 +111,7 @@ void echo_to_room_dnr(int ecolor, ROOM_INDEX_DATA* room, const char* argument)
 {
     CHAR_DATA* vic;
 
-    if (room == NULL)
+    if (room == nullptr)
         return;
 
     for (vic = room->first_person; vic; vic = vic->next_in_room)
@@ -170,7 +170,7 @@ void update_traffic()
 
     shuttle = ship_from_cockpit(ROOM_CORUSCANT_SHUTTLE);
     senate  = ship_from_cockpit(ROOM_SENATE_SHUTTLE);
-    if (senate != NULL && shuttle != NULL)
+    if (senate != nullptr && shuttle != nullptr)
     {
         switch (corus_shuttle)
         {
@@ -208,7 +208,7 @@ void update_traffic()
     }
 
     turbocar = ship_from_cockpit(ROOM_CORUSCANT_TURBOCAR);
-    if (turbocar != NULL)
+    if (turbocar != nullptr)
     {
         echo_to_room(
             AT_YELLOW,
@@ -251,13 +251,13 @@ void update_bus()
     ship  = ship_from_cockpit(ROOM_SHUTTLE_BUS);
     ship2 = ship_from_cockpit(ROOM_SHUTTLE_BUS_2);
 
-    if (ship == NULL && ship2 == NULL)
+    if (ship == nullptr && ship2 == nullptr)
         return;
 
     switch (bus_pos)
     {
         case 0:target = ship_from_hanger(bus_vnum[bus_planet]);
-            if (target != NULL && !target->starsystem)
+            if (target != nullptr && !target->starsystem)
             {
                 snprintf(
                     buf,
@@ -270,7 +270,7 @@ void update_bus()
             }
 
             target = ship_from_hanger(bus_vnum[bus2_planet]);
-            if (target != NULL && !target->starsystem)
+            if (target != nullptr && !target->starsystem)
             {
                 snprintf(
                     buf,
@@ -569,8 +569,8 @@ void move_ships()
         {
             echo_to_cockpit(AT_BLOOD + AT_BLINK, ship, "You fly directly into the sun.");
             snprintf(buf, MAX_STRING_LENGTH, "%s flys directly into %s!", ship->name, ship->starsystem->star1);
-            echo_to_system(AT_ORANGE, ship, buf, NULL);
-            destroy_ship(ship, NULL);
+            echo_to_system(AT_ORANGE, ship, buf, nullptr);
+            destroy_ship(ship, nullptr);
             continue;
         }
         if (ship->starsystem->star2 && strcmp(ship->starsystem->star2, "")
@@ -580,8 +580,8 @@ void move_ships()
         {
             echo_to_cockpit(AT_BLOOD + AT_BLINK, ship, "You fly directly into the sun.");
             snprintf(buf, MAX_STRING_LENGTH, "%s flys directly into %s!", ship->name, ship->starsystem->star2);
-            echo_to_system(AT_ORANGE, ship, buf, NULL);
-            destroy_ship(ship, NULL);
+            echo_to_system(AT_ORANGE, ship, buf, nullptr);
+            destroy_ship(ship, nullptr);
             continue;
         }
 
@@ -595,7 +595,7 @@ void move_ships()
                 snprintf(buf, MAX_STRING_LENGTH, "You begin orbitting %s.", ship->starsystem->planet1);
                 echo_to_cockpit(AT_YELLOW, ship, buf);
                 snprintf(buf, MAX_STRING_LENGTH, "%s begins orbiting %s.", ship->name, ship->starsystem->planet1);
-                echo_to_system(AT_ORANGE, ship, buf, NULL);
+                echo_to_system(AT_ORANGE, ship, buf, nullptr);
                 ship->currspeed = 0;
                 continue;
             }
@@ -607,7 +607,7 @@ void move_ships()
                 snprintf(buf, MAX_STRING_LENGTH, "You begin orbitting %s.", ship->starsystem->planet2);
                 echo_to_cockpit(AT_YELLOW, ship, buf);
                 snprintf(buf, MAX_STRING_LENGTH, "%s begins orbiting %s.", ship->name, ship->starsystem->planet2);
-                echo_to_system(AT_ORANGE, ship, buf, NULL);
+                echo_to_system(AT_ORANGE, ship, buf, nullptr);
                 ship->currspeed = 0;
                 continue;
             }
@@ -619,7 +619,7 @@ void move_ships()
                 snprintf(buf, MAX_STRING_LENGTH, "You begin orbitting %s.", ship->starsystem->planet2);
                 echo_to_cockpit(AT_YELLOW, ship, buf);
                 snprintf(buf, MAX_STRING_LENGTH, "%s begins orbiting %s.", ship->name, ship->starsystem->planet2);
-                echo_to_system(AT_ORANGE, ship, buf, NULL);
+                echo_to_system(AT_ORANGE, ship, buf, nullptr);
                 ship->currspeed = 0;
                 continue;
             }
@@ -714,7 +714,7 @@ void recharge_ships()
                                         ship->name,
                                         target->name
                                     );
-                                    echo_to_system(AT_ORANGE, target, buf, NULL);
+                                    echo_to_system(AT_ORANGE, target, buf, nullptr);
                                 }
                                 else
                                 {
@@ -725,7 +725,7 @@ void recharge_ships()
                                         ship->name,
                                         target->name
                                     );
-                                    echo_to_system(AT_ORANGE, target, buf, NULL);
+                                    echo_to_system(AT_ORANGE, target, buf, nullptr);
                                     snprintf(buf, MAX_STRING_LENGTH, "You are hit by lasers from %s!", ship->name);
                                     echo_to_cockpit(AT_BLOOD, target, buf);
                                     echo_to_ship(AT_RED, target, "A small explosion vibrates through the ship.");
@@ -759,7 +759,7 @@ void update_space()
             else if (ship->energy > 0)
                 ship->energy += (5 + ship->ship_class * 5);
             else
-                destroy_ship(ship, NULL);
+                destroy_ship(ship, nullptr);
         }
 
         if (ship->chaff_released > 0)
@@ -772,7 +772,7 @@ void update_space()
             {
                 ship_to_starsystem(ship, ship->currjump);
 
-                if (ship->starsystem == NULL)
+                if (ship->starsystem == nullptr)
                 {
                     echo_to_cockpit(AT_RED, ship, "Ship lost in Hyperspace. Make new calculations.");
                 }
@@ -789,7 +789,7 @@ void update_space()
                         ship->vy,
                         ship->vz
                     );
-                    echo_to_system(AT_YELLOW, ship, buf, NULL);
+                    echo_to_system(AT_YELLOW, ship, buf, nullptr);
                     ship->shipstate = SHIP_READY;
                     STRFREE(ship->home);
                     ship->home = STRALLOC(ship->starsystem->name);
@@ -969,7 +969,7 @@ void update_space()
             echo_to_room_dnr(AT_BLUE, get_room_index(ship->gunseat), "Target: ");
             echo_to_room(AT_LBLUE, get_room_index(ship->gunseat), buf);
             if (ship->starsystem != ship->target0->starsystem)
-                ship->target0 = NULL;
+                ship->target0 = nullptr;
         }
 
         if (ship->target1)
@@ -986,7 +986,7 @@ void update_space()
             echo_to_room_dnr(AT_BLUE, get_room_index(ship->turret1), "Target: ");
             echo_to_room(AT_LBLUE, get_room_index(ship->turret1), buf);
             if (ship->starsystem != ship->target1->starsystem)
-                ship->target1 = NULL;
+                ship->target1 = nullptr;
         }
 
         if (ship->target2)
@@ -1003,7 +1003,7 @@ void update_space()
             echo_to_room_dnr(AT_BLUE, get_room_index(ship->turret2), "Target: ");
             echo_to_room(AT_LBLUE, get_room_index(ship->turret2), buf);
             if (ship->starsystem != ship->target2->starsystem)
-                ship->target2 = NULL;
+                ship->target2 = nullptr;
         }
 
         if (ship->energy < 100 && ship->starsystem)
@@ -1083,7 +1083,7 @@ void update_space()
                     {
                         if (autofly(target))
                             if (!str_cmp(target->owner, ship->owner) && target != ship)
-                                if (target->target0 == NULL && ship->target0 != target)
+                                if (target->target0 == nullptr && ship->target0 != target)
                                 {
                                     target->target0 = ship->target0;
                                     snprintf(buf, MAX_STRING_LENGTH, "You are being targetted by %s.", target->name);
@@ -1123,7 +1123,7 @@ void update_space()
                             }
                             else
                             {
-                                new_missile(ship, target, NULL, CONCUSSION_MISSILE);
+                                new_missile(ship, target, nullptr, CONCUSSION_MISSILE);
                                 ship->missiles--;
                                 snprintf(buf, MAX_STRING_LENGTH, "Incoming missile from %s.", ship->name);
                                 echo_to_cockpit(AT_BLOOD, target, buf);
@@ -1134,7 +1134,7 @@ void update_space()
                                     ship->name,
                                     target->name
                                 );
-                                echo_to_system(AT_ORANGE, target, buf, NULL);
+                                echo_to_system(AT_ORANGE, target, buf, nullptr);
 
                                 if (ship->ship_class == CAPITAL_SHIP
                                     || ship->ship_class == SHIP_PLATFORM)
@@ -1207,7 +1207,7 @@ void update_space()
         if ((
                 ship->ship_class == CAPITAL_SHIP
                 || ship->ship_class == SHIP_PLATFORM
-            ) && ship->target0 == NULL)
+            ) && ship->target0 == nullptr)
         {
             if (ship->missiles < ship->maxmissiles)
                 ship->missiles++;
@@ -1253,7 +1253,7 @@ SPACE_DATA* starsystem_from_name(const char* name)
         if (!str_prefix(name, starsystem->name))
             return starsystem;
 
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -1274,7 +1274,7 @@ SPACE_DATA* starsystem_from_vnum(int vnum)
         if (vnum == ship->hanger)
             return ship->starsystem;
 
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -1299,7 +1299,7 @@ void save_starsystem(SPACE_DATA* starsystem)
 
     snprintf(filename, 256, "%s%s", SPACE_DIR, starsystem->filename);
 
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         bug("%s: fopen", __func__);
         perror(filename);
@@ -1502,7 +1502,7 @@ bool load_starsystem(const char* starsystemfile)
     found = FALSE;
     snprintf(filename, 256, "%s%s", SPACE_DIR, starsystemfile);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
         found = TRUE;
         LINK(starsystem, first_starsystem, last_starsystem, next, prev);
@@ -1556,13 +1556,13 @@ void load_space()
     const char* filename;
     char      starsystemlist[256];
 
-    first_starsystem = NULL;
-    last_starsystem  = NULL;
+    first_starsystem = nullptr;
+    last_starsystem  = nullptr;
 
     log_string("Loading space...");
 
     snprintf(starsystemlist, 256, "%s%s", SPACE_DIR, SPACE_LIST);
-    if ((fpList = fopen(starsystemlist, "r")) == NULL)
+    if ((fpList = fopen(starsystemlist, "r")) == nullptr)
     {
         perror(starsystemlist);
         exit(1);
@@ -2029,7 +2029,7 @@ void do_showstarsystem(CHAR_DATA* ch, const char* argument)
 
     starsystem = starsystem_from_name(argument);
 
-    if (starsystem == NULL)
+    if (starsystem == nullptr)
         send_to_char("&RNo such starsystem.\r\n", ch);
     else
         showstarsystem(ch, starsystem);
@@ -2112,7 +2112,7 @@ void sound_to_ship(SHIP_DATA* ship, const char* argument)
     for (roomnum = ship->firstroom; roomnum <= ship->lastroom; roomnum++)
     {
         room = get_room_index(roomnum);
-        if (room == NULL)
+        if (room == nullptr)
             continue;
 
         for (vic = room->first_person; vic; vic = vic->next_in_room)
@@ -2282,7 +2282,7 @@ SHIP_DATA* ship_in_room(ROOM_INDEX_DATA* room, const char* name)
     SHIP_DATA* ship;
 
     if (!room)
-        return NULL;
+        return nullptr;
 
     for (ship = room->first_ship; ship; ship = ship->next_in_room)
         if (!str_cmp(name, ship->name))
@@ -2292,7 +2292,7 @@ SHIP_DATA* ship_in_room(ROOM_INDEX_DATA* room, const char* name)
         if (nifty_is_name_prefix(name, ship->name))
             return ship;
 
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -2310,7 +2310,7 @@ SHIP_DATA* get_ship(const char* name)
         if (nifty_is_name_prefix(name, ship->name))
             return ship;
 
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -2320,8 +2320,8 @@ SHIP_DATA* get_ship_here(const char* name, SPACE_DATA* starsystem)
 {
     SHIP_DATA* ship;
 
-    if (starsystem == NULL)
-        return NULL;
+    if (starsystem == nullptr)
+        return nullptr;
 
     for (ship = starsystem->first_ship; ship; ship = ship->next_in_starsystem)
         if (!str_cmp(name, ship->name))
@@ -2331,7 +2331,7 @@ SHIP_DATA* get_ship_here(const char* name, SPACE_DATA* starsystem)
         if (nifty_is_name_prefix(name, ship->name))
             return ship;
 
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -2348,7 +2348,7 @@ SHIP_DATA* ship_from_pilot(const char* name)
         return ship;
     if (!str_cmp(name, ship->owner))
         return ship;
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -2364,7 +2364,7 @@ SHIP_DATA* ship_from_cockpit(int vnum)
             || vnum == ship->pilotseat || vnum == ship->coseat || vnum == ship->navseat
             || vnum == ship->gunseat || vnum == ship->engineroom)
             return ship;
-    return NULL;
+    return nullptr;
 }
 
 SHIP_DATA* ship_from_pilotseat(int vnum)
@@ -2374,7 +2374,7 @@ SHIP_DATA* ship_from_pilotseat(int vnum)
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->pilotseat)
             return ship;
-    return NULL;
+    return nullptr;
 }
 
 SHIP_DATA* ship_from_coseat(int vnum)
@@ -2384,7 +2384,7 @@ SHIP_DATA* ship_from_coseat(int vnum)
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->coseat)
             return ship;
-    return NULL;
+    return nullptr;
 }
 
 SHIP_DATA* ship_from_navseat(int vnum)
@@ -2394,7 +2394,7 @@ SHIP_DATA* ship_from_navseat(int vnum)
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->navseat)
             return ship;
-    return NULL;
+    return nullptr;
 }
 
 SHIP_DATA* ship_from_gunseat(int vnum)
@@ -2404,7 +2404,7 @@ SHIP_DATA* ship_from_gunseat(int vnum)
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->gunseat)
             return ship;
-    return NULL;
+    return nullptr;
 }
 
 SHIP_DATA* ship_from_engine(int vnum)
@@ -2425,7 +2425,7 @@ SHIP_DATA* ship_from_engine(int vnum)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -2436,7 +2436,7 @@ SHIP_DATA* ship_from_turret(int vnum)
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->gunseat || vnum == ship->turret1 || vnum == ship->turret2)
             return ship;
-    return NULL;
+    return nullptr;
 }
 
 SHIP_DATA* ship_from_entrance(int vnum)
@@ -2446,7 +2446,7 @@ SHIP_DATA* ship_from_entrance(int vnum)
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->entrance)
             return ship;
-    return NULL;
+    return nullptr;
 }
 
 SHIP_DATA* ship_from_hanger(int vnum)
@@ -2456,7 +2456,7 @@ SHIP_DATA* ship_from_hanger(int vnum)
     for (ship = first_ship; ship; ship = ship->next)
         if (vnum == ship->hanger)
             return ship;
-    return NULL;
+    return nullptr;
 }
 
 void save_ship(SHIP_DATA* ship)
@@ -2478,7 +2478,7 @@ void save_ship(SHIP_DATA* ship)
 
     snprintf(filename, 256, "%s%s", SHIP_DIR, ship->filename);
 
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         bug("%s: fopen", __func__);
         perror(filename);
@@ -2623,12 +2623,12 @@ void fread_ship(SHIP_DATA* ship, FILE* fp)
                         ship->torpedos = ship->missiles; /* for back compatability */
                         ship->missiles = 0;
                     }
-                    ship->starsystem       = NULL;
+                    ship->starsystem       = nullptr;
                     ship->energy           = ship->maxenergy;
                     ship->hull             = ship->maxhull;
-                    ship->in_room          = NULL;
-                    ship->next_in_room     = NULL;
-                    ship->prev_in_room     = NULL;
+                    ship->in_room          = nullptr;
+                    ship->next_in_room     = nullptr;
+                    ship->prev_in_room     = nullptr;
 
                     return;
                 }
@@ -2723,7 +2723,7 @@ bool load_ship_file(const char* shipfile)
     found = FALSE;
     snprintf(filename, 256, "%s%s", SHIP_DIR, shipfile);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
         found = TRUE;
         for (;;)
@@ -2789,10 +2789,10 @@ bool load_ship_file(const char* shipfile)
             ship->statet0      = LASER_READY;
             ship->missilestate = LASER_READY;
 
-            ship->currjump = NULL;
-            ship->target0  = NULL;
-            ship->target1  = NULL;
-            ship->target2  = NULL;
+            ship->currjump = nullptr;
+            ship->target0  = nullptr;
+            ship->target1  = nullptr;
+            ship->target2  = nullptr;
 
             ship->hatchopen = FALSE;
             ship->bayopen   = TRUE;
@@ -2810,7 +2810,7 @@ bool load_ship_file(const char* shipfile)
                  ship->cockpit == ROOM_CORUSCANT_TURBOCAR || ship->cockpit == ROOM_CORUSCANT_SHUTTLE)
         {
         }
-        else if ((pRoomIndex = get_room_index(ship->lastdoc)) != NULL
+        else if ((pRoomIndex = get_room_index(ship->lastdoc)) != nullptr
                  && ship->ship_class != CAPITAL_SHIP
                  && ship->ship_class != SHIP_PLATFORM)
         {
@@ -2835,7 +2835,7 @@ bool load_ship_file(const char* shipfile)
             ship->shield       = ship->maxshield;
         }
 
-        if (ship->type != MOB_SHIP && (clan = get_clan(ship->owner)) != NULL)
+        if (ship->type != MOB_SHIP && (clan = get_clan(ship->owner)) != nullptr)
         {
             if (ship->ship_class <= SHIP_PLATFORM)
                 clan->spacecraft++;
@@ -2855,15 +2855,15 @@ void load_ships()
     const char* filename;
     char      shiplist[256];
 
-    first_ship    = NULL;
-    last_ship     = NULL;
-    first_missile = NULL;
-    last_missile  = NULL;
+    first_ship    = nullptr;
+    last_ship     = nullptr;
+    first_missile = nullptr;
+    last_missile  = nullptr;
 
     log_string("Loading ships...");
 
     snprintf(shiplist, 256, "%s%s", SHIP_DIR, SHIP_LIST);
-    if ((fpList = fopen(shiplist, "r")) == NULL)
+    if ((fpList = fopen(shiplist, "r")) == nullptr)
     {
         perror(shiplist);
         exit(1);
@@ -2913,10 +2913,10 @@ void resetship(SHIP_DATA* ship)
     ship->statet0      = LASER_READY;
     ship->missilestate = LASER_READY;
 
-    ship->currjump = NULL;
-    ship->target0  = NULL;
-    ship->target1  = NULL;
-    ship->target2  = NULL;
+    ship->currjump = nullptr;
+    ship->target0  = nullptr;
+    ship->target1  = nullptr;
+    ship->target2  = nullptr;
 
     ship->hatchopen = FALSE;
     ship->bayopen   = TRUE;
@@ -2932,7 +2932,7 @@ void resetship(SHIP_DATA* ship)
     {
         CLAN_DATA* clan;
 
-        if (ship->type != MOB_SHIP && (clan = get_clan(ship->owner)) != NULL)
+        if (ship->type != MOB_SHIP && (clan = get_clan(ship->owner)) != nullptr)
         {
             if (ship->ship_class <= SHIP_PLATFORM)
                 clan->spacecraft--;
@@ -2972,7 +2972,7 @@ void do_resetship(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* ship;
 
     ship = get_ship(argument);
-    if (ship == NULL)
+    if (ship == nullptr)
     {
         send_to_char("&RNo such ship!", ch);
         return;
@@ -3034,7 +3034,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     if (!str_cmp(arg2, "owner"))
     {
         CLAN_DATA* clan;
-        if (ship->type != MOB_SHIP && (clan = get_clan(ship->owner)) != NULL)
+        if (ship->type != MOB_SHIP && (clan = get_clan(ship->owner)) != nullptr)
         {
             if (ship->ship_class <= SHIP_PLATFORM)
                 clan->spacecraft--;
@@ -3045,7 +3045,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         ship->owner = STRALLOC(argument);
         send_to_char("Done.\r\n", ch);
         save_ship(ship);
-        if (ship->type != MOB_SHIP && (clan = get_clan(ship->owner)) != NULL)
+        if (ship->type != MOB_SHIP && (clan = get_clan(ship->owner)) != nullptr)
         {
             if (ship->ship_class <= SHIP_PLATFORM)
                 clan->spacecraft++;
@@ -3086,7 +3086,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.\r\n", ch);
             return;
@@ -3111,7 +3111,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.\r\n", ch);
             return;
@@ -3149,7 +3149,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.\r\n", ch);
             return;
@@ -3177,7 +3177,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.\r\n", ch);
             return;
@@ -3204,7 +3204,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.\r\n", ch);
             return;
@@ -3231,7 +3231,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.\r\n", ch);
             return;
@@ -3258,7 +3258,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.\r\n", ch);
             return;
@@ -3286,7 +3286,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.\r\n", ch);
             return;
@@ -3309,7 +3309,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.\r\n", ch);
             return;
@@ -3343,7 +3343,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.\r\n", ch);
             return;
@@ -3377,7 +3377,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.\r\n", ch);
             return;
@@ -3411,7 +3411,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.\r\n", ch);
             return;
@@ -3440,7 +3440,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
-        if (roomindex == NULL)
+        if (roomindex == nullptr)
         {
             send_to_char("That room doesn't exist.", ch);
             return;
@@ -3771,16 +3771,16 @@ void do_makeship(CHAR_DATA* ch, const char* argument)
     ship->pilot        = STRALLOC("");
     ship->home         = STRALLOC("");
     ship->type         = SHIP_CIVILIAN;
-    ship->starsystem   = NULL;
+    ship->starsystem   = nullptr;
     ship->energy       = ship->maxenergy;
     ship->hull         = ship->maxhull;
-    ship->in_room      = NULL;
-    ship->next_in_room = NULL;
-    ship->prev_in_room = NULL;
-    ship->currjump     = NULL;
-    ship->target0      = NULL;
-    ship->target1      = NULL;
-    ship->target2      = NULL;
+    ship->in_room      = nullptr;
+    ship->next_in_room = nullptr;
+    ship->prev_in_room = nullptr;
+    ship->currjump     = nullptr;
+    ship->target0      = nullptr;
+    ship->target1      = nullptr;
+    ship->target2      = nullptr;
 
     ship->filename = str_dup(arg);
     save_ship(ship);
@@ -3833,13 +3833,13 @@ void do_copyship(CHAR_DATA* ch, const char* argument)
     ship->maxchaff     = old->maxchaff;
     ship->realspeed    = old->realspeed;
     ship->manuever     = old->manuever;
-    ship->in_room      = NULL;
-    ship->next_in_room = NULL;
-    ship->prev_in_room = NULL;
-    ship->currjump     = NULL;
-    ship->target0      = NULL;
-    ship->target1      = NULL;
-    ship->target2      = NULL;
+    ship->in_room      = nullptr;
+    ship->next_in_room = nullptr;
+    ship->prev_in_room = nullptr;
+    ship->currjump     = nullptr;
+    ship->target0      = nullptr;
+    ship->target1      = nullptr;
+    ship->target2      = nullptr;
 
     ship->filename = str_dup(arg2);
     save_ship(ship);
@@ -4113,13 +4113,13 @@ void do_allships(CHAR_DATA* ch, const char* argument)
 
 void ship_to_starsystem(SHIP_DATA* ship, SPACE_DATA* starsystem)
 {
-    if (starsystem == NULL)
+    if (starsystem == nullptr)
         return;
 
-    if (ship == NULL)
+    if (ship == nullptr)
         return;
 
-    if (starsystem->first_ship == NULL)
+    if (starsystem->first_ship == nullptr)
         starsystem->first_ship = ship;
 
     if (starsystem->last_ship)
@@ -4138,13 +4138,13 @@ void new_missile(SHIP_DATA* ship, SHIP_DATA* target, CHAR_DATA* ch, int missilet
     SPACE_DATA  * starsystem;
     MISSILE_DATA* missile;
 
-    if (ship == NULL)
+    if (ship == nullptr)
         return;
 
-    if (target == NULL)
+    if (target == nullptr)
         return;
 
-    if ((starsystem = ship->starsystem) == NULL)
+    if ((starsystem = ship->starsystem) == nullptr)
         return;
 
     CREATE(missile, MISSILE_DATA, 1);
@@ -4171,7 +4171,7 @@ void new_missile(SHIP_DATA* ship, SHIP_DATA* target, CHAR_DATA* ch, int missilet
     missile->my = (int)ship->vy;
     missile->mz = (int)ship->vz;
 
-    if (starsystem->first_missile == NULL)
+    if (starsystem->first_missile == nullptr)
         starsystem->first_missile = missile;
 
     if (starsystem->last_missile)
@@ -4187,10 +4187,10 @@ void new_missile(SHIP_DATA* ship, SHIP_DATA* target, CHAR_DATA* ch, int missilet
 
 void ship_from_starsystem(SHIP_DATA* ship, SPACE_DATA* starsystem)
 {
-    if (starsystem == NULL)
+    if (starsystem == nullptr)
         return;
 
-    if (ship == NULL)
+    if (ship == nullptr)
         return;
 
     if (starsystem->last_ship == ship)
@@ -4205,19 +4205,19 @@ void ship_from_starsystem(SHIP_DATA* ship, SPACE_DATA* starsystem)
     if (ship->next_in_starsystem)
         ship->next_in_starsystem->prev_in_starsystem = ship->prev_in_starsystem;
 
-    ship->starsystem         = NULL;
-    ship->next_in_starsystem = NULL;
-    ship->prev_in_starsystem = NULL;
+    ship->starsystem         = nullptr;
+    ship->next_in_starsystem = nullptr;
+    ship->prev_in_starsystem = nullptr;
 }
 
 void extract_missile(MISSILE_DATA* missile)
 {
     SPACE_DATA* starsystem;
 
-    if (missile == NULL)
+    if (missile == nullptr)
         return;
 
-    if ((starsystem = missile->starsystem) != NULL)
+    if ((starsystem = missile->starsystem) != nullptr)
     {
 
         if (starsystem->last_missile == missile)
@@ -4232,16 +4232,16 @@ void extract_missile(MISSILE_DATA* missile)
         if (missile->next_in_starsystem)
             missile->next_in_starsystem->prev_in_starsystem = missile->prev_in_starsystem;
 
-        missile->starsystem         = NULL;
-        missile->next_in_starsystem = NULL;
-        missile->prev_in_starsystem = NULL;
+        missile->starsystem         = nullptr;
+        missile->next_in_starsystem = nullptr;
+        missile->prev_in_starsystem = nullptr;
 
     }
 
     UNLINK(missile, first_missile, last_missile, next, prev);
 
-    missile->target     = NULL;
-    missile->fired_from = NULL;
+    missile->target     = nullptr;
+    missile->fired_from = nullptr;
     if (missile->fired_by)
         STRFREE(missile->fired_by);
 
@@ -4284,10 +4284,10 @@ bool extract_ship(SHIP_DATA* ship)
 {
     ROOM_INDEX_DATA* room;
 
-    if ((room = ship->in_room) != NULL)
+    if ((room = ship->in_room) != nullptr)
     {
         UNLINK(ship, room->first_ship, room->last_ship, next_in_room, prev_in_room);
-        ship->in_room = NULL;
+        ship->in_room = nullptr;
     }
     return TRUE;
 }
@@ -4408,7 +4408,7 @@ void damage_ship(SHIP_DATA* ship, int min, int max)
 
     if (ship->hull <= 0)
     {
-        destroy_ship(ship, NULL);
+        destroy_ship(ship, nullptr);
         return;
     }
 
@@ -4425,7 +4425,7 @@ void destroy_ship(SHIP_DATA* ship, CHAR_DATA* ch)
     CHAR_DATA      * rch;
 
     snprintf(buf, MAX_STRING_LENGTH, "%s explodes in a blinding flash of light!", ship->name);
-    echo_to_system(AT_WHITE + AT_BLINK, ship, buf, NULL);
+    echo_to_system(AT_WHITE + AT_BLINK, ship, buf, nullptr);
 
     if (ship->ship_class == FIGHTER_SHIP)
 
@@ -4439,7 +4439,7 @@ void destroy_ship(SHIP_DATA* ship, CHAR_DATA* ch)
     {
         room = get_room_index(roomnum);
 
-        if (room != NULL)
+        if (room != nullptr)
         {
             rch = room->first_person;
             while (rch)
@@ -4474,7 +4474,7 @@ bool ship_to_room(SHIP_DATA* ship, int vnum)
 {
     ROOM_INDEX_DATA* shipto;
 
-    if ((shipto = get_room_index(vnum)) == NULL)
+    if ((shipto = get_room_index(vnum)) == nullptr)
         return FALSE;
     LINK(ship, shipto->first_ship, shipto->last_ship, next_in_room, prev_in_room);
     ship->in_room = shipto;
@@ -4492,19 +4492,19 @@ void do_board(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((ship = ship_in_room(ch->in_room, argument)) == NULL)
+    if ((ship = ship_in_room(ch->in_room, argument)) == nullptr)
     {
-        act(AT_PLAIN, "I see no $T here.", ch, NULL, argument, TO_CHAR);
+        act(AT_PLAIN, "I see no $T here.", ch, nullptr, argument, TO_CHAR);
         return;
     }
 
     if (IS_SET(ch->act, ACT_MOUNTED))
     {
-        act(AT_PLAIN, "You can't go in there riding THAT.", ch, NULL, argument, TO_CHAR);
+        act(AT_PLAIN, "You can't go in there riding THAT.", ch, nullptr, argument, TO_CHAR);
         return;
     }
 
-    if ((toroom = get_room_index(ship->entrance)) != NULL)
+    if ((toroom = get_room_index(ship->entrance)) != nullptr)
     {
         if (!ship->hatchopen)
         {
@@ -4530,11 +4530,11 @@ void do_board(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        act(AT_PLAIN, "$n enters $T.", ch, NULL, ship->name, TO_ROOM);
-        act(AT_PLAIN, "You enter $T.", ch, NULL, ship->name, TO_CHAR);
+        act(AT_PLAIN, "$n enters $T.", ch, nullptr, ship->name, TO_ROOM);
+        act(AT_PLAIN, "You enter $T.", ch, nullptr, ship->name, TO_CHAR);
         char_from_room(ch);
         char_to_room(ch, toroom);
-        act(AT_PLAIN, "$n enters the ship.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n enters the ship.", ch, nullptr, argument, TO_ROOM);
         do_look(ch, "auto");
 
     }
@@ -4570,7 +4570,7 @@ void do_leaveship(CHAR_DATA* ch, const char* argument)
 
     fromroom = ch->in_room;
 
-    if ((ship = ship_from_entrance(fromroom->vnum)) == NULL)
+    if ((ship = ship_from_entrance(fromroom->vnum)) == nullptr)
     {
         send_to_char("I see no exit here.\r\n", ch);
         return;
@@ -4600,13 +4600,13 @@ void do_leaveship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((toroom = get_room_index(ship->location)) != NULL)
+    if ((toroom = get_room_index(ship->location)) != nullptr)
     {
-        act(AT_PLAIN, "$n exits the ship.", ch, NULL, argument, TO_ROOM);
-        act(AT_PLAIN, "You exit the ship.", ch, NULL, argument, TO_CHAR);
+        act(AT_PLAIN, "$n exits the ship.", ch, nullptr, argument, TO_ROOM);
+        act(AT_PLAIN, "You exit the ship.", ch, nullptr, argument, TO_CHAR);
         char_from_room(ch);
         char_to_room(ch, toroom);
-        act(AT_PLAIN, "$n steps out of a ship.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n steps out of a ship.", ch, nullptr, argument, TO_ROOM);
         do_look(ch, "auto");
     }
     else
@@ -4620,7 +4620,7 @@ void do_launch(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* ship;
     char     buf[MAX_STRING_LENGTH];
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -4632,7 +4632,7 @@ void do_launch(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou don't seem to be in the pilot seat!\r\n", ch);
         return;
@@ -4769,7 +4769,7 @@ void do_launch(CHAR_DATA* ch, const char* argument)
         }
         set_char_color(AT_GREEN, ch);
         send_to_char("Launch sequence initiated.\r\n", ch);
-        act(AT_PLAIN, "$n starts up the ship and begins the launch sequence.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n starts up the ship and begins the launch sequence.", ch, nullptr, argument, TO_ROOM);
         echo_to_ship(AT_YELLOW, ship, "The ship hums as it lifts off the ground.");
         snprintf(buf, MAX_STRING_LENGTH, "%s begins to launch.", ship->name);
         echo_to_room(AT_YELLOW, get_room_index(ship->location), buf);
@@ -4802,7 +4802,7 @@ void launchship(SHIP_DATA* ship)
 
     ship_to_starsystem(ship, starsystem_from_vnum(ship->location));
 
-    if (ship->starsystem == NULL)
+    if (ship->starsystem == nullptr)
     {
         echo_to_room(AT_YELLOW, get_room_index(ship->pilotseat), "Launch path blocked .. Launch aborted.");
         echo_to_ship(AT_YELLOW, ship, "The ship slowly sets back back down on the landing pad.");
@@ -4904,7 +4904,7 @@ void launchship(SHIP_DATA* ship)
         ship->vy,
         ship->vz
     );
-    echo_to_system(AT_YELLOW, ship, buf, NULL);
+    echo_to_system(AT_YELLOW, ship, buf, nullptr);
     snprintf(buf, MAX_STRING_LENGTH, "%s lifts off into space.", ship->name);
     echo_to_room(AT_YELLOW, get_room_index(ship->lastdoc), buf);
 }
@@ -4919,7 +4919,7 @@ void do_land(CHAR_DATA* ch, const char* argument)
 
     mudstrlcpy(arg, argument, MAX_INPUT_LENGTH);
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -4931,7 +4931,7 @@ void do_land(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou need to be in the pilot seat!\r\n", ch);
         return;
@@ -4976,7 +4976,7 @@ void do_land(CHAR_DATA* ch, const char* argument)
         send_to_char("&RPlease wait until the ship has finished its current manouver.\r\n", ch);
         return;
     }
-    if (ship->starsystem == NULL)
+    if (ship->starsystem == nullptr)
     {
         send_to_char("&RThere's nowhere to land around here!", ch);
         return;
@@ -5066,7 +5066,7 @@ void do_land(CHAR_DATA* ch, const char* argument)
         str_prefix(argument, ship->starsystem->location2c) && str_prefix(argument, ship->starsystem->location3c))
     {
         target = get_ship_here(argument, ship->starsystem);
-        if (target == NULL)
+        if (target == nullptr)
         {
             send_to_char("&RI don't see that here. Type land by itself for a list\r\n", ch);
             return;
@@ -5138,7 +5138,7 @@ void do_land(CHAR_DATA* ch, const char* argument)
     {
         set_char_color(AT_GREEN, ch);
         send_to_char("Landing sequence initiated.\r\n", ch);
-        act(AT_PLAIN, "$n begins the landing sequence.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n begins the landing sequence.", ch, nullptr, argument, TO_ROOM);
         echo_to_ship(AT_YELLOW, ship, "The ship slowly begins its landing aproach.");
         ship->dest      = STRALLOC(arg);
         ship->shipstate = SHIP_LAND;
@@ -5189,7 +5189,7 @@ void landship(SHIP_DATA* ship, const char* arg)
         destination = ship->starsystem->doc1c;
 
     target          = get_ship_here(arg, ship->starsystem);
-    if (target != ship && target != NULL && target->bayopen
+    if (target != ship && target != nullptr && target->bayopen
         && (ship->ship_class != MIDSIZE_SHIP || target->ship_class != MIDSIZE_SHIP))
         destination = target->hanger;
 
@@ -5205,7 +5205,7 @@ void landship(SHIP_DATA* ship, const char* arg)
     echo_to_room(AT_YELLOW, get_room_index(ship->pilotseat), "Landing sequence complete.");
     echo_to_ship(AT_YELLOW, ship, "You feel a slight thud as the ship sets down on the ground.");
     snprintf(buf, MAX_STRING_LENGTH, "%s disapears from your scanner.", ship->name);
-    echo_to_system(AT_YELLOW, ship, buf, NULL);
+    echo_to_system(AT_YELLOW, ship, buf, nullptr);
 
     ship->location      = destination;
     ship->lastdoc       = ship->location;
@@ -5250,7 +5250,7 @@ void do_accelerate(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* ship;
     char     buf[MAX_STRING_LENGTH];
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -5262,7 +5262,7 @@ void do_accelerate(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RThe controls must be at the pilots chair...\r\n", ch);
         return;
@@ -5321,14 +5321,14 @@ void do_accelerate(CHAR_DATA* ch, const char* argument)
 
     change = atoi(argument);
 
-    act(AT_PLAIN, "$n manipulates the ships controls.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n manipulates the ships controls.", ch, nullptr, argument, TO_ROOM);
 
     if (change > ship->currspeed)
     {
         send_to_char("&GAccelerating\r\n", ch);
         echo_to_cockpit(AT_YELLOW, ship, "The ship begins to accelerate.");
         snprintf(buf, MAX_STRING_LENGTH, "%s begins to speed up.", ship->name);
-        echo_to_system(AT_ORANGE, ship, buf, NULL);
+        echo_to_system(AT_ORANGE, ship, buf, nullptr);
     }
 
     if (change < ship->currspeed)
@@ -5336,7 +5336,7 @@ void do_accelerate(CHAR_DATA* ch, const char* argument)
         send_to_char("&GDecelerating\r\n", ch);
         echo_to_cockpit(AT_YELLOW, ship, "The ship begins to slow down.");
         snprintf(buf, MAX_STRING_LENGTH, "%s begins to slow down.", ship->name);
-        echo_to_system(AT_ORANGE, ship, buf, NULL);
+        echo_to_system(AT_ORANGE, ship, buf, nullptr);
     }
 
     ship->energy -= abs((change - abs(ship->currspeed)) / 10);
@@ -5360,7 +5360,7 @@ void do_trajectory(CHAR_DATA* ch, const char* argument)
     float    vx, vy, vz;
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -5372,7 +5372,7 @@ void do_trajectory(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYour not in the pilots seat.\r\n", ch);
         return;
@@ -5457,11 +5457,11 @@ void do_trajectory(CHAR_DATA* ch, const char* argument)
     ship->energy -= (ship->currspeed / 10);
 
     ch_printf(ch, "&GNew course set, aproaching %.0f %.0f %.0f.\r\n", vx, vy, vz);
-    act(AT_PLAIN, "$n manipulates the ships controls.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n manipulates the ships controls.", ch, nullptr, argument, TO_ROOM);
 
     echo_to_cockpit(AT_YELLOW, ship, "The ship begins to turn.\r\n");
     snprintf(buf, MAX_STRING_LENGTH, "%s turns altering its present course.", ship->name);
-    echo_to_system(AT_ORANGE, ship, buf, NULL);
+    echo_to_system(AT_ORANGE, ship, buf, nullptr);
 
     if (ship->ship_class == FIGHTER_SHIP || (ship->ship_class == MIDSIZE_SHIP && ship->manuever > 50))
         ship->shipstate = SHIP_BUSY_3;
@@ -5496,7 +5496,7 @@ void do_buyship(CHAR_DATA* ch, const char* argument)
 
         if (!ship)
         {
-            act(AT_PLAIN, "I see no $T here.", ch, NULL, argument, TO_CHAR);
+            act(AT_PLAIN, "I see no $T here.", ch, nullptr, argument, TO_CHAR);
             return;
         }
     }
@@ -5564,7 +5564,7 @@ void do_buyship(CHAR_DATA* ch, const char* argument)
     ch->gold -= price;
     ch_printf(ch, "&GYou pay %ld credits to purchace the ship.\r\n", price);
 
-    act(AT_PLAIN, "$n walks over to a terminal and makes a credit transaction.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n walks over to a terminal and makes a credit transaction.", ch, nullptr, argument, TO_ROOM);
 
     STRFREE(ship->owner);
     ship->owner = STRALLOC(ch->name);
@@ -5608,7 +5608,7 @@ void do_clanbuyship(CHAR_DATA* ch, const char* argument)
 
         if (!ship)
         {
-            act(AT_PLAIN, "I see no $T here.", ch, NULL, argument, TO_CHAR);
+            act(AT_PLAIN, "I see no $T here.", ch, nullptr, argument, TO_CHAR);
             return;
         }
     }
@@ -5654,7 +5654,7 @@ void do_clanbuyship(CHAR_DATA* ch, const char* argument)
     clan->funds -= price;
     ch_printf(ch, "&G%s pays %ld credits to purchace the ship.\r\n", clan->name, price);
 
-    act(AT_PLAIN, "$n walks over to a terminal and makes a credit transaction.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n walks over to a terminal and makes a credit transaction.", ch, nullptr, argument, TO_ROOM);
 
     STRFREE(ship->owner);
     ship->owner = STRALLOC(clan->name);
@@ -5674,7 +5674,7 @@ void do_sellship(CHAR_DATA* ch, const char* argument)
     ship = ship_in_room(ch->in_room, argument);
     if (!ship)
     {
-        act(AT_PLAIN, "I see no $T here.", ch, NULL, argument, TO_CHAR);
+        act(AT_PLAIN, "I see no $T here.", ch, nullptr, argument, TO_CHAR);
         return;
     }
 
@@ -5689,7 +5689,7 @@ void do_sellship(CHAR_DATA* ch, const char* argument)
     ch->gold += (price - price / 10);
     ch_printf(ch, "&GYou receive %ld credits from selling your ship.\r\n", price - price / 10);
 
-    act(AT_PLAIN, "$n walks over to a terminal and makes a credit transaction.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n walks over to a terminal and makes a credit transaction.", ch, nullptr, argument, TO_ROOM);
 
     STRFREE(ship->owner);
     ship->owner = STRALLOC("");
@@ -5701,18 +5701,18 @@ void do_info(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* ship;
     SHIP_DATA* target;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         if (argument[0] == '\0')
         {
-            act(AT_PLAIN, "Which ship do you want info on?.", ch, NULL, NULL, TO_CHAR);
+            act(AT_PLAIN, "Which ship do you want info on?.", ch, nullptr, nullptr, TO_CHAR);
             return;
         }
 
         ship = ship_in_room(ch->in_room, argument);
         if (!ship)
         {
-            act(AT_PLAIN, "I see no $T here.", ch, NULL, argument, TO_CHAR);
+            act(AT_PLAIN, "I see no $T here.", ch, nullptr, argument, TO_CHAR);
             return;
         }
 
@@ -5723,7 +5723,7 @@ void do_info(CHAR_DATA* ch, const char* argument)
     else
         target = get_ship_here(argument, ship->starsystem);
 
-    if (target == NULL)
+    if (target == nullptr)
     {
         send_to_char(
             "&RI don't see that here.\r\nTry the radar, or type info by itself for info on this ship.\r\n",
@@ -5775,7 +5775,7 @@ void do_info(CHAR_DATA* ch, const char* argument)
     ch_printf(ch, "Max Shields: %d   Max Energy(fuel): %d\r\n", target->maxshield, target->maxenergy);
     ch_printf(ch, "Maximum Speed: %d   Hyperspeed: %d\r\n", target->realspeed, target->hyperspeed);
 
-    act(AT_PLAIN, "$n checks various gages and displays on the control panel.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n checks various gages and displays on the control panel.", ch, nullptr, argument, TO_ROOM);
 }
 
 void do_autorecharge(CHAR_DATA* ch, const char* argument)
@@ -5784,13 +5784,13 @@ void do_autorecharge(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* ship;
     int      recharge;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
     }
 
-    if ((ship = ship_from_coseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_coseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the co-pilots seat!\r\n", ch);
         return;
@@ -5810,7 +5810,7 @@ void do_autorecharge(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    act(AT_PLAIN, "$n flips a switch on the control panell.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n flips a switch on the control panell.", ch, nullptr, argument, TO_ROOM);
 
     if (!str_cmp(argument, "on"))
     {
@@ -5862,13 +5862,13 @@ void do_autopilot(CHAR_DATA* ch, const char* argument)
 {
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
     }
 
-    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the pilots seat!\r\n", ch);
         return;
@@ -5887,7 +5887,7 @@ void do_autopilot(CHAR_DATA* ch, const char* argument)
     }
 
 
-    act(AT_PLAIN, "$n flips a switch on the control panell.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n flips a switch on the control panell.", ch, nullptr, argument, TO_ROOM);
 
     if (ship->autopilot == TRUE)
     {
@@ -5912,7 +5912,7 @@ void do_openhatch(CHAR_DATA* ch, const char* argument)
     if (!argument || argument[0] == '\0' || !str_cmp(argument, "hatch"))
     {
         ship = ship_from_entrance(ch->in_room->vnum);
-        if (ship == NULL)
+        if (ship == nullptr)
         {
             send_to_char("&ROpen what?\r\n", ch);
             return;
@@ -5935,7 +5935,7 @@ void do_openhatch(CHAR_DATA* ch, const char* argument)
                 }
                 ship->hatchopen = TRUE;
                 send_to_char("&GYou open the hatch.\r\n", ch);
-                act(AT_PLAIN, "$n opens the hatch.", ch, NULL, argument, TO_ROOM);
+                act(AT_PLAIN, "$n opens the hatch.", ch, nullptr, argument, TO_ROOM);
                 snprintf(buf, MAX_STRING_LENGTH, "The hatch on %s opens.", ship->name);
                 echo_to_room(AT_YELLOW, get_room_index(ship->location), buf);
                 sound_to_room(get_room_index(ship->entrance), "!!SOUND(door)");
@@ -5953,7 +5953,7 @@ void do_openhatch(CHAR_DATA* ch, const char* argument)
     ship = ship_in_room(ch->in_room, argument);
     if (!ship)
     {
-        act(AT_PLAIN, "I see no $T here.", ch, NULL, argument, TO_CHAR);
+        act(AT_PLAIN, "I see no $T here.", ch, nullptr, argument, TO_CHAR);
         return;
     }
 
@@ -5972,8 +5972,8 @@ void do_openhatch(CHAR_DATA* ch, const char* argument)
     if (!ship->hatchopen)
     {
         ship->hatchopen = TRUE;
-        act(AT_PLAIN, "You open the hatch on $T.", ch, NULL, ship->name, TO_CHAR);
-        act(AT_PLAIN, "$n opens the hatch on $T.", ch, NULL, ship->name, TO_ROOM);
+        act(AT_PLAIN, "You open the hatch on $T.", ch, nullptr, ship->name, TO_CHAR);
+        act(AT_PLAIN, "$n opens the hatch on $T.", ch, nullptr, ship->name, TO_ROOM);
         echo_to_room(AT_YELLOW, get_room_index(ship->entrance), "The hatch opens from the outside.");
         sound_to_room(get_room_index(ship->entrance), "!!SOUND(door)");
         sound_to_room(get_room_index(ship->location), "!!SOUND(door)");
@@ -5991,7 +5991,7 @@ void do_closehatch(CHAR_DATA* ch, const char* argument)
     if (!argument || argument[0] == '\0' || !str_cmp(argument, "hatch"))
     {
         ship = ship_from_entrance(ch->in_room->vnum);
-        if (ship == NULL)
+        if (ship == nullptr)
         {
             send_to_char("&RClose what?\r\n", ch);
             return;
@@ -6008,7 +6008,7 @@ void do_closehatch(CHAR_DATA* ch, const char* argument)
             {
                 ship->hatchopen = FALSE;
                 send_to_char("&GYou close the hatch.\r\n", ch);
-                act(AT_PLAIN, "$n closes the hatch.", ch, NULL, argument, TO_ROOM);
+                act(AT_PLAIN, "$n closes the hatch.", ch, nullptr, argument, TO_ROOM);
                 snprintf(buf, MAX_STRING_LENGTH, "The hatch on %s closes.", ship->name);
                 echo_to_room(AT_YELLOW, get_room_index(ship->location), buf);
                 sound_to_room(get_room_index(ship->entrance), "!!SOUND(door)");
@@ -6026,7 +6026,7 @@ void do_closehatch(CHAR_DATA* ch, const char* argument)
     ship = ship_in_room(ch->in_room, argument);
     if (!ship)
     {
-        act(AT_PLAIN, "I see no $T here.", ch, NULL, argument, TO_CHAR);
+        act(AT_PLAIN, "I see no $T here.", ch, nullptr, argument, TO_CHAR);
         return;
     }
 
@@ -6040,8 +6040,8 @@ void do_closehatch(CHAR_DATA* ch, const char* argument)
         if (ship->hatchopen)
         {
             ship->hatchopen = FALSE;
-            act(AT_PLAIN, "You close the hatch on $T.", ch, NULL, ship->name, TO_CHAR);
-            act(AT_PLAIN, "$n closes the hatch on $T.", ch, NULL, ship->name, TO_ROOM);
+            act(AT_PLAIN, "You close the hatch on $T.", ch, nullptr, ship->name, TO_CHAR);
+            act(AT_PLAIN, "$n closes the hatch on $T.", ch, nullptr, ship->name, TO_ROOM);
             echo_to_room(AT_YELLOW, get_room_index(ship->entrance), "The hatch is closed from outside.");
             sound_to_room(get_room_index(ship->entrance), "!!SOUND(door)");
             sound_to_room(get_room_index(ship->location), "!!SOUND(door)");
@@ -6062,7 +6062,7 @@ void do_status(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* ship;
     SHIP_DATA* target;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit, turret or engineroom of a ship to do that!\r\n", ch);
         return;
@@ -6073,7 +6073,7 @@ void do_status(CHAR_DATA* ch, const char* argument)
     else
         target = get_ship_here(argument, ship->starsystem);
 
-    if (target == NULL)
+    if (target == nullptr)
     {
         send_to_char(
             "&RI don't see that here.\r\nTry the radar, or type status by itself for your ships status.\r\n",
@@ -6098,7 +6098,7 @@ void do_status(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    act(AT_PLAIN, "$n checks various gages and displays on the control panel.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n checks various gages and displays on the control panel.", ch, nullptr, argument, TO_ROOM);
 
     ch_printf(ch, "&W%s:\r\n", target->name);
     ch_printf(ch, "&OCurrent Coordinates:&Y %.0f %.0f %.0f\r\n", target->vx, target->vy, target->vz);
@@ -6145,7 +6145,7 @@ void do_hyperspace(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* eShip;
     char     buf[MAX_STRING_LENGTH];
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -6158,7 +6158,7 @@ void do_hyperspace(CHAR_DATA* ch, const char* argument)
     }
 
 
-    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou aren't in the pilots seat.\r\n", ch);
         return;
@@ -6250,13 +6250,13 @@ void do_hyperspace(CHAR_DATA* ch, const char* argument)
         return;
     }
     snprintf(buf, MAX_STRING_LENGTH, "%s disapears from your scanner.", ship->name);
-    echo_to_system(AT_YELLOW, ship, buf, NULL);
+    echo_to_system(AT_YELLOW, ship, buf, nullptr);
 
     ship_from_starsystem(ship, ship->starsystem);
     ship->shipstate = SHIP_HYPERSPACE;
 
     send_to_char("&GYou push forward the hyperspeed lever.\r\n", ch);
-    act(AT_PLAIN, "$n pushes a lever forward on the control panel.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n pushes a lever forward on the control panel.", ch, nullptr, argument, TO_ROOM);
     echo_to_ship(AT_YELLOW, ship, "The ship lurches slightly as it makes the jump to lightspeed.");
     echo_to_cockpit(AT_YELLOW, ship, "The stars become streaks of light as you enter hyperspace.");
 
@@ -6287,7 +6287,7 @@ void do_target(CHAR_DATA* ch, const char* argument)
     switch (ch->substate)
     {
         default:
-            if ((ship = ship_from_turret(ch->in_room->vnum)) == NULL)
+            if ((ship = ship_from_turret(ch->in_room->vnum)) == nullptr)
             {
                 send_to_char("&RYou must be in the gunners seat or turret of a ship to do that!\r\n", ch);
                 return;
@@ -6326,16 +6326,16 @@ void do_target(CHAR_DATA* ch, const char* argument)
             {
                 send_to_char("&GTarget set to none.\r\n", ch);
                 if (ch->in_room->vnum == ship->gunseat)
-                    ship->target0 = NULL;
+                    ship->target0 = nullptr;
                 if (ch->in_room->vnum == ship->turret1)
-                    ship->target1 = NULL;
+                    ship->target1 = nullptr;
                 if (ch->in_room->vnum == ship->turret2)
-                    ship->target2 = NULL;
+                    ship->target2 = nullptr;
                 return;
             }
 
             target = get_ship_here(arg, ship->starsystem);
-            if (target == NULL)
+            if (target == nullptr)
             {
                 send_to_char("&RThat ship isn't here!\r\n", ch);
                 return;
@@ -6365,7 +6365,7 @@ void do_target(CHAR_DATA* ch, const char* argument)
             if (number_percent() < schance)
             {
                 send_to_char("&GTracking target.\r\n", ch);
-                act(AT_PLAIN, "$n makes some adjustments on the targeting computer.", ch, NULL, argument, TO_ROOM);
+                act(AT_PLAIN, "$n makes some adjustments on the targeting computer.", ch, nullptr, argument, TO_ROOM);
                 add_timer(ch, TIMER_DO_FUN, 1, do_target, 1);
                 ch->dest_buf = str_dup(arg);
                 return;
@@ -6383,7 +6383,7 @@ void do_target(CHAR_DATA* ch, const char* argument)
 
         case SUB_TIMER_DO_ABORT:DISPOSE(ch->dest_buf);
             ch->substate = SUB_NONE;
-            if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+            if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
                 return;
             send_to_char("&RYour concentration is broken. You fail to lock onto your target.\r\n", ch);
             return;
@@ -6391,13 +6391,13 @@ void do_target(CHAR_DATA* ch, const char* argument)
 
     ch->substate = SUB_NONE;
 
-    if ((ship = ship_from_turret(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_turret(ch->in_room->vnum)) == nullptr)
     {
         return;
     }
 
     target = get_ship_here(arg, ship->starsystem);
-    if (target == NULL || target == ship)
+    if (target == nullptr || target == ship)
     {
         send_to_char("&RThe ship has left the starsytem. Targeting aborted.\r\n", ch);
         return;
@@ -6434,7 +6434,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* target;
     char     buf[MAX_STRING_LENGTH];
 
-    if ((ship = ship_from_turret(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_turret(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the gunners chair or turret of a ship to do that!\r\n", ch);
         return;
@@ -6451,7 +6451,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         send_to_char("&RYou can only do that in realspace!\r\n", ch);
         return;
     }
-    if (ship->starsystem == NULL)
+    if (ship->starsystem == nullptr)
     {
         send_to_char("&RYou can't do that until after you've finished launching!\r\n", ch);
         return;
@@ -6487,7 +6487,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
             send_to_char("&RThe lasers are still recharging.\r\n", ch);
             return;
         }
-        if (ship->target0 == NULL)
+        if (ship->target0 == nullptr)
         {
             send_to_char("&RYou need to choose a target first.\r\n", ch);
             return;
@@ -6496,7 +6496,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         if (ship->target0->starsystem != ship->starsystem)
         {
             send_to_char("&RYour target seems to have left.\r\n", ch);
-            ship->target0 = NULL;
+            ship->target0 = nullptr;
             return;
         }
         if (abs((int)(target->vx - ship->vx)) > 1000
@@ -6519,7 +6519,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         schance -= (abs((int)(target->vy - ship->vy)) / 70);
         schance -= (abs((int)(target->vz - ship->vz)) / 70);
         schance = URANGE(10, schance, 90);
-        act(AT_PLAIN, "$n presses the fire button.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n presses the fire button.", ch, nullptr, argument, TO_ROOM);
         if (number_percent() > schance)
         {
             snprintf(buf, MAX_STRING_LENGTH, "Lasers fire from %s at you but miss.", ship->name);
@@ -6572,7 +6572,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
             send_to_char("&RThe missiles are still reloading.\r\n", ch);
             return;
         }
-        if (ship->target0 == NULL)
+        if (ship->target0 == nullptr)
         {
             send_to_char("&RYou need to choose a target first.\r\n", ch);
             return;
@@ -6581,7 +6581,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         if (ship->target0->starsystem != ship->starsystem)
         {
             send_to_char("&RYour target seems to have left.\r\n", ch);
-            ship->target0 = NULL;
+            ship->target0 = nullptr;
             return;
         }
         if (abs((int)(target->vx - ship->vx)) > 1000
@@ -6604,7 +6604,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         schance -= (abs((int)(target->vz - ship->vz)) / 100);
         schance += (30);
         schance = URANGE(20, schance, 80);
-        act(AT_PLAIN, "$n presses the fire button.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n presses the fire button.", ch, nullptr, argument, TO_ROOM);
         if (number_percent() > schance)
         {
             send_to_char("&RYou fail to lock onto your target!", ch);
@@ -6613,7 +6613,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         }
         new_missile(ship, target, ch, CONCUSSION_MISSILE);
         ship->missiles--;
-        act(AT_PLAIN, "$n presses the fire button.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n presses the fire button.", ch, nullptr, argument, TO_ROOM);
         echo_to_cockpit(AT_YELLOW, ship, "Missiles launched.");
         snprintf(buf, MAX_STRING_LENGTH, "Incoming missile from %s.", ship->name);
         echo_to_cockpit(AT_BLOOD, target, buf);
@@ -6651,7 +6651,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
             send_to_char("&RThe torpedos are still reloading.\r\n", ch);
             return;
         }
-        if (ship->target0 == NULL)
+        if (ship->target0 == nullptr)
         {
             send_to_char("&RYou need to choose a target first.\r\n", ch);
             return;
@@ -6660,7 +6660,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         if (ship->target0->starsystem != ship->starsystem)
         {
             send_to_char("&RYour target seems to have left.\r\n", ch);
-            ship->target0 = NULL;
+            ship->target0 = nullptr;
             return;
         }
         if (abs((int)(target->vx - ship->vx)) > 1000
@@ -6682,7 +6682,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         schance -= (abs((int)(target->vy - ship->vy)) / 100);
         schance -= (abs((int)(target->vz - ship->vz)) / 100);
         schance = URANGE(20, schance, 80);
-        act(AT_PLAIN, "$n presses the fire button.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n presses the fire button.", ch, nullptr, argument, TO_ROOM);
         if (number_percent() > schance)
         {
             send_to_char("&RYou fail to lock onto your target!", ch);
@@ -6691,7 +6691,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         }
         new_missile(ship, target, ch, PROTON_TORPEDO);
         ship->torpedos--;
-        act(AT_PLAIN, "$n presses the fire button.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n presses the fire button.", ch, nullptr, argument, TO_ROOM);
         echo_to_cockpit(AT_YELLOW, ship, "Missiles launched.");
         snprintf(buf, MAX_STRING_LENGTH, "Incoming torpedo from %s.", ship->name);
         echo_to_cockpit(AT_BLOOD, target, buf);
@@ -6730,7 +6730,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
             send_to_char("&RThe missiles are still reloading.\r\n", ch);
             return;
         }
-        if (ship->target0 == NULL)
+        if (ship->target0 == nullptr)
         {
             send_to_char("&RYou need to choose a target first.\r\n", ch);
             return;
@@ -6739,7 +6739,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         if (ship->target0->starsystem != ship->starsystem)
         {
             send_to_char("&RYour target seems to have left.\r\n", ch);
-            ship->target0 = NULL;
+            ship->target0 = nullptr;
             return;
         }
         if (abs((int)(target->vx - ship->vx)) > 800
@@ -6762,7 +6762,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         schance -= (abs((int)(target->vz - ship->vz)) / 100);
         schance -= 30;
         schance = URANGE(20, schance, 80);
-        act(AT_PLAIN, "$n presses the fire button.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n presses the fire button.", ch, nullptr, argument, TO_ROOM);
         if (number_percent() > schance)
         {
             send_to_char("&RYou fail to lock onto your target!", ch);
@@ -6771,7 +6771,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         }
         new_missile(ship, target, ch, HEAVY_ROCKET);
         ship->rockets--;
-        act(AT_PLAIN, "$n presses the fire button.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n presses the fire button.", ch, nullptr, argument, TO_ROOM);
         echo_to_cockpit(AT_YELLOW, ship, "Rocket launched.");
         snprintf(buf, MAX_STRING_LENGTH, "Incoming rocket from %s.", ship->name);
         echo_to_cockpit(AT_BLOOD, target, buf);
@@ -6805,7 +6805,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
             send_to_char("&RThe turbolaser is recharging.\r\n", ch);
             return;
         }
-        if (ship->target1 == NULL)
+        if (ship->target1 == nullptr)
         {
             send_to_char("&RYou need to choose a target first.\r\n", ch);
             return;
@@ -6814,7 +6814,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         if (ship->target1->starsystem != ship->starsystem)
         {
             send_to_char("&RYour target seems to have left.\r\n", ch);
-            ship->target1 = NULL;
+            ship->target1 = nullptr;
             return;
         }
         if (abs((int)(target->vx - ship->vx)) > 1000
@@ -6832,7 +6832,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         schance -= (abs((int)(target->vy - ship->vy)) / 70);
         schance -= (abs((int)(target->vz - ship->vz)) / 70);
         schance = URANGE(10, schance, 90);
-        act(AT_PLAIN, "$n presses the fire button.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n presses the fire button.", ch, nullptr, argument, TO_ROOM);
         if (number_percent() > schance)
         {
             snprintf(buf, MAX_STRING_LENGTH, "Turbolasers fire from %s at you but miss.", ship->name);
@@ -6880,7 +6880,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
             send_to_char("&RThe turbolaser is still recharging.\r\n", ch);
             return;
         }
-        if (ship->target2 == NULL)
+        if (ship->target2 == nullptr)
         {
             send_to_char("&RYou need to choose a target first.\r\n", ch);
             return;
@@ -6889,7 +6889,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         if (ship->target2->starsystem != ship->starsystem)
         {
             send_to_char("&RYour target seems to have left.\r\n", ch);
-            ship->target2 = NULL;
+            ship->target2 = nullptr;
             return;
         }
         if (abs((int)(target->vx - ship->vx)) > 1000
@@ -6907,7 +6907,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         schance -= (abs((int)(target->vy - ship->vy)) / 70);
         schance -= (abs((int)(target->vz - ship->vz)) / 70);
         schance = URANGE(10, schance, 90);
-        act(AT_PLAIN, "$n presses the fire button.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n presses the fire button.", ch, nullptr, argument, TO_ROOM);
         if (number_percent() > schance)
         {
             snprintf(buf, MAX_STRING_LENGTH, "Turbolasers fire from %s barely missing %s.", ship->name, target->name);
@@ -6959,7 +6959,7 @@ void do_calculate(CHAR_DATA* ch, const char* argument)
     argument = one_argument(argument, arg2);
     argument = one_argument(argument, arg3);
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -6971,7 +6971,7 @@ void do_calculate(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((ship = ship_from_navseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_navseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be at a nav computer to calculate jumps.\r\n", ch);
         return;
@@ -6998,7 +6998,7 @@ void do_calculate(CHAR_DATA* ch, const char* argument)
         send_to_char("&RYou can't do that until after you've launched!\r\n", ch);
         return;
     }
-    if (ship->starsystem == NULL)
+    if (ship->starsystem == nullptr)
     {
         send_to_char("&RYou can only do that in realspace.\r\n", ch);
         return;
@@ -7039,7 +7039,7 @@ void do_calculate(CHAR_DATA* ch, const char* argument)
     ship->jy       = atoi(arg3);
     ship->jz       = atoi(argument);
 
-    if (ship->currjump == NULL)
+    if (ship->currjump == nullptr)
     {
         send_to_char("&RYou can't seem to find that starsytem on your charts.\r\n", ch);
         return;
@@ -7057,7 +7057,7 @@ void do_calculate(CHAR_DATA* ch, const char* argument)
         {
             echo_to_cockpit(AT_RED, ship, "WARNING.. Jump coordinates too close to stellar object.");
             echo_to_cockpit(AT_RED, ship, "WARNING.. Hyperjump NOT set.");
-            ship->currjump = NULL;
+            ship->currjump = nullptr;
             return;
         }
         else if (starsystem2->star2 && strcmp(starsystem2->star2, "")
@@ -7067,7 +7067,7 @@ void do_calculate(CHAR_DATA* ch, const char* argument)
         {
             echo_to_cockpit(AT_RED, ship, "WARNING.. Jump coordinates too close to stellar object.");
             echo_to_cockpit(AT_RED, ship, "WARNING.. Hyperjump NOT set.");
-            ship->currjump = NULL;
+            ship->currjump = nullptr;
             return;
         }
         else if (starsystem2->planet1 && strcmp(starsystem2->planet1, "")
@@ -7077,7 +7077,7 @@ void do_calculate(CHAR_DATA* ch, const char* argument)
         {
             echo_to_cockpit(AT_RED, ship, "WARNING.. Jump coordinates too close to stellar object.");
             echo_to_cockpit(AT_RED, ship, "WARNING.. Hyperjump NOT set.");
-            ship->currjump = NULL;
+            ship->currjump = nullptr;
             return;
         }
         else if (starsystem2->planet2 && strcmp(starsystem2->planet2, "")
@@ -7087,7 +7087,7 @@ void do_calculate(CHAR_DATA* ch, const char* argument)
         {
             echo_to_cockpit(AT_RED, ship, "WARNING.. Jump coordinates too close to stellar object.");
             echo_to_cockpit(AT_RED, ship, "WARNING.. Hyperjump NOT set.");
-            ship->currjump = NULL;
+            ship->currjump = nullptr;
             return;
         }
         else if (starsystem2->planet3 && strcmp(starsystem2->planet3, "")
@@ -7097,7 +7097,7 @@ void do_calculate(CHAR_DATA* ch, const char* argument)
         {
             echo_to_cockpit(AT_RED, ship, "WARNING.. Jump coordinates too close to stellar object.");
             echo_to_cockpit(AT_RED, ship, "WARNING.. Hyperjump NOT set.");
-            ship->currjump = NULL;
+            ship->currjump = nullptr;
             return;
         }
         else
@@ -7120,7 +7120,7 @@ void do_calculate(CHAR_DATA* ch, const char* argument)
     sound_to_room(ch->in_room, "!!SOUND(computer)");
 
     send_to_char("&GHyperspace course set. Ready for the jump to lightspeed.\r\n", ch);
-    act(AT_PLAIN, "$n does some calculations using the ships computer.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n does some calculations using the ships computer.", ch, nullptr, argument, TO_ROOM);
 
     learn_from_success(ch, gsn_navigation);
 
@@ -7133,12 +7133,12 @@ void do_recharge(CHAR_DATA* ch, const char* argument)
     int      schance;
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
     }
-    if ((ship = ship_from_coseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_coseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RThe controls must be at the co-pilot station.\r\n", ch);
         return;
@@ -7171,7 +7171,7 @@ void do_recharge(CHAR_DATA* ch, const char* argument)
     }
 
     send_to_char("&GRecharging shields..\r\n", ch);
-    act(AT_PLAIN, "$n pulls back a lever on the control panel.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n pulls back a lever on the control panel.", ch, nullptr, argument, TO_ROOM);
 
     learn_from_success(ch, gsn_shipsystems);
 
@@ -7192,7 +7192,7 @@ void do_repairship(CHAR_DATA* ch, const char* argument)
     switch (ch->substate)
     {
         default:
-            if ((ship = ship_from_engine(ch->in_room->vnum)) == NULL)
+            if ((ship = ship_from_engine(ch->in_room->vnum)) == nullptr)
             {
                 send_to_char("&RYou must be in the engine room of a ship to do that!\r\n", ch);
                 return;
@@ -7211,7 +7211,7 @@ void do_repairship(CHAR_DATA* ch, const char* argument)
             if (number_percent() < schance)
             {
                 send_to_char("&GYou begin your repairs\r\n", ch);
-                act(AT_PLAIN, "$n begins repairing the ships $T.", ch, NULL, argument, TO_ROOM);
+                act(AT_PLAIN, "$n begins repairing the ships $T.", ch, nullptr, argument, TO_ROOM);
                 if (!str_cmp(arg, "hull"))
                     add_timer(ch, TIMER_DO_FUN, 15, do_repairship, 1);
                 else
@@ -7232,7 +7232,7 @@ void do_repairship(CHAR_DATA* ch, const char* argument)
 
         case SUB_TIMER_DO_ABORT:DISPOSE(ch->dest_buf);
             ch->substate = SUB_NONE;
-            if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+            if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
                 return;
             send_to_char("&RYou are distracted and fail to finish your repairs.\r\n", ch);
             return;
@@ -7240,7 +7240,7 @@ void do_repairship(CHAR_DATA* ch, const char* argument)
 
     ch->substate = SUB_NONE;
 
-    if ((ship = ship_from_engine(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_engine(ch->in_room->vnum)) == nullptr)
     {
         return;
     }
@@ -7287,7 +7287,7 @@ void do_repairship(CHAR_DATA* ch, const char* argument)
         send_to_char("&Laser Turret 2 repaired.\r\n", ch);
     }
 
-    act(AT_PLAIN, "$n finishes the repairs.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes the repairs.", ch, nullptr, argument, TO_ROOM);
 
     learn_from_success(ch, gsn_shipmaintenance);
 }
@@ -7300,7 +7300,7 @@ void do_addpilot(CHAR_DATA* ch, const char* argument)
 {
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -7366,7 +7366,7 @@ void do_rempilot(CHAR_DATA* ch, const char* argument)
 {
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -7432,7 +7432,7 @@ void do_radar(CHAR_DATA* ch, const char* argument)
     SHIP_DATA   * ship;
     MISSILE_DATA* missile;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit or turret of a ship to do that!\r\n", ch);
         return;
@@ -7456,7 +7456,7 @@ void do_radar(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (ship->starsystem == NULL)
+    if (ship->starsystem == nullptr)
     {
         send_to_char("&RYou can't do that unless the ship is flying in realspace!\r\n", ch);
         return;
@@ -7470,7 +7470,7 @@ void do_radar(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    act(AT_PLAIN, "$n checks the radar.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n checks the radar.", ch, nullptr, argument, TO_ROOM);
 
     set_char_color(AT_WHITE, ch);
     ch_printf(ch, "%s\r\n\r\n", ship->starsystem->name);
@@ -7530,7 +7530,7 @@ void do_autotrack(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* ship;
     int      schance;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -7554,7 +7554,7 @@ void do_autotrack(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou aren't in the pilots chair!\r\n", ch);
         return;
@@ -7574,7 +7574,7 @@ void do_autotrack(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    act(AT_PLAIN, "$n flips a switch on the control panel.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n flips a switch on the control panel.", ch, nullptr, argument, TO_ROOM);
     if (ship->autotrack)
     {
         ship->autotrack = FALSE;
@@ -7693,7 +7693,7 @@ void do_drive(CHAR_DATA* ch, const char* argument)
     int      dir;
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the drivers seat of a land vehicle to do that!\r\n", ch);
         return;
@@ -7760,11 +7760,11 @@ ch_ret drive_ship(CHAR_DATA* ch, SHIP_DATA* ship, EXIT_DATA* pexit, int fall)
 #endif
 
     retcode = rNONE;
-    txt     = NULL;
+    txt     = nullptr;
 
     in_room = get_room_index(ship->location);
 
-    if (!pexit || (to_room = pexit->to_room) == NULL)
+    if (!pexit || (to_room = pexit->to_room) == nullptr)
     {
         if (drunk)
             send_to_char("You drive into a wall in your drunken state.\r\n", ch);
@@ -7783,13 +7783,13 @@ ch_ret drive_ship(CHAR_DATA* ch, SHIP_DATA* ship, EXIT_DATA* pexit, int fall)
 
     if (IS_SET(pexit->exit_info, EX_PORTAL) && IS_NPC(ch))
     {
-        act(AT_PLAIN, "Mobs can't use portals.", ch, NULL, NULL, TO_CHAR);
+        act(AT_PLAIN, "Mobs can't use portals.", ch, nullptr, nullptr, TO_CHAR);
         return rNONE;
     }
 
     if (IS_SET(pexit->exit_info, EX_NOMOB) && IS_NPC(ch))
     {
-        act(AT_PLAIN, "Mobs can't enter there.", ch, NULL, NULL, TO_CHAR);
+        act(AT_PLAIN, "Mobs can't enter there.", ch, nullptr, nullptr, TO_CHAR);
         return rNONE;
     }
 
@@ -7799,11 +7799,11 @@ ch_ret drive_ship(CHAR_DATA* ch, SHIP_DATA* ship, EXIT_DATA* pexit, int fall)
         {
             if (drunk)
             {
-                act(AT_PLAIN, "$n drives into the $d in $s drunken state.", ch, NULL, pexit->keyword, TO_ROOM);
-                act(AT_PLAIN, "You drive into the $d in your drunken state.", ch, NULL, pexit->keyword, TO_CHAR);
+                act(AT_PLAIN, "$n drives into the $d in $s drunken state.", ch, nullptr, pexit->keyword, TO_ROOM);
+                act(AT_PLAIN, "You drive into the $d in your drunken state.", ch, nullptr, pexit->keyword, TO_CHAR);
             }
             else
-                act(AT_PLAIN, "The $d is closed.", ch, NULL, pexit->keyword, TO_CHAR);
+                act(AT_PLAIN, "The $d is closed.", ch, nullptr, pexit->keyword, TO_CHAR);
         }
         else
         {
@@ -7934,9 +7934,9 @@ ch_ret drive_ship(CHAR_DATA* ch, SHIP_DATA* ship, EXIT_DATA* pexit, int fall)
         }
     }
     snprintf(buf, MAX_STRING_LENGTH, "$n %ss the vehicle $T.", txt);
-    act(AT_ACTION, buf, ch, NULL, dir_name[door], TO_ROOM);
+    act(AT_ACTION, buf, ch, nullptr, dir_name[door], TO_ROOM);
     snprintf(buf, MAX_STRING_LENGTH, "You %s the vehicle $T.", txt);
-    act(AT_ACTION, buf, ch, NULL, dir_name[door], TO_CHAR);
+    act(AT_ACTION, buf, ch, nullptr, dir_name[door], TO_CHAR);
     snprintf(buf, MAX_STRING_LENGTH, "%s %ss %s.", ship->name, txt, dir_name[door]);
     echo_to_room(AT_ACTION, get_room_index(ship->location), buf);
 
@@ -8032,7 +8032,7 @@ void do_chaff(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* ship;
 
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -8045,7 +8045,7 @@ void do_chaff(CHAR_DATA* ch, const char* argument)
     }
 
 
-    if ((ship = ship_from_coseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_coseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RThe controls are at the copilots seat!\r\n", ch);
         return;
@@ -8085,7 +8085,7 @@ void do_chaff(CHAR_DATA* ch, const char* argument)
     ship->chaff_released++;
 
     send_to_char("You flip the chaff release switch.\r\n", ch);
-    act(AT_PLAIN, "$n flips a switch on the control pannel", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n flips a switch on the control pannel", ch, nullptr, argument, TO_ROOM);
     echo_to_cockpit(AT_YELLOW, ship, "A burst of chaff is released from the ship.");
 
     learn_from_success(ch, gsn_weaponsystems);
@@ -8119,7 +8119,7 @@ void do_hmm( CHAR_DATA *ch, const char *argument )
     switch( ch->substate )
     { 
     	default:
-    	        if (  (ship = ship_from_cockpit(ch->in_room->vnum))  == NULL )
+    	        if (  (ship = ship_from_cockpit(ch->in_room->vnum))  == nullptr )
     	        {
     	            send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n",ch);
     	            return;
@@ -8164,7 +8164,7 @@ void do_hmm( CHAR_DATA *ch, const char *argument )
     		{
     		   send_to_char( "&G\r\n", ch);
     		   act( AT_PLAIN, "$n does  ...", ch,
-		        NULL, argument , TO_ROOM );
+		        nullptr, argument , TO_ROOM );
 		   echo_to_room( AT_YELLOW , get_room_index(ship->cockpit) , "");
     		   add_timer ( ch , TIMER_DO_FUN , 1 , do_hmm , 1 );
     		   ch->dest_buf = str_dup(arg);
@@ -8189,7 +8189,7 @@ void do_hmm( CHAR_DATA *ch, const char *argument )
     	case SUB_TIMER_DO_ABORT:
     		DISPOSE( ch->dest_buf );
     		ch->substate = SUB_NONE;
-    		if ( (ship = ship_from_cockpit(ch->in_room->vnum)) == NULL )
+    		if ( (ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr )
     		      return;    		                                   
     	        send_to_char("&Raborted.\r\n", ch);
     	        echo_to_room( AT_YELLOW , get_room_index(ship->cockpit) , "");
@@ -8200,14 +8200,14 @@ void do_hmm( CHAR_DATA *ch, const char *argument )
     
     ch->substate = SUB_NONE;
     
-    if ( (ship = ship_from_cockpit(ch->in_room->vnum)) == NULL )
+    if ( (ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr )
     {  
        return;
     }
 
     send_to_char( "&G\r\n", ch);
     act( AT_PLAIN, "$n does  ...", ch,
-         NULL, argument , TO_ROOM );
+         nullptr, argument , TO_ROOM );
     echo_to_room( AT_YELLOW , get_room_index(ship->cockpit) , "");
 
          
@@ -8227,7 +8227,7 @@ void do_hmm( CHAR_DATA *ch, const char *argument )
     SHIP_DATA *ship;
     
    
-        if (  (ship = ship_from_cockpit(ch->in_room->vnum))  == NULL )
+        if (  (ship = ship_from_cockpit(ch->in_room->vnum))  == nullptr )
         {
             send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n",ch);
             return;
@@ -8283,7 +8283,7 @@ void do_hmm( CHAR_DATA *ch, const char *argument )
         
     send_to_char( "&G\r\n", ch);
     act( AT_PLAIN, "$n does  ...", ch,
-         NULL, argument , TO_ROOM );
+         nullptr, argument , TO_ROOM );
     echo_to_room( AT_YELLOW , get_room_index(ship->cockpit) , "");
 	  
     

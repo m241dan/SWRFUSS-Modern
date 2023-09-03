@@ -89,8 +89,8 @@ void interpret(CHAR_DATA* ch, const char* argument)
     char           command[MAX_INPUT_LENGTH];
     char           logline[MAX_INPUT_LENGTH];
     char           logname[MAX_INPUT_LENGTH];
-    TIMER          * timer = NULL;
-    CMDTYPE        * cmd   = NULL;
+    TIMER          * timer = nullptr;
+    CMDTYPE        * cmd   = nullptr;
     int            trust;
     int            loglvl;
     bool           found;
@@ -109,10 +109,10 @@ void interpret(CHAR_DATA* ch, const char* argument)
     {
         DO_FUN* fun;
 
-        if ((fun = ch->last_cmd) == NULL)
+        if ((fun = ch->last_cmd) == nullptr)
         {
             ch->substate = SUB_NONE;
-            bug("%s: SUB_REPEATCMD with NULL last_cmd", __func__);
+            bug("%s: SUB_REPEATCMD with nullptr last_cmd", __func__);
             return;
         }
         else
@@ -136,7 +136,7 @@ void interpret(CHAR_DATA* ch, const char* argument)
             }
             if (!found)
             {
-                cmd = NULL;
+                cmd = nullptr;
                 bug("%s: SUB_REPEATCMD: last_cmd invalid", __func__);
                 return;
             }
@@ -218,7 +218,7 @@ void interpret(CHAR_DATA* ch, const char* argument)
         if (!IS_NPC(ch) && IS_SET(ch->act, PLR_AFK) && (str_cmp(command, "AFK")))
         {
             REMOVE_BIT(ch->act, PLR_AFK);
-            act(AT_GREY, "$n is no longer afk.", ch, NULL, NULL, TO_ROOM);
+            act(AT_GREY, "$n is no longer afk.", ch, nullptr, nullptr, TO_ROOM);
         }
     }
 
@@ -307,13 +307,13 @@ void interpret(CHAR_DATA* ch, const char* argument)
             /*
              * check for an auto-matic exit command
              */
-            if ((pexit = find_door(ch, command, TRUE)) != NULL && IS_SET(pexit->exit_info, EX_xAUTO))
+            if ((pexit = find_door(ch, command, TRUE)) != nullptr && IS_SET(pexit->exit_info, EX_xAUTO))
             {
                 if (IS_SET(pexit->exit_info, EX_CLOSED)
                     && (!IS_AFFECTED(ch, AFF_PASS_DOOR) || IS_SET(pexit->exit_info, EX_NOPASSDOOR)))
                 {
                     if (!IS_SET(pexit->exit_info, EX_SECRET))
-                        act(AT_PLAIN, "The $d is closed.", ch, NULL, pexit->keyword, TO_CHAR);
+                        act(AT_PLAIN, "The $d is closed.", ch, nullptr, pexit->keyword, TO_CHAR);
                     else
                         send_to_char("You cannot do that here.\r\n", ch);
                     return;
@@ -383,7 +383,7 @@ CMDTYPE* find_command(const char* command)
         if (!str_prefix(command, cmd->name))
             return cmd;
 
-    return NULL;
+    return nullptr;
 }
 
 SOCIALTYPE* find_social(const char* command)
@@ -402,7 +402,7 @@ SOCIALTYPE* find_social(const char* command)
         if (!str_prefix(command, social->name))
             return social;
 
-    return NULL;
+    return nullptr;
 }
 
 bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
@@ -411,7 +411,7 @@ bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
     CHAR_DATA * victim;
     SOCIALTYPE* social;
 
-    if ((social = find_social(command)) == NULL)
+    if ((social = find_social(command)) == nullptr)
         return FALSE;
 
     if (!IS_NPC(ch) && IS_SET(ch->act, PLR_NO_EMOTE))
@@ -445,26 +445,26 @@ bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
     }
 
     one_argument(argument, arg);
-    victim           = NULL;
+    victim           = nullptr;
     if (arg[0] == '\0')
     {
-        act(AT_SOCIAL, social->others_no_arg, ch, NULL, victim, TO_ROOM);
-        act(AT_SOCIAL, social->char_no_arg, ch, NULL, victim, TO_CHAR);
+        act(AT_SOCIAL, social->others_no_arg, ch, nullptr, victim, TO_ROOM);
+        act(AT_SOCIAL, social->char_no_arg, ch, nullptr, victim, TO_CHAR);
     }
-    else if ((victim = get_char_room(ch, arg)) == NULL)
+    else if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
     }
     else if (victim == ch)
     {
-        act(AT_SOCIAL, social->others_auto, ch, NULL, victim, TO_ROOM);
-        act(AT_SOCIAL, social->char_auto, ch, NULL, victim, TO_CHAR);
+        act(AT_SOCIAL, social->others_auto, ch, nullptr, victim, TO_ROOM);
+        act(AT_SOCIAL, social->char_auto, ch, nullptr, victim, TO_CHAR);
     }
     else
     {
-        act(AT_SOCIAL, social->others_found, ch, NULL, victim, TO_NOTVICT);
-        act(AT_SOCIAL, social->char_found, ch, NULL, victim, TO_CHAR);
-        act(AT_SOCIAL, social->vict_found, ch, NULL, victim, TO_VICT);
+        act(AT_SOCIAL, social->others_found, ch, nullptr, victim, TO_NOTVICT);
+        act(AT_SOCIAL, social->char_found, ch, nullptr, victim, TO_CHAR);
+        act(AT_SOCIAL, social->vict_found, ch, nullptr, victim, TO_VICT);
 
         if (!IS_NPC(ch) && IS_NPC(victim)
             && !IS_AFFECTED(victim, AFF_CHARM) && IS_AWAKE(victim) && !IS_SET(victim->pIndexData->progtypes, ACT_PROG))
@@ -476,15 +476,15 @@ bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
                         multi_hit(victim, ch, TYPE_UNDEFINED);
                     else if (IS_NEUTRAL(ch))
                     {
-                        act(AT_ACTION, "$n slaps $N.", victim, NULL, ch, TO_NOTVICT);
-                        act(AT_ACTION, "You slap $N.", victim, NULL, ch, TO_CHAR);
-                        act(AT_ACTION, "$n slaps you.", victim, NULL, ch, TO_VICT);
+                        act(AT_ACTION, "$n slaps $N.", victim, nullptr, ch, TO_NOTVICT);
+                        act(AT_ACTION, "You slap $N.", victim, nullptr, ch, TO_CHAR);
+                        act(AT_ACTION, "$n slaps you.", victim, nullptr, ch, TO_VICT);
                     }
                     else
                     {
-                        act(AT_ACTION, "$n acts like $N doesn't even exist.", victim, NULL, ch, TO_NOTVICT);
-                        act(AT_ACTION, "You just ignore $N.", victim, NULL, ch, TO_CHAR);
-                        act(AT_ACTION, "$n appears to be ignoring you.", victim, NULL, ch, TO_VICT);
+                        act(AT_ACTION, "$n acts like $N doesn't even exist.", victim, nullptr, ch, TO_NOTVICT);
+                        act(AT_ACTION, "You just ignore $N.", victim, nullptr, ch, TO_CHAR);
+                        act(AT_ACTION, "$n appears to be ignoring you.", victim, nullptr, ch, TO_VICT);
                     }
                     break;
 
@@ -495,17 +495,17 @@ bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
                 case 5:
                 case 6:
                 case 7:
-                case 8:act(AT_SOCIAL, social->others_found, victim, NULL, ch, TO_NOTVICT);
-                    act(AT_SOCIAL, social->char_found, victim, NULL, ch, TO_CHAR);
-                    act(AT_SOCIAL, social->vict_found, victim, NULL, ch, TO_VICT);
+                case 8:act(AT_SOCIAL, social->others_found, victim, nullptr, ch, TO_NOTVICT);
+                    act(AT_SOCIAL, social->char_found, victim, nullptr, ch, TO_CHAR);
+                    act(AT_SOCIAL, social->vict_found, victim, nullptr, ch, TO_VICT);
                     break;
 
                 case 9:
                 case 10:
                 case 11:
-                case 12:act(AT_ACTION, "$n slaps $N.", victim, NULL, ch, TO_NOTVICT);
-                    act(AT_ACTION, "You slap $N.", victim, NULL, ch, TO_CHAR);
-                    act(AT_ACTION, "$n slaps you.", victim, NULL, ch, TO_VICT);
+                case 12:act(AT_ACTION, "$n slaps $N.", victim, nullptr, ch, TO_NOTVICT);
+                    act(AT_ACTION, "You slap $N.", victim, nullptr, ch, TO_CHAR);
+                    act(AT_ACTION, "$n slaps you.", victim, nullptr, ch, TO_VICT);
                     break;
             }
         }
@@ -676,9 +676,9 @@ void do_timecmd(CHAR_DATA* ch, const char* argument)
     set_char_color(AT_PLAIN, ch);
     send_to_char("Starting timer.\r\n", ch);
     timing = TRUE;
-    gettimeofday(&sttime, NULL);
+    gettimeofday(&sttime, nullptr);
     interpret(ch, argument);
-    gettimeofday(&etime, NULL);
+    gettimeofday(&etime, nullptr);
     timing = FALSE;
     set_char_color(AT_PLAIN, ch);
     send_to_char("Timing complete.\r\n", ch);
@@ -690,10 +690,10 @@ void start_timer(struct timeval* sttime)
 {
     if (!sttime)
     {
-        bug("%s: NULL sttime.", __func__);
+        bug("%s: nullptr sttime.", __func__);
         return;
     }
-    gettimeofday(sttime, NULL);
+    gettimeofday(sttime, nullptr);
 }
 
 time_t end_timer(struct timeval* sttime)
@@ -703,7 +703,7 @@ time_t end_timer(struct timeval* sttime)
     /*
      * Mark etime before checking stime, so that we get a better reading..
      */
-    gettimeofday(&etime, NULL);
+    gettimeofday(&etime, nullptr);
     if (!sttime || (!sttime->tv_sec && !sttime->tv_usec))
     {
         bug("%s: bad sttime.", __func__);

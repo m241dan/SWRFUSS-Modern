@@ -150,7 +150,7 @@ void do_restrict(CHAR_DATA* ch, const char* argument)
 CHAR_DATA* get_waiting_desc(CHAR_DATA* ch, char* name)
 {
     DESCRIPTOR_DATA     * d;
-    CHAR_DATA           * ret_char = NULL;
+    CHAR_DATA           * ret_char = nullptr;
     static unsigned int number_of_hits;
 
     number_of_hits = 0;
@@ -161,7 +161,7 @@ CHAR_DATA* get_waiting_desc(CHAR_DATA* ch, char* name)
             if (++number_of_hits > 1)
             {
                 ch_printf(ch, "%s does not uniquely identify a char.\r\n", name);
-                return NULL;
+                return nullptr;
             }
             ret_char = d->character;   /* return current char on exit */
         }
@@ -171,7 +171,7 @@ CHAR_DATA* get_waiting_desc(CHAR_DATA* ch, char* name)
     else
     {
         send_to_char("No one like that waiting for authorization.\r\n", ch);
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -193,7 +193,7 @@ void do_authorize(CHAR_DATA* ch, const char* argument)
         send_to_char(" Chosen Character Name\r\n", ch);
         send_to_char("---------------------------------------------\r\n", ch);
         for (d = first_descriptor; d; d = d->next)
-            if ((victim = d->character) != NULL && IS_WAITING_FOR_AUTH(victim))
+            if ((victim = d->character) != nullptr && IS_WAITING_FOR_AUTH(victim))
                 ch_printf(
                     ch,
                     " %s@%s new %s...\r\n",
@@ -205,7 +205,7 @@ void do_authorize(CHAR_DATA* ch, const char* argument)
     }
 
     victim = get_waiting_desc(ch, arg1);
-    if (victim == NULL)
+    if (victim == nullptr)
         return;
 
     if (arg2[0] == '\0' || !str_cmp(arg2, "accept") || !str_cmp(arg2, "yes"))
@@ -315,7 +315,7 @@ void do_retire(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -365,7 +365,7 @@ void do_deny(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -402,15 +402,15 @@ void do_disconnect(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
     }
 
-    if (victim->desc == NULL)
+    if (victim->desc == nullptr)
     {
-        act(AT_PLAIN, "$N doesn't have a descriptor.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$N doesn't have a descriptor.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -513,7 +513,7 @@ void do_pardon(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg1)) == NULL)
+    if ((victim = get_char_world(ch, arg1)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -613,7 +613,7 @@ void echo_to_room(
 {
     CHAR_DATA* vic;
 
-    if (room == NULL)
+    if (room == nullptr)
         return;
 
 
@@ -669,13 +669,13 @@ ROOM_INDEX_DATA* find_location(CHAR_DATA* ch, const char* arg)
     if (is_number(arg))
         return get_room_index(atoi(arg));
 
-    if ((victim = get_char_world(ch, arg)) != NULL)
+    if ((victim = get_char_world(ch, arg)) != nullptr)
         return victim->in_room;
 
-    if ((obj = get_obj_world(ch, arg)) != NULL)
+    if ((obj = get_obj_world(ch, arg)) != nullptr)
         return obj->in_room;
 
-    return NULL;
+    return nullptr;
 }
 
 /* This function shared by do_transfer and do_mptransfer
@@ -690,7 +690,7 @@ void transfer_char(CHAR_DATA* ch, CHAR_DATA* victim, ROOM_INDEX_DATA* location)
 {
     if (!victim->in_room)
     {
-        bug("%s: victim in NULL room: %s", __func__, victim->name);
+        bug("%s: victim in nullptr room: %s", __func__, victim->name);
         return;
     }
 
@@ -721,24 +721,24 @@ void transfer_char(CHAR_DATA* ch, CHAR_DATA* victim, ROOM_INDEX_DATA* location)
 
     if (!IS_NPC(ch))
     {
-        act(AT_MAGIC, "$n disappears in a cloud of swirling colors.", victim, NULL, NULL, TO_ROOM);
+        act(AT_MAGIC, "$n disappears in a cloud of swirling colors.", victim, nullptr, nullptr, TO_ROOM);
         victim->retran = victim->in_room->vnum;
     }
     char_from_room(victim);
     char_to_room(victim, location);
     if (!IS_NPC(ch))
     {
-        act(AT_MAGIC, "$n arrives from a puff of smoke.", victim, NULL, NULL, TO_ROOM);
+        act(AT_MAGIC, "$n arrives from a puff of smoke.", victim, nullptr, nullptr, TO_ROOM);
         if (ch != victim)
-            act(AT_IMMORT, "$n has transferred you.", ch, NULL, victim, TO_VICT);
+            act(AT_IMMORT, "$n has transferred you.", ch, nullptr, victim, TO_VICT);
         do_look(victim, "auto");
         if (!IS_IMMORTAL(victim) && !IS_NPC(victim) && !in_hard_range(victim, location->area))
             act(
                 AT_DANGER,
                 "Warning:  this player's level is not within the area's level range.",
                 ch,
-                NULL,
-                NULL,
+                nullptr,
+                nullptr,
                 TO_CHAR
             );
     }
@@ -836,7 +836,7 @@ void do_at(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((location = find_location(ch, arg)) == NULL)
+    if ((location = find_location(ch, arg)) == nullptr)
     {
         send_to_char("No such location.\r\n", ch);
         return;
@@ -911,7 +911,7 @@ void do_rat(CHAR_DATA* ch, const char* argument)
     original  = ch->in_room;
     for (vnum = Start; vnum <= End; vnum++)
     {
-        if ((location = get_room_index(vnum)) == NULL)
+        if ((location = get_room_index(vnum)) == nullptr)
             continue;
         char_from_room(ch);
         char_to_room(ch, location);
@@ -1080,7 +1080,7 @@ void do_ostat(CHAR_DATA* ch, const char* argument)
     if (arg[0] != '\'' && arg[0] != '"' && strlen(argument) > strlen(arg))
         mudstrlcpy(arg, argument, MAX_INPUT_LENGTH);
 
-    if ((obj = get_obj_world(ch, arg)) == NULL)
+    if ((obj = get_obj_world(ch, arg)) == nullptr)
     {
         send_to_char("Nothing like that in hell, earth, or heaven.\r\n", ch);
         return;
@@ -1130,9 +1130,9 @@ void do_ostat(CHAR_DATA* ch, const char* argument)
     ch_printf(
         ch,
         "In room: %d.  In object: %s.  Carried by: %s.  Wear_loc: %d.\r\n",
-        obj->in_room == NULL ? 0 : obj->in_room->vnum,
-        obj->in_obj == NULL ? "(none)" : obj->in_obj->short_descr,
-        obj->carried_by == NULL ? "(none)" : obj->carried_by->name, obj->wear_loc
+        obj->in_room == nullptr ? 0 : obj->in_room->vnum,
+        obj->in_obj == nullptr ? "(none)" : obj->in_obj->short_descr,
+        obj->carried_by == nullptr ? "(none)" : obj->carried_by->name, obj->wear_loc
     );
 
     ch_printf(
@@ -1198,7 +1198,7 @@ void do_mstat(CHAR_DATA* ch, const char* argument)
     if (arg[0] != '\'' && arg[0] != '"' && strlen(argument) > strlen(arg))
         mudstrlcpy(arg, argument, MAX_INPUT_LENGTH);
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -1232,7 +1232,7 @@ void do_mstat(CHAR_DATA* ch, const char* argument)
         IS_NPC(victim) ? victim->pIndexData->vnum : 0,
         victim->sex == SEX_MALE ? "male" :
         victim->sex == SEX_FEMALE ? "female" : "neutral",
-        victim->in_room == NULL ? 0 : victim->in_room->vnum,
+        victim->in_room == nullptr ? 0 : victim->in_room->vnum,
         IS_NPC(victim) ? victim->pIndexData->count : 1,
         IS_NPC(victim) ? victim->pIndexData->killed : victim->pcdata->mdeaths + victim->pcdata->pdeaths
     );
@@ -1352,7 +1352,7 @@ void do_mstat(CHAR_DATA* ch, const char* argument)
     ch_printf(ch, "Attacks    : %s\r\n", flag_string(victim->attacks, attack_flags));
     ch_printf(ch, "Defenses   : %s\r\n", flag_string(victim->defenses, defense_flags));
     for (paf = victim->first_affect; paf; paf = paf->next)
-        if ((skill = get_skilltype(paf->type)) != NULL)
+        if ((skill = get_skilltype(paf->type)) != nullptr)
             ch_printf(
                 ch,
                 "%s: '%s' modifies %s by %d for %d rounds with bits %s.\r\n",
@@ -1477,7 +1477,7 @@ void do_mwhere(CHAR_DATA* ch, const char* argument)
     }
 
     if (!found)
-        act(AT_PLAIN, "You didn't find any $T.", ch, NULL, arg, TO_CHAR);
+        act(AT_PLAIN, "You didn't find any $T.", ch, nullptr, arg, TO_CHAR);
 }
 
 void do_bodybag(CHAR_DATA* ch, const char* argument)
@@ -1568,7 +1568,7 @@ void do_owhere(CHAR_DATA* ch, const char* argument)
             );
         else if (obj->in_obj)
         {
-            bug("%s: obj->in_obj after NULL!", __func__);
+            bug("%s: obj->in_obj after nullptr!", __func__);
             mudstrlcat(buf, "object??\r\n", MAX_STRING_LENGTH);
         }
         else
@@ -1618,7 +1618,7 @@ void do_owhere(CHAR_DATA* ch, const char* argument)
     }
 
     if (!found)
-        act(AT_PLAIN, "You didn't find any $T.", ch, NULL, arg, TO_CHAR);
+        act(AT_PLAIN, "You didn't find any $T.", ch, nullptr, arg, TO_CHAR);
     else
         pager_printf(ch, "%d matches.\r\n", icnt);
 }
@@ -1710,7 +1710,7 @@ void do_snoop(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -1727,7 +1727,7 @@ void do_snoop(CHAR_DATA* ch, const char* argument)
         send_to_char("Cancelling all snoops.\r\n", ch);
         for (d = first_descriptor; d; d = d->next)
             if (d->snoop_by == ch->desc)
-                d->snoop_by = NULL;
+                d->snoop_by = nullptr;
         return;
     }
 
@@ -1787,7 +1787,7 @@ void do_switch(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -1814,7 +1814,7 @@ void do_switch(CHAR_DATA* ch, const char* argument)
     ch->desc->character = victim;
     ch->desc->original  = ch;
     victim->desc        = ch->desc;
-    ch->desc            = NULL;
+    ch->desc            = nullptr;
     ch->switched        = victim;
     send_to_char("Ok.\r\n", victim);
 }
@@ -1845,10 +1845,10 @@ void do_return(CHAR_DATA* ch, const char* argument)
     /*    if ( IS_NPC( ch->desc->character ) )
       REMOVE_BIT( ch->desc->character->affected_by, AFF_POSSESS );*/
     ch->desc->character           = ch->desc->original;
-    ch->desc->original            = NULL;
+    ch->desc->original            = nullptr;
     ch->desc->character->desc     = ch->desc;
-    ch->desc->character->switched = NULL;
-    ch->desc                      = NULL;
+    ch->desc->character->switched = nullptr;
+    ch->desc                      = nullptr;
 }
 
 void do_minvoke(CHAR_DATA* ch, const char* argument)
@@ -1911,7 +1911,7 @@ void do_minvoke(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if ((pMobIndex = get_mob_index(vnum)) == NULL)
+    if ((pMobIndex = get_mob_index(vnum)) == nullptr)
     {
         send_to_char("No mobile has that vnum.\r\n", ch);
         return;
@@ -1919,7 +1919,7 @@ void do_minvoke(CHAR_DATA* ch, const char* argument)
 
     victim = create_mobile(pMobIndex);
     char_to_room(victim, ch->in_room);
-    act(AT_IMMORT, "$n has created $N!", ch, NULL, victim, TO_ROOM);
+    act(AT_IMMORT, "$n has created $N!", ch, nullptr, victim, TO_ROOM);
     send_to_char("Ok.\r\n", ch);
 }
 
@@ -2005,7 +2005,7 @@ void do_oinvoke(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char("No object has that vnum.\r\n", ch);
         return;
@@ -2019,7 +2019,7 @@ void do_oinvoke(CHAR_DATA* ch, const char* argument)
     else
     {
         obj = obj_to_room(obj, ch->in_room);
-        act(AT_IMMORT, "$n has created $p!", ch, obj, NULL, TO_ROOM);
+        act(AT_IMMORT, "$n has created $p!", ch, obj, nullptr, TO_ROOM);
     }
     send_to_char("Ok.\r\n", ch);
 }
@@ -2055,21 +2055,21 @@ void do_purge(CHAR_DATA* ch, const char* argument)
             extract_obj(obj);
         }
 
-        act(AT_IMMORT, "$n purges the room!", ch, NULL, NULL, TO_ROOM);
+        act(AT_IMMORT, "$n purges the room!", ch, nullptr, nullptr, TO_ROOM);
         send_to_char("Ok.\r\n", ch);
         return;
     }
-    victim = NULL;
-    obj    = NULL;
+    victim = nullptr;
+    obj    = nullptr;
 
     /*
     * fixed to get things in room first -- i.e., purge portal (obj),
     * * no more purging mobs with that keyword in another room first
     * * -- Tri
     */
-    if ((victim = get_char_room(ch, arg)) == NULL && (obj = get_obj_here(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr && (obj = get_obj_here(ch, arg)) == nullptr)
     {
-        if ((victim = get_char_world(ch, arg)) == NULL && (obj = get_obj_world(ch, arg)) == NULL) /* no get_obj_room */
+        if ((victim = get_char_world(ch, arg)) == nullptr && (obj = get_obj_world(ch, arg)) == nullptr) /* no get_obj_room */
         {
             send_to_char("They aren't here.\r\n", ch);
             return;
@@ -2080,8 +2080,8 @@ void do_purge(CHAR_DATA* ch, const char* argument)
     if (obj)
     {
         separate_obj(obj);
-        act(AT_IMMORT, "$n purges $p.", ch, obj, NULL, TO_ROOM);
-        act(AT_IMMORT, "You make $p disappear in a puff of smoke!", ch, obj, NULL, TO_CHAR);
+        act(AT_IMMORT, "$n purges $p.", ch, obj, nullptr, TO_ROOM);
+        act(AT_IMMORT, "You make $p disappear in a puff of smoke!", ch, obj, nullptr, TO_CHAR);
         extract_obj(obj);
         return;
     }
@@ -2104,7 +2104,7 @@ void do_purge(CHAR_DATA* ch, const char* argument)
         send_to_char("You cannot purge a polymorphed player.\r\n", ch);
         return;
     }
-    act(AT_IMMORT, "$n purges $N.", ch, NULL, victim, TO_NOTVICT);
+    act(AT_IMMORT, "$n purges $N.", ch, nullptr, victim, TO_NOTVICT);
     extract_char(victim, TRUE);
 }
 
@@ -2122,9 +2122,9 @@ void do_low_purge(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    victim      = NULL;
-    obj         = NULL;
-    if ((victim = get_char_room(ch, arg)) == NULL && (obj = get_obj_here(ch, arg)) == NULL)
+    victim      = nullptr;
+    obj         = nullptr;
+    if ((victim = get_char_room(ch, arg)) == nullptr && (obj = get_obj_here(ch, arg)) == nullptr)
     {
         send_to_char("You can't find that here.\r\n", ch);
         return;
@@ -2133,8 +2133,8 @@ void do_low_purge(CHAR_DATA* ch, const char* argument)
     if (obj)
     {
         separate_obj(obj);
-        act(AT_IMMORT, "$n purges $p!", ch, obj, NULL, TO_ROOM);
-        act(AT_IMMORT, "You make $p disappear in a puff of smoke!", ch, obj, NULL, TO_CHAR);
+        act(AT_IMMORT, "$n purges $p!", ch, obj, nullptr, TO_ROOM);
+        act(AT_IMMORT, "You make $p disappear in a puff of smoke!", ch, obj, nullptr, TO_CHAR);
         extract_obj(obj);
         return;
     }
@@ -2151,8 +2151,8 @@ void do_low_purge(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    act(AT_IMMORT, "$n purges $N.", ch, NULL, victim, TO_NOTVICT);
-    act(AT_IMMORT, "You make $N disappear in a puff of smoke!", ch, NULL, victim, TO_CHAR);
+    act(AT_IMMORT, "$n purges $N.", ch, nullptr, victim, TO_NOTVICT);
+    act(AT_IMMORT, "You make $N disappear in a puff of smoke!", ch, nullptr, victim, TO_CHAR);
     extract_char(victim, TRUE);
 }
 
@@ -2175,7 +2175,7 @@ void do_balzhur(CHAR_DATA* ch, const char* argument)
         send_to_char("Who is deserving of such a fate?\r\n", ch);
         return;
     }
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't currently playing.\r\n", ch);
         return;
@@ -2290,7 +2290,7 @@ void do_advance(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("That player is not here.\r\n", ch);
         return;
@@ -2377,7 +2377,7 @@ void do_immortalize(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("That player is not here.\r\n", ch);
         return;
@@ -2397,7 +2397,7 @@ void do_immortalize(CHAR_DATA* ch, const char* argument)
 
     send_to_char("Immortalizing a player...\r\n", ch);
     set_char_color(AT_IMMORT, victim);
-    act(AT_IMMORT, "$n begins to chant softly... then raises $s arms to the sky...", ch, NULL, NULL, TO_ROOM);
+    act(AT_IMMORT, "$n begins to chant softly... then raises $s arms to the sky...", ch, nullptr, nullptr, TO_ROOM);
     set_char_color(AT_WHITE, victim);
     send_to_char("You suddenly feel very strange...\r\n\r\n", victim);
     set_char_color(AT_LBLUE, victim);
@@ -2431,7 +2431,7 @@ void do_trust(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("That player is not here.\r\n", ch);
         return;
@@ -2513,7 +2513,7 @@ void do_restore(CHAR_DATA* ch, const char* argument)
                 vch->move = vch->max_move;
                 vch->pcdata->condition[COND_BLOODTHIRST] = (10 + vch->top_level);
                 update_pos(vch);
-                act(AT_IMMORT, "$n has restored you.", ch, NULL, vch, TO_VICT);
+                act(AT_IMMORT, "$n has restored you.", ch, nullptr, vch, TO_VICT);
             }
         }
     }
@@ -2522,7 +2522,7 @@ void do_restore(CHAR_DATA* ch, const char* argument)
 
         CHAR_DATA* victim;
 
-        if ((victim = get_char_world(ch, arg)) == NULL)
+        if ((victim = get_char_world(ch, arg)) == nullptr)
         {
             send_to_char("They aren't here.\r\n", ch);
             return;
@@ -2541,7 +2541,7 @@ void do_restore(CHAR_DATA* ch, const char* argument)
             victim->pcdata->condition[COND_BLOODTHIRST] = (10 + victim->top_level);
         update_pos(victim);
         if (ch != victim)
-            act(AT_IMMORT, "$n has restored you.", ch, NULL, victim, TO_VICT);
+            act(AT_IMMORT, "$n has restored you.", ch, nullptr, victim, TO_VICT);
         send_to_char("Ok.\r\n", ch);
         return;
     }
@@ -2590,7 +2590,7 @@ void do_freeze(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -2663,7 +2663,7 @@ void do_log(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -2703,7 +2703,7 @@ void do_litterbug(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -2748,7 +2748,7 @@ void do_noemote(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -2793,7 +2793,7 @@ void do_notell(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -2839,7 +2839,7 @@ void do_notitle(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -2886,7 +2886,7 @@ void do_silence(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -2929,7 +2929,7 @@ void do_unsilence(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -2963,7 +2963,7 @@ void do_peace(CHAR_DATA* ch, const char* argument)
 {
     CHAR_DATA* rch;
 
-    act(AT_IMMORT, "$n booms, 'PEACE!'", ch, NULL, NULL, TO_ROOM);
+    act(AT_IMMORT, "$n booms, 'PEACE!'", ch, nullptr, nullptr, TO_ROOM);
     for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
     {
         if (rch->fighting)
@@ -3276,7 +3276,7 @@ void do_force(CHAR_DATA* ch, const char* argument)
     {
         CHAR_DATA* victim;
 
-        if ((victim = get_char_world(ch, arg)) == NULL)
+        if ((victim = get_char_world(ch, arg)) == nullptr)
         {
             send_to_char("They aren't here.\r\n", ch);
             return;
@@ -3353,13 +3353,13 @@ void do_invis(CHAR_DATA* ch, const char* argument)
     if (IS_SET(ch->act, PLR_WIZINVIS))
     {
         REMOVE_BIT(ch->act, PLR_WIZINVIS);
-        act(AT_IMMORT, "$n slowly fades into existence.", ch, NULL, NULL, TO_ROOM);
+        act(AT_IMMORT, "$n slowly fades into existence.", ch, nullptr, nullptr, TO_ROOM);
         send_to_char("You slowly fade back into existence.\r\n", ch);
     }
     else
     {
         SET_BIT(ch->act, PLR_WIZINVIS);
-        act(AT_IMMORT, "$n slowly fades into thin air.", ch, NULL, NULL, TO_ROOM);
+        act(AT_IMMORT, "$n slowly fades into thin air.", ch, nullptr, nullptr, TO_ROOM);
         send_to_char("You slowly vanish into thin air.\r\n", ch);
     }
 }
@@ -3474,7 +3474,7 @@ void do_vassign(CHAR_DATA* ch, const char* argument)
 
     if (lo == 0 && hi == 0)
     {
-        victim->pcdata->area       = NULL;
+        victim->pcdata->area       = nullptr;
         victim->pcdata->r_range_lo = 0;
         victim->pcdata->r_range_hi = 0;
         victim->pcdata->o_range_lo = 0;
@@ -3648,8 +3648,8 @@ void do_loadup(CHAR_DATA* ch, const char* argument)
     if (check_parse_name(name) && lstat(fname, &fst) != -1)
     {
         CREATE(d, DESCRIPTOR_DATA, 1);
-        d->next      = NULL;
-        d->prev      = NULL;
+        d->next      = nullptr;
+        d->prev      = nullptr;
         d->connected = CON_GET_NAME;
         d->outsize   = 2000;
         CREATE(d->outbuf, char, d->outsize);
@@ -3662,18 +3662,18 @@ void do_loadup(CHAR_DATA* ch, const char* argument)
         {
             do_say(d->character, "Do *NOT* disturb me again!");
             send_to_char("I think you'd better leave that player alone!\r\n", ch);
-            d->character->desc = NULL;
+            d->character->desc = nullptr;
             do_quit(d->character, "");
             return;
         }
-        d->character->desc   = NULL;
+        d->character->desc   = nullptr;
         d->character->retran = old_room_vnum;
-        d->character         = NULL;
+        d->character         = nullptr;
         DISPOSE(d->outbuf);
         DISPOSE(d);
         ch_printf(ch, "Player %s loaded from room %d.\r\n", capitalize(name), old_room_vnum);
         snprintf(buf, MAX_STRING_LENGTH, "%s appears from nowhere, eyes glazed over.\r\n", capitalize(name));
-        act(AT_IMMORT, buf, ch, NULL, NULL, TO_ROOM);
+        act(AT_IMMORT, buf, ch, nullptr, nullptr, TO_ROOM);
         send_to_char("Done.\r\n", ch);
         return;
     }
@@ -3720,7 +3720,7 @@ void do_newbieset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("That player is not here.\r\n", ch);
         return;
@@ -3749,7 +3749,7 @@ void do_newbieset(CHAR_DATA* ch, const char* argument)
     */
     {
         OBJ_INDEX_DATA* obj_ind = get_obj_index(10333);
-        if (obj_ind != NULL)
+        if (obj_ind != nullptr)
         {
             obj = create_object(obj_ind, 1);
             obj_to_char(obj, victim);
@@ -3762,14 +3762,14 @@ void do_newbieset(CHAR_DATA* ch, const char* argument)
     {
 
         OBJ_INDEX_DATA* obj_ind = get_obj_index(123);
-        if (obj_ind != NULL)
+        if (obj_ind != nullptr)
         {
             obj = create_object(obj_ind, 1);
             obj_to_char(obj, victim);
         }
     }
 
-    act(AT_IMMORT, "$n has equipped you with a newbieset.", ch, NULL, victim, TO_VICT);
+    act(AT_IMMORT, "$n has equipped you with a newbieset.", ch, nullptr, victim, TO_VICT);
     ch_printf(ch, "You have re-equipped %s.\r\n", victim->name);
 }
 
@@ -3917,7 +3917,7 @@ void do_bestow(CHAR_DATA* ch, const char* argument)
         send_to_char("Bestow whom with what?\r\n", ch);
         return;
     }
-    if ((victim = get_char_world(ch, arg)) == NULL)
+    if ((victim = get_char_world(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -4054,7 +4054,7 @@ void do_pcrename(CHAR_DATA* ch, const char* argument)
     * Just a security precaution so you don't rename someone you don't mean
     * * too --Shaddai
     */
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("That person is not in the room.\r\n", ch);
         return;
@@ -4497,11 +4497,11 @@ void do_destroy(CHAR_DATA* ch, const char* argument)
 
         quitting_char = victim;
         save_char_obj(victim);
-        saving_char = NULL;
+        saving_char = nullptr;
         extract_char(victim, TRUE);
         for (x = 0; x < MAX_WEAR; x++)
             for (y = 0; y < MAX_LAYERS; y++)
-                save_equipment[x][y] = NULL;
+                save_equipment[x][y] = nullptr;
     }
 
     if (!rename(pfile, backup))
@@ -4628,7 +4628,7 @@ const char* name_expand(CHAR_DATA* ch)
 
     if (!name[0]) /* weird mob .. no keywords */
     {
-        mudstrlcpy(outbuf, "", MAX_STRING_LENGTH);   /* Do not return NULL, just an empty buffer */
+        mudstrlcpy(outbuf, "", MAX_STRING_LENGTH);   /* Do not return nullptr, just an empty buffer */
         return outbuf;
     }
 
@@ -5121,10 +5121,10 @@ void do_hell(CHAR_DATA* ch, const char* argument)
     victim->pcdata->release_date = mktime(tms);
     victim->pcdata->helled_by    = STRALLOC(ch->name);
     ch_printf(ch, "%s will be released from hell at %24.24s.\r\n", victim->name, ctime(&victim->pcdata->release_date));
-    act(AT_MAGIC, "$n disappears in a cloud of hellish light.", victim, NULL, ch, TO_NOTVICT);
+    act(AT_MAGIC, "$n disappears in a cloud of hellish light.", victim, nullptr, ch, TO_NOTVICT);
     char_from_room(victim);
     char_to_room(victim, get_room_index(6));
-    act(AT_MAGIC, "$n appears in a could of hellish light.", victim, NULL, ch, TO_NOTVICT);
+    act(AT_MAGIC, "$n appears in a could of hellish light.", victim, nullptr, ch, TO_NOTVICT);
     do_look(victim, "auto");
     ch_printf(
         victim, "The immortals are not pleased with your actions.\r\n"
@@ -5157,7 +5157,7 @@ void do_unhell(CHAR_DATA* ch, const char* argument)
     if (!location)
         location = ch->in_room;
     MOBtrigger   = FALSE;
-    act(AT_MAGIC, "$n disappears in a cloud of godly light.", victim, NULL, ch, TO_NOTVICT);
+    act(AT_MAGIC, "$n disappears in a cloud of godly light.", victim, nullptr, ch, TO_NOTVICT);
     char_from_room(victim);
     char_to_room(victim, location);
     send_to_char("The gods have smiled on you and released you from hell early!\r\n", victim);
@@ -5172,11 +5172,11 @@ void do_unhell(CHAR_DATA* ch, const char* argument)
                 victim->pcdata->helled_by
             );
         STRFREE(victim->pcdata->helled_by);
-        victim->pcdata->helled_by = NULL;
+        victim->pcdata->helled_by = nullptr;
     }
 
     MOBtrigger = FALSE;
-    act(AT_MAGIC, "$n appears in a cloud of godly light.", victim, NULL, ch, TO_NOTVICT);
+    act(AT_MAGIC, "$n appears in a cloud of godly light.", victim, nullptr, ch, TO_NOTVICT);
     victim->pcdata->release_date = 0;
     save_char_obj(victim);
 }
@@ -5206,15 +5206,15 @@ void do_vsearch(CHAR_DATA* ch, const char* argument)
         send_to_char("Vnum out of range.\r\n", ch);
         return;
     }
-    for (obj = first_object; obj != NULL; obj = obj->next)
+    for (obj = first_object; obj != nullptr; obj = obj->next)
     {
         if (!can_see_obj(ch, obj) || !(argi == obj->pIndexData->vnum))
             continue;
 
         found       = TRUE;
-        for (in_obj = obj; in_obj->in_obj != NULL; in_obj = in_obj->in_obj);
+        for (in_obj = obj; in_obj->in_obj != nullptr; in_obj = in_obj->in_obj);
 
-        if (in_obj->carried_by != NULL)
+        if (in_obj->carried_by != nullptr)
             pager_printf(
                 ch, "[%2d] Level %d %s carried by %s.\r\n",
                 obj_counter, obj->level, obj_short(obj), PERS(in_obj->carried_by, ch));
@@ -5222,7 +5222,7 @@ void do_vsearch(CHAR_DATA* ch, const char* argument)
             pager_printf(
                 ch, "[%2d] [%-5d] %s in %s.\r\n", obj_counter,
                 ((in_obj->in_room) ? in_obj->in_room->vnum : 0),
-                obj_short(obj), (in_obj->in_room == NULL) ? "somewhere" : in_obj->in_room->name
+                obj_short(obj), (in_obj->in_room == nullptr) ? "somewhere" : in_obj->in_room->name
             );
 
         obj_counter++;
@@ -5244,7 +5244,7 @@ void do_sober(CHAR_DATA* ch, const char* argument)
 
     argument    = smash_tilde_static(argument);
     argument    = one_argument(argument, arg1);
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -5296,7 +5296,7 @@ void unlink_social(SOCIALTYPE* social)
 
     if (!social)
     {
-        bug("%s: NULL social", __func__);
+        bug("%s: nullptr social", __func__);
         return;
     }
 
@@ -5332,19 +5332,19 @@ void add_social(SOCIALTYPE* social)
 
     if (!social)
     {
-        bug("%s: NULL social", __func__);
+        bug("%s: nullptr social", __func__);
         return;
     }
 
     if (!social->name)
     {
-        bug("%s: NULL social->name", __func__);
+        bug("%s: nullptr social->name", __func__);
         return;
     }
 
     if (!social->char_no_arg)
     {
-        bug("%s: NULL social->char_no_arg", __func__);
+        bug("%s: nullptr social->char_no_arg", __func__);
         return;
     }
 
@@ -5360,7 +5360,7 @@ void add_social(SOCIALTYPE* social)
     else
         hash = (social->name[0] - 'a') + 1;
 
-    if ((prev = tmp = social_index[hash]) == NULL)
+    if ((prev = tmp = social_index[hash]) == nullptr)
     {
         social->next = social_index[hash];
         social_index[hash] = social;
@@ -5394,7 +5394,7 @@ void add_social(SOCIALTYPE* social)
     * add to end
     */
     prev->next   = social;
-    social->next = NULL;
+    social->next = nullptr;
 }
 
 /*
@@ -5568,7 +5568,7 @@ void do_sedit(CHAR_DATA* ch, const char* argument)
             send_to_char("Cannot clear name field!\r\n", ch);
             return;
         }
-        if ((checksocial = find_social(arg1)) != NULL)
+        if ((checksocial = find_social(arg1)) != nullptr)
         {
             ch_printf(ch, "There is already a social named %s.\r\n", arg1);
             return;
@@ -5617,7 +5617,7 @@ void unlink_command(CMDTYPE* command)
 
     if (!command)
     {
-        bug("%s: NULL command", __func__);
+        bug("%s: nullptr command", __func__);
         return;
     }
 
@@ -5649,19 +5649,19 @@ void add_command(CMDTYPE* command)
 
     if (!command)
     {
-        bug("%s: NULL command", __func__);
+        bug("%s: nullptr command", __func__);
         return;
     }
 
     if (!command->name)
     {
-        bug("%s: NULL command->name", __func__);
+        bug("%s: nullptr command->name", __func__);
         return;
     }
 
     if (!command->do_fun)
     {
-        bug("%s: NULL command->do_fun", __func__);
+        bug("%s: nullptr command->do_fun", __func__);
         return;
     }
 
@@ -5674,7 +5674,7 @@ void add_command(CMDTYPE* command)
 
     hash = command->name[0] % 126;
 
-    if ((prev = tmp = command_hash[hash]) == NULL)
+    if ((prev = tmp = command_hash[hash]) == nullptr)
     {
         command->next = command_hash[hash];
         command_hash[hash] = command;
@@ -5689,7 +5689,7 @@ void add_command(CMDTYPE* command)
         if (!tmp->next)
         {
             tmp->next     = command;
-            command->next = NULL;
+            command->next = nullptr;
         }
     }
 }
@@ -5868,7 +5868,7 @@ void do_cedit(CHAR_DATA* ch, const char* argument)
             send_to_char("Cannot clear name field!\r\n", ch);
             return;
         }
-        if ((checkcmd = find_command(arg1)) != NULL)
+        if ((checkcmd = find_command(arg1)) != nullptr)
         {
             ch_printf(ch, "There is already a command named %s.\r\n", arg1);
             return;

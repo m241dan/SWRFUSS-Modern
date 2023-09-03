@@ -67,7 +67,7 @@ typedef int obj_ret;
 }
 
 /* Macro taken from DOTD codebase. Fcloses a file, then nulls its pointer for safety. */
-#define FCLOSE(fp)  fclose((fp)); (fp)=NULL;
+#define FCLOSE(fp)  fclose((fp)); (fp)=nullptr;
 
 /*
 * Structure types.
@@ -1597,7 +1597,7 @@ typedef enum
 typedef enum
 {
     APPLY_NONE, APPLY_STR, APPLY_DEX, APPLY_INT, APPLY_WIS, APPLY_CON,
-    APPLY_SEX, APPLY_NULL, APPLY_LEVEL, APPLY_AGE, APPLY_HEIGHT, APPLY_WEIGHT,
+    APPLY_SEX, APPLY_nullptr, APPLY_LEVEL, APPLY_AGE, APPLY_HEIGHT, APPLY_WEIGHT,
     APPLY_MANA, APPLY_HIT, APPLY_MOVE, APPLY_GOLD, APPLY_EXP, APPLY_AC,
     APPLY_HITROLL, APPLY_DAMROLL, APPLY_SAVING_POISON, APPLY_SAVING_ROD,
     APPLY_SAVING_PARA, APPLY_SAVING_BREATH, APPLY_SAVING_SPELL, APPLY_CHA,
@@ -2805,7 +2805,7 @@ int urange(int mincheck, int check, int maxcheck);
    if( (point) )                            \
 {                                        \
    free( (void*)(point) );            \
-   (point) = NULL;                       \
+   (point) = nullptr;                       \
 }                                        \
 } while(0)
 
@@ -2819,7 +2819,7 @@ int urange(int mincheck, int check, int maxcheck);
 {                                            \
    if( str_free((point)) == -1 )             \
    bug( "&RSTRFREEing bad pointer: %s, line %d", __FILE__, __LINE__ ); \
-   (point) = NULL;                           \
+   (point) = nullptr;                           \
 }                                            \
 } while(0)
 #else
@@ -2840,9 +2840,9 @@ int urange(int mincheck, int check, int maxcheck);
 }                                        \
    else                                     \
    (last)->next = (link);                \
-   (link)->next = NULL;                     \
+   (link)->next = nullptr;                     \
    if ((first) == (link))                   \
-   (link)->prev = NULL;                  \
+   (link)->prev = nullptr;                  \
    else                                     \
    (link)->prev = (last);                \
    (last) = (link);                         \
@@ -2867,7 +2867,7 @@ int urange(int mincheck, int check, int maxcheck);
 {                                            \
    (first) = (link)->next;                   \
    if ((first))                              \
-   (first)->prev = NULL;                  \
+   (first)->prev = nullptr;                  \
 }                                            \
    else                                         \
 {                                            \
@@ -2877,7 +2877,7 @@ int urange(int mincheck, int check, int maxcheck);
 {                                            \
    (last) = (link)->prev;                    \
    if((last))                                \
-   (last)->next = NULL;                   \
+   (last)->next = nullptr;                   \
 }                                            \
    else                                         \
 {                                            \
@@ -2887,19 +2887,19 @@ int urange(int mincheck, int check, int maxcheck);
 
 #define CHECK_LINKS(first, last, next, prev, type)        \
    do {                                \
-   type *ptr, *pptr = NULL;                    \
+   type *ptr, *pptr = nullptr;                    \
    if ( !(first) && !(last) )                    \
    break;                            \
    if ( !(first) )                        \
 {                                \
-   bug( "CHECK_LINKS: last with NULL first!  %s.",        \
+   bug( "CHECK_LINKS: last with nullptr first!  %s.",        \
    __STRING(first) );                    \
    for ( ptr = (last); ptr->prev; ptr = ptr->prev );        \
    (first) = ptr;                        \
 }                                \
    else if ( !(last) )                        \
 {                                \
-   bug( "CHECK_LINKS: first with NULL last!  %s.",        \
+   bug( "CHECK_LINKS: first with nullptr last!  %s.",        \
    __STRING(first) );                    \
    for ( ptr = (first); ptr->next; ptr = ptr->next );        \
    (last) = ptr;                        \
@@ -2922,7 +2922,7 @@ int urange(int mincheck, int check, int maxcheck);
 }                                \
    pptr = ptr;                        \
 }                                \
-   pptr = NULL;                        \
+   pptr = nullptr;                        \
 }                                \
    if ( (last) )                            \
 {                                \
@@ -3006,7 +3006,7 @@ int urange(int mincheck, int check, int maxcheck);
 #define EXIT(ch, door)        ( get_exit( (ch)->in_room, door ) )
 
 #define CAN_GO(ch, door)    (EXIT((ch),(door))             \
-   && (EXIT((ch),(door))->to_room != NULL)  \
+   && (EXIT((ch),(door))->to_room != nullptr)  \
    && !IS_SET(EXIT((ch), (door))->exit_info, EX_CLOSED))
 
 #define IS_VALID_SN(sn)        ( (sn) >=0 && (sn) < MAX_SKILL             \
@@ -3857,7 +3857,7 @@ DECLARE_SPELL_FUN(spell_cure_addiction);
 * All files are read in completely at bootup.
 * Most output files (bug, idea, typo, shutdown) are append-only.
 *
-* The NULL_FILE is held open so that we have a stream handle in reserve,
+* The nullptr_FILE is held open so that we have a stream handle in reserve,
 *   so players can go ahead and telnet to all the other descriptors.
 * Then we close it whenever we need to open a file (e.g. a save file).
 */

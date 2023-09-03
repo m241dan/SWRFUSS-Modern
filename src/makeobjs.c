@@ -59,7 +59,7 @@ void make_scraps(OBJ_DATA* obj)
 {
     char     buf[MAX_STRING_LENGTH];
     OBJ_DATA * scraps, * tmpobj;
-    CHAR_DATA* ch = NULL;
+    CHAR_DATA* ch = nullptr;
 
     separate_obj(obj);
     scraps = create_object(get_obj_index(OBJ_VNUM_SCRAPS), 0);
@@ -87,19 +87,19 @@ void make_scraps(OBJ_DATA* obj)
 
     if (obj->carried_by)
     {
-        act(AT_OBJECT, "$p falls to the ground in scraps!", obj->carried_by, obj, NULL, TO_CHAR);
+        act(AT_OBJECT, "$p falls to the ground in scraps!", obj->carried_by, obj, nullptr, TO_CHAR);
         if (obj == get_eq_char(obj->carried_by, WEAR_WIELD)
-            && (tmpobj = get_eq_char(obj->carried_by, WEAR_DUAL_WIELD)) != NULL)
+            && (tmpobj = get_eq_char(obj->carried_by, WEAR_DUAL_WIELD)) != nullptr)
             tmpobj->wear_loc = WEAR_WIELD;
 
         obj_to_room(scraps, obj->carried_by->in_room);
     }
     else if (obj->in_room)
     {
-        if ((ch = obj->in_room->first_person) != NULL)
+        if ((ch = obj->in_room->first_person) != nullptr)
         {
-            act(AT_OBJECT, "$p is reduced to little more than scraps.", ch, obj, NULL, TO_ROOM);
-            act(AT_OBJECT, "$p is reduced to little more than scraps.", ch, obj, NULL, TO_CHAR);
+            act(AT_OBJECT, "$p is reduced to little more than scraps.", ch, obj, nullptr, TO_ROOM);
+            act(AT_OBJECT, "$p is reduced to little more than scraps.", ch, obj, nullptr, TO_CHAR);
         }
         obj_to_room(scraps, obj->in_room);
     }
@@ -107,15 +107,15 @@ void make_scraps(OBJ_DATA* obj)
     {
         if (ch && ch->in_room)
         {
-            act(AT_OBJECT, "The contents of $p fall to the ground.", ch, obj, NULL, TO_ROOM);
-            act(AT_OBJECT, "The contents of $p fall to the ground.", ch, obj, NULL, TO_CHAR);
+            act(AT_OBJECT, "The contents of $p fall to the ground.", ch, obj, nullptr, TO_ROOM);
+            act(AT_OBJECT, "The contents of $p fall to the ground.", ch, obj, nullptr, TO_CHAR);
         }
         if (obj->carried_by)
-            empty_obj(obj, NULL, obj->carried_by->in_room);
+            empty_obj(obj, nullptr, obj->carried_by->in_room);
         else if (obj->in_room)
-            empty_obj(obj, NULL, obj->in_room);
+            empty_obj(obj, nullptr, obj->in_room);
         else if (obj->in_obj)
-            empty_obj(obj, obj->in_obj, NULL);
+            empty_obj(obj, obj->in_obj, nullptr);
     }
     extract_obj(obj);
 }

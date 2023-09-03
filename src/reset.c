@@ -39,7 +39,7 @@ OBJ_DATA* get_obj_type(OBJ_INDEX_DATA* pObjIndex)
         if (obj->pIndexData == pObjIndex)
             return obj;
     }
-    return NULL;
+    return nullptr;
 }
 
 /* Find an object in a room so we can check it's dependents. Used by 'O' resets. */
@@ -52,7 +52,7 @@ OBJ_DATA* get_obj_room(OBJ_INDEX_DATA* pObjIndex, ROOM_INDEX_DATA* pRoomIndex)
         if (obj->pIndexData == pObjIndex)
             return obj;
     }
-    return NULL;
+    return nullptr;
 }
 
 char* sprint_reset(RESET_DATA* pReset, short* num)
@@ -138,10 +138,10 @@ char* sprint_reset(RESET_DATA* pReset, short* num)
                                     mudstrlcpy(objname, "Object1: *BAD VNUM*", MAX_INPUT_LENGTH);
                                 else
                                     mudstrlcpy(objname, obj2->name, MAX_INPUT_LENGTH);
-                                if (gReset->arg3 > 0 && (obj = get_obj_index(gReset->arg3)) == NULL)
+                                if (gReset->arg3 > 0 && (obj = get_obj_index(gReset->arg3)) == nullptr)
                                     mudstrlcpy(roomname, "Object2: *BAD VNUM*", MAX_INPUT_LENGTH);
                                 else if (!obj)
-                                    mudstrlcpy(roomname, "Object2: *NULL obj*", MAX_INPUT_LENGTH);
+                                    mudstrlcpy(roomname, "Object2: *nullptr obj*", MAX_INPUT_LENGTH);
                                 else
                                     mudstrlcpy(roomname, obj->name, MAX_INPUT_LENGTH);
                                 snprintf(
@@ -187,10 +187,10 @@ char* sprint_reset(RESET_DATA* pReset, short* num)
                             mudstrlcpy(objname, "Object1: *BAD VNUM*", MAX_INPUT_LENGTH);
                         else
                             mudstrlcpy(objname, obj2->name, MAX_INPUT_LENGTH);
-                        if (tReset->arg3 > 0 && (obj = get_obj_index(tReset->arg3)) == NULL)
+                        if (tReset->arg3 > 0 && (obj = get_obj_index(tReset->arg3)) == nullptr)
                             mudstrlcpy(roomname, "Object2: *BAD VNUM*", MAX_INPUT_LENGTH);
                         else if (!obj)
-                            mudstrlcpy(roomname, "Object2: *NULL obj*", MAX_INPUT_LENGTH);
+                            mudstrlcpy(roomname, "Object2: *nullptr obj*", MAX_INPUT_LENGTH);
                         else
                             mudstrlcpy(roomname, obj->name, MAX_INPUT_LENGTH);
                         snprintf(
@@ -358,7 +358,7 @@ void delete_reset(RESET_DATA* pReset)
         UNLINK(tReset, pReset->first_reset, pReset->last_reset, next_reset, prev_reset);
         delete_reset(tReset);
     }
-    pReset->first_reset = pReset->last_reset = NULL;
+    pReset->first_reset = pReset->last_reset = nullptr;
     DISPOSE(pReset);
     return;
 }
@@ -420,7 +420,7 @@ void wipe_resets(ROOM_INDEX_DATA* room)
         UNLINK(pReset, room->first_reset, room->last_reset, next, prev);
         delete_reset(pReset);
     }
-    room->first_reset = room->last_reset = NULL;
+    room->first_reset = room->last_reset = nullptr;
     return;
 }
 
@@ -550,16 +550,16 @@ void reset_room(ROOM_INDEX_DATA* room)
     OBJ_DATA       * nestmap[MAX_NEST];
     CHAR_DATA      * mob;
     OBJ_DATA       * obj, * lastobj, * to_obj;
-    ROOM_INDEX_DATA* pRoomIndex = NULL;
-    MOB_INDEX_DATA * pMobIndex  = NULL;
-    OBJ_INDEX_DATA * pObjIndex  = NULL, * pObjToIndex;
+    ROOM_INDEX_DATA* pRoomIndex = nullptr;
+    MOB_INDEX_DATA * pMobIndex  = nullptr;
+    OBJ_INDEX_DATA * pObjIndex  = nullptr, * pObjToIndex;
     EXIT_DATA      * pexit;
     const char     * filename   = room->area->filename;
     int            level        = 0, n, num = 0, lastnest, onreset = 0;;
 
-    mob     = NULL;
-    obj     = NULL;
-    lastobj = NULL;
+    mob     = nullptr;
+    obj     = nullptr;
+    lastobj = nullptr;
     if (!room->first_reset)
         return;
     level       = 0;
@@ -584,7 +584,7 @@ void reset_room(ROOM_INDEX_DATA* room)
                 }
                 if (!pReset->sreset)
                 {
-                    mob = NULL;
+                    mob = nullptr;
                     break;
                 }
                 mob              = create_mobile(pMobIndex);
@@ -618,7 +618,7 @@ void reset_room(ROOM_INDEX_DATA* room)
                                 }
                                 if (!mob)
                                 {
-                                    lastobj = NULL;
+                                    lastobj = nullptr;
                                     break;
                                 }
 
@@ -647,7 +647,7 @@ void reset_room(ROOM_INDEX_DATA* room)
                                     equip_char(mob, obj, tReset->arg3);
                                 }
                                 for (n = 0; n < MAX_NEST; n++)
-                                    nestmap[n] = NULL;
+                                    nestmap[n] = nullptr;
                                 nestmap[0]     = obj;
                                 lastobj  = nestmap[0];
                                 lastnest = 0;
@@ -699,12 +699,12 @@ void reset_room(ROOM_INDEX_DATA* room)
                                                         filename,
                                                         MAX_NEST
                                                     );
-                                                    obj = NULL;
+                                                    obj = nullptr;
                                                     break;
                                                 }
                                                 if (count_obj_list(pObjIndex, to_obj->first_content) > 0)
                                                 {
-                                                    obj = NULL;
+                                                    obj = nullptr;
                                                     break;
                                                 }
 
@@ -774,8 +774,8 @@ void reset_room(ROOM_INDEX_DATA* room)
 
                     if (!(obj = get_obj_room(pObjIndex, pRoomIndex)))
                     {
-                        obj     = NULL;
-                        lastobj = NULL;
+                        obj     = nullptr;
+                        lastobj = nullptr;
                         break;
                     }
                     obj->extra_flags = pObjIndex->extra_flags;
@@ -783,7 +783,7 @@ void reset_room(ROOM_INDEX_DATA* room)
                         obj->value[x] = pObjIndex->value[x];
                 }
                 for (n = 0; n < MAX_NEST; n++)
-                    nestmap[n] = NULL;
+                    nestmap[n] = nullptr;
                 nestmap[0]     = obj;
                 lastobj  = nestmap[0];
                 lastnest = 0;
@@ -867,13 +867,13 @@ void reset_room(ROOM_INDEX_DATA* room)
                                         MAX_NEST,
                                         room->vnum
                                     );
-                                    obj = NULL;
+                                    obj = nullptr;
                                     break;
                                 }
 
                                 if (count_obj_list(pObjIndex, to_obj->first_content) > 0)
                                 {
-                                    obj = NULL;
+                                    obj = nullptr;
                                     break;
                                 }
                                 if (iNest < lastnest)
@@ -983,7 +983,7 @@ void reset_area(AREA_DATA* area)
    actually reset, or if they're bugged. */
 void renumber_put_resets(ROOM_INDEX_DATA* room)
 {
-    RESET_DATA* pReset, * tReset, * lastobj = NULL;
+    RESET_DATA* pReset, * tReset, * lastobj = nullptr;
 
     for (pReset = room->first_reset; pReset; pReset = pReset->next)
     {
@@ -1024,8 +1024,8 @@ RESET_DATA* add_reset(ROOM_INDEX_DATA* room, char letter, int extra, int arg1, i
 
     if (!room)
     {
-        bug("%s: NULL room!", __func__);
-        return NULL;
+        bug("%s: nullptr room!", __func__);
+        return nullptr;
     }
 
     letter = UPPER(letter);
@@ -1040,8 +1040,8 @@ RESET_DATA* add_reset(ROOM_INDEX_DATA* room, char letter, int extra, int arg1, i
         case 'G':
             if (!room->last_mob_reset)
             {
-                bug("%s: Can't add '%c' reset to room: last_mob_reset is NULL.", __func__, letter);
-                return NULL;
+                bug("%s: Can't add '%c' reset to room: last_mob_reset is nullptr.", __func__, letter);
+                return nullptr;
             }
             room->last_obj_reset = pReset;
             LINK(pReset, room->last_mob_reset->first_reset, room->last_mob_reset->last_reset, next_reset, prev_reset);
@@ -1050,8 +1050,8 @@ RESET_DATA* add_reset(ROOM_INDEX_DATA* room, char letter, int extra, int arg1, i
         case 'P':
             if (!room->last_obj_reset)
             {
-                bug("%s: Can't add '%c' reset to room: last_obj_reset is NULL.", __func__, letter);
-                return NULL;
+                bug("%s: Can't add '%c' reset to room: last_obj_reset is nullptr.", __func__, letter);
+                return nullptr;
             }
             LINK(pReset, room->last_obj_reset->first_reset, room->last_obj_reset->last_reset, next_reset, prev_reset);
             return pReset;
@@ -1062,7 +1062,7 @@ RESET_DATA* add_reset(ROOM_INDEX_DATA* room, char letter, int extra, int arg1, i
         case 'T':
             if (IS_SET(extra, TRAP_OBJ))
             {
-                pReset->prev_reset                                = NULL;
+                pReset->prev_reset                                = nullptr;
                 pReset->next_reset                                = room->last_obj_reset->first_reset;
                 if (room->last_obj_reset->first_reset)
                     room->last_obj_reset->first_reset->prev_reset = pReset;
@@ -1073,7 +1073,7 @@ RESET_DATA* add_reset(ROOM_INDEX_DATA* room, char letter, int extra, int arg1, i
             }
             break;
 
-        case 'H':pReset->prev_reset                           = NULL;
+        case 'H':pReset->prev_reset                           = nullptr;
             pReset->next_reset                                = room->last_obj_reset->first_reset;
             if (room->last_obj_reset->first_reset)
                 room->last_obj_reset->first_reset->prev_reset = pReset;
@@ -1105,7 +1105,7 @@ RESET_DATA* find_oreset(ROOM_INDEX_DATA* room, const char* oname)
         if (is_name(arg, pobj->name) && ++cnt == num)
             return pReset;
     }
-    return NULL;
+    return nullptr;
 }
 
 void do_reset(CHAR_DATA* ch, const char* argument)
@@ -1219,7 +1219,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
         }
 
         pReset = make_reset('R', 0, ch->in_room->vnum, door, 0);
-        pReset->prev                       = NULL;
+        pReset->prev                       = nullptr;
         pReset->next                       = ch->in_room->first_reset;
         if (ch->in_room->first_reset)
             ch->in_room->first_reset->prev = pReset;
@@ -1232,7 +1232,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
 
     if (!str_cmp(arg, "trap"))
     {
-        RESET_DATA* pReset                = NULL, * tReset;
+        RESET_DATA* pReset                = nullptr, * tReset;
         char      oname[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
         int       num, chrg, value, extra = 0, vnum;
 
@@ -1296,7 +1296,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
         tReset = make_reset('T', extra, num, chrg, vnum);
         if (pReset)
         {
-            tReset->prev_reset                  = NULL;
+            tReset->prev_reset                  = nullptr;
             tReset->next_reset                  = pReset->first_reset;
             if (pReset->first_reset)
                 pReset->first_reset->prev_reset = tReset;
@@ -1306,7 +1306,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
         }
         else
         {
-            tReset->prev                       = NULL;
+            tReset->prev                       = nullptr;
             tReset->next                       = ch->in_room->first_reset;
             if (ch->in_room->first_reset)
                 ch->in_room->first_reset->prev = tReset;
@@ -1320,7 +1320,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
 
     if (!str_cmp(arg, "hide"))
     {
-        RESET_DATA* pReset = NULL, * tReset;
+        RESET_DATA* pReset = nullptr, * tReset;
 
         if (!(pReset = find_oreset(ch->in_room, argument)))
         {
@@ -1330,7 +1330,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
         tReset       = make_reset('H', 1, 0, 0, 0);
         if (pReset)
         {
-            tReset->prev_reset                  = NULL;
+            tReset->prev_reset                  = nullptr;
             tReset->next_reset                  = pReset->first_reset;
             if (pReset->first_reset)
                 pReset->first_reset->prev_reset = tReset;
@@ -1340,7 +1340,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
         }
         else
         {
-            tReset->prev                       = NULL;
+            tReset->prev                       = nullptr;
             tReset->next                       = ch->in_room->first_reset;
             if (ch->in_room->first_reset)
                 ch->in_room->first_reset->prev = tReset;

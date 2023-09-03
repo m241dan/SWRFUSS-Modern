@@ -39,7 +39,7 @@ SPELL_FUN* spell_function(const char* name)
     const char* error     = 0;
     *(void**)(&funHandle) = dlsym(sysdata.dlHandle, name);
 
-    if ((error = dlerror()) != NULL)
+    if ((error = dlerror()) != nullptr)
     {
         bug("%s: Error locating %s in symbol table. %s", __func__, name, error);
         return spell_notfound;
@@ -54,7 +54,7 @@ DO_FUN* skill_function(const char* name)
     DO_FUN    * funHandle = 0;
     *(void**)(&funHandle) = dlsym(sysdata.dlHandle, name);
 
-    if ((error = dlerror()) != NULL)
+    if ((error = dlerror()) != nullptr)
     {
         bug("%s: Error locating %s in symbol table. %s", __func__, name, error);
         return skill_notfound;
@@ -185,7 +185,7 @@ void save_skill_table()
     int x;
     FILE* fpout;
 
-    if ((fpout = fopen(SKILL_FILE, "w")) == NULL)
+    if ((fpout = fopen(SKILL_FILE, "w")) == nullptr)
     {
         bug("%s: Cannot open skills.dat for writting", __func__);
         perror(SKILL_FILE);
@@ -211,7 +211,7 @@ void save_herb_table()
     int x;
     FILE* fpout;
 
-    if ((fpout = fopen(HERB_FILE, "w")) == NULL)
+    if ((fpout = fopen(HERB_FILE, "w")) == nullptr)
     {
         bug("%s: Cannot open herbs.dat for writting", __func__);
         perror(HERB_FILE);
@@ -238,7 +238,7 @@ void save_socials()
     SOCIALTYPE* social;
     int       x;
 
-    if ((fpout = fopen(SOCIAL_FILE, "w")) == NULL)
+    if ((fpout = fopen(SOCIAL_FILE, "w")) == nullptr)
     {
         bug("%s: Cannot open socials.dat for writting", __func__);
         perror(SOCIAL_FILE);
@@ -259,7 +259,7 @@ void save_socials()
             if (social->char_no_arg)
                 fprintf(fpout, "CharNoArg   %s~\n", social->char_no_arg);
             else
-                bug("%s: NULL char_no_arg in hash bucket %d", __func__, x);
+                bug("%s: nullptr char_no_arg in hash bucket %d", __func__, x);
             if (social->others_no_arg)
                 fprintf(fpout, "OthersNoArg %s~\n", social->others_no_arg);
             if (social->char_found)
@@ -303,7 +303,7 @@ void save_commands()
     CMDTYPE* command;
     int    x;
 
-    if ((fpout = fopen(COMMAND_FILE, "w")) == NULL)
+    if ((fpout = fopen(COMMAND_FILE, "w")) == nullptr)
     {
         bug("%s: annot open commands.dat for writing", __func__);
         perror(COMMAND_FILE);
@@ -384,13 +384,13 @@ SKILLTYPE* fread_skill(FILE* fp)
                     if (!str_prefix("do_", w) && (dofun = skill_function(w)) != skill_notfound)
                     {
                         skill->skill_fun      = dofun;
-                        skill->spell_fun      = NULL;
+                        skill->spell_fun      = nullptr;
                         skill->skill_fun_name = str_dup(w);
                     }
                     else if (str_prefix("do_", w) && (spellfun = spell_function(w)) != spell_notfound)
                     {
                         skill->spell_fun      = spellfun;
-                        skill->skill_fun      = NULL;
+                        skill->skill_fun      = nullptr;
                         skill->spell_fun_name = str_dup(w);
                     }
                     else
@@ -476,7 +476,7 @@ void load_skill_table()
 {
     FILE* fp;
 
-    if ((fp = fopen(SKILL_FILE, "r")) != NULL)
+    if ((fp = fopen(SKILL_FILE, "r")) != nullptr)
     {
         top_sn = 0;
         for (;;)
@@ -530,7 +530,7 @@ void load_herb_table()
 {
     FILE* fp;
 
-    if ((fp = fopen(HERB_FILE, "r")) != NULL)
+    if ((fp = fopen(HERB_FILE, "r")) != nullptr)
     {
         top_herb = 0;
         for (;;)
@@ -649,7 +649,7 @@ void load_socials()
 {
     FILE* fp;
 
-    if ((fp = fopen(SOCIAL_FILE, "r")) != NULL)
+    if ((fp = fopen(SOCIAL_FILE, "r")) != nullptr)
     {
         for (;;)
         {
@@ -768,7 +768,7 @@ void load_commands()
 {
     FILE* fp;
 
-    if ((fp = fopen(COMMAND_FILE, "r")) != NULL)
+    if ((fp = fopen(COMMAND_FILE, "r")) != nullptr)
     {
         for (;;)
         {

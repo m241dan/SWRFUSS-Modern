@@ -97,7 +97,7 @@ typedef enum
 #define SMST 1024 /* Small String */
 
 /* Macro taken from DOTD codebase. Fcloses a file, then nulls its pointer for safety. */
-#define IMCFCLOSE(fp)  fclose((fp)); (fp)=NULL;
+#define IMCFCLOSE(fp)  fclose((fp)); (fp)=nullptr;
 
 /*
  * Memory allocation macros.
@@ -128,7 +128,7 @@ do                            \
    if((point))                \
    {                          \
       free( (void*) (point));          \
-      (point) = NULL;         \
+      (point) = nullptr;         \
    }                          \
 } while(0)
 
@@ -147,9 +147,9 @@ do                                              \
    }                                            \
    else                                         \
       (last)->next = (link);                    \
-   (link)->next = NULL;                         \
+   (link)->next = nullptr;                         \
    if ((first) == (link))                       \
-      (link)->prev = NULL;                      \
+      (link)->prev = nullptr;                      \
    else                                         \
       (link)->prev = (last);                    \
    (last) = (link);                             \
@@ -174,7 +174,7 @@ do                                               \
    {                                             \
       (first) = (link)->next;                    \
     if((first))                                \
-       (first)->prev = NULL;                   \
+       (first)->prev = nullptr;                   \
    }                                             \
    else                                          \
    {                                             \
@@ -184,7 +184,7 @@ do                                               \
    {                                             \
       (last) = (link)->prev;                     \
     if((last))                                 \
-       (last)->next = NULL;                    \
+       (last)->next = nullptr;                    \
    }                                             \
    else                                          \
    {                                             \

@@ -339,7 +339,7 @@ const char* imcone_argument(const char* argument, char* arg_first)
         arg_first[0] = '\0';
 
     if (!argument || argument[0] == '\0')
-        return NULL;
+        return nullptr;
 
     while (isspace(*argument))
         argument++;
@@ -708,15 +708,15 @@ char* escape_string(const char* src)
 CHAR_DATA* imc_find_user(const char* name)
 {
     DESCRIPTOR_DATA* d;
-    CHAR_DATA      * vch = NULL;
+    CHAR_DATA      * vch = nullptr;
 
     for (d = first_descriptor; d; d = d->next)
     {
-        if ((vch = d->character ? d->character : d->original) != NULL && !strcasecmp(CH_IMCNAME(vch), name)
+        if ((vch = d->character ? d->character : d->original) != nullptr && !strcasecmp(CH_IMCNAME(vch), name)
             && d->connected == CON_PLAYING)
             return vch;
     }
-    return NULL;
+    return nullptr;
 }
 
 char* imcgetname(const char* from)
@@ -857,7 +857,7 @@ REMOTEINFO* imc_find_reminfo(const char* name)
         if (!strcasecmp(name, p->name))
             return p;
     }
-    return NULL;
+    return nullptr;
 }
 
 bool check_mud(CHAR_DATA* ch, const char* mud)
@@ -926,7 +926,7 @@ IMC_BAN* imc_newban(void)
     IMC_BAN* ban;
 
     IMCCREATE(ban, IMC_BAN, 1);
-    ban->name = NULL;
+    ban->name = nullptr;
     IMCLINK(ban, first_imc_ban, last_imc_ban, next, prev);
     return ban;
 }
@@ -969,7 +969,7 @@ IMC_CHANNEL* imc_findchannel(const char* name)
     for (c = first_imc_channel; c; c = c->next)
         if ((c->name && !strcasecmp(c->name, name)) || (c->local_name && !strcasecmp(c->local_name, name)))
             return c;
-    return NULL;
+    return nullptr;
 }
 
 void imc_freechan(IMC_CHANNEL* c)
@@ -978,7 +978,7 @@ void imc_freechan(IMC_CHANNEL* c)
 
     if (!c)
     {
-        imcbug("%s: Freeing NULL channel!", __func__);
+        imcbug("%s: Freeing nullptr channel!", __func__);
         return;
     }
     IMCUNLINK(c, first_imc_channel, last_imc_channel, next, prev);
@@ -999,7 +999,7 @@ void imc_freechan(IMC_CHANNEL* c)
 
 void imcformat_channel(CHAR_DATA* ch, IMC_CHANNEL* d, int format, bool all)
 {
-    IMC_CHANNEL* c = NULL;
+    IMC_CHANNEL* c = nullptr;
     char       buf[LGST];
 
     if (all)
@@ -1068,7 +1068,7 @@ void imc_new_channel(
 
     if (!chan || chan[0] == '\0')
     {
-        imclog("%s: NULL channel name received, skipping", __func__);
+        imclog("%s: nullptr channel name received, skipping", __func__);
         return;
     }
 
@@ -1095,7 +1095,7 @@ void imc_new_channel(
     c->refreshed = TRUE;
     c->open      = copen;
     IMCLINK(c, first_imc_channel, last_imc_channel, next, prev);
-    imcformat_channel(NULL, c, 4, FALSE);
+    imcformat_channel(nullptr, c, 4, FALSE);
 }
 
 /*
@@ -1271,7 +1271,7 @@ char* imcfread_word(FILE* fp)
         }
     }
     imcbug("%s: word too long", __func__);
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -1559,26 +1559,26 @@ IMC_PACKET* imc_newpacket(const char* from, const char* type, const char* to)
     if (!type || type[0] == '\0')
     {
         imcbug("%s: Attempt to build packet with no type field.", __func__);
-        return NULL;
+        return nullptr;
     }
 
     if (!from || from[0] == '\0')
     {
         imcbug("%s: Attempt to build %s packet with no from field.", __func__, type);
-        return NULL;
+        return nullptr;
     }
 
     if (!to || to[0] == '\0')
     {
         imcbug("%s: Attempt to build %s packet with no to field.", __func__, type);
-        return NULL;
+        return nullptr;
     }
 
     IMCCREATE(p, IMC_PACKET, 1);
     snprintf(p->from, SMST, "%s@%s", from, this_imcmud->localname);
     imcstrlcpy(p->type, type, SMST);
     imcstrlcpy(p->to, to, SMST);
-    p->first_data = p->last_data = NULL;
+    p->first_data = p->last_data = nullptr;
 
     return p;
 }
@@ -1593,7 +1593,7 @@ void imc_update_tellhistory(CHAR_DATA* ch, const char* msg)
 
     for (x = 0; x < MAX_IMCTELLHISTORY; x++)
     {
-        if (IMCTELLHISTORY(ch, x) == NULL)
+        if (IMCTELLHISTORY(ch, x) == nullptr)
         {
             IMCTELLHISTORY(ch, x) = IMCSTRALLOC(new_msg);
             break;
@@ -1722,7 +1722,7 @@ PFUN( imc_recv_emote )
 
         for ( d = first_descriptor; d; d = d->next )
         {
-            if (d->connected == CON_PLAYING && (ch = d->original ? d->original : d->character) != NULL
+            if (d->connected == CON_PLAYING && (ch = d->original ? d->original : d->character) != nullptr
                 && IMCPERM(ch) >= level)
                 imc_printf(ch, "~p[~GIMC~p] %s %s\r\n", imcgetname(q->from), txt);
         }
@@ -1736,20 +1736,20 @@ void update_imchistory(IMC_CHANNEL* channel, char* message)
 
     if (!channel)
     {
-        imcbug("%s: NULL channel received!", __func__);
+        imcbug("%s: nullptr channel received!", __func__);
         return;
     }
 
     if (!message || message[0] == '\0')
     {
-        imcbug("%s: NULL message received!", __func__);
+        imcbug("%s: nullptr message received!", __func__);
         return;
     }
 
     imcstrlcpy(msg, message, LGST);
     for (x = 0; x < MAX_IMCHISTORY; x++)
     {
-        if (channel->history[x] == NULL)
+        if (channel->history[x] == nullptr)
         {
             local = localtime(&imc_time);
             snprintf(
@@ -1784,7 +1784,7 @@ void update_imchistory(IMC_CHANNEL* channel, char* message)
             {
                 int z = y - 1;
 
-                if (channel->history[z] != NULL)
+                if (channel->history[z] != nullptr)
                 {
                     IMCSTRFREE(channel->history[z]);
                     channel->history[z] = IMCSTRALLOC(channel->history[y]);
@@ -2113,7 +2113,7 @@ char* break_newlines(char* argument, char* arg_first)
         arg_first[0] = '\0';
 
     if (!argument || argument[0] == '\0')
-        return NULL;
+        return nullptr;
 
     while (isspace(*argument))
         argument++;
@@ -2478,7 +2478,7 @@ PFUN( imc_recv_whoisreply )
 
         imc_getData( txt, "text", packet );
 
-        if (( vic = imc_find_user( imc_nameof( q->to ))) != NULL )
+        if (( vic = imc_find_user( imc_nameof( q->to ))) != nullptr )
         imc_to_char( txt, vic );
         }
 
@@ -2495,7 +2495,7 @@ PFUN( imc_recv_whois )
             CHAR_DATA * vic;
         char buf[LGST];
 
-        if (( vic = imc_find_user( imc_nameof( q->to ))) != NULL && !IMCISINVIS( vic ))
+        if (( vic = imc_find_user( imc_nameof( q->to ))) != nullptr && !IMCISINVIS( vic ))
         {
             snprintf(buf, LGST, "~RIMC Locate: ~Y%s@%s: ~cOnline.\r\n", CH_IMCNAME(vic), this_imcmud->localname);
             imc_send_whoisreply(q->from, buf);
@@ -2504,7 +2504,7 @@ PFUN( imc_recv_whois )
 
 PFUN( imc_recv_beep )
         {
-            CHAR_DATA * vic = NULL;
+            CHAR_DATA * vic = nullptr;
         char buf[LGST];
 
         if ( !( vic = imc_find_user( imc_nameof( q->to ))) || IMCPERM( vic ) < IMCPERM_MORT )
@@ -2646,7 +2646,7 @@ void imc_request_keepalive(void)
     p = imc_newpacket("*", "keepalive-request", "*@*");
     imc_write_packet(p);
 
-    imc_send_keepalive(NULL, "*@*");
+    imc_send_keepalive(nullptr, "*@*");
 }
 
 void imc_firstrefresh(void)
@@ -2690,7 +2690,7 @@ PFUN( imc_recv_iceupdate )
 
         if ( chan[0] == '\0' )
         {
-            imclog("%s: NULL channel name received, skipping", __func__);
+            imclog("%s: nullptr channel name received, skipping", __func__);
             return;
         }
 
@@ -2970,7 +2970,7 @@ PACKET_FUN* pfun_lookup(const char* type)
         if (!strcasecmp(type, ph->name))
             return ph->func;
 
-    return NULL;
+    return nullptr;
 }
 
 void imc_parse_packet(const char* packet)
@@ -3329,7 +3329,7 @@ void imc_loop(void)
     fd_set         in_set, out_set;
     struct timeval last_time, null_time;
 
-    gettimeofday(&last_time, NULL);
+    gettimeofday(&last_time, nullptr);
     imc_time = (time_t)last_time.tv_sec;
 
     if (imcwait > 0)
@@ -3379,7 +3379,7 @@ void imc_loop(void)
 
     null_time.tv_sec = null_time.tv_usec = 0;
 
-    if (select(this_imcmud->desc + 1, &in_set, &out_set, NULL, &null_time) < 0)
+    if (select(this_imcmud->desc + 1, &in_set, &out_set, nullptr, &null_time) < 0)
     {
         perror("imc_loop: select: poll");
         imc_shutdown(TRUE);
@@ -3542,9 +3542,9 @@ bool imc_loadchar(CHAR_DATA* ch, FILE* fp, const char* word)
             if (!strcasecmp(word, "IMClisten"))
             {
                 IMC_LISTEN(ch) = imcfread_line(fp);
-                if (IMC_LISTEN(ch) != NULL && this_imcmud->state == IMC_ONLINE)
+                if (IMC_LISTEN(ch) != nullptr && this_imcmud->state == IMC_ONLINE)
                 {
-                    IMC_CHANNEL* channel  = NULL;
+                    IMC_CHANNEL* channel  = nullptr;
                     const char * channels = IMC_LISTEN(ch);
                     char       arg[SMST];
 
@@ -3567,9 +3567,9 @@ bool imc_loadchar(CHAR_DATA* ch, FILE* fp, const char* word)
             if (!strcasecmp(word, "IMCdeny"))
             {
                 IMC_DENY(ch) = imcfread_line(fp);
-                if (IMC_DENY(ch) != NULL && this_imcmud->state == IMC_ONLINE)
+                if (IMC_DENY(ch) != nullptr && this_imcmud->state == IMC_ONLINE)
                 {
-                    IMC_CHANNEL* channel  = NULL;
+                    IMC_CHANNEL* channel  = nullptr;
                     const char * channels = IMC_DENY(ch);
                     char       arg[SMST];
 
@@ -3662,9 +3662,9 @@ void imc_load_pfile( CHAR_DATA * ch, char *tag, int num, char *line )
    if( !strcmp( tag, "IMCLSN" ) )
    {
       IMC_LISTEN( ch ) = IMCSTRALLOC( line );
-      if( IMC_LISTEN( ch ) != NULL && imc_active == IA_UP )
+      if( IMC_LISTEN( ch ) != nullptr && imc_active == IA_UP )
       {
-         IMC_CHANNEL *channel = NULL;
+         IMC_CHANNEL *channel = nullptr;
          char *channels = IMC_LISTEN( ch );
          char arg[SMST];
 
@@ -3685,9 +3685,9 @@ void imc_load_pfile( CHAR_DATA * ch, char *tag, int num, char *line )
    if( !strcmp( tag, "IMCDNY" ) )
    {
       IMC_DENY( ch ) = IMCSTRALLOC( line );
-      if( IMC_DENY( ch ) != NULL && imc_active == IA_UP )
+      if( IMC_DENY( ch ) != nullptr && imc_active == IA_UP )
       {
-         IMC_CHANNEL *channel = NULL;
+         IMC_CHANNEL *channel = nullptr;
          char *channels = IMC_DENY( ch );
          char arg[SMST];
 
@@ -3758,7 +3758,7 @@ void imc_freechardata(CHAR_DATA* ch)
         return;
 #endif
 
-    if (CH_IMCDATA(ch) == NULL)
+    if (CH_IMCDATA(ch) == nullptr)
         return;
 
     for (ign = FIRST_IMCIGNORE(ch); ign; ign = ign_next)
@@ -3791,20 +3791,20 @@ void imc_initchar(CHAR_DATA* ch)
 #endif
 
     IMCCREATE(CH_IMCDATA(ch), IMC_CHARDATA, 1);
-    IMC_LISTEN(ch)      = NULL;
-    IMC_DENY(ch)        = NULL;
-    IMC_RREPLY(ch)      = NULL;
-    IMC_RREPLY_NAME(ch) = NULL;
-    IMC_EMAIL(ch)       = NULL;
-    IMC_HOMEPAGE(ch)    = NULL;
-    IMC_AIM(ch)         = NULL;
-    IMC_YAHOO(ch)       = NULL;
-    IMC_MSN(ch)         = NULL;
-    IMC_COMMENT(ch)     = NULL;
+    IMC_LISTEN(ch)      = nullptr;
+    IMC_DENY(ch)        = nullptr;
+    IMC_RREPLY(ch)      = nullptr;
+    IMC_RREPLY_NAME(ch) = nullptr;
+    IMC_EMAIL(ch)       = nullptr;
+    IMC_HOMEPAGE(ch)    = nullptr;
+    IMC_AIM(ch)         = nullptr;
+    IMC_YAHOO(ch)       = nullptr;
+    IMC_MSN(ch)         = nullptr;
+    IMC_COMMENT(ch)     = nullptr;
     IMCFLAG(ch)         = 0;
     IMCSET_BIT(IMCFLAG(ch), IMC_COLORFLAG);
-    FIRST_IMCIGNORE(ch) = NULL;
-    LAST_IMCIGNORE(ch)  = NULL;
+    FIRST_IMCIGNORE(ch) = nullptr;
+    LAST_IMCIGNORE(ch)  = nullptr;
     IMCPERM(ch)         = IMCPERM_NOTSET;
 }
 
@@ -3816,7 +3816,7 @@ void imc_loadhistory(void)
 {
     char       filename[256];
     FILE       * tempfile;
-    IMC_CHANNEL* tempchan = NULL;
+    IMC_CHANNEL* tempchan = nullptr;
     int        x;
 
     for (tempchan = first_imc_channel; tempchan; tempchan = tempchan->next)
@@ -3832,7 +3832,7 @@ void imc_loadhistory(void)
         for (x = 0; x < MAX_IMCHISTORY; x++)
         {
             if (feof(tempfile))
-                tempchan->history[x] = NULL;
+                tempchan->history[x] = nullptr;
             else
                 tempchan->history[x] = imcfread_line(tempfile);
         }
@@ -3845,7 +3845,7 @@ void imc_savehistory(void)
 {
     char       filename[256];
     FILE       * tempfile;
-    IMC_CHANNEL* tempchan = NULL;
+    IMC_CHANNEL* tempchan = nullptr;
     int        x;
 
     for (tempchan = first_imc_channel; tempchan; tempchan = tempchan->next)
@@ -3863,7 +3863,7 @@ void imc_savehistory(void)
 
         for (x = 0; x < MAX_IMCHISTORY; x++)
         {
-            if (tempchan->history[x] != NULL)
+            if (tempchan->history[x] != nullptr)
                 fprintf(tempfile, "%s\n", tempchan->history[x]);
         }
         IMCFCLOSE(tempfile);
@@ -3960,8 +3960,8 @@ void imc_loadchannels(void)
     FILE       * fp;
     IMC_CHANNEL* channel;
 
-    first_imc_channel = NULL;
-    last_imc_channel  = NULL;
+    first_imc_channel = nullptr;
+    last_imc_channel  = nullptr;
 
     imclog("%s", "Loading channels...");
 
@@ -3998,7 +3998,7 @@ void imc_loadchannels(void)
             imc_readchannel(channel, fp);
 
             for (x = 0; x < MAX_IMCHISTORY; x++)
-                channel->history[x] = NULL;
+                channel->history[x] = nullptr;
 
             channel->refreshed = FALSE;   /* Prevents crash trying to use a bogus channel */
             IMCLINK(channel, first_imc_channel, last_imc_channel, next, prev);
@@ -4144,7 +4144,7 @@ void imc_load_color_table(void)
     FILE     * fp;
     IMC_COLOR* color;
 
-    first_imc_color = last_imc_color = NULL;
+    first_imc_color = last_imc_color = nullptr;
 
     imclog("%s", "Loading IMC2 color table...");
 
@@ -4282,7 +4282,7 @@ void imc_load_helps(void)
     FILE         * fp;
     IMC_HELP_DATA* help;
 
-    first_imc_help = last_imc_help = NULL;
+    first_imc_help = last_imc_help = nullptr;
 
     imclog("%s", "Loading IMC2 help file...");
 
@@ -4345,10 +4345,10 @@ void imc_savecommands(void)
     {
         fprintf(fp, "%s", "#COMMAND\n");
         fprintf(fp, "Name      %s\n", cmd->name);
-        if (cmd->function != NULL)
+        if (cmd->function != nullptr)
             fprintf(fp, "Code      %s\n", imc_funcname(cmd->function));
         else
-            fprintf(fp, "%s", "Code      NULL\n");
+            fprintf(fp, "%s", "Code      nullptr\n");
         fprintf(fp, "Perm      %s\n", imcperm_names[cmd->level]);
         fprintf(fp, "Connected %d\n", cmd->connected);
         for (alias = cmd->first_alias; alias; alias = alias->next)
@@ -4398,8 +4398,8 @@ void imc_readcommand(IMC_CMD_DATA* cmd, FILE* fp)
                 {
                     word = imcfread_word(fp);
                     cmd->function = imc_function(word);
-                    if (cmd->function == NULL)
-                        imcbug("%s: Command %s loaded with invalid function. Set to NULL.", __func__, cmd->name);
+                    if (cmd->function == nullptr)
+                        imcbug("%s: Command %s loaded with invalid function. Set to nullptr.", __func__, cmd->name);
                     fMatch = TRUE;
                     break;
                 }
@@ -4436,7 +4436,7 @@ bool imc_load_commands(void)
     FILE        * fp;
     IMC_CMD_DATA* cmd;
 
-    first_imc_command = last_imc_command = NULL;
+    first_imc_command = last_imc_command = nullptr;
 
     imclog("%s", "Loading IMC2 command table...");
 
@@ -4698,9 +4698,9 @@ bool imc_read_config(int desc)
     FILE * fin;
     char cbase[SMST];
 
-    if (this_imcmud != NULL)
+    if (this_imcmud != nullptr)
         imc_delete_info();
-    this_imcmud = NULL;
+    this_imcmud = nullptr;
 
     imclog("%s", "Loading IMC2 network data...");
 
@@ -4730,7 +4730,7 @@ bool imc_read_config(int desc)
         }
 
         word = imcfread_word(fin);
-        if (!strcasecmp(word, "IMCCONFIG") && this_imcmud == NULL)
+        if (!strcasecmp(word, "IMCCONFIG") && this_imcmud == nullptr)
         {
             IMCCREATE(this_imcmud, SITEINFO, 1);
 
@@ -4866,7 +4866,7 @@ void imc_load_who_template(void)
     if (!(fp = fopen(IMC_WHO_FILE, "r")))
     {
         imcbug("%s: Unable to load template file for imcwho", __func__);
-        whot = NULL;
+        whot = nullptr;
         return;
     }
 
@@ -5066,7 +5066,7 @@ bool imc_server_connect(void)
       close( desc );
    }
    freeaddrinfo( ai_list );
-   if( ai == NULL )
+   if( ai == nullptr )
    {
       imcbug( "%s: socket or connect: failed for %s port %hu", __func__, this_imcmud->rhost, this_imcmud->rport );
       imcwait = 100; /* So it will try again according to the reconnect count. */
@@ -5342,13 +5342,13 @@ void imc_startup(bool force, int desc, bool connected)
         return;
     }
 
-    imc_time           = time(NULL);
+    imc_time           = time(nullptr);
     imc_sequencenumber = imc_time;
 
     /*
     * The Command table is required for operation. Like.... duh?
     */
-    if (first_imc_command == NULL)
+    if (first_imc_command == nullptr)
     {
         if (!imc_load_commands())
         {
@@ -5371,13 +5371,13 @@ void imc_startup(bool force, int desc, bool connected)
     /*
     * Help information should persist even when the network is not connected...
     */
-    if (first_imc_help == NULL)
+    if (first_imc_help == nullptr)
         imc_load_helps();
 
     /*
     * ... as should the color table.
     */
-    if (first_imc_color == NULL)
+    if (first_imc_color == nullptr)
         imc_load_color_table();
 
     /*
@@ -5454,7 +5454,7 @@ bool verify_format(const char* fmt, short sneed)
     int       i = 0;
 
     c         = fmt;
-    while ((c = strchr(c, '%')) != NULL)
+    while ((c = strchr(c, '%')) != nullptr)
     {
         if (*(c + 1) == '%') /* %% */
         {
@@ -5480,7 +5480,7 @@ bool verify_format(const char* fmt, short sneed)
 IMC_CMD( imcsetup )
            {
                char imccmd[SMST], chan[SMST], arg1[SMST], buf[LGST];
-               IMC_CHANNEL *c = NULL;
+               IMC_CHANNEL *c = nullptr;
                int x;
                bool all = FALSE;
 
@@ -5595,7 +5595,7 @@ IMC_CMD( imcsetup )
                {
                    if (all)
                    {
-                       imcformat_channel(ch, NULL, 4, TRUE);
+                       imcformat_channel(ch, nullptr, 4, TRUE);
                        imc_to_char("All channel formats have been reset to default.\r\n", ch);
                    }
                    else
@@ -5755,7 +5755,7 @@ IMC_CMD( imcsetup )
 /* The imcchanlist command. Basic listing of channels. */
 IMC_CMD( imcchanlist )
            {
-               IMC_CHANNEL * c = NULL;
+               IMC_CHANNEL * c = nullptr;
            int count = 0; /* Count -- Xorith */
            char col = 'C';   /* Listening Color -- Xorith */
 
@@ -5911,7 +5911,7 @@ IMC_CMD( imctell )
 
                    for (x = 0; x < MAX_IMCTELLHISTORY; x++)
                    {
-                       if (IMCTELLHISTORY(ch, x) == NULL)
+                       if (IMCTELLHISTORY(ch, x) == nullptr)
                            break;
                        imc_to_char(IMCTELLHISTORY(ch, x), ch);
                    }
@@ -6356,7 +6356,7 @@ IMC_CMD( imclist )
        */
                if (p->path && p->path[0] != '\0')
                {
-                   if ((start = strchr(p->path, '!')) != NULL)
+                   if ((start = strchr(p->path, '!')) != nullptr)
                    {
                        start++;
                        onpath          = start;
@@ -6596,7 +6596,7 @@ IMC_CMD( imcconfig )
                    this_imcmud->www = IMCSTRALLOC(argument);
                    imc_save_config();
                    imc_printf(ch, "InfoWWW changed to %s\r\n", argument);
-                   imc_send_keepalive(NULL, "*@*");
+                   imc_send_keepalive(nullptr, "*@*");
                    return;
                }
 
@@ -6612,7 +6612,7 @@ IMC_CMD( imcconfig )
                    IMCSTRFREE(this_imcmud->versionid);
                    snprintf(cbase, SMST, "%s%s", IMC_VERSION_STRING, this_imcmud->base);
                    this_imcmud->versionid = IMCSTRALLOC(cbase);
-                   imc_send_keepalive(NULL, "*@*");
+                   imc_send_keepalive(nullptr, "*@*");
                    return;
                }
 
@@ -6989,9 +6989,9 @@ IMC_CMD( imcpermset )
            /*
     * Note: Let's not clean up IMC_DENY for a player. Never know...
     */
-           if ( IMC_LISTEN( victim ) != NULL && this_imcmud->state == IMC_ONLINE )
+           if ( IMC_LISTEN( victim ) != nullptr && this_imcmud->state == IMC_ONLINE )
            {
-               IMC_CHANNEL* channel  = NULL;
+               IMC_CHANNEL* channel  = nullptr;
                const char * channels = IMC_LISTEN(victim);
 
                while (1)
@@ -7289,13 +7289,13 @@ IMC_CMD( imccedit )
                if (argument && argument[0] != '\0')
                {
                    cmd->function = imc_function(argument);
-                   if (cmd->function == NULL)
-                       imc_printf(ch, "~gFunction ~W%s ~gdoes not exist - set to NULL.\r\n", argument);
+                   if (cmd->function == nullptr)
+                       imc_printf(ch, "~gFunction ~W%s ~gdoes not exist - set to nullptr.\r\n", argument);
                }
                else
                {
-                   imc_to_char("~gFunction set to NULL.\r\n", ch);
-                   cmd->function = NULL;
+                   imc_to_char("~gFunction set to nullptr.\r\n", ch);
+                   cmd->function = nullptr;
                }
                IMCLINK(cmd, first_imc_command, last_imc_command, next, prev);
                imc_savecommands();
@@ -7434,8 +7434,8 @@ IMC_CMD( imccedit )
            if ( !strcasecmp( option, "code" ))
            {
                cmd->function = imc_function(argument);
-               if (cmd->function == NULL)
-                   imc_printf(ch, "~gFunction ~W%s ~gdoes not exist - set to NULL.\r\n", argument);
+               if (cmd->function == nullptr)
+                   imc_printf(ch, "~gFunction ~W%s ~gdoes not exist - set to nullptr.\r\n", argument);
                else
                    imc_printf(ch, "~gFunction set to ~W%s.\r\n", argument);
                imc_savecommands();
@@ -7611,7 +7611,7 @@ const char* imc_find_social(CHAR_DATA* ch, const char* sname, const char* person
          lcSocName[i] = '\0';
    }
 
-   if( ( social = find_social( lcSocName ) ) == NULL )
+   if( ( social = find_social( lcSocName ) ) == nullptr )
    {
       imc_printf( ch, "~YSocial ~W%s~Y does not exist on this mud.\r\n", sname );
       return socname;
@@ -7779,7 +7779,7 @@ char* imc_act_string(const char* format, CHAR_DATA* ch, CHAR_DATA* vic)
     bool        should_upper = FALSE;
 
     if (!format || format[0] == '\0' || !ch)
-        return NULL;
+        return nullptr;
 
     point  = buf;
 
@@ -7899,7 +7899,7 @@ void imc_purge_skeleton(CHAR_DATA* skeleton)
  */
 const char* imc_send_social(CHAR_DATA* ch, const char* argument, int telloption)
 {
-    CHAR_DATA * skeleton = NULL;
+    CHAR_DATA * skeleton = nullptr;
     const char* ps;
     char      socbuf[LGST], msg[LGST], tmp[SMST];
     char      arg1[SMST], person[SMST], mud[SMST], buf[LGST];
@@ -8126,7 +8126,7 @@ IMC_FUN* imc_function(const char* func)
     if (!strcasecmp(func, "imctemplates"))
         return imctemplates;
 
-    return NULL;
+    return nullptr;
 }
 
 /* Check for IMC channels, return TRUE to stop command processing, FALSE otherwise */
@@ -8190,7 +8190,7 @@ bool imc_command_hook(CHAR_DATA* ch, const char* command, const char* argument)
                 return TRUE;
             }
 
-            if (cmd->function == NULL)
+            if (cmd->function == nullptr)
             {
                 imc_to_char("That command has no code set. Inform the administration.\r\n", ch);
                 imcbug("%s: Command %s has no code set!", __func__, cmd->name);
@@ -8229,7 +8229,7 @@ bool imc_command_hook(CHAR_DATA* ch, const char* command, const char* argument)
         imc_printf(ch, "~cThe last %d %s messages:\r\n", MAX_IMCHISTORY, c->local_name);
         for (y = 0; y < MAX_IMCHISTORY; y++)
         {
-            if (c->history[y] != NULL)
+            if (c->history[y] != nullptr)
                 imc_printf(ch, "%s\r\n", c->history[y]);
             else
                 break;
@@ -8299,7 +8299,7 @@ bool imc_command_hook(CHAR_DATA* ch, const char* command, const char* argument)
 {
    bool client_down = FALSE;
 
-   first_descriptor = last_descriptor = NULL;
+   first_descriptor = last_descriptor = nullptr;
 
    imclog( "IMC2 Standalone connection startup: %s", IMC_VERSION_STRING );
    imc_startup( FALSE, -1, FALSE );

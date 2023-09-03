@@ -149,12 +149,12 @@ void load_dns(void)
     DNS_DATA* cache;
     FILE    * fp;
 
-    first_cache = NULL;
-    last_cache  = NULL;
+    first_cache = nullptr;
+    last_cache  = nullptr;
 
     snprintf(filename, 256, "%s", DNS_FILE);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
         for (;;)
         {
@@ -399,7 +399,7 @@ void resolve_dns(DESCRIPTOR_DATA* d, long ip)
             close(i);
 
         snprintf(str_ip, 64, "%ld", ip);
-        execl("../src/resolver", "AFKMud Resolver", str_ip, NULL);
+        execl("../src/resolver", "AFKMud Resolver", str_ip, nullptr);
         /*
          * Still here --> hmm. An error.
          */

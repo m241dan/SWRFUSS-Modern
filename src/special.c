@@ -86,8 +86,8 @@ void load_specfuns(void)
     char      filename[256];
     const char* word;
 
-    first_specfun = NULL;
-    last_specfun  = NULL;
+    first_specfun = nullptr;
+    last_specfun  = nullptr;
 
     snprintf(filename, 256, "%sspecfuns.dat", SYSTEM_DIR);
     if (!(fp = fopen(filename, "r")))
@@ -140,10 +140,10 @@ SPEC_FUN* spec_lookup(const char* name)
     const char* error;
 
     funHandle  = dlsym(sysdata.dlHandle, name);
-    if ((error = dlerror()) != NULL)
+    if ((error = dlerror()) != nullptr)
     {
         bug("%s: Error locating function %s in symbol table.", __func__, name);
-        return NULL;
+        return nullptr;
     }
     return (SPEC_FUN*)funHandle;
 }
@@ -330,8 +330,8 @@ bool spec_customs_smut(CHAR_DATA* ch)
                     ch_printf(victim, "You receive %ld experience for smuggling %s.\r\n ", ch_exp, obj->short_descr);
                     gain_exp(victim, ch_exp, SMUGGLING_ABILITY);
 
-                    act(AT_ACTION, "$n looks at $N suspiciously.", ch, NULL, victim, TO_NOTVICT);
-                    act(AT_ACTION, "$n look at you suspiciously.", ch, NULL, victim, TO_VICT);
+                    act(AT_ACTION, "$n looks at $N suspiciously.", ch, nullptr, victim, TO_NOTVICT);
+                    act(AT_ACTION, "$n look at you suspiciously.", ch, nullptr, victim, TO_VICT);
                     separate_obj(obj);
                     SET_BIT(obj->extra_flags, ITEM_CONTRABAND);
 
@@ -442,8 +442,8 @@ bool spec_customs_weapons(CHAR_DATA* ch)
                     ch_printf(victim, "You receive %ld experience for smuggling %s.\r\n ", ch_exp, obj->short_descr);
                     gain_exp(victim, ch_exp, SMUGGLING_ABILITY);
 
-                    act(AT_ACTION, "$n looks at $N suspiciously.", ch, NULL, victim, TO_NOTVICT);
-                    act(AT_ACTION, "$n look at you suspiciously.", ch, NULL, victim, TO_VICT);
+                    act(AT_ACTION, "$n looks at $N suspiciously.", ch, nullptr, victim, TO_NOTVICT);
+                    act(AT_ACTION, "$n look at you suspiciously.", ch, nullptr, victim, TO_VICT);
                     separate_obj(obj);
                     SET_BIT(obj->extra_flags, ITEM_CONTRABAND);
                     return TRUE;
@@ -561,8 +561,8 @@ bool spec_customs_alcohol(CHAR_DATA* ch)
                         );
                         gain_exp(victim, ch_exp, SMUGGLING_ABILITY);
 
-                        act(AT_ACTION, "$n looks at $N suspiciously.", ch, NULL, victim, TO_NOTVICT);
-                        act(AT_ACTION, "$n look at you suspiciously.", ch, NULL, victim, TO_VICT);
+                        act(AT_ACTION, "$n looks at $N suspiciously.", ch, nullptr, victim, TO_NOTVICT);
+                        act(AT_ACTION, "$n look at you suspiciously.", ch, nullptr, victim, TO_VICT);
                         separate_obj(obj);
                         SET_BIT(obj->extra_flags, ITEM_CONTRABAND);
                         return TRUE;
@@ -680,8 +680,8 @@ bool spec_customs_spice(CHAR_DATA* ch)
                     ch_printf(victim, "You receive %ld experience for smuggling %s. \r\n", ch_exp, obj->short_descr);
                     gain_exp(victim, ch_exp, SMUGGLING_ABILITY);
 
-                    act(AT_ACTION, "$n looks at $N suspiciously.", ch, NULL, victim, TO_NOTVICT);
-                    act(AT_ACTION, "$n look at you suspiciously.", ch, NULL, victim, TO_VICT);
+                    act(AT_ACTION, "$n looks at $N suspiciously.", ch, nullptr, victim, TO_NOTVICT);
+                    act(AT_ACTION, "$n look at you suspiciously.", ch, nullptr, victim, TO_VICT);
                     separate_obj(obj);
                     SET_BIT(obj->extra_flags, ITEM_CONTRABAND);
                     return TRUE;
@@ -752,7 +752,7 @@ bool spec_police(CHAR_DATA* ch)
         for (vip = 0; vip < 32; vip++)
             if (IS_SET(ch->vip_flags, 1 << vip) && IS_SET(victim->pcdata->wanted_flags, 1 << vip))
             {
-                ROOM_INDEX_DATA* jail = NULL;
+                ROOM_INDEX_DATA* jail = nullptr;
 
                 snprintf(buf, MAX_STRING_LENGTH, "Hey you're wanted on %s!", planet_flags[vip]);
                 do_say(ch, buf);
@@ -775,16 +775,16 @@ bool spec_police(CHAR_DATA* ch)
                     }
                 else
                 {
-                    act(AT_ACTION, "$n fines $N an enormous amount of money.", ch, NULL, victim, TO_NOTVICT);
-                    act(AT_ACTION, "$n fines you an enourmous amount of money.", ch, NULL, victim, TO_VICT);
+                    act(AT_ACTION, "$n fines $N an enormous amount of money.", ch, nullptr, victim, TO_NOTVICT);
+                    act(AT_ACTION, "$n fines you an enourmous amount of money.", ch, nullptr, victim, TO_VICT);
                     victim->gold /= 2;
                 }
 
                 if (jail)
                 {
                     REMOVE_BIT(victim->pcdata->wanted_flags, 1 << vip);
-                    act(AT_ACTION, "$n ushers $N off to jail.", ch, NULL, victim, TO_NOTVICT);
-                    act(AT_ACTION, "$n escorts you to jail.", ch, NULL, victim, TO_VICT);
+                    act(AT_ACTION, "$n ushers $N off to jail.", ch, nullptr, victim, TO_NOTVICT);
+                    act(AT_ACTION, "$n escorts you to jail.", ch, nullptr, victim, TO_VICT);
                     char_from_room(victim);
                     char_to_room(victim, jail);
                 }
@@ -850,8 +850,8 @@ bool spec_police_fine(CHAR_DATA* ch)
             {
                 snprintf(buf, MAX_STRING_LENGTH, "Hey you're wanted on %s!", planet_flags[vip]);
                 do_say(ch, buf);
-                act(AT_ACTION, "$n fines $N an enormous amount of money.", ch, NULL, victim, TO_NOTVICT);
-                act(AT_ACTION, "$n fines you an enourmous amount of money.", ch, NULL, victim, TO_VICT);
+                act(AT_ACTION, "$n fines $N an enormous amount of money.", ch, nullptr, victim, TO_NOTVICT);
+                act(AT_ACTION, "$n fines you an enourmous amount of money.", ch, nullptr, victim, TO_VICT);
                 victim->gold /= 2;
                 REMOVE_BIT(victim->pcdata->wanted_flags, 1 << vip);
                 return TRUE;
@@ -862,7 +862,7 @@ bool spec_police_fine(CHAR_DATA* ch)
 
 bool spec_police_jail(CHAR_DATA* ch)
 {
-    ROOM_INDEX_DATA* jail = NULL;
+    ROOM_INDEX_DATA* jail = nullptr;
     CHAR_DATA      * victim;
     CHAR_DATA      * v_next;
     int            vip;
@@ -904,8 +904,8 @@ bool spec_police_jail(CHAR_DATA* ch)
                 if (jail)
                 {
                     REMOVE_BIT(victim->pcdata->wanted_flags, 1 << vip);
-                    act(AT_ACTION, "$n ushers $N off to jail.", ch, NULL, victim, TO_NOTVICT);
-                    act(AT_ACTION, "$n escorts you to jail.", ch, NULL, victim, TO_VICT);
+                    act(AT_ACTION, "$n ushers $N off to jail.", ch, nullptr, victim, TO_NOTVICT);
+                    act(AT_ACTION, "$n escorts you to jail.", ch, nullptr, victim, TO_VICT);
                     char_from_room(victim);
                     char_to_room(victim, jail);
                 }
@@ -956,27 +956,27 @@ bool spec_jedi_healer(CHAR_DATA* ch)
 
     switch (number_bits(12))
     {
-        case 0:act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, NULL, NULL, TO_ROOM);
+        case 0:act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, nullptr, nullptr, TO_ROOM);
             spell_smaug(skill_lookup("armor"), ch->top_level, ch, victim);
             return TRUE;
 
-        case 1:act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, NULL, NULL, TO_ROOM);
+        case 1:act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, nullptr, nullptr, TO_ROOM);
             spell_smaug(skill_lookup("good fortune"), ch->top_level, ch, victim);
             return TRUE;
 
-        case 2:act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, NULL, NULL, TO_ROOM);
+        case 2:act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, nullptr, nullptr, TO_ROOM);
             spell_cure_blindness(skill_lookup("cure blindness"), ch->top_level, ch, victim);
             return TRUE;
 
-        case 3:act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, NULL, NULL, TO_ROOM);
+        case 3:act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, nullptr, nullptr, TO_ROOM);
             spell_smaug(skill_lookup("cure light"), ch->top_level, ch, victim);
             return TRUE;
 
-        case 4:act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, NULL, NULL, TO_ROOM);
+        case 4:act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, nullptr, nullptr, TO_ROOM);
             spell_cure_poison(skill_lookup("cure poison"), ch->top_level, ch, victim);
             return TRUE;
 
-        case 5:act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, NULL, NULL, TO_ROOM);
+        case 5:act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, nullptr, nullptr, TO_ROOM);
             spell_smaug(skill_lookup("refresh"), ch->top_level, ch, victim);
             return TRUE;
     }
@@ -1068,7 +1068,7 @@ bool spec_fido(CHAR_DATA* ch)
         if (corpse->item_type != ITEM_CORPSE_NPC)
             continue;
 
-        act(AT_ACTION, "$n savagely devours a corpse.", ch, NULL, NULL, TO_ROOM);
+        act(AT_ACTION, "$n savagely devours a corpse.", ch, nullptr, nullptr, TO_ROOM);
         for (obj = corpse->first_content; obj; obj = obj_next)
         {
             obj_next = obj->next_content;
@@ -1154,7 +1154,7 @@ bool spec_guardian(CHAR_DATA* ch)
         return FALSE;
 
     max_evil = 300;
-    ech      = NULL;
+    ech      = nullptr;
     crime    = "";
 
     for (victim = ch->in_room->first_person; victim; victim = v_next)
@@ -1184,7 +1184,7 @@ bool spec_guardian(CHAR_DATA* ch)
 
     if (ech)
     {
-        act(AT_YELL, "$n screams 'PROTECT THE INNOCENT!!", ch, NULL, NULL, TO_ROOM);
+        act(AT_YELL, "$n screams 'PROTECT THE INNOCENT!!", ch, nullptr, nullptr, TO_ROOM);
         multi_hit(ch, ech, TYPE_UNDEFINED);
         return TRUE;
     }
@@ -1210,7 +1210,7 @@ bool spec_janitor(CHAR_DATA* ch)
             || trash->item_type == ITEM_TRASH
             || trash->cost < 10 || (trash->pIndexData->vnum == OBJ_VNUM_SHOPPING_BAG && !trash->first_content))
         {
-            act(AT_ACTION, "$n picks up some trash.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n picks up some trash.", ch, nullptr, nullptr, TO_ROOM);
             obj_from_room(trash);
             obj_to_char(trash, ch);
             return TRUE;
@@ -1223,12 +1223,12 @@ bool spec_poison(CHAR_DATA* ch)
 {
     CHAR_DATA* victim;
 
-    if (ch->position != POS_FIGHTING || (victim = who_fighting(ch)) == NULL || number_percent() > 2 * ch->top_level)
+    if (ch->position != POS_FIGHTING || (victim = who_fighting(ch)) == nullptr || number_percent() > 2 * ch->top_level)
         return FALSE;
 
-    act(AT_HIT, "You bite $N!", ch, NULL, victim, TO_CHAR);
-    act(AT_ACTION, "$n bites $N!", ch, NULL, victim, TO_NOTVICT);
-    act(AT_POISON, "$n bites you!", ch, NULL, victim, TO_VICT);
+    act(AT_HIT, "You bite $N!", ch, nullptr, victim, TO_CHAR);
+    act(AT_ACTION, "$n bites $N!", ch, nullptr, victim, TO_NOTVICT);
+    act(AT_POISON, "$n bites you!", ch, nullptr, victim, TO_VICT);
     spell_poison(gsn_poison, ch->top_level, ch, victim);
     return TRUE;
 }
@@ -1254,8 +1254,8 @@ bool spec_thief(CHAR_DATA* ch)
 
         if (IS_AWAKE(victim) && number_range(0, ch->top_level) == 0)
         {
-            act(AT_ACTION, "You discover $n's hands in your wallet!", ch, NULL, victim, TO_VICT);
-            act(AT_ACTION, "$N discovers $n's hands in $S wallet!", ch, NULL, victim, TO_NOTVICT);
+            act(AT_ACTION, "You discover $n's hands in your wallet!", ch, nullptr, victim, TO_VICT);
+            act(AT_ACTION, "$N discovers $n's hands in $S wallet!", ch, nullptr, victim, TO_NOTVICT);
             return TRUE;
         }
         else
@@ -1288,7 +1288,7 @@ bool spec_auth(CHAR_DATA* ch)
     {
         v_next = victim->next_in_room;
 
-        if (!IS_NPC(victim) && (pObjIndex = get_obj_index(OBJ_VNUM_SCHOOL_DIPLOMA)) != NULL)
+        if (!IS_NPC(victim) && (pObjIndex = get_obj_index(OBJ_VNUM_SCHOOL_DIPLOMA)) != nullptr)
         {
             hasdiploma = FALSE;
 

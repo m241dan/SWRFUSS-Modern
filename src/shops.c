@@ -43,15 +43,15 @@ CHAR_DATA* find_keeper(CHAR_DATA* ch)
     CHAR_DATA* keeper;
     SHOP_DATA* pShop;
 
-    pShop       = NULL;
+    pShop       = nullptr;
     for (keeper = ch->in_room->first_person; keeper; keeper = keeper->next_in_room)
-        if (IS_NPC(keeper) && (pShop = keeper->pIndexData->pShop) != NULL)
+        if (IS_NPC(keeper) && (pShop = keeper->pIndexData->pShop) != nullptr)
             break;
 
     if (!pShop)
     {
         send_to_char("You can't do that here.\r\n", ch);
-        return NULL;
+        return nullptr;
     }
 
     /*
@@ -60,19 +60,19 @@ CHAR_DATA* find_keeper(CHAR_DATA* ch)
     if (time_info.hour < pShop->open_hour)
     {
         do_say(keeper, "Sorry, come back later.");
-        return NULL;
+        return nullptr;
     }
 
     if (time_info.hour > pShop->close_hour)
     {
         do_say(keeper, "Sorry, come back tomorrow.");
-        return NULL;
+        return nullptr;
     }
 
     if (!knows_language(keeper, ch->speaking, ch))
     {
         do_say(keeper, "I can't understand you.");
-        return NULL;
+        return nullptr;
     }
 
     return keeper;
@@ -86,15 +86,15 @@ CHAR_DATA* find_fixer(CHAR_DATA* ch)
     CHAR_DATA  * keeper;
     REPAIR_DATA* rShop;
 
-    rShop       = NULL;
+    rShop       = nullptr;
     for (keeper = ch->in_room->first_person; keeper; keeper = keeper->next_in_room)
-        if (IS_NPC(keeper) && (rShop = keeper->pIndexData->rShop) != NULL)
+        if (IS_NPC(keeper) && (rShop = keeper->pIndexData->rShop) != nullptr)
             break;
 
     if (!rShop)
     {
         send_to_char("You can't do that here.\r\n", ch);
-        return NULL;
+        return nullptr;
     }
 
     /*
@@ -103,20 +103,20 @@ CHAR_DATA* find_fixer(CHAR_DATA* ch)
     if (time_info.hour < rShop->open_hour)
     {
         do_say(keeper, "Sorry, come back later.");
-        return NULL;
+        return nullptr;
     }
 
     if (time_info.hour > rShop->close_hour)
     {
         do_say(keeper, "Sorry, come back tomorrow.");
-        return NULL;
+        return nullptr;
     }
 
 
     if (!knows_language(keeper, ch->speaking, ch))
     {
         do_say(keeper, "I can't understand you.");
-        return NULL;
+        return nullptr;
     }
 
     return keeper;
@@ -129,7 +129,7 @@ int get_cost(CHAR_DATA* ch, CHAR_DATA* keeper, OBJ_DATA* obj, bool fBuy)
     bool     richcustomer;
     int      profitmod;
 
-    if (!obj || (pShop = keeper->pIndexData->pShop) == NULL)
+    if (!obj || (pShop = keeper->pIndexData->pShop) == nullptr)
         return 0;
 
     if (ch->gold > (ch->top_level * ch->top_level * 1000))
@@ -185,7 +185,7 @@ int get_repaircost(CHAR_DATA* keeper, OBJ_DATA* obj)
     int        itype;
     bool       found;
 
-    if (!obj || (rShop = keeper->pIndexData->rShop) == NULL)
+    if (!obj || (rShop = keeper->pIndexData->rShop) == nullptr)
         return 0;
 
     cost       = 0;
@@ -268,7 +268,7 @@ void do_buy(CHAR_DATA* ch, const char* argument)
         pet = get_char_room(ch, arg);
         ch->in_room = in_room;
 
-        if (pet == NULL || !IS_NPC(pet) || !IS_SET(pet->act, ACT_PET))
+        if (pet == nullptr || !IS_NPC(pet) || !IS_SET(pet->act, ACT_PET))
         {
             send_to_char("Sorry, you can't buy that here.\r\n", ch);
             return;
@@ -315,7 +315,7 @@ void do_buy(CHAR_DATA* ch, const char* argument)
         char_to_room(pet, ch->in_room);
         add_follower(pet, ch);
         send_to_char("Enjoy your pet.\r\n", ch);
-        act(AT_ACTION, "$n bought $N as a pet.", ch, NULL, pet, TO_ROOM);
+        act(AT_ACTION, "$n bought $N as a pet.", ch, nullptr, pet, TO_ROOM);
         return;
     }
     else
@@ -326,7 +326,7 @@ void do_buy(CHAR_DATA* ch, const char* argument)
         int      noi  = 1;   /* Number of items */
         short    mnoi = 20;  /* Max number of items to be bought at once */
 
-        if ((keeper = find_keeper(ch)) == NULL)
+        if ((keeper = find_keeper(ch)) == nullptr)
             return;
 
         maxgold = keeper->top_level * 10;
@@ -337,7 +337,7 @@ void do_buy(CHAR_DATA* ch, const char* argument)
             argument = one_argument(argument, arg);
             if (noi > mnoi)
             {
-                act(AT_TELL, "$n tells you 'I don't sell that many items at" " once.'", keeper, NULL, ch, TO_VICT);
+                act(AT_TELL, "$n tells you 'I don't sell that many items at" " once.'", keeper, nullptr, ch, TO_VICT);
                 ch->reply = keeper;
                 return;
             }
@@ -365,13 +365,13 @@ void do_buy(CHAR_DATA* ch, const char* argument)
                     break;
             }
             if (!ofound)
-                obj                                    = NULL;
+                obj                                    = nullptr;
         }
 
         cost = (get_cost(ch, keeper, obj, TRUE) * noi);
         if (cost <= 0 || !can_see_obj(ch, obj))
         {
-            act(AT_TELL, "$n tells you 'I don't sell that -- try 'list'.'", keeper, NULL, ch, TO_VICT);
+            act(AT_TELL, "$n tells you 'I don't sell that -- try 'list'.'", keeper, nullptr, ch, TO_VICT);
             ch->reply = keeper;
             return;
         }
@@ -381,7 +381,7 @@ void do_buy(CHAR_DATA* ch, const char* argument)
             interpret(keeper, "laugh");
             act(
                 AT_TELL, "$n tells you 'I don't have enough of those in stock"
-                         " to sell more than one at a time.'", keeper, NULL, ch, TO_VICT
+                         " to sell more than one at a time.'", keeper, nullptr, ch, TO_VICT
             );
             ch->reply = keeper;
             return;
@@ -400,7 +400,7 @@ void do_buy(CHAR_DATA* ch, const char* argument)
                 AT_TELL,
                 "$n tells you 'This is a only a prototype!  I can't sell you that...'",
                 keeper,
-                NULL,
+                nullptr,
                 ch,
                 TO_VICT
             );
@@ -424,8 +424,8 @@ void do_buy(CHAR_DATA* ch, const char* argument)
         {
             if (!IS_OBJ_STAT(obj, ITEM_INVENTORY))
                 separate_obj(obj);
-            act(AT_ACTION, "$n buys $p.", ch, obj, NULL, TO_ROOM);
-            act(AT_ACTION, "You buy $p.", ch, obj, NULL, TO_CHAR);
+            act(AT_ACTION, "$n buys $p.", ch, obj, nullptr, TO_ROOM);
+            act(AT_ACTION, "You buy $p.", ch, obj, nullptr, TO_CHAR);
         }
         else
         {
@@ -435,15 +435,15 @@ void do_buy(CHAR_DATA* ch, const char* argument)
                 "$n buys %d $p%s.",
                 noi,
                 (obj->short_descr[strlen(obj->short_descr) - 1] == 's' ? "" : "s"));
-            act(AT_ACTION, arg, ch, obj, NULL, TO_ROOM);
+            act(AT_ACTION, arg, ch, obj, nullptr, TO_ROOM);
             snprintf(
                 arg,
                 MAX_INPUT_LENGTH,
                 "You buy %d $p%s.",
                 noi,
                 (obj->short_descr[strlen(obj->short_descr) - 1] == 's' ? "" : "s"));
-            act(AT_ACTION, arg, ch, obj, NULL, TO_CHAR);
-            act(AT_ACTION, "$N puts them into a bag and hands it to you.", ch, NULL, keeper, TO_CHAR);
+            act(AT_ACTION, arg, ch, obj, nullptr, TO_CHAR);
+            act(AT_ACTION, "$N puts them into a bag and hands it to you.", ch, nullptr, keeper, TO_CHAR);
         }
 
         ch->gold -= cost;
@@ -453,7 +453,7 @@ void do_buy(CHAR_DATA* ch, const char* argument)
         {
             boost_economy(keeper->in_room->area, keeper->gold - maxgold / 2);
             keeper->gold = maxgold / 2;
-            act(AT_ACTION, "$n puts some credits into a large safe.", keeper, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n puts some credits into a large safe.", keeper, nullptr, nullptr, TO_ROOM);
         }
 
         if (IS_OBJ_STAT(obj, ITEM_INVENTORY))
@@ -544,7 +544,7 @@ void do_list(CHAR_DATA* ch, const char* argument)
 
         one_argument(argument, arg);
 
-        if ((keeper = find_keeper(ch)) == NULL)
+        if ((keeper = find_keeper(ch)) == nullptr)
             return;
 
         found    = FALSE;
@@ -598,12 +598,12 @@ void do_sell(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((keeper = find_keeper(ch)) == NULL)
+    if ((keeper = find_keeper(ch)) == nullptr)
         return;
 
-    if ((obj = get_obj_carry(ch, arg)) == NULL)
+    if ((obj = get_obj_carry(ch, arg)) == nullptr)
     {
-        act(AT_TELL, "$n tells you 'You don't have that item.'", keeper, NULL, ch, TO_VICT);
+        act(AT_TELL, "$n tells you 'You don't have that item.'", keeper, nullptr, ch, TO_VICT);
         ch->reply = keeper;
         return;
     }
@@ -642,9 +642,9 @@ void do_sell(CHAR_DATA* ch, const char* argument)
     }
 
     separate_obj(obj);
-    act(AT_ACTION, "$n sells $p.", ch, obj, NULL, TO_ROOM);
+    act(AT_ACTION, "$n sells $p.", ch, obj, nullptr, TO_ROOM);
     snprintf(buf, MAX_STRING_LENGTH, "You sell $p for %d credit%s.", cost, cost == 1 ? "" : "s");
-    act(AT_ACTION, buf, ch, obj, NULL, TO_CHAR);
+    act(AT_ACTION, buf, ch, obj, nullptr, TO_CHAR);
     ch->gold += cost;
     keeper->gold -= cost;
     if (keeper->gold < 0)
@@ -694,12 +694,12 @@ void do_value(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((keeper = find_keeper(ch)) == NULL)
+    if ((keeper = find_keeper(ch)) == nullptr)
         return;
 
-    if ((obj = get_obj_carry(ch, argument)) == NULL)
+    if ((obj = get_obj_carry(ch, argument)) == nullptr)
     {
-        act(AT_TELL, "$n tells you 'You don't have that item.'", keeper, NULL, ch, TO_VICT);
+        act(AT_TELL, "$n tells you 'You don't have that item.'", keeper, nullptr, ch, TO_VICT);
         ch->reply = keeper;
         return;
     }
@@ -761,8 +761,8 @@ void repair_one_obj(
             fixstr,
             obj->name
         );
-        act(AT_TELL, buf, ch, NULL, keeper, TO_CHAR);
-        act(AT_TELL, "$N tells you, 'Which I see you can't afford.'", ch, NULL, keeper, TO_CHAR);
+        act(AT_TELL, buf, ch, nullptr, keeper, TO_CHAR);
+        act(AT_TELL, "$N tells you, 'Which I see you can't afford.'", ch, nullptr, keeper, TO_CHAR);
     }
     else
     {
@@ -778,7 +778,7 @@ void repair_one_obj(
         {
             boost_economy(keeper->in_room->area, keeper->gold - maxgold / 2);
             keeper->gold = maxgold / 2;
-            act(AT_ACTION, "$n puts some credits into a large safe.", keeper, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n puts some credits into a large safe.", keeper, nullptr, nullptr, TO_ROOM);
         }
 
         switch (obj->item_type)
@@ -811,7 +811,7 @@ void do_repair(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((keeper = find_fixer(ch)) == NULL)
+    if ((keeper = find_fixer(ch)) == nullptr)
         return;
 
     maxgold = keeper->top_level * 10;
@@ -838,9 +838,9 @@ void do_repair(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((obj = get_obj_carry(ch, argument)) == NULL)
+    if ((obj = get_obj_carry(ch, argument)) == nullptr)
     {
-        act(AT_TELL, "$n tells you 'You don't have that item.'", keeper, NULL, ch, TO_VICT);
+        act(AT_TELL, "$n tells you 'You don't have that item.'", keeper, nullptr, ch, TO_VICT);
         ch->reply = keeper;
         return;
     }
@@ -854,7 +854,7 @@ void appraise_all(CHAR_DATA* ch, CHAR_DATA* keeper, const char* fixstr)
     char    buf[MAX_STRING_LENGTH];
     int     cost = 0, total = 0;
 
-    for (obj = ch->first_carrying; obj != NULL; obj = obj->next_content)
+    for (obj = ch->first_carrying; obj != nullptr; obj = obj->next_content)
     {
         if (obj->wear_loc == WEAR_NONE
             && can_see_obj(ch, obj)
@@ -876,7 +876,7 @@ void appraise_all(CHAR_DATA* ch, CHAR_DATA* keeper, const char* fixstr)
                     buf, MAX_STRING_LENGTH,
                     "$N tells you, 'It will cost %d credit%s to %s %s'", cost, cost == 1 ? "" : "s", fixstr, obj->name
                 );
-                act(AT_TELL, buf, ch, NULL, keeper, TO_CHAR);
+                act(AT_TELL, buf, ch, nullptr, keeper, TO_CHAR);
                 total += cost;
             }
         }
@@ -891,9 +891,9 @@ void appraise_all(CHAR_DATA* ch, CHAR_DATA* keeper, const char* fixstr)
             total,
             cost == 1 ? "" : "s"
         );
-        act(AT_TELL, buf, ch, NULL, keeper, TO_CHAR);
+        act(AT_TELL, buf, ch, nullptr, keeper, TO_CHAR);
         mudstrlcpy(buf, "$N tells you, 'Remember there is a 10% surcharge for repair all.'", MAX_STRING_LENGTH);
-        act(AT_TELL, buf, ch, NULL, keeper, TO_CHAR);
+        act(AT_TELL, buf, ch, nullptr, keeper, TO_CHAR);
     }
 }
 
@@ -914,7 +914,7 @@ void do_appraise(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((keeper = find_fixer(ch)) == NULL)
+    if ((keeper = find_fixer(ch)) == nullptr)
         return;
 
     switch (keeper->pIndexData->rShop->shop_type)
@@ -932,9 +932,9 @@ void do_appraise(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((obj = get_obj_carry(ch, arg)) == NULL)
+    if ((obj = get_obj_carry(ch, arg)) == nullptr)
     {
-        act(AT_TELL, "$n tells you 'You don't have that item.'", keeper, NULL, ch, TO_VICT);
+        act(AT_TELL, "$n tells you 'You don't have that item.'", keeper, nullptr, ch, TO_VICT);
         ch->reply = keeper;
         return;
     }
@@ -962,9 +962,9 @@ void do_appraise(CHAR_DATA* ch, const char* argument)
         cost == 1 ? "" : "s",
         fixstr
     );
-    act(AT_TELL, buf, ch, NULL, keeper, TO_CHAR);
+    act(AT_TELL, buf, ch, nullptr, keeper, TO_CHAR);
     if (cost > ch->gold)
-        act(AT_TELL, "$N tells you, 'Which I see you can't afford.'", ch, NULL, keeper, TO_CHAR);
+        act(AT_TELL, "$N tells you, 'Which I see you can't afford.'", ch, nullptr, keeper, TO_CHAR);
 }
 
 /* ------------------ Shop Building and Editing Section ----------------- */
@@ -983,7 +983,7 @@ void do_makeshop(CHAR_DATA* ch, const char* argument)
 
     vnum = atoi(argument);
 
-    if ((mob = get_mob_index(vnum)) == NULL)
+    if ((mob = get_mob_index(vnum)) == nullptr)
     {
         send_to_char("Mobile not found.\r\n", ch);
         return;
@@ -1031,7 +1031,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
 
     vnum = atoi(arg1);
 
-    if ((mob = get_mob_index(vnum)) == NULL)
+    if ((mob = get_mob_index(vnum)) == nullptr)
     {
         send_to_char("Mobile not found.\r\n", ch);
         return;
@@ -1168,7 +1168,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
 
     if (!str_cmp(arg2, "keeper"))
     {
-        if ((mob2 = get_mob_index(vnum)) == NULL)
+        if ((mob2 = get_mob_index(vnum)) == nullptr)
         {
             send_to_char("Mobile not found.\r\n", ch);
             return;
@@ -1180,7 +1180,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
             send_to_char("That mobile already has a shop.\r\n", ch);
             return;
         }
-        mob->pShop   = NULL;
+        mob->pShop   = nullptr;
         mob2->pShop  = shop;
         shop->keeper = value;
         send_to_char("Done.\r\n", ch);
@@ -1204,7 +1204,7 @@ void do_shopstat(CHAR_DATA* ch, const char* argument)
 
     vnum = atoi(argument);
 
-    if ((mob = get_mob_index(vnum)) == NULL)
+    if ((mob = get_mob_index(vnum)) == nullptr)
     {
         send_to_char("Mobile not found.\r\n", ch);
         return;
@@ -1264,7 +1264,7 @@ void do_makerepair(CHAR_DATA* ch, const char* argument)
 
     vnum = atoi(argument);
 
-    if ((mob = get_mob_index(vnum)) == NULL)
+    if ((mob = get_mob_index(vnum)) == nullptr)
     {
         send_to_char("Mobile not found.\r\n", ch);
         return;
@@ -1312,7 +1312,7 @@ void do_repairset(CHAR_DATA* ch, const char* argument)
 
     vnum = atoi(arg1);
 
-    if ((mob = get_mob_index(vnum)) == NULL)
+    if ((mob = get_mob_index(vnum)) == nullptr)
     {
         send_to_char("Mobile not found.\r\n", ch);
         return;
@@ -1421,7 +1421,7 @@ void do_repairset(CHAR_DATA* ch, const char* argument)
 
     if (!str_cmp(arg2, "keeper"))
     {
-        if ((mob2 = get_mob_index(vnum)) == NULL)
+        if ((mob2 = get_mob_index(vnum)) == nullptr)
         {
             send_to_char("Mobile not found.\r\n", ch);
             return;
@@ -1433,7 +1433,7 @@ void do_repairset(CHAR_DATA* ch, const char* argument)
             send_to_char("That mobile already has a repair shop.\r\n", ch);
             return;
         }
-        mob->rShop     = NULL;
+        mob->rShop     = nullptr;
         mob2->rShop    = repair;
         repair->keeper = value;
         send_to_char("Done.\r\n", ch);
@@ -1457,7 +1457,7 @@ void do_repairstat(CHAR_DATA* ch, const char* argument)
 
     vnum = atoi(argument);
 
-    if ((mob = get_mob_index(vnum)) == NULL)
+    if ((mob = get_mob_index(vnum)) == nullptr)
     {
         send_to_char("Mobile not found.\r\n", ch);
         return;

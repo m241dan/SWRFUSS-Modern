@@ -116,7 +116,7 @@ void do_makeblade(CHAR_DATA* ch, const char* argument)
                 send_to_char("&GYou begin the long process of crafting a vibroblade.\r\n", ch);
                 act(
                     AT_PLAIN, "$n takes $s tools and a small oven and begins to work on something.", ch,
-                    NULL, argument, TO_ROOM
+                    nullptr, argument, TO_ROOM
                 );
                 add_timer(ch, TIMER_DO_FUN, 25, do_makeblade, 1);
                 ch->dest_buf = str_dup(arg);
@@ -144,7 +144,7 @@ void do_makeblade(CHAR_DATA* ch, const char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makeblade]);
     vnum  = 10422;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char
             (
@@ -216,7 +216,7 @@ void do_makeblade(CHAR_DATA* ch, const char* argument)
     paf->location  = get_atype("backstab");
     paf->modifier  = level / 3;
     paf->bitvector = 0;
-    paf->next      = NULL;
+    paf->next      = nullptr;
     LINK(paf, obj->first_affect, obj->last_affect, next, prev);
     ++top_affect;
     CREATE(paf2, AFFECT_DATA, 1);
@@ -225,7 +225,7 @@ void do_makeblade(CHAR_DATA* ch, const char* argument)
     paf2->location  = get_atype("hitroll");
     paf2->modifier  = -2;
     paf2->bitvector = 0;
-    paf2->next      = NULL;
+    paf2->next      = nullptr;
     LINK(paf2, obj->first_affect, obj->last_affect, next, prev);
     ++top_affect;
     obj->value[0] = INIT_WEAPON_CONDITION;
@@ -239,7 +239,7 @@ void do_makeblade(CHAR_DATA* ch, const char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created blade.&w\r\n", ch);
-    act(AT_PLAIN, "$n finishes crafting a vibro-blade.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes crafting a vibro-blade.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -350,7 +350,7 @@ void do_makeblaster(CHAR_DATA* ch, const char* argument)
                 send_to_char("&GYou begin the long process of making a blaster.\r\n", ch);
                 act(
                     AT_PLAIN, "$n takes $s tools and a small oven and begins to work on something.", ch,
-                    NULL, argument, TO_ROOM
+                    nullptr, argument, TO_ROOM
                 );
                 add_timer(ch, TIMER_DO_FUN, 25, do_makeblaster, 1);
                 ch->dest_buf = str_dup(arg);
@@ -378,7 +378,7 @@ void do_makeblaster(CHAR_DATA* ch, const char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makeblaster]);
     vnum  = 10420;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char
             (
@@ -486,7 +486,7 @@ void do_makeblaster(CHAR_DATA* ch, const char* argument)
     paf->location  = get_atype("hitroll");
     paf->modifier  = URANGE(0, 1 + scope, level / 30);
     paf->bitvector = 0;
-    paf->next      = NULL;
+    paf->next      = nullptr;
     LINK(paf, obj->first_affect, obj->last_affect, next, prev);
     ++top_affect;
     CREATE(paf2, AFFECT_DATA, 1);
@@ -495,7 +495,7 @@ void do_makeblaster(CHAR_DATA* ch, const char* argument)
     paf2->location  = get_atype("damroll");
     paf2->modifier  = URANGE(0, power, level / 30);
     paf2->bitvector = 0;
-    paf2->next      = NULL;
+    paf2->next      = nullptr;
     LINK(paf2, obj->first_affect, obj->last_affect, next, prev);
     ++top_affect;
     obj->value[0] = INIT_WEAPON_CONDITION; /* condition  */
@@ -509,7 +509,7 @@ void do_makeblaster(CHAR_DATA* ch, const char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created blaster.&w\r\n", ch);
-    act(AT_PLAIN, "$n finishes making $s new blaster.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes making $s new blaster.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -646,7 +646,7 @@ void do_makelightsaber(CHAR_DATA* ch, const char* argument)
                 send_to_char("&GYou begin the long process of crafting a lightsaber.\r\n", ch);
                 act(
                     AT_PLAIN, "$n takes $s tools and a small oven and begins to work on something.", ch,
-                    NULL, argument, TO_ROOM
+                    nullptr, argument, TO_ROOM
                 );
                 add_timer(ch, TIMER_DO_FUN, 25, do_makelightsaber, 1);
                 ch->dest_buf = str_dup(arg);
@@ -674,7 +674,7 @@ void do_makelightsaber(CHAR_DATA* ch, const char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_lightsaber_crafting]);
     vnum  = 10421;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char
             (
@@ -807,7 +807,7 @@ void do_makelightsaber(CHAR_DATA* ch, const char* argument)
     paf->location  = get_atype("hitroll");
     paf->modifier  = URANGE(0, gems, level / 30);
     paf->bitvector = 0;
-    paf->next      = NULL;
+    paf->next      = nullptr;
     LINK(paf, obj->first_affect, obj->last_affect, next, prev);
     ++top_affect;
     CREATE(paf2, AFFECT_DATA, 1);
@@ -816,7 +816,7 @@ void do_makelightsaber(CHAR_DATA* ch, const char* argument)
     paf2->location  = get_atype("parry");
     paf2->modifier  = (level / 3);
     paf2->bitvector = 0;
-    paf2->next      = NULL;
+    paf2->next      = nullptr;
     LINK(paf2, obj->first_affect, obj->last_affect, next, prev);
     ++top_affect;
     obj->value[0] = INIT_WEAPON_CONDITION; /* condition  */
@@ -830,7 +830,7 @@ void do_makelightsaber(CHAR_DATA* ch, const char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created lightsaber.&w\r\n", ch);
-    act(AT_PLAIN, "$n finishes making $s new lightsaber.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes making $s new lightsaber.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -870,7 +870,7 @@ void do_makespice(CHAR_DATA* ch, const char* argument)
             if (ms_find_obj(ch))
                 return;
 
-            if ((obj = get_obj_carry(ch, arg)) == NULL)
+            if ((obj = get_obj_carry(ch, arg)) == nullptr)
             {
                 send_to_char("&RYou do not have that item.\r\n&w", ch);
                 return;
@@ -886,7 +886,7 @@ void do_makespice(CHAR_DATA* ch, const char* argument)
             if (number_percent() < schance)
             {
                 send_to_char("&GYou begin the long process of refining spice into a drug.\r\n", ch);
-                act(AT_PLAIN, "$n begins working on something.", ch, NULL, argument, TO_ROOM);
+                act(AT_PLAIN, "$n begins working on something.", ch, nullptr, argument, TO_ROOM);
                 add_timer(ch, TIMER_DO_FUN, 10, do_makespice, 1);
                 ch->dest_buf = str_dup(arg);
                 return;
@@ -910,7 +910,7 @@ void do_makespice(CHAR_DATA* ch, const char* argument)
 
     ch->substate = SUB_NONE;
 
-    if ((obj = get_obj_carry(ch, arg)) == NULL)
+    if ((obj = get_obj_carry(ch, arg)) == nullptr)
     {
         send_to_char("You seem to have lost your spice!\r\n", ch);
         return;
@@ -938,7 +938,7 @@ void do_makespice(CHAR_DATA* ch, const char* argument)
     obj->item_type   = ITEM_SPICE;
 
     send_to_char("&GYou finish your work.\r\n", ch);
-    act(AT_PLAIN, "$n finishes $s work.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes $s work.", ch, nullptr, argument, TO_ROOM);
 
     obj->cost += obj->value[1] * 10;
     {
@@ -1039,7 +1039,7 @@ void do_makegrenade(CHAR_DATA* ch, const char* argument)
                 send_to_char("&GYou begin the long process of making a grenade.\r\n", ch);
                 act(
                     AT_PLAIN, "$n takes $s tools and a drink container and begins to work on something.", ch,
-                    NULL, argument, TO_ROOM
+                    nullptr, argument, TO_ROOM
                 );
                 add_timer(ch, TIMER_DO_FUN, 25, do_makegrenade, 1);
                 ch->dest_buf = str_dup(arg);
@@ -1067,7 +1067,7 @@ void do_makegrenade(CHAR_DATA* ch, const char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makegrenade]);
     vnum  = 10425;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char
             (
@@ -1157,7 +1157,7 @@ void do_makegrenade(CHAR_DATA* ch, const char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created grenade.&w\r\n", ch);
-    act(AT_PLAIN, "$n finishes making $s new grenade.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes making $s new grenade.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -1256,7 +1256,7 @@ void do_makelandmine(CHAR_DATA* ch, const char* argument)
                 send_to_char("&GYou begin the long process of making a landmine.\r\n", ch);
                 act(
                     AT_PLAIN, "$n takes $s tools and a drink container and begins to work on something.", ch,
-                    NULL, argument, TO_ROOM
+                    nullptr, argument, TO_ROOM
                 );
                 add_timer(ch, TIMER_DO_FUN, 25, do_makelandmine, 1);
                 ch->dest_buf = str_dup(arg);
@@ -1284,7 +1284,7 @@ void do_makelandmine(CHAR_DATA* ch, const char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makelandmine]);
     vnum  = 10427;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char
             (
@@ -1374,7 +1374,7 @@ void do_makelandmine(CHAR_DATA* ch, const char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created landmine.&w\r\n", ch);
-    act(AT_PLAIN, "$n finishes making $s new landmine.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes making $s new landmine.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -1471,7 +1471,7 @@ void do_makelight(CHAR_DATA* ch, const char* argument)
             if (number_percent() < schance)
             {
                 send_to_char("&GYou begin the long process of making a light.\r\n", ch);
-                act(AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, NULL, argument, TO_ROOM);
+                act(AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, nullptr, argument, TO_ROOM);
                 add_timer(ch, TIMER_DO_FUN, 10, do_makelight, 1);
                 ch->dest_buf = str_dup(arg);
                 return;
@@ -1498,7 +1498,7 @@ void do_makelight(CHAR_DATA* ch, const char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makelight]);
     vnum  = 10428;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char
             (
@@ -1585,7 +1585,7 @@ void do_makelight(CHAR_DATA* ch, const char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created light.&w\r\n", ch);
-    act(AT_PLAIN, "$n finishes making $s new light.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes making $s new light.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -1609,7 +1609,7 @@ void do_makejewelry(CHAR_DATA* ch, const char* argument)
     int     level, schance;
     bool    checktool, checkoven, checkmetal;
     OBJ_DATA* obj;
-    OBJ_DATA* metal = NULL;
+    OBJ_DATA* metal = nullptr;
     int     value, cost;
 
     argument = one_argument(argument, arg);
@@ -1692,7 +1692,7 @@ void do_makejewelry(CHAR_DATA* ch, const char* argument)
             if (number_percent() < schance)
             {
                 send_to_char("&GYou begin the long process of creating some jewelry.\r\n", ch);
-                act(AT_PLAIN, "$n takes $s toolkit and some metal and begins to work.", ch, NULL, argument, TO_ROOM);
+                act(AT_PLAIN, "$n takes $s toolkit and some metal and begins to work.", ch, nullptr, argument, TO_ROOM);
                 add_timer(ch, TIMER_DO_FUN, 15, do_makejewelry, 1);
                 ch->dest_buf   = str_dup(arg);
                 ch->dest_buf_2 = str_dup(arg2);
@@ -1789,7 +1789,7 @@ void do_makejewelry(CHAR_DATA* ch, const char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created jewelry.&w\r\n", ch);
-    act(AT_PLAIN, "$n finishes sewing some new jewelry.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes sewing some new jewelry.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -1813,7 +1813,7 @@ void do_makearmor(CHAR_DATA* ch, const char* argument)
     int     level, schance;
     bool    checksew, checkfab;
     OBJ_DATA* obj;
-    OBJ_DATA* material = NULL;
+    OBJ_DATA* material = nullptr;
     int     value;
 
     argument = one_argument(argument, arg);
@@ -1886,7 +1886,7 @@ void do_makearmor(CHAR_DATA* ch, const char* argument)
                     AT_PLAIN,
                     "$n takes $s sewing kit and some material and begins to work.",
                     ch,
-                    NULL,
+                    nullptr,
                     argument,
                     TO_ROOM
                 );
@@ -1973,7 +1973,7 @@ void do_makearmor(CHAR_DATA* ch, const char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created garment.&w\r\n", ch);
-    act(AT_PLAIN, "$n finishes sewing some new armor.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes sewing some new armor.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -2062,7 +2062,7 @@ void do_makecomlink(CHAR_DATA* ch, const char* argument)
             if (number_percent() < schance)
             {
                 send_to_char("&GYou begin the long process of making a comlink.\r\n", ch);
-                act(AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, NULL, argument, TO_ROOM);
+                act(AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, nullptr, argument, TO_ROOM);
                 add_timer(ch, TIMER_DO_FUN, 10, do_makecomlink, 1);
                 ch->dest_buf = str_dup(arg);
                 return;
@@ -2088,7 +2088,7 @@ void do_makecomlink(CHAR_DATA* ch, const char* argument)
 
     vnum = 10430;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char
             (
@@ -2161,7 +2161,7 @@ void do_makecomlink(CHAR_DATA* ch, const char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created comlink.&w\r\n", ch);
-    act(AT_PLAIN, "$n finishes crafting a comlink.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes crafting a comlink.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -2258,7 +2258,7 @@ void do_makeshield(CHAR_DATA* ch, const char* argument)
             if (number_percent() < schance)
             {
                 send_to_char("&GYou begin the long process of crafting an energy shield.\r\n", ch);
-                act(AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, NULL, argument, TO_ROOM);
+                act(AT_PLAIN, "$n takes $s tools and begins to work on something.", ch, nullptr, argument, TO_ROOM);
                 add_timer(ch, TIMER_DO_FUN, 20, do_makeshield, 1);
                 ch->dest_buf = str_dup(arg);
                 return;
@@ -2285,7 +2285,7 @@ void do_makeshield(CHAR_DATA* ch, const char* argument)
     level = IS_NPC(ch) ? ch->top_level : (int)(ch->pcdata->learned[gsn_makeshield]);
     vnum  = 10429;
 
-    if ((pObjIndex = get_obj_index(vnum)) == NULL)
+    if ((pObjIndex = get_obj_index(vnum)) == nullptr)
     {
         send_to_char
             (
@@ -2375,7 +2375,7 @@ void do_makeshield(CHAR_DATA* ch, const char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created energy shield.&w\r\n", ch);
-    act(AT_PLAIN, "$n finishes making $s new energy shield.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes making $s new energy shield.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -2399,7 +2399,7 @@ void do_makecontainer(CHAR_DATA* ch, const char* argument)
     int     level, schance;
     bool    checksew, checkfab;
     OBJ_DATA* obj;
-    OBJ_DATA* material = NULL;
+    OBJ_DATA* material = nullptr;
     int     value;
 
     argument = one_argument(argument, arg);
@@ -2478,7 +2478,7 @@ void do_makecontainer(CHAR_DATA* ch, const char* argument)
                     AT_PLAIN,
                     "$n takes $s sewing kit and some material and begins to work.",
                     ch,
-                    NULL,
+                    nullptr,
                     argument,
                     TO_ROOM
                 );
@@ -2568,7 +2568,7 @@ void do_makecontainer(CHAR_DATA* ch, const char* argument)
     obj = obj_to_char(obj, ch);
 
     send_to_char("&GYou finish your work and hold up your newly created container.&w\r\n", ch);
-    act(AT_PLAIN, "$n finishes sewing a new container.", ch, NULL, argument, TO_ROOM);
+    act(AT_PLAIN, "$n finishes sewing a new container.", ch, nullptr, argument, TO_ROOM);
 
     {
         long xpgain;
@@ -2627,7 +2627,7 @@ void do_reinforcements(CHAR_DATA* ch, const char* argument)
             if (number_percent() < schance)
             {
                 send_to_char("&GYou begin making the call for reinforcements.\r\n", ch);
-                act(AT_PLAIN, "$n begins issuing orders int $s comlink.", ch, NULL, argument, TO_ROOM);
+                act(AT_PLAIN, "$n begins issuing orders int $s comlink.", ch, nullptr, argument, TO_ROOM);
                 add_timer(ch, TIMER_DO_FUN, 1, do_reinforcements, 1);
                 ch->dest_buf = str_dup(arg);
                 return;
@@ -2703,7 +2703,7 @@ void do_postguard(CHAR_DATA* ch, const char* argument)
             if (number_percent() < schance)
             {
                 send_to_char("&GYou begin making the call for reinforcements.\r\n", ch);
-                act(AT_PLAIN, "$n begins issuing orders int $s comlink.", ch, NULL, argument, TO_ROOM);
+                act(AT_PLAIN, "$n begins issuing orders int $s comlink.", ch, nullptr, argument, TO_ROOM);
                 add_timer(ch, TIMER_DO_FUN, 1, do_postguard, 1);
                 ch->dest_buf = str_dup(arg);
                 return;
@@ -2751,7 +2751,7 @@ void add_reinforcements(CHAR_DATA* ch)
     OBJ_DATA      * blaster;
     OBJ_INDEX_DATA* pObjIndex;
 
-    if ((pMobIndex = get_mob_index(ch->backup_mob)) == NULL)
+    if ((pMobIndex = get_mob_index(ch->backup_mob)) == nullptr)
         return;
 
     if (ch->backup_mob == MOB_VNUM_STORMTROOPER ||
@@ -2766,7 +2766,7 @@ void add_reinforcements(CHAR_DATA* ch)
             int ability;
             mob[mob_cnt] = create_mobile(pMobIndex);
             char_to_room(mob[mob_cnt], ch->in_room);
-            act(AT_IMMORT, "$N has arrived.", ch, NULL, mob[mob_cnt], TO_ROOM);
+            act(AT_IMMORT, "$N has arrived.", ch, nullptr, mob[mob_cnt], TO_ROOM);
             mob[mob_cnt]->top_level = ch->skill_level[LEADERSHIP_ABILITY] / 3;
             for (ability = 0; ability < MAX_ABILITY; ability++)
                 mob[mob_cnt]->skill_level[ability] = mob[mob_cnt]->top_level;
@@ -2775,7 +2775,7 @@ void add_reinforcements(CHAR_DATA* ch)
             mob[mob_cnt]->armor   = (short)(LEVEL_HERO - mob[mob_cnt]->top_level * 2.5);
             mob[mob_cnt]->damroll = mob[mob_cnt]->top_level / 5;
             mob[mob_cnt]->hitroll = mob[mob_cnt]->top_level / 5;
-            if ((pObjIndex = get_obj_index(OBJ_VNUM_BLASTECH_E11)) != NULL)
+            if ((pObjIndex = get_obj_index(OBJ_VNUM_BLASTECH_E11)) != nullptr)
             {
                 blaster = create_object(pObjIndex, mob[mob_cnt]->top_level);
                 obj_to_char(blaster, mob[mob_cnt]);
@@ -2805,7 +2805,7 @@ void add_reinforcements(CHAR_DATA* ch)
             STRFREE(mob->long_descr);
             mob->long_descr = STRALLOC(tmpbuf);
         }
-        act(AT_IMMORT, "$N has arrived.", ch, NULL, mob, TO_ROOM);
+        act(AT_IMMORT, "$N has arrived.", ch, nullptr, mob, TO_ROOM);
         send_to_char("Your guard has arrived.\r\n", ch);
         mob->top_level = ch->skill_level[LEADERSHIP_ABILITY];
         for (ability = 0; ability < MAX_ABILITY; ability++)
@@ -2815,7 +2815,7 @@ void add_reinforcements(CHAR_DATA* ch)
         mob->armor   = (short)(LEVEL_HERO - mob->top_level * 2.5);
         mob->damroll = mob->top_level / 5;
         mob->hitroll = mob->top_level / 5;
-        if ((pObjIndex = get_obj_index(OBJ_VNUM_BLASTECH_E11)) != NULL)
+        if ((pObjIndex = get_obj_index(OBJ_VNUM_BLASTECH_E11)) != nullptr)
         {
             blaster = create_object(pObjIndex, mob->top_level);
             obj_to_char(blaster, mob);
@@ -2866,7 +2866,7 @@ void do_torture(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -2914,9 +2914,9 @@ void do_torture(CHAR_DATA* ch, const char* argument)
         learn_from_success(ch, gsn_torture);
         WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
         WAIT_STATE(victim, PULSE_VIOLENCE);
-        act(AT_SKILL, "$N slowly tortures you. The pain is excruciating.", victim, NULL, ch, TO_CHAR);
-        act(AT_SKILL, "You torture $N, leaving $M screaming in pain.", ch, NULL, victim, TO_CHAR);
-        act(AT_SKILL, "$n tortures $N, leaving $M screaming in agony!", ch, NULL, victim, TO_NOTVICT);
+        act(AT_SKILL, "$N slowly tortures you. The pain is excruciating.", victim, nullptr, ch, TO_CHAR);
+        act(AT_SKILL, "You torture $N, leaving $M screaming in pain.", ch, nullptr, victim, TO_CHAR);
+        act(AT_SKILL, "$n tortures $N, leaving $M screaming in agony!", ch, nullptr, victim, TO_NOTVICT);
 
         dam = dice(ch->skill_level[HUNTING_ABILITY] / 10, 4);
         dam = URANGE(0, victim->max_hit - 10, dam);
@@ -2929,9 +2929,9 @@ void do_torture(CHAR_DATA* ch, const char* argument)
     }
     else
     {
-        act(AT_SKILL, "$N tries to cut off your finger!", victim, NULL, ch, TO_CHAR);
-        act(AT_SKILL, "You mess up big time.", ch, NULL, victim, TO_CHAR);
-        act(AT_SKILL, "$n tries to painfully torture $N.", ch, NULL, victim, TO_NOTVICT);
+        act(AT_SKILL, "$N tries to cut off your finger!", victim, nullptr, ch, TO_CHAR);
+        act(AT_SKILL, "You mess up big time.", ch, nullptr, victim, TO_CHAR);
+        act(AT_SKILL, "$n tries to painfully torture $N.", ch, nullptr, victim, TO_NOTVICT);
         WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
         global_retcode = multi_hit(victim, ch, TYPE_UNDEFINED);
     }
@@ -3060,7 +3060,7 @@ void do_mine(CHAR_DATA* ch, const char* argument)
     obj->armed_by = STRALLOC(ch->name);
 
     ch_printf(ch, "You arm and bury %s.\r\n", obj->short_descr);
-    act(AT_PLAIN, "$n arms and buries $p.", ch, obj, NULL, TO_ROOM);
+    act(AT_PLAIN, "$n arms and buries $p.", ch, obj, nullptr, TO_ROOM);
 
     learn_from_success(ch, gsn_mine);
 }
@@ -3115,15 +3115,15 @@ void do_first_aid(CHAR_DATA* ch, const char* argument)
     {
         ch_printf(ch, "You tend to your wounds.\r\n");
         snprintf(buf, MAX_STRING_LENGTH, "$n uses %s to help heal $s wounds.", medpac->short_descr);
-        act(AT_ACTION, buf, ch, NULL, victim, TO_ROOM);
+        act(AT_ACTION, buf, ch, nullptr, victim, TO_ROOM);
     }
     else
     {
-        act(AT_ACTION, "You tend to $N's wounds.", ch, NULL, victim, TO_CHAR);
+        act(AT_ACTION, "You tend to $N's wounds.", ch, nullptr, victim, TO_CHAR);
         snprintf(buf, MAX_STRING_LENGTH, "$n uses %s to help heal $N's wounds.", medpac->short_descr);
-        act(AT_ACTION, buf, ch, NULL, victim, TO_NOTVICT);
+        act(AT_ACTION, buf, ch, nullptr, victim, TO_NOTVICT);
         snprintf(buf, MAX_STRING_LENGTH, "$n uses %s to help heal your wounds.", medpac->short_descr);
-        act(AT_ACTION, buf, ch, NULL, victim, TO_VICT);
+        act(AT_ACTION, buf, ch, nullptr, victim, TO_VICT);
     }
 
     --medpac->value[0];
@@ -3142,7 +3142,7 @@ void do_snipe(CHAR_DATA* ch, const char* argument)
     EXIT_DATA      * pexit;
     ROOM_INDEX_DATA* was_in_room;
     ROOM_INDEX_DATA* to_room;
-    CHAR_DATA      * victim = NULL;
+    CHAR_DATA      * victim = nullptr;
     int            schance;
     char           buf[MAX_STRING_LENGTH];
     bool           pfound   = FALSE;
@@ -3154,7 +3154,7 @@ void do_snipe(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (get_eq_char(ch, WEAR_DUAL_WIELD) != NULL)
+    if (get_eq_char(ch, WEAR_DUAL_WIELD) != nullptr)
     {
         send_to_char("You can't do that while wielding two weapons.", ch);
         return;
@@ -3176,7 +3176,7 @@ void do_snipe(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((pexit = get_exit(ch->in_room, dir)) == NULL)
+    if ((pexit = get_exit(ch->in_room, dir)) == nullptr)
     {
         send_to_char("Are you expecting to fire through a wall!?\r\n", ch);
         return;
@@ -3198,30 +3198,30 @@ void do_snipe(CHAR_DATA* ch, const char* argument)
         if (!pexit->to_room)
             break;
 
-        to_room     = NULL;
+        to_room     = nullptr;
         if (pexit->distance > 1)
             to_room = generate_exit(ch->in_room, &pexit);
 
-        if (to_room == NULL)
+        if (to_room == nullptr)
             to_room = pexit->to_room;
 
         char_from_room(ch);
         char_to_room(ch, to_room);
 
 
-        if (IS_NPC(ch) && (victim = get_char_room_mp(ch, arg2)) != NULL)
+        if (IS_NPC(ch) && (victim = get_char_room_mp(ch, arg2)) != nullptr)
         {
             pfound = TRUE;
             break;
         }
-        else if (!IS_NPC(ch) && (victim = get_char_room(ch, arg2)) != NULL)
+        else if (!IS_NPC(ch) && (victim = get_char_room(ch, arg2)) != nullptr)
         {
             pfound = TRUE;
             break;
         }
 
 
-        if ((pexit = get_exit(ch->in_room, dir)) == NULL)
+        if ((pexit = get_exit(ch->in_room, dir)) == nullptr)
             break;
 
     }
@@ -3255,7 +3255,7 @@ void do_snipe(CHAR_DATA* ch, const char* argument)
 
     if (IS_AFFECTED(ch, AFF_CHARM) && ch->master == victim)
     {
-        act(AT_PLAIN, "$N is your beloved master.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$N is your beloved master.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -3298,16 +3298,16 @@ void do_snipe(CHAR_DATA* ch, const char* argument)
         char_from_room(ch);
         char_to_room(ch, was_in_room);
         snprintf(buf, MAX_STRING_LENGTH, "$n fires a blaster shot to the %s.", dir_name[get_door(arg)]);
-        act(AT_ACTION, buf, ch, NULL, NULL, TO_ROOM);
+        act(AT_ACTION, buf, ch, nullptr, nullptr, TO_ROOM);
 
         char_from_room(ch);
         char_to_room(ch, victim->in_room);
 
         snprintf(buf, MAX_STRING_LENGTH, "A blaster shot fires at you from the %s.", dir_name[dir]);
-        act(AT_ACTION, buf, victim, NULL, ch, TO_CHAR);
-        act(AT_ACTION, "You fire at $N.", ch, NULL, victim, TO_CHAR);
+        act(AT_ACTION, buf, victim, nullptr, ch, TO_CHAR);
+        act(AT_ACTION, "You fire at $N.", ch, nullptr, victim, TO_CHAR);
         snprintf(buf, MAX_STRING_LENGTH, "A blaster shot fires at $N from the %s.", dir_name[dir]);
-        act(AT_ACTION, buf, ch, NULL, victim, TO_NOTVICT);
+        act(AT_ACTION, buf, ch, nullptr, victim, TO_NOTVICT);
 
         one_hit(ch, victim, TYPE_UNDEFINED);
 
@@ -3323,14 +3323,14 @@ void do_snipe(CHAR_DATA* ch, const char* argument)
         char_from_room(ch);
         char_to_room(ch, was_in_room);
         snprintf(buf, MAX_STRING_LENGTH, "$n fires a blaster shot to the %s.", dir_name[get_door(arg)]);
-        act(AT_ACTION, buf, ch, NULL, NULL, TO_ROOM);
+        act(AT_ACTION, buf, ch, nullptr, nullptr, TO_ROOM);
 
         char_from_room(ch);
         char_to_room(ch, victim->in_room);
 
-        act(AT_ACTION, "You fire at $N but don't even come close.", ch, NULL, victim, TO_CHAR);
+        act(AT_ACTION, "You fire at $N but don't even come close.", ch, nullptr, victim, TO_CHAR);
         snprintf(buf, MAX_STRING_LENGTH, "A blaster shot fired from the %s barely misses you.", dir_name[dir]);
-        act(AT_ACTION, buf, ch, NULL, victim, TO_ROOM);
+        act(AT_ACTION, buf, ch, nullptr, victim, TO_ROOM);
         learn_from_failure(ch, gsn_snipe);
     }
 
@@ -3411,7 +3411,7 @@ void do_throw(CHAR_DATA* ch, const char* argument)
 
     if (IS_OBJ_STAT(obj, ITEM_NOREMOVE))
     {
-        act(AT_PLAIN, "You can't throw $p.", ch, obj, NULL, TO_CHAR);
+        act(AT_PLAIN, "You can't throw $p.", ch, obj, nullptr, TO_CHAR);
         return;
     }
 
@@ -3427,14 +3427,14 @@ void do_throw(CHAR_DATA* ch, const char* argument)
     else if (arg2[0] == '\0')
     {
         snprintf(buf, MAX_STRING_LENGTH, "$n throws %s at the floor.", obj->short_descr);
-        act(AT_ACTION, buf, ch, NULL, NULL, TO_ROOM);
+        act(AT_ACTION, buf, ch, nullptr, nullptr, TO_ROOM);
         ch_printf(ch, "You throw %s at the floor.\r\n", obj->short_descr);
 
-        victim = NULL;
+        victim = nullptr;
     }
     else if ((dir = get_door(arg2)) != -1)
     {
-        if ((pexit = get_exit(ch->in_room, dir)) == NULL)
+        if ((pexit = get_exit(ch->in_room, dir)) == nullptr)
         {
             send_to_char("Are you expecting to throw it through a wall!?\r\n", ch);
             return;
@@ -3466,11 +3466,11 @@ void do_throw(CHAR_DATA* ch, const char* argument)
                 break;
         }
 
-        to_room     = NULL;
+        to_room     = nullptr;
         if (pexit->distance > 1)
             to_room = generate_exit(ch->in_room, &pexit);
 
-        if (to_room == NULL)
+        if (to_room == nullptr)
             to_room = pexit->to_room;
 
         char_from_room(ch);
@@ -3485,7 +3485,7 @@ void do_throw(CHAR_DATA* ch, const char* argument)
 
             if (IS_AFFECTED(ch, AFF_CHARM) && ch->master == victim)
             {
-                act(AT_PLAIN, "$N is your beloved master.", ch, NULL, victim, TO_CHAR);
+                act(AT_PLAIN, "$N is your beloved master.", ch, nullptr, victim, TO_CHAR);
                 return;
             }
 
@@ -3505,27 +3505,27 @@ void do_throw(CHAR_DATA* ch, const char* argument)
                 return;
             }
 
-            to_room     = NULL;
+            to_room     = nullptr;
             if (pexit->distance > 1)
                 to_room = generate_exit(ch->in_room, &pexit);
 
-            if (to_room == NULL)
+            if (to_room == nullptr)
                 to_room = pexit->to_room;
 
             char_from_room(ch);
             char_to_room(ch, to_room);
 
             snprintf(buf, MAX_STRING_LENGTH, "Someone throws %s at you from the %s.", obj->short_descr, dir_name[dir]);
-            act(AT_ACTION, buf, victim, NULL, ch, TO_CHAR);
+            act(AT_ACTION, buf, victim, nullptr, ch, TO_CHAR);
             act(AT_ACTION, "You throw %p at $N.", ch, obj, victim, TO_CHAR);
             char_from_room(ch);
             char_to_room(ch, was_in_room);
             snprintf(buf, MAX_STRING_LENGTH, "$n throws %s to the %s.", obj->short_descr, dir_name[get_dir(arg2)]);
-            act(AT_ACTION, buf, ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, buf, ch, nullptr, nullptr, TO_ROOM);
             char_from_room(ch);
             char_to_room(ch, to_room);
             snprintf(buf, MAX_STRING_LENGTH, "%s is thrown at $N from the %s.", obj->short_descr, dir_name[dir]);
-            act(AT_ACTION, buf, ch, NULL, victim, TO_NOTVICT);
+            act(AT_ACTION, buf, ch, nullptr, victim, TO_NOTVICT);
         }
         else
         {
@@ -3533,21 +3533,21 @@ void do_throw(CHAR_DATA* ch, const char* argument)
             char_from_room(ch);
             char_to_room(ch, was_in_room);
             snprintf(buf, MAX_STRING_LENGTH, "$n throws %s to the %s.", obj->short_descr, dir_name[get_dir(arg2)]);
-            act(AT_ACTION, buf, ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, buf, ch, nullptr, nullptr, TO_ROOM);
             char_from_room(ch);
             char_to_room(ch, to_room);
             snprintf(buf, MAX_STRING_LENGTH, "%s is thrown from the %s.", obj->short_descr, dir_name[dir]);
-            act(AT_ACTION, buf, ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, buf, ch, nullptr, nullptr, TO_ROOM);
         }
     }
-    else if ((victim = get_char_room(ch, arg2)) != NULL)
+    else if ((victim = get_char_room(ch, arg2)) != nullptr)
     {
         if (is_safe(ch, victim))
             return;
 
         if (IS_AFFECTED(ch, AFF_CHARM) && ch->master == victim)
         {
-            act(AT_PLAIN, "$N is your beloved master.", ch, NULL, victim, TO_CHAR);
+            act(AT_PLAIN, "$N is your beloved master.", ch, nullptr, victim, TO_CHAR);
             return;
         }
 
@@ -3564,7 +3564,7 @@ void do_throw(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (obj == get_eq_char(ch, WEAR_WIELD) && (tmpobj = get_eq_char(ch, WEAR_DUAL_WIELD)) != NULL)
+    if (obj == get_eq_char(ch, WEAR_WIELD) && (tmpobj = get_eq_char(ch, WEAR_DUAL_WIELD)) != nullptr)
         tmpobj->wear_loc = WEAR_WIELD;
 
     unequip_char(ch, obj);
@@ -3648,7 +3648,7 @@ void do_beg(CHAR_DATA* ch, const char* argument)
     if (ms_find_obj(ch))
         return;
 
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -3694,8 +3694,8 @@ void do_beg(CHAR_DATA* ch, const char* argument)
     if (!IS_NPC(victim))
     {
         send_to_char("You beg them for money.\r\n", ch);
-        act(AT_ACTION, "$n begs you to give $s some change.\r\n", ch, NULL, victim, TO_VICT);
-        act(AT_ACTION, "$n begs $N for change.\r\n", ch, NULL, victim, TO_NOTVICT);
+        act(AT_ACTION, "$n begs you to give $s some change.\r\n", ch, nullptr, victim, TO_VICT);
+        act(AT_ACTION, "$n begs $N for change.\r\n", ch, nullptr, victim, TO_NOTVICT);
         return;
     }
 
@@ -3708,8 +3708,8 @@ void do_beg(CHAR_DATA* ch, const char* argument)
        * Failure.
        */
         send_to_char("You beg them for money but don't get any!\r\n", ch);
-        act(AT_ACTION, "$n is really getting on your nerves with all this begging!\r\n", ch, NULL, victim, TO_VICT);
-        act(AT_ACTION, "$n begs $N for money.\r\n", ch, NULL, victim, TO_NOTVICT);
+        act(AT_ACTION, "$n is really getting on your nerves with all this begging!\r\n", ch, nullptr, victim, TO_VICT);
+        act(AT_ACTION, "$n begs $N for money.\r\n", ch, nullptr, victim, TO_NOTVICT);
 
         if (victim->alignment < 0 && victim->top_level >= ch->top_level + 5)
         {
@@ -3723,8 +3723,8 @@ void do_beg(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    act(AT_ACTION, "$n begs $N for money.\r\n", ch, NULL, victim, TO_NOTVICT);
-    act(AT_ACTION, "$n begs you for money!\r\n", ch, NULL, victim, TO_VICT);
+    act(AT_ACTION, "$n begs $N for money.\r\n", ch, nullptr, victim, TO_NOTVICT);
+    act(AT_ACTION, "$n begs you for money!\r\n", ch, nullptr, victim, TO_VICT);
 
     amount = UMIN(victim->gold, number_range(1, 10));
     if (amount <= 0)
@@ -3745,8 +3745,8 @@ void do_beg(CHAR_DATA* ch, const char* argument)
     xp = UMIN(xp, xp_compute(ch, victim));
     gain_exp(ch, xp, SMUGGLING_ABILITY);
     ch_printf(ch, "&WYou gain %d smuggling experience points!\r\n", xp);
-    act(AT_ACTION, "$N gives $n some money.\r\n", ch, NULL, victim, TO_NOTVICT);
-    act(AT_ACTION, "You give $n some money.\r\n", ch, NULL, victim, TO_VICT);
+    act(AT_ACTION, "$N gives $n some money.\r\n", ch, nullptr, victim, TO_NOTVICT);
+    act(AT_ACTION, "You give $n some money.\r\n", ch, nullptr, victim, TO_VICT);
 }
 
 void do_pickshiplock(CHAR_DATA* ch, const char* argument)
@@ -3760,7 +3760,7 @@ void do_hijack(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* ship;
     char     buf[MAX_STRING_LENGTH];
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -3772,7 +3772,7 @@ void do_hijack(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_pilotseat(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou don't seem to be in the pilot seat!\r\n", ch);
         return;
@@ -3840,7 +3840,7 @@ void do_hijack(CHAR_DATA* ch, const char* argument)
         }
         set_char_color(AT_GREEN, ch);
         send_to_char("Launch sequence initiated.\r\n", ch);
-        act(AT_PLAIN, "$n starts up the ship and begins the launch sequence.", ch, NULL, argument, TO_ROOM);
+        act(AT_PLAIN, "$n starts up the ship and begins the launch sequence.", ch, nullptr, argument, TO_ROOM);
         echo_to_ship(AT_YELLOW, ship, "The ship hums as it lifts off the ground.");
         snprintf(buf, MAX_STRING_LENGTH, "%s begins to launch.", ship->name);
         echo_to_room(AT_YELLOW, get_room_index(ship->location), buf);
@@ -3883,14 +3883,14 @@ void do_elite_guard(CHAR_DATA* ch, const char* argument)
 
 void do_jail(CHAR_DATA* ch, const char* argument)
 {
-    CHAR_DATA      * victim = NULL;
-    CLAN_DATA      * clan   = NULL;
-    ROOM_INDEX_DATA* jail   = NULL;
+    CHAR_DATA      * victim = nullptr;
+    CLAN_DATA      * clan   = nullptr;
+    ROOM_INDEX_DATA* jail   = nullptr;
 
     if (IS_NPC(ch))
         return;
 
-    if (!ch->pcdata || (clan = ch->pcdata->clan) == NULL)
+    if (!ch->pcdata || (clan = ch->pcdata->clan) == nullptr)
     {
         send_to_char("Only members of organizations can jail their enemies.\r\n", ch);
         return;
@@ -3925,7 +3925,7 @@ void do_jail(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, argument)) == NULL)
+    if ((victim = get_char_room(ch, argument)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -3969,13 +3969,13 @@ void do_jail(CHAR_DATA* ch, const char* argument)
     }
 
     send_to_char("You have them escorted off to jail.\r\n", ch);
-    act(AT_ACTION, "You have a strange feeling that you've been moved.\r\n", ch, NULL, victim, TO_VICT);
-    act(AT_ACTION, "$n has $N escorted away.\r\n", ch, NULL, victim, TO_NOTVICT);
+    act(AT_ACTION, "You have a strange feeling that you've been moved.\r\n", ch, nullptr, victim, TO_VICT);
+    act(AT_ACTION, "$n has $N escorted away.\r\n", ch, nullptr, victim, TO_NOTVICT);
 
     char_from_room(victim);
     char_to_room(victim, jail);
 
-    act(AT_ACTION, "The door opens briefly as $n is shoved into the room.\r\n", victim, NULL, NULL, TO_ROOM);
+    act(AT_ACTION, "The door opens briefly as $n is shoved into the room.\r\n", victim, nullptr, nullptr, TO_ROOM);
 
     learn_from_success(ch, gsn_jail);
 }
@@ -3984,9 +3984,9 @@ void do_smalltalk(CHAR_DATA* ch, const char* argument)
 {
     char       buf[MAX_STRING_LENGTH];
     char       arg1[MAX_INPUT_LENGTH];
-    CHAR_DATA  * victim = NULL;
-    PLANET_DATA* planet = NULL;
-    CLAN_DATA  * clan   = NULL;
+    CHAR_DATA  * victim = nullptr;
+    PLANET_DATA* planet = nullptr;
+    CLAN_DATA  * clan   = nullptr;
     int        percent  = 0;
 
     if (IS_NPC(ch) || !ch->pcdata)
@@ -4008,7 +4008,7 @@ void do_smalltalk(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -4066,8 +4066,8 @@ void do_smalltalk(CHAR_DATA* ch, const char* argument)
        * Failure.
        */
         send_to_char("You attempt to make smalltalk with them.. but are ignored.\r\n", ch);
-        act(AT_ACTION, "$n is really getting on your nerves with all this chatter!\r\n", ch, NULL, victim, TO_VICT);
-        act(AT_ACTION, "$n asks $N about the weather but is ignored.\r\n", ch, NULL, victim, TO_NOTVICT);
+        act(AT_ACTION, "$n is really getting on your nerves with all this chatter!\r\n", ch, nullptr, victim, TO_VICT);
+        act(AT_ACTION, "$n asks $N about the weather but is ignored.\r\n", ch, nullptr, victim, TO_NOTVICT);
 
         if (victim->alignment < -500 && victim->top_level >= ch->top_level + 5)
         {
@@ -4080,13 +4080,13 @@ void do_smalltalk(CHAR_DATA* ch, const char* argument)
     }
 
     send_to_char("You strike up a short conversation with them.\r\n", ch);
-    act(AT_ACTION, "$n smiles at you and says, 'hello'.\r\n", ch, NULL, victim, TO_VICT);
-    act(AT_ACTION, "$n chats briefly with $N.\r\n", ch, NULL, victim, TO_NOTVICT);
+    act(AT_ACTION, "$n smiles at you and says, 'hello'.\r\n", ch, nullptr, victim, TO_VICT);
+    act(AT_ACTION, "$n chats briefly with $N.\r\n", ch, nullptr, victim, TO_NOTVICT);
 
     if (IS_NPC(ch) || !ch->pcdata || !ch->pcdata->clan || !ch->in_room->area || !ch->in_room->area->planet)
         return;
 
-    if ((clan = ch->pcdata->clan->mainclan) == NULL)
+    if ((clan = ch->pcdata->clan->mainclan) == nullptr)
         clan = ch->pcdata->clan;
 
     planet = ch->in_room->area->planet;
@@ -4135,7 +4135,7 @@ void do_propeganda(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -4185,7 +4185,7 @@ void do_propeganda(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((clan = ch->pcdata->clan->mainclan) == NULL)
+    if ((clan = ch->pcdata->clan->mainclan) == nullptr)
         clan = ch->pcdata->clan;
 
     planet = ch->in_room->area->planet;
@@ -4200,8 +4200,8 @@ void do_propeganda(CHAR_DATA* ch, const char* argument)
         ch, "You speak to them about the benifits of the %s%s.\r\n", ch->pcdata->clan->name,
         planet->governed_by == clan ? "" : buf
     );
-    act(AT_ACTION, "$n speaks about his organization.\r\n", ch, NULL, victim, TO_VICT);
-    act(AT_ACTION, "$n tells $N about their organization.\r\n", ch, NULL, victim, TO_NOTVICT);
+    act(AT_ACTION, "$n speaks about his organization.\r\n", ch, nullptr, victim, TO_VICT);
+    act(AT_ACTION, "$n tells $N about their organization.\r\n", ch, nullptr, victim, TO_NOTVICT);
 
     WAIT_STATE(ch, skill_table[gsn_propeganda]->beats);
 
@@ -4270,7 +4270,7 @@ void do_bribe(CHAR_DATA* ch, const char* argument)
 
     amount = atoi(argument);
 
-    if ((victim = get_char_room(ch, arg1)) == NULL)
+    if ((victim = get_char_room(ch, arg1)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -4335,8 +4335,8 @@ void do_bribe(CHAR_DATA* ch, const char* argument)
     victim->gold += amount;
 
     ch_printf(ch, "You give them a small gift on behalf of %s.\r\n", ch->pcdata->clan->name);
-    act(AT_ACTION, "$n offers you a small bribe.\r\n", ch, NULL, victim, TO_VICT);
-    act(AT_ACTION, "$n gives $N some money.\r\n", ch, NULL, victim, TO_NOTVICT);
+    act(AT_ACTION, "$n offers you a small bribe.\r\n", ch, nullptr, victim, TO_VICT);
+    act(AT_ACTION, "$n gives $N some money.\r\n", ch, nullptr, victim, TO_NOTVICT);
 
     if (!IS_NPC(victim))
         return;
@@ -4346,7 +4346,7 @@ void do_bribe(CHAR_DATA* ch, const char* argument)
     if (percent - amount + victim->top_level > ch->pcdata->learned[gsn_bribe])
         return;
 
-    if ((clan = ch->pcdata->clan->mainclan) == NULL)
+    if ((clan = ch->pcdata->clan->mainclan) == nullptr)
         clan = ch->pcdata->clan;
 
     planet = ch->in_room->area->planet;

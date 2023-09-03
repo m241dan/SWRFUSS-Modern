@@ -248,7 +248,7 @@ char* wordwrap(char* txt, short wrap)
 
     buf[0] = '\0';
     bufp = buf;
-    if (txt != NULL)
+    if (txt != nullptr)
     {
         char line[MAX_INPUT_LENGTH];
         char temp[MAX_INPUT_LENGTH];
@@ -364,7 +364,7 @@ void clear_vrooms()
             DISPOSE(room);
             --top_vroom;
         }
-        prev      = NULL;
+        prev      = nullptr;
         for (room = vroom_hash[hash]; room; room = room_next)
         {
             room_next = room->next;
@@ -392,14 +392,14 @@ EXIT_DATA* get_exit(ROOM_INDEX_DATA* room, short dir)
 
     if (!room)
     {
-        bug("%s: NULL room", __func__);
-        return NULL;
+        bug("%s: nullptr room", __func__);
+        return nullptr;
     }
 
     for (xit = room->first_exit; xit; xit = xit->next)
         if (xit->vdir == dir)
             return xit;
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -411,14 +411,14 @@ EXIT_DATA* get_exit_to(ROOM_INDEX_DATA* room, short dir, int vnum)
 
     if (!room)
     {
-        bug("%s: NULL room", __func__);
-        return NULL;
+        bug("%s: nullptr room", __func__);
+        return nullptr;
     }
 
     for (xit = room->first_exit; xit; xit = xit->next)
         if (xit->vdir == dir && xit->vnum == vnum)
             return xit;
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -431,14 +431,14 @@ EXIT_DATA* get_exit_num(ROOM_INDEX_DATA* room, short count)
 
     if (!room)
     {
-        bug("%s: NULL room", __func__);
-        return NULL;
+        bug("%s: nullptr room", __func__);
+        return nullptr;
     }
 
     for (cnt = 0, xit = room->first_exit; xit; xit = xit->next)
         if (++cnt == count)
             return xit;
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -558,7 +558,7 @@ ROOM_INDEX_DATA* generate_exit(ROOM_INDEX_DATA* in_room, EXIT_DATA** pexit)
         vroom_hash[hash] = room;
         ++top_vroom;
     }
-    if (!found || (xit = get_exit(room, vdir)) == NULL)
+    if (!found || (xit = get_exit(room, vdir)) == nullptr)
     {
         xit = make_exit(room, orig_exit->to_room, vdir);
         xit->keyword     = STRALLOC("");
@@ -611,14 +611,14 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
 #endif
 
     retcode = rNONE;
-    txt     = NULL;
+    txt     = nullptr;
 
     if (IS_NPC(ch) && IS_SET(ch->act, ACT_MOUNTED))
         return retcode;
 
     in_room   = ch->in_room;
     from_room = in_room;
-    if (!pexit || (to_room = pexit->to_room) == NULL)
+    if (!pexit || (to_room = pexit->to_room) == nullptr)
     {
         if (drunk)
             send_to_char("You hit a wall in your drunken state.\r\n", ch);
@@ -642,19 +642,19 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
 
     if (IS_SET(pexit->exit_info, EX_PORTAL) && IS_NPC(ch))
     {
-        act(AT_PLAIN, "Mobs can't use portals.", ch, NULL, NULL, TO_CHAR);
+        act(AT_PLAIN, "Mobs can't use portals.", ch, nullptr, nullptr, TO_CHAR);
         return rNONE;
     }
 
     if (IS_SET(pexit->exit_info, EX_NOMOB) && IS_NPC(ch))
     {
-        act(AT_PLAIN, "Mobs can't enter there.", ch, NULL, NULL, TO_CHAR);
+        act(AT_PLAIN, "Mobs can't enter there.", ch, nullptr, nullptr, TO_CHAR);
         return rNONE;
     }
 
     if (IS_SET(to_room->room_flags, ROOM_NO_MOB) && IS_NPC(ch))
     {
-        act(AT_PLAIN, "Mobs can't enter there.", ch, NULL, NULL, TO_CHAR);
+        act(AT_PLAIN, "Mobs can't enter there.", ch, nullptr, nullptr, TO_CHAR);
         return rNONE;
     }
 
@@ -665,11 +665,11 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
         {
             if (drunk)
             {
-                act(AT_PLAIN, "$n runs into the $d in $s drunken state.", ch, NULL, pexit->keyword, TO_ROOM);
-                act(AT_PLAIN, "You run into the $d in your drunken state.", ch, NULL, pexit->keyword, TO_CHAR);
+                act(AT_PLAIN, "$n runs into the $d in $s drunken state.", ch, nullptr, pexit->keyword, TO_ROOM);
+                act(AT_PLAIN, "You run into the $d in your drunken state.", ch, nullptr, pexit->keyword, TO_CHAR);
             }
             else
-                act(AT_PLAIN, "The $d is closed.", ch, NULL, pexit->keyword, TO_CHAR);
+                act(AT_PLAIN, "The $d is closed.", ch, nullptr, pexit->keyword, TO_CHAR);
         }
         else
         {
@@ -685,7 +685,7 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
     * Crazy virtual room idea, created upon demand.     -Thoric
     */
     if (distance > 1)
-        if ((to_room = generate_exit(in_room, &pexit)) == NULL)
+        if ((to_room = generate_exit(in_room, &pexit)) == nullptr)
             send_to_char("Alas, you cannot go that way.\r\n", ch);
 
     if (!fall && IS_AFFECTED(ch, AFF_CHARM) && ch->master && in_room == ch->master->in_room)
@@ -966,12 +966,12 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
         if (ch->mount)
         {
             snprintf(buf, MAX_STRING_LENGTH, "$n %s %s upon $N.", txt, dir_name[door]);
-            act(AT_ACTION, buf, ch, NULL, ch->mount, TO_NOTVICT);
+            act(AT_ACTION, buf, ch, nullptr, ch->mount, TO_NOTVICT);
         }
         else
         {
             snprintf(buf, MAX_STRING_LENGTH, "$n %s $T.", txt);
-            act(AT_ACTION, buf, ch, NULL, dir_name[door], TO_ROOM);
+            act(AT_ACTION, buf, ch, nullptr, dir_name[door], TO_ROOM);
         }
     }
 
@@ -1067,12 +1067,12 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
         if (ch->mount)
         {
             snprintf(buf, MAX_STRING_LENGTH, "$n %s from %s upon $N.", txt, dtxt);
-            act(AT_ACTION, buf, ch, NULL, ch->mount, TO_ROOM);
+            act(AT_ACTION, buf, ch, nullptr, ch->mount, TO_ROOM);
         }
         else
         {
             snprintf(buf, MAX_STRING_LENGTH, "$n %s from %s.", txt, dtxt);
-            act(AT_ACTION, buf, ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, buf, ch, nullptr, nullptr, TO_ROOM);
         }
     }
 
@@ -1122,13 +1122,13 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
                         AT_ACTION,
                         "The entrance closes behind $N, preventing you from following!",
                         fch,
-                        NULL,
+                        nullptr,
                         ch,
                         TO_CHAR
                     );
                     continue;
                 }
-                act(AT_ACTION, "You follow $N.", fch, NULL, ch, TO_CHAR);
+                act(AT_ACTION, "You follow $N.", fch, nullptr, ch, TO_CHAR);
                 move_char(fch, pexit, 0);
             }
         }
@@ -1231,10 +1231,10 @@ EXIT_DATA* find_door(CHAR_DATA* ch, const char* arg, bool quiet)
     EXIT_DATA* pexit;
     int      door;
 
-    if (arg == NULL || !str_cmp(arg, ""))
-        return NULL;
+    if (arg == nullptr || !str_cmp(arg, ""))
+        return nullptr;
 
-    pexit    = NULL;
+    pexit    = nullptr;
     if (!str_cmp(arg, "n") || !str_cmp(arg, "north"))
         door = 0;
     else if (!str_cmp(arg, "e") || !str_cmp(arg, "east"))
@@ -1263,15 +1263,15 @@ EXIT_DATA* find_door(CHAR_DATA* ch, const char* arg, bool quiet)
                 return pexit;
         }
         if (!quiet)
-            act(AT_PLAIN, "You see no $T here.", ch, NULL, arg, TO_CHAR);
-        return NULL;
+            act(AT_PLAIN, "You see no $T here.", ch, nullptr, arg, TO_CHAR);
+        return nullptr;
     }
 
-    if ((pexit = get_exit(ch->in_room, door)) == NULL)
+    if ((pexit = get_exit(ch->in_room, door)) == nullptr)
     {
         if (!quiet)
-            act(AT_PLAIN, "You see no $T here.", ch, NULL, arg, TO_CHAR);
-        return NULL;
+            act(AT_PLAIN, "You see no $T here.", ch, nullptr, arg, TO_CHAR);
+        return nullptr;
     }
 
     if (quiet)
@@ -1279,14 +1279,14 @@ EXIT_DATA* find_door(CHAR_DATA* ch, const char* arg, bool quiet)
 
     if (IS_SET(pexit->exit_info, EX_SECRET))
     {
-        act(AT_PLAIN, "You see no $T here.", ch, NULL, arg, TO_CHAR);
-        return NULL;
+        act(AT_PLAIN, "You see no $T here.", ch, nullptr, arg, TO_CHAR);
+        return nullptr;
     }
 
     if (!IS_SET(pexit->exit_info, EX_ISDOOR))
     {
         send_to_char("You can't do that.\r\n", ch);
-        return NULL;
+        return nullptr;
     }
 
     return pexit;
@@ -1297,7 +1297,7 @@ void toggle_bexit_flag(EXIT_DATA* pexit, int flag)
     EXIT_DATA* pexit_rev;
 
     TOGGLE_BIT(pexit->exit_info, flag);
-    if ((pexit_rev = pexit->rexit) != NULL && pexit_rev != pexit)
+    if ((pexit_rev = pexit->rexit) != nullptr && pexit_rev != pexit)
         TOGGLE_BIT(pexit_rev->exit_info, flag);
 }
 
@@ -1306,7 +1306,7 @@ void set_bexit_flag(EXIT_DATA* pexit, int flag)
     EXIT_DATA* pexit_rev;
 
     SET_BIT(pexit->exit_info, flag);
-    if ((pexit_rev = pexit->rexit) != NULL && pexit_rev != pexit)
+    if ((pexit_rev = pexit->rexit) != nullptr && pexit_rev != pexit)
         SET_BIT(pexit_rev->exit_info, flag);
 }
 
@@ -1315,7 +1315,7 @@ void remove_bexit_flag(EXIT_DATA* pexit, int flag)
     EXIT_DATA* pexit_rev;
 
     REMOVE_BIT(pexit->exit_info, flag);
-    if ((pexit_rev = pexit->rexit) != NULL && pexit_rev != pexit)
+    if ((pexit_rev = pexit->rexit) != nullptr && pexit_rev != pexit)
         REMOVE_BIT(pexit_rev->exit_info, flag);
 }
 
@@ -1334,7 +1334,7 @@ void do_open(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((pexit = find_door(ch, arg, TRUE)) != NULL)
+    if ((pexit = find_door(ch, arg, TRUE)) != nullptr)
     {
         /*
        * 'open door'
@@ -1359,14 +1359,14 @@ void do_open(CHAR_DATA* ch, const char* argument)
 
         if (!IS_SET(pexit->exit_info, EX_SECRET) || (pexit->keyword && nifty_is_name(arg, pexit->keyword)))
         {
-            act(AT_ACTION, "$n opens the $d.", ch, NULL, pexit->keyword, TO_ROOM);
-            act(AT_ACTION, "You open the $d.", ch, NULL, pexit->keyword, TO_CHAR);
-            if ((pexit_rev = pexit->rexit) != NULL && pexit_rev->to_room == ch->in_room)
+            act(AT_ACTION, "$n opens the $d.", ch, nullptr, pexit->keyword, TO_ROOM);
+            act(AT_ACTION, "You open the $d.", ch, nullptr, pexit->keyword, TO_CHAR);
+            if ((pexit_rev = pexit->rexit) != nullptr && pexit_rev->to_room == ch->in_room)
             {
                 CHAR_DATA* rch;
 
                 for (rch = pexit->to_room->first_person; rch; rch = rch->next_in_room)
-                    act(AT_ACTION, "The $d opens.", rch, NULL, pexit_rev->keyword, TO_CHAR);
+                    act(AT_ACTION, "The $d opens.", rch, nullptr, pexit_rev->keyword, TO_CHAR);
                 sound_to_room(pexit->to_room, "!!SOUND(door)");
             }
             remove_bexit_flag(pexit, EX_CLOSED);
@@ -1378,7 +1378,7 @@ void do_open(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if ((obj = get_obj_here(ch, arg)) != NULL)
+    if ((obj = get_obj_here(ch, arg)) != nullptr)
     {
         /*
        * 'open object'
@@ -1405,8 +1405,8 @@ void do_open(CHAR_DATA* ch, const char* argument)
         }
 
         REMOVE_BIT(obj->value[1], CONT_CLOSED);
-        act(AT_ACTION, "You open $p.", ch, obj, NULL, TO_CHAR);
-        act(AT_ACTION, "$n opens $p.", ch, obj, NULL, TO_ROOM);
+        act(AT_ACTION, "You open $p.", ch, obj, nullptr, TO_CHAR);
+        act(AT_ACTION, "$n opens $p.", ch, obj, nullptr, TO_ROOM);
         check_for_trap(ch, obj, TRAP_OPEN);
         return;
     }
@@ -1435,7 +1435,7 @@ void do_close(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((pexit = find_door(ch, arg, TRUE)) != NULL)
+    if ((pexit = find_door(ch, arg, TRUE)) != nullptr)
     {
         /*
        * 'close door'
@@ -1453,19 +1453,19 @@ void do_close(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        act(AT_ACTION, "$n closes the $d.", ch, NULL, pexit->keyword, TO_ROOM);
-        act(AT_ACTION, "You close the $d.", ch, NULL, pexit->keyword, TO_CHAR);
+        act(AT_ACTION, "$n closes the $d.", ch, nullptr, pexit->keyword, TO_ROOM);
+        act(AT_ACTION, "You close the $d.", ch, nullptr, pexit->keyword, TO_CHAR);
 
         /*
        * close the other side
        */
-        if ((pexit_rev = pexit->rexit) != NULL && pexit_rev->to_room == ch->in_room)
+        if ((pexit_rev = pexit->rexit) != nullptr && pexit_rev->to_room == ch->in_room)
         {
             CHAR_DATA* rch;
 
             SET_BIT(pexit_rev->exit_info, EX_CLOSED);
             for (rch = pexit->to_room->first_person; rch; rch = rch->next_in_room)
-                act(AT_ACTION, "The $d closes.", rch, NULL, pexit_rev->keyword, TO_CHAR);
+                act(AT_ACTION, "The $d closes.", rch, nullptr, pexit_rev->keyword, TO_CHAR);
         }
         set_bexit_flag(pexit, EX_CLOSED);
         if ((door = pexit->vdir) >= 0 && door < 10)
@@ -1473,7 +1473,7 @@ void do_close(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((obj = get_obj_here(ch, arg)) != NULL)
+    if ((obj = get_obj_here(ch, arg)) != nullptr)
     {
         /*
        * 'close object'
@@ -1495,8 +1495,8 @@ void do_close(CHAR_DATA* ch, const char* argument)
         }
 
         SET_BIT(obj->value[1], CONT_CLOSED);
-        act(AT_ACTION, "You close $p.", ch, obj, NULL, TO_CHAR);
-        act(AT_ACTION, "$n closes $p.", ch, obj, NULL, TO_ROOM);
+        act(AT_ACTION, "You close $p.", ch, obj, nullptr, TO_CHAR);
+        act(AT_ACTION, "$n closes $p.", ch, obj, nullptr, TO_ROOM);
         check_for_trap(ch, obj, TRAP_CLOSE);
         return;
     }
@@ -1535,7 +1535,7 @@ void do_lock(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((pexit = find_door(ch, arg, TRUE)) != NULL)
+    if ((pexit = find_door(ch, arg, TRUE)) != nullptr)
     {
         /*
        * 'lock door'
@@ -1569,13 +1569,13 @@ void do_lock(CHAR_DATA* ch, const char* argument)
         if (!IS_SET(pexit->exit_info, EX_SECRET) || (pexit->keyword && nifty_is_name(arg, pexit->keyword)))
         {
             send_to_char("*Click*\r\n", ch);
-            act(AT_ACTION, "$n locks the $d.", ch, NULL, pexit->keyword, TO_ROOM);
+            act(AT_ACTION, "$n locks the $d.", ch, nullptr, pexit->keyword, TO_ROOM);
             set_bexit_flag(pexit, EX_LOCKED);
             return;
         }
     }
 
-    if ((obj = get_obj_here(ch, arg)) != NULL)
+    if ((obj = get_obj_here(ch, arg)) != nullptr)
     {
         /*
        * 'lock object'
@@ -1608,7 +1608,7 @@ void do_lock(CHAR_DATA* ch, const char* argument)
 
         SET_BIT(obj->value[1], CONT_LOCKED);
         send_to_char("*Click*\r\n", ch);
-        act(AT_ACTION, "$n locks $p.", ch, obj, NULL, TO_ROOM);
+        act(AT_ACTION, "$n locks $p.", ch, obj, nullptr, TO_ROOM);
         return;
     }
 
@@ -1629,7 +1629,7 @@ void do_unlock(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((pexit = find_door(ch, arg, TRUE)) != NULL)
+    if ((pexit = find_door(ch, arg, TRUE)) != nullptr)
     {
         /*
        * 'unlock door'
@@ -1664,13 +1664,13 @@ void do_unlock(CHAR_DATA* ch, const char* argument)
         if (!IS_SET(pexit->exit_info, EX_SECRET) || (pexit->keyword && nifty_is_name(arg, pexit->keyword)))
         {
             send_to_char("*Click*\r\n", ch);
-            act(AT_ACTION, "$n unlocks the $d.", ch, NULL, pexit->keyword, TO_ROOM);
+            act(AT_ACTION, "$n unlocks the $d.", ch, nullptr, pexit->keyword, TO_ROOM);
             remove_bexit_flag(pexit, EX_LOCKED);
             return;
         }
     }
 
-    if ((obj = get_obj_here(ch, arg)) != NULL)
+    if ((obj = get_obj_here(ch, arg)) != nullptr)
     {
         /*
        * 'unlock object'
@@ -1703,7 +1703,7 @@ void do_unlock(CHAR_DATA* ch, const char* argument)
 
         REMOVE_BIT(obj->value[1], CONT_LOCKED);
         send_to_char("*Click*\r\n", ch);
-        act(AT_ACTION, "$n unlocks $p.", ch, obj, NULL, TO_ROOM);
+        act(AT_ACTION, "$n unlocks $p.", ch, obj, nullptr, TO_ROOM);
         return;
     }
 
@@ -1735,7 +1735,7 @@ void do_bashdoor(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((pexit = find_door(ch, arg, FALSE)) != NULL)
+    if ((pexit = find_door(ch, arg, FALSE)) != nullptr)
     {
         ROOM_INDEX_DATA* to_room;
         EXIT_DATA      * pexit_rev;
@@ -1767,12 +1767,12 @@ void do_bashdoor(CHAR_DATA* ch, const char* argument)
                 REMOVE_BIT(pexit->exit_info, EX_LOCKED);
             SET_BIT(pexit->exit_info, EX_BASHED);
 
-            act(AT_SKILL, "Crash!  You bashed open the $d!", ch, NULL, keyword, TO_CHAR);
-            act(AT_SKILL, "$n bashes open the $d!", ch, NULL, keyword, TO_ROOM);
+            act(AT_SKILL, "Crash!  You bashed open the $d!", ch, nullptr, keyword, TO_CHAR);
+            act(AT_SKILL, "$n bashes open the $d!", ch, nullptr, keyword, TO_ROOM);
             learn_from_success(ch, gsn_bashdoor);
 
-            if ((to_room      = pexit->to_room) != NULL
-                && (pexit_rev = pexit->rexit) != NULL && pexit_rev->to_room == ch->in_room)
+            if ((to_room      = pexit->to_room) != nullptr
+                && (pexit_rev = pexit->rexit) != nullptr && pexit_rev->to_room == ch->in_room)
             {
                 CHAR_DATA* rch;
 
@@ -1783,7 +1783,7 @@ void do_bashdoor(CHAR_DATA* ch, const char* argument)
 
                 for (rch = to_room->first_person; rch; rch = rch->next_in_room)
                 {
-                    act(AT_SKILL, "The $d crashes open!", rch, NULL, pexit_rev->keyword, TO_CHAR);
+                    act(AT_SKILL, "The $d crashes open!", rch, nullptr, pexit_rev->keyword, TO_CHAR);
                 }
             }
             damage(ch, ch, (ch->max_hit / 20), gsn_bashdoor);
@@ -1791,16 +1791,16 @@ void do_bashdoor(CHAR_DATA* ch, const char* argument)
         }
         else
         {
-            act(AT_SKILL, "WHAAAAM!!!  You bash against the $d, but it doesn't budge.", ch, NULL, keyword, TO_CHAR);
-            act(AT_SKILL, "WHAAAAM!!!  $n bashes against the $d, but it holds strong.", ch, NULL, keyword, TO_ROOM);
+            act(AT_SKILL, "WHAAAAM!!!  You bash against the $d, but it doesn't budge.", ch, nullptr, keyword, TO_CHAR);
+            act(AT_SKILL, "WHAAAAM!!!  $n bashes against the $d, but it holds strong.", ch, nullptr, keyword, TO_ROOM);
             damage(ch, ch, (ch->max_hit / 20) + 10, gsn_bashdoor);
             learn_from_failure(ch, gsn_bashdoor);
         }
     }
     else
     {
-        act(AT_SKILL, "WHAAAAM!!!  You bash against the wall, but it doesn't budge.", ch, NULL, NULL, TO_CHAR);
-        act(AT_SKILL, "WHAAAAM!!!  $n bashes against the wall, but it holds strong.", ch, NULL, NULL, TO_ROOM);
+        act(AT_SKILL, "WHAAAAM!!!  You bash against the wall, but it doesn't budge.", ch, nullptr, nullptr, TO_CHAR);
+        act(AT_SKILL, "WHAAAAM!!!  $n bashes against the wall, but it holds strong.", ch, nullptr, nullptr, TO_ROOM);
         damage(ch, ch, (ch->max_hit / 20) + 10, gsn_bashdoor);
         learn_from_failure(ch, gsn_bashdoor);
     }
@@ -1818,17 +1818,17 @@ void do_stand(CHAR_DATA* ch, const char* argument)
             }
 
             send_to_char("You wake and climb quickly to your feet.\r\n", ch);
-            act(AT_ACTION, "$n arises from $s slumber.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n arises from $s slumber.", ch, nullptr, nullptr, TO_ROOM);
             ch->position = POS_STANDING;
             break;
 
         case POS_RESTING:send_to_char("You gather yourself and stand up.\r\n", ch);
-            act(AT_ACTION, "$n rises from $s rest.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n rises from $s rest.", ch, nullptr, nullptr, TO_ROOM);
             ch->position = POS_STANDING;
             break;
 
         case POS_SITTING:send_to_char("You move quickly to your feet.\r\n", ch);
-            act(AT_ACTION, "$n rises up.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n rises up.", ch, nullptr, nullptr, TO_ROOM);
             ch->position = POS_STANDING;
             break;
 
@@ -1852,17 +1852,17 @@ void do_sit(CHAR_DATA* ch, const char* argument)
             }
 
             send_to_char("You wake and sit up.\r\n", ch);
-            act(AT_ACTION, "$n wakes and sits up.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n wakes and sits up.", ch, nullptr, nullptr, TO_ROOM);
             ch->position = POS_SITTING;
             break;
 
         case POS_RESTING:send_to_char("You stop resting and sit up.\r\n", ch);
-            act(AT_ACTION, "$n stops resting and sits up.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n stops resting and sits up.", ch, nullptr, nullptr, TO_ROOM);
             ch->position = POS_SITTING;
             break;
 
         case POS_STANDING:send_to_char("You sit down.\r\n", ch);
-            act(AT_ACTION, "$n sits down.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n sits down.", ch, nullptr, nullptr, TO_ROOM);
             ch->position = POS_SITTING;
             break;
         case POS_SITTING:send_to_char("You are already sitting.\r\n", ch);
@@ -1887,7 +1887,7 @@ void do_rest(CHAR_DATA* ch, const char* argument)
             }
 
             send_to_char("You rouse from your slumber.\r\n", ch);
-            act(AT_ACTION, "$n rouses from $s slumber.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n rouses from $s slumber.", ch, nullptr, nullptr, TO_ROOM);
             ch->position = POS_RESTING;
             break;
 
@@ -1895,12 +1895,12 @@ void do_rest(CHAR_DATA* ch, const char* argument)
             return;
 
         case POS_STANDING:send_to_char("You sprawl out haphazardly.\r\n", ch);
-            act(AT_ACTION, "$n sprawls out haphazardly.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n sprawls out haphazardly.", ch, nullptr, nullptr, TO_ROOM);
             ch->position = POS_RESTING;
             break;
 
         case POS_SITTING:send_to_char("You lie back and sprawl out to rest.\r\n", ch);
-            act(AT_ACTION, "$n lies back and sprawls out to rest.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n lies back and sprawls out to rest.", ch, nullptr, nullptr, TO_ROOM);
             ch->position = POS_RESTING;
             break;
 
@@ -1928,14 +1928,14 @@ void do_sleep(CHAR_DATA* ch, const char* argument)
                     AT_ACTION,
                     "$n closes $s eyes for a few moments, but just can't seem to go to sleep.",
                     ch,
-                    NULL,
-                    NULL,
+                    nullptr,
+                    nullptr,
                     TO_ROOM
                 );
                 return;
             }
             send_to_char("You close your eyes and drift into slumber.\r\n", ch);
-            act(AT_ACTION, "$n closes $s eyes and drifts into a deep slumber.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n closes $s eyes and drifts into a deep slumber.", ch, nullptr, nullptr, TO_ROOM);
             ch->position = POS_SLEEPING;
             break;
 
@@ -1947,14 +1947,14 @@ void do_sleep(CHAR_DATA* ch, const char* argument)
                     AT_ACTION,
                     "$n closes $s eyes for a few moments, but just can't seem to go to sleep.",
                     ch,
-                    NULL,
-                    NULL,
+                    nullptr,
+                    nullptr,
                     TO_ROOM
                 );
                 return;
             }
             send_to_char("You slump over and fall dead asleep.\r\n", ch);
-            act(AT_ACTION, "$n nods off and slowly slumps over, dead asleep.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n nods off and slowly slumps over, dead asleep.", ch, nullptr, nullptr, TO_ROOM);
             ch->position = POS_SLEEPING;
             break;
 
@@ -1966,14 +1966,14 @@ void do_sleep(CHAR_DATA* ch, const char* argument)
                     AT_ACTION,
                     "$n closes $s eyes for a few moments, but just can't seem to go to sleep.",
                     ch,
-                    NULL,
-                    NULL,
+                    nullptr,
+                    nullptr,
                     TO_ROOM
                 );
                 return;
             }
             send_to_char("You collapse into a deep sleep.\r\n", ch);
-            act(AT_ACTION, "$n collapses into a deep sleep.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n collapses into a deep sleep.", ch, nullptr, nullptr, TO_ROOM);
             ch->position = POS_SLEEPING;
             break;
 
@@ -2004,7 +2004,7 @@ void do_wake(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -2012,19 +2012,19 @@ void do_wake(CHAR_DATA* ch, const char* argument)
 
     if (IS_AWAKE(victim))
     {
-        act(AT_PLAIN, "$N is already awake.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$N is already awake.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
     if (IS_AFFECTED(victim, AFF_SLEEP) || victim->position < POS_SLEEPING)
     {
-        act(AT_PLAIN, "You can't seem to wake $M!", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "You can't seem to wake $M!", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
-    act(AT_ACTION, "You wake $M.", ch, NULL, victim, TO_CHAR);
+    act(AT_ACTION, "You wake $M.", ch, nullptr, victim, TO_CHAR);
     victim->position = POS_STANDING;
-    act(AT_ACTION, "$n wakes you.", ch, NULL, victim, TO_VICT);
+    act(AT_ACTION, "$n wakes you.", ch, nullptr, victim, TO_VICT);
 }
 
 /*
@@ -2034,10 +2034,10 @@ void teleportch(CHAR_DATA* ch, ROOM_INDEX_DATA* room, bool show)
 {
     if (room_is_private(ch, room))
         return;
-    act(AT_ACTION, "$n disappears suddenly!", ch, NULL, NULL, TO_ROOM);
+    act(AT_ACTION, "$n disappears suddenly!", ch, nullptr, nullptr, TO_ROOM);
     char_from_room(ch);
     char_to_room(ch, room);
-    act(AT_ACTION, "$n arrives suddenly!", ch, NULL, NULL, TO_ROOM);
+    act(AT_ACTION, "$n arrives suddenly!", ch, nullptr, nullptr, TO_ROOM);
     if (show)
         do_look(ch, "auto");
 }
@@ -2090,7 +2090,7 @@ void do_climb(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((pexit = find_door(ch, argument, TRUE)) != NULL && IS_SET(pexit->exit_info, EX_xCLIMB))
+    if ((pexit = find_door(ch, argument, TRUE)) != nullptr && IS_SET(pexit->exit_info, EX_xCLIMB))
     {
         move_char(ch, pexit, 0);
         return;
@@ -2117,7 +2117,7 @@ void do_enter(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((pexit = find_door(ch, argument, TRUE)) != NULL && IS_SET(pexit->exit_info, EX_xENTER))
+    if ((pexit = find_door(ch, argument, TRUE)) != nullptr && IS_SET(pexit->exit_info, EX_xENTER))
     {
         move_char(ch, pexit, 0);
         return;
@@ -2144,7 +2144,7 @@ void do_leave(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((pexit = find_door(ch, argument, TRUE)) != NULL && IS_SET(pexit->exit_info, EX_xLEAVE))
+    if ((pexit = find_door(ch, argument, TRUE)) != nullptr && IS_SET(pexit->exit_info, EX_xLEAVE))
     {
         move_char(ch, pexit, 0);
         return;

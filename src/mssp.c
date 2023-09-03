@@ -91,7 +91,7 @@ void save_mssp_info(void)
 
     snprintf(filename, 256, "%s", MSSP_FILE);
 
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         bug("%s: can't open file", __func__);
         perror(filename);
@@ -164,7 +164,7 @@ bool load_mssp_data(void)
     found = FALSE;
     snprintf(filename, 256, "%s", MSSP_FILE);
 
-    if ((fp = fopen(filename, "r")) != NULL)
+    if ((fp = fopen(filename, "r")) != nullptr)
     {
         found = TRUE;
 
@@ -314,7 +314,7 @@ void show_mssp(CHAR_DATA* ch)
 {
     if (!ch)
     {
-        bug("%s: NULL ch", __func__);
+        bug("%s: nullptr ch", __func__);
         return;
     }
 
@@ -367,8 +367,8 @@ void show_mssp(CHAR_DATA* ch)
 void do_setmssp(CHAR_DATA* ch, const char* argument)
 {
     char arg1[MAX_INPUT_LENGTH];
-    char ** strptr = NULL;
-    bool * ynptr   = NULL;
+    char ** strptr = nullptr;
+    bool * ynptr   = nullptr;
 
     argument = one_argument(argument, arg1);
 
@@ -425,7 +425,7 @@ void do_setmssp(CHAR_DATA* ch, const char* argument)
     else if (!str_cmp(arg1, "subgenre"))
         strptr = &mssp_info->subgenre;
 
-    if (strptr != NULL)
+    if (strptr != nullptr)
     {
         DISPOSE(*strptr);
         *strptr = str_dup(argument);
@@ -474,7 +474,7 @@ void do_setmssp(CHAR_DATA* ch, const char* argument)
     else if (!str_cmp(arg1, "player_guilds"))
         ynptr = &mssp_info->playerGuilds;
 
-    if (ynptr != NULL)
+    if (ynptr != nullptr)
     {
         bool newvalue = FALSE;
 
@@ -648,12 +648,12 @@ void mssp_reply(DESCRIPTOR_DATA* d, const char* var, const char* fmt, ...)
 
     if (!d)
     {
-        bug("%s: NULL d", __func__);
+        bug("%s: nullptr d", __func__);
         return;
     }
     if (!var || var[0] == '\0')
     {
-        bug("%s: NULL var", __func__);
+        bug("%s: nullptr var", __func__);
         return;
     }
 
@@ -694,7 +694,7 @@ void send_mssp_data(DESCRIPTOR_DATA* d)
 {
     if (!d)
     {
-        bug("%s: NULL d", __func__);
+        bug("%s: nullptr d", __func__);
         return;
     }
 

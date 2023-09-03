@@ -153,7 +153,7 @@ BOARD_DATA* get_board(OBJ_DATA* obj)
     for (board = first_board; board; board = board->next)
         if (board->board_obj == obj->pIndexData->vnum)
             return board;
-    return NULL;
+    return nullptr;
 }
 
 BOARD_DATA* find_board(CHAR_DATA* ch)
@@ -163,11 +163,11 @@ BOARD_DATA* find_board(CHAR_DATA* ch)
 
     for (obj = ch->in_room->first_content; obj; obj = obj->next_content)
     {
-        if ((board = get_board(obj)) != NULL)
+        if ((board = get_board(obj)) != nullptr)
             return board;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool is_note_to(CHAR_DATA* ch, NOTE_DATA* pnote)
@@ -195,8 +195,8 @@ void note_attach(CHAR_DATA* ch)
         return;
 
     CREATE(pnote, NOTE_DATA, 1);
-    pnote->next    = NULL;
-    pnote->prev    = NULL;
+    pnote->next    = nullptr;
+    pnote->prev    = nullptr;
     pnote->sender  = QUICKLINK(ch->name);
     pnote->date    = STRALLOC("");
     pnote->to_list = STRALLOC("");
@@ -215,7 +215,7 @@ void write_board(BOARD_DATA* board)
     * Rewrite entire list.
     */
     snprintf(filename, 256, "%s%s", BOARD_DIR, board->note_file);
-    if ((fp = fopen(filename, "w")) == NULL)
+    if ((fp = fopen(filename, "w")) == nullptr)
     {
         perror(filename);
     }
@@ -387,8 +387,8 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
     int             vnum;
     int             anum;
     int             first_list;
-    OBJ_DATA        * quill  = NULL, * paper = NULL, * tmpobj = NULL;
-    EXTRA_DESCR_DATA* ed     = NULL;
+    OBJ_DATA        * quill  = nullptr, * paper = nullptr, * tmpobj = nullptr;
+    EXTRA_DESCR_DATA* ed     = nullptr;
     char            notebuf[MAX_STRING_LENGTH];
     char            short_desc_buf[MAX_STRING_LENGTH];
     char            long_desc_buf[MAX_STRING_LENGTH];
@@ -409,7 +409,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
     {
         default:break;
         case SUB_WRITING_NOTE:
-            if ((paper = get_eq_char(ch, WEAR_HOLD)) == NULL || paper->item_type != ITEM_PAPER)
+            if ((paper = get_eq_char(ch, WEAR_HOLD)) == nullptr || paper->item_type != ITEM_PAPER)
             {
                 bug("%s: player not holding paper", __func__);
                 stop_editing(ch);
@@ -474,7 +474,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
                         pnote->to_list, pnote->subject
                     );
             }
-            act(AT_ACTION, "$n glances over the messages.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n glances over the messages.", ch, nullptr, nullptr, TO_ROOM);
             return;
         }
         else
@@ -560,7 +560,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
                             pnote->yesvotes, pnote->novotes, pnote->abstentions
                         );
                     }
-                    act(AT_ACTION, "$n reads a message.", ch, NULL, NULL, TO_ROOM);
+                    act(AT_ACTION, "$n reads a message.", ch, nullptr, nullptr, TO_ROOM);
                 }
             }
             if (!wasfound)
@@ -650,7 +650,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
                 return;
             }
             pnote->voting = VOTE_OPEN;
-            act(AT_ACTION, "$n opens voting on a note.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n opens voting on a note.", ch, nullptr, nullptr, TO_ROOM);
             send_to_char("Voting opened.\r\n", ch);
             write_board(board);
             return;
@@ -663,7 +663,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
                 return;
             }
             pnote->voting = VOTE_CLOSED;
-            act(AT_ACTION, "$n closes voting on a note.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n closes voting on a note.", ch, nullptr, nullptr, TO_ROOM);
             send_to_char("Voting closed.\r\n", ch);
             write_board(board);
             return;
@@ -692,7 +692,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
             snprintf(buf, MAX_STRING_LENGTH, "%s %s", pnote->yesvotes, ch->name);
             DISPOSE(pnote->yesvotes);
             pnote->yesvotes = str_dup(buf);
-            act(AT_ACTION, "$n votes on a note.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n votes on a note.", ch, nullptr, nullptr, TO_ROOM);
             send_to_char("Ok.\r\n", ch);
             write_board(board);
             return;
@@ -702,7 +702,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
             snprintf(buf, MAX_STRING_LENGTH, "%s %s", pnote->novotes, ch->name);
             DISPOSE(pnote->novotes);
             pnote->novotes = str_dup(buf);
-            act(AT_ACTION, "$n votes on a note.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n votes on a note.", ch, nullptr, nullptr, TO_ROOM);
             send_to_char("Ok.\r\n", ch);
             write_board(board);
             return;
@@ -712,7 +712,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
             snprintf(buf, MAX_STRING_LENGTH, "%s %s", pnote->abstentions, ch->name);
             DISPOSE(pnote->abstentions);
             pnote->abstentions = str_dup(buf);
-            act(AT_ACTION, "$n votes on a note.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n votes on a note.", ch, nullptr, nullptr, TO_ROOM);
             send_to_char("Ok.\r\n", ch);
             write_board(board);
             return;
@@ -741,7 +741,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
                 return;
             }
         }
-        if ((paper = get_eq_char(ch, WEAR_HOLD)) == NULL || paper->item_type != ITEM_PAPER)
+        if ((paper = get_eq_char(ch, WEAR_HOLD)) == nullptr || paper->item_type != ITEM_PAPER)
         {
             if (get_trust(ch) < sysdata.write_mail_free)
             {
@@ -749,12 +749,12 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
                 return;
             }
             paper       = create_object(get_obj_index(OBJ_VNUM_NOTE), 0);
-            if ((tmpobj = get_eq_char(ch, WEAR_HOLD)) != NULL)
+            if ((tmpobj = get_eq_char(ch, WEAR_HOLD)) != nullptr)
                 unequip_char(ch, tmpobj);
             paper       = obj_to_char(paper, ch);
             equip_char(ch, paper, WEAR_HOLD);
-            act(AT_MAGIC, "$n grabs a message tisk to record a note.", ch, NULL, NULL, TO_ROOM);
-            act(AT_MAGIC, "You get a message disk to record your note.", ch, NULL, NULL, TO_CHAR);
+            act(AT_MAGIC, "$n grabs a message tisk to record a note.", ch, nullptr, nullptr, TO_ROOM);
+            act(AT_MAGIC, "You get a message disk to record your note.", ch, nullptr, nullptr, TO_CHAR);
         }
         if (paper->value[0] < 2)
         {
@@ -795,7 +795,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
             send_to_char("What do you wish the subject to be?\r\n", ch);
             return;
         }
-        if ((paper = get_eq_char(ch, WEAR_HOLD)) == NULL || paper->item_type != ITEM_PAPER)
+        if ((paper = get_eq_char(ch, WEAR_HOLD)) == nullptr || paper->item_type != ITEM_PAPER)
         {
             if (get_trust(ch) < sysdata.write_mail_free)
             {
@@ -803,12 +803,12 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
                 return;
             }
             paper       = create_object(get_obj_index(OBJ_VNUM_NOTE), 0);
-            if ((tmpobj = get_eq_char(ch, WEAR_HOLD)) != NULL)
+            if ((tmpobj = get_eq_char(ch, WEAR_HOLD)) != nullptr)
                 unequip_char(ch, tmpobj);
             paper       = obj_to_char(paper, ch);
             equip_char(ch, paper, WEAR_HOLD);
-            act(AT_MAGIC, "$n grabs a message disk.", ch, NULL, NULL, TO_ROOM);
-            act(AT_MAGIC, "You get a message disk to record your note.", ch, NULL, NULL, TO_CHAR);
+            act(AT_MAGIC, "$n grabs a message disk.", ch, nullptr, nullptr, TO_ROOM);
+            act(AT_MAGIC, "You get a message disk to record your note.", ch, nullptr, nullptr, TO_CHAR);
         }
         if (paper->value[1] > 1)
         {
@@ -849,7 +849,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
             send_to_char("Please specify an addressee.\r\n", ch);
             return;
         }
-        if ((paper = get_eq_char(ch, WEAR_HOLD)) == NULL || paper->item_type != ITEM_PAPER)
+        if ((paper = get_eq_char(ch, WEAR_HOLD)) == nullptr || paper->item_type != ITEM_PAPER)
         {
             if (get_trust(ch) < sysdata.write_mail_free)
             {
@@ -857,12 +857,12 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
                 return;
             }
             paper       = create_object(get_obj_index(OBJ_VNUM_NOTE), 0);
-            if ((tmpobj = get_eq_char(ch, WEAR_HOLD)) != NULL)
+            if ((tmpobj = get_eq_char(ch, WEAR_HOLD)) != nullptr)
                 unequip_char(ch, tmpobj);
             paper       = obj_to_char(paper, ch);
             equip_char(ch, paper, WEAR_HOLD);
-            act(AT_MAGIC, "$n gets a message disk to record a note.", ch, NULL, NULL, TO_ROOM);
-            act(AT_MAGIC, "You grab a message disk to record your note.", ch, NULL, NULL, TO_CHAR);
+            act(AT_MAGIC, "$n gets a message disk to record a note.", ch, nullptr, nullptr, TO_ROOM);
+            act(AT_MAGIC, "You grab a message disk to record your note.", ch, nullptr, nullptr, TO_CHAR);
         }
 
         if (paper->value[2] > 1)
@@ -897,18 +897,18 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
     {
         const char* subject, * to_list, * text;
 
-        if ((paper = get_eq_char(ch, WEAR_HOLD)) == NULL || paper->item_type != ITEM_PAPER)
+        if ((paper = get_eq_char(ch, WEAR_HOLD)) == nullptr || paper->item_type != ITEM_PAPER)
         {
             send_to_char("You are not holding a message disk.\r\n", ch);
             return;
         }
 
-        if ((subject = get_extra_descr("_subject_", paper->first_extradesc)) == NULL)
+        if ((subject = get_extra_descr("_subject_", paper->first_extradesc)) == nullptr)
             subject  = "(no subject)";
-        if ((to_list = get_extra_descr("_to_", paper->first_extradesc)) == NULL)
+        if ((to_list = get_extra_descr("_to_", paper->first_extradesc)) == nullptr)
             to_list = "(nobody)";
         ch_printf(ch, "%s: %s\r\nTo: %s\r\n", ch->name, subject, to_list);
-        if ((text = get_extra_descr("_text_", paper->first_extradesc)) == NULL)
+        if ((text = get_extra_descr("_text_", paper->first_extradesc)) == nullptr)
             text = "The disk is blank.\r\n";
         send_to_char(text, ch);
         return;
@@ -919,7 +919,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
         char      * strtime;
         const char* text;
 
-        if ((paper = get_eq_char(ch, WEAR_HOLD)) == NULL || paper->item_type != ITEM_PAPER)
+        if ((paper = get_eq_char(ch, WEAR_HOLD)) == nullptr || paper->item_type != ITEM_PAPER)
         {
             send_to_char("You are not holding a message disk.\r\n", ch);
             return;
@@ -975,7 +975,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
             return;
         }
 
-        act(AT_ACTION, "$n uploads a message.", ch, NULL, NULL, TO_ROOM);
+        act(AT_ACTION, "$n uploads a message.", ch, nullptr, nullptr, TO_ROOM);
 
         strtime = ctime(&current_time);
         strtime[strlen(strtime) - 1] = '\0';
@@ -1118,16 +1118,16 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
                 send_to_char("Ok.\r\n", ch);
                 if (take == 1)
                 {
-                    act(AT_ACTION, "$n downloads a message.", ch, NULL, NULL, TO_ROOM);
+                    act(AT_ACTION, "$n downloads a message.", ch, nullptr, nullptr, TO_ROOM);
                     obj_to_char(paper, ch);
                 }
                 else if (take == 2)
                 {
-                    act(AT_ACTION, "$n copies a message.", ch, NULL, NULL, TO_ROOM);
+                    act(AT_ACTION, "$n copies a message.", ch, nullptr, nullptr, TO_ROOM);
                     obj_to_char(paper, ch);
                 }
                 else
-                    act(AT_ACTION, "$n removes a message.", ch, NULL, NULL, TO_ROOM);
+                    act(AT_ACTION, "$n removes a message.", ch, nullptr, nullptr, TO_ROOM);
                 return;
             }
         }
@@ -1152,7 +1152,7 @@ BOARD_DATA* read_board(const char* boardfile, FILE* fp)
         if (feof(fp))
         {
             FCLOSE(fp);
-            return NULL;
+            return nullptr;
         }
     } while (isspace(letter));
     ungetc(letter, fp);
@@ -1174,10 +1174,10 @@ BOARD_DATA* read_board(const char* boardfile, FILE* fp)
                 if (!str_cmp(word, "End"))
                 {
                     board->num_posts          = 0;
-                    board->first_note         = NULL;
-                    board->last_note          = NULL;
-                    board->next               = NULL;
-                    board->prev               = NULL;
+                    board->first_note         = nullptr;
+                    board->last_note          = nullptr;
+                    board->next               = nullptr;
+                    board->prev               = nullptr;
                     if (!board->read_group)
                         board->read_group     = str_dup("");
                     if (!board->post_group)
@@ -1221,7 +1221,7 @@ NOTE_DATA* read_note(char* notefile, FILE* fp)
             if (feof(fp))
             {
                 FCLOSE(fp);
-                return NULL;
+                return nullptr;
             }
         } while (isspace(letter));
         ungetc(letter, fp);
@@ -1274,8 +1274,8 @@ NOTE_DATA* read_note(char* notefile, FILE* fp)
             pnote->novotes     = str_dup("");
         if (!pnote->abstentions)
             pnote->abstentions = str_dup("");
-        pnote->next            = NULL;
-        pnote->prev            = NULL;
+        pnote->next            = nullptr;
+        pnote->prev            = nullptr;
         return pnote;
     }
 
@@ -1295,21 +1295,21 @@ void load_boards(void)
     char      boardfile[256];
     char      notefile[256];
 
-    first_board = NULL;
-    last_board  = NULL;
+    first_board = nullptr;
+    last_board  = nullptr;
 
     snprintf(boardfile, 256, "%s%s", BOARD_DIR, BOARD_FILE);
-    if ((board_fp = fopen(boardfile, "r")) == NULL)
+    if ((board_fp = fopen(boardfile, "r")) == nullptr)
         return;
 
-    while ((board = read_board(boardfile, board_fp)) != NULL)
+    while ((board = read_board(boardfile, board_fp)) != nullptr)
     {
         LINK(board, first_board, last_board, next, prev);
         snprintf(notefile, 256, "%s%s", BOARD_DIR, board->note_file);
         log_string(notefile);
-        if ((note_fp = fopen(notefile, "r")) != NULL)
+        if ((note_fp = fopen(notefile, "r")) != nullptr)
         {
-            while ((pnote = read_note(notefile, note_fp)) != NULL)
+            while ((pnote = read_note(notefile, note_fp)) != nullptr)
             {
                 LINK(pnote, board->first_note, board->last_note, next, prev);
                 board->num_posts++;

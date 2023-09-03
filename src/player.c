@@ -281,7 +281,7 @@ void do_score(CHAR_DATA* ch, const char* argument)
         send_to_char("AFFECT DATA:                            ", ch);
         for (paf = ch->first_affect; paf; paf = paf->next)
         {
-            if ((sktmp = get_skilltype(paf->type)) == NULL)
+            if ((sktmp = get_skilltype(paf->type)) == nullptr)
                 continue;
             if (ch->top_level < 20)
             {
@@ -598,7 +598,7 @@ void do_oldscore(CHAR_DATA* ch, const char* argument)
     {
         send_to_char("You are affected by:\r\n", ch);
         for (paf = ch->first_affect; paf; paf = paf->next)
-            if ((skill = get_skilltype(paf->type)) != NULL)
+            if ((skill = get_skilltype(paf->type)) != nullptr)
             {
                 ch_printf(ch, "Spell: '%s'", skill->name);
 
@@ -702,7 +702,7 @@ void do_affected(CHAR_DATA* ch, const char* argument)
     {
         send_to_char("\r\n", ch);
         for (paf = ch->first_affect; paf; paf = paf->next)
-            if ((skill = get_skilltype(paf->type)) != NULL)
+            if ((skill = get_skilltype(paf->type)) != nullptr)
             {
                 set_char_color(AT_BLUE, ch);
                 send_to_char("Affected:  ", ch);
@@ -999,7 +999,7 @@ void do_report(CHAR_DATA* ch, const char* argument)
 
     snprintf(buf, MAX_INPUT_LENGTH, "$n reports: %d/%d hp %d/%d.", ch->hit, ch->max_hit, ch->move, ch->max_move);
 
-    act(AT_REPORT, buf, ch, NULL, NULL, TO_ROOM);
+    act(AT_REPORT, buf, ch, nullptr, nullptr, TO_ROOM);
 }
 
 void do_prompt(CHAR_DATA* ch, const char* argument)

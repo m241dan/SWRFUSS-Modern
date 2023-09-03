@@ -32,7 +32,7 @@
  * save.c:108:       fwrite_comments( ch, fp );                                           (*  in file *)
  *
  *
- * save.c:411:    ch->comments                        = NULL;                   (* nulls ch->comments *)
+ * save.c:411:    ch->comments                        = nullptr;                   (* nulls ch->comments *)
  *
  *
  * save.c:457:         else if ( !str_cmp( word, "COMMENT") ) fread_comment(ch, fp ); (*snags #COMMENT*)
@@ -204,7 +204,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
         }
 
         /*
-         * act( AT_ACTION, "$n glances over the notes.", ch, NULL, NULL, TO_ROOM );
+         * act( AT_ACTION, "$n glances over the notes.", ch, nullptr, nullptr, TO_ROOM );
          */
         return;
     }
@@ -268,7 +268,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
                 send_to_char(buf, ch);
                 send_to_char(pnote->text, ch);
                 /*
-                 * act( AT_ACTION, "$n reads a note.", ch, NULL, NULL, TO_ROOM );
+                 * act( AT_ACTION, "$n reads a note.", ch, nullptr, nullptr, TO_ROOM );
                  */
                 return;
             }
@@ -316,7 +316,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
             STRFREE(ch->pnote->sender);
             DISPOSE(ch->pnote);
         }
-        ch->pnote = NULL;
+        ch->pnote = nullptr;
 
         send_to_char("Ok.\r\n", ch);
         return;
@@ -366,14 +366,14 @@ void do_comment(CHAR_DATA* ch, const char* argument)
         }
 
         /*
-         * act( AT_ACTION, "$n posts a note.", ch, NULL, NULL, TO_ROOM );
+         * act( AT_ACTION, "$n posts a note.", ch, nullptr, nullptr, TO_ROOM );
          */
         strtime = ctime(&current_time);
         strtime[strlen(strtime) - 1] = '\0';
         ch->pnote->date = STRALLOC(strtime);
 
         pnote = ch->pnote;
-        ch->pnote = NULL;
+        ch->pnote = nullptr;
 
         /*
          * LIFO to make life easier
@@ -381,7 +381,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
         pnote->next                = victim->comments;
         if (victim->comments)
             victim->comments->prev = pnote;
-        pnote->prev                = NULL;
+        pnote->prev                = nullptr;
         victim->comments           = pnote;
 
         save_char_obj(victim);
@@ -432,7 +432,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
                 comment_remove(ch, victim, pnote);
                 send_to_char("Ok.\r\n", ch);
                 /*
-                 * act( AT_ACTION, "$n removes a note.", ch, NULL, NULL, TO_ROOM );
+                 * act( AT_ACTION, "$n removes a note.", ch, nullptr, nullptr, TO_ROOM );
                  */
                 return;
             }
@@ -505,7 +505,7 @@ void fread_comment(CHAR_DATA* ch, FILE* fp)
         pnote->text = fread_string(fp);
 
         pnote->next  = ch->comments;
-        pnote->prev  = NULL;
+        pnote->prev  = nullptr;
         ch->comments = pnote;
         return;
     }

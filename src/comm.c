@@ -171,17 +171,17 @@ int main(int argc, char** argv)
 
     DONT_UPPER       = FALSE;
     num_descriptors  = 0;
-    first_descriptor = NULL;
-    last_descriptor  = NULL;
+    first_descriptor = nullptr;
+    last_descriptor  = nullptr;
     sysdata.NO_NAME_RESOLVING = TRUE;
     sysdata.WAIT_FOR_AUTH     = TRUE;
 
     /*
     * Init time.
     */
-    gettimeofday(&now_time, NULL);
+    gettimeofday(&now_time, nullptr);
     current_time = (time_t)now_time.tv_sec;
-    /*  gettimeofday( &boot_time, NULL);   okay, so it's kludgy, sue me :) */
+    /*  gettimeofday( &boot_time, nullptr);   okay, so it's kludgy, sue me :) */
     boot_time    = time(0);  /*  <-- I think this is what you wanted */
     mudstrlcpy(str_boot_time, ctime(&current_time), MAX_INPUT_LENGTH);
 
@@ -289,7 +289,7 @@ int main(int argc, char** argv)
 
 void init_descriptor(DESCRIPTOR_DATA* dnew, int desc)
 {
-    dnew->next         = NULL;
+    dnew->next         = nullptr;
     dnew->descriptor   = desc;
     dnew->connected    = CON_GET_NAME;
     dnew->outsize      = 2000;
@@ -487,7 +487,7 @@ void game_loop(void)
     /*
     * signal( SIGSEGV, SegVio );
     */
-    gettimeofday(&last_time, NULL);
+    gettimeofday(&last_time, nullptr);
     current_time = (time_t)last_time.tv_sec;
 
     /*
@@ -505,7 +505,7 @@ void game_loop(void)
             if (d == d->next)
             {
                 bug("%s: descriptor loop found & fixed", __func__);
-                d->next = NULL;
+                d->next = nullptr;
             }
             d_next = d->next;
 
@@ -550,7 +550,7 @@ void game_loop(void)
                 }
 
                 /* check for input from the dns */
-                if ((d->connected == CON_PLAYING || d->character != NULL) && d->ifd != -1 && FD_ISSET(d->ifd, &in_set))
+                if ((d->connected == CON_PLAYING || d->character != nullptr) && d->ifd != -1 && FD_ISSET(d->ifd, &in_set))
                     process_dns(d);
 
                 if (d->character && d->character->wait > 0)
@@ -639,7 +639,7 @@ void game_loop(void)
             long           secDelta;
             long           usecDelta;
 
-            gettimeofday(&now_time, NULL);
+            gettimeofday(&now_time, nullptr);
             usecDelta = ((int)last_time.tv_usec) - ((int)now_time.tv_usec) + 1000000 / PULSE_PER_SECOND;
             secDelta  = ((int)last_time.tv_sec) - ((int)now_time.tv_sec);
             while (usecDelta < 0)
@@ -660,7 +660,7 @@ void game_loop(void)
 
                 stall_time.tv_usec = usecDelta;
                 stall_time.tv_sec  = secDelta;
-                if (select(0, NULL, NULL, NULL, &stall_time) < 0)
+                if (select(0, nullptr, nullptr, nullptr, &stall_time) < 0)
                 {
                     perror("game_loop: select: stall");
                     exit(1);
@@ -668,7 +668,7 @@ void game_loop(void)
             }
         }
 
-        gettimeofday(&last_time, NULL);
+        gettimeofday(&last_time, nullptr);
         current_time = (time_t)last_time.tv_sec;
 
         /*
@@ -764,7 +764,7 @@ void new_descriptor(int new_desc)
     {
         DESCRIPTOR_DATA* d;
 
-        bug("%s: last_desc is NULL, but first_desc is not! ...fixing", __func__);
+        bug("%s: last_desc is nullptr, but first_desc is not! ...fixing", __func__);
         for (d = first_descriptor; d; d = d->next)
             if (!d->next)
                 last_descriptor = d;
@@ -851,14 +851,14 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
     */
     for (d = first_descriptor; d; d = d->next)
         if (d->snoop_by == dclose)
-            d->snoop_by = NULL;
+            d->snoop_by = nullptr;
 
     /*
     * Check for switched people who go link-dead. -- Altrag
     */
     if (dclose->original)
     {
-        if ((ch = dclose->character) != NULL)
+        if ((ch = dclose->character) != nullptr)
             do_return(ch, "");
         else
         {
@@ -866,7 +866,7 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
                 "%s: dclose->original without character %s", __func__,
                 (dclose->original->name ? dclose->original->name : "unknown"));
             dclose->character = dclose->original;
-            dclose->original  = NULL;
+            dclose->original  = nullptr;
         }
     }
 
@@ -879,10 +879,10 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
     {
         DESCRIPTOR_DATA* dp, * dn;
         bug(
-            "%s: %s desc:%p != first_desc:%p and desc->prev = NULL!", __func__,
+            "%s: %s desc:%p != first_desc:%p and desc->prev = nullptr!", __func__,
             ch ? ch->name : d->host, dclose, first_descriptor
         );
-        dp     = NULL;
+        dp     = nullptr;
         for (d = first_descriptor; d; d = dn)
         {
             dn = d->next;
@@ -904,10 +904,10 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
     {
         DESCRIPTOR_DATA* dp, * dn;
         bug(
-            "%s: %s desc:%p != last_desc:%p and desc->next = NULL!", __func__,
+            "%s: %s desc:%p != last_desc:%p and desc->next = nullptr!", __func__,
             ch ? ch->name : d->host, dclose, last_descriptor
         );
-        dn     = NULL;
+        dn     = nullptr;
         for (d = last_descriptor; d; d = dp)
         {
             dp = d->prev;
@@ -936,15 +936,15 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
 */
         if (dclose->connected == CON_PLAYING || dclose->connected == CON_EDITING)
         {
-            act(AT_ACTION, "$n has lost $s link.", ch, NULL, NULL, TO_ROOM);
-            ch->desc = NULL;
+            act(AT_ACTION, "$n has lost $s link.", ch, nullptr, nullptr, TO_ROOM);
+            ch->desc = nullptr;
         }
         else
         {
             /*
           * clear descriptor pointer to get rid of bug message in log
           */
-            dclose->character->desc = NULL;
+            dclose->character->desc = nullptr;
             free_char(dclose->character);
         }
     }
@@ -1244,7 +1244,7 @@ void write_to_buffer(DESCRIPTOR_DATA* d, const char* txt, size_t length)
 {
     if (!d)
     {
-        bug("%s: NULL descriptor", __func__);
+        bug("%s: nullptr descriptor", __func__);
         return;
     }
 
@@ -1718,7 +1718,7 @@ void nanny_get_old_password(DESCRIPTOR_DATA* d, const char* argument)
         /*
        * clear descriptor pointer to get rid of bug message in log
        */
-        d->character->desc = NULL;
+        d->character->desc = nullptr;
         close_socket(d, FALSE);
         return;
     }
@@ -1733,7 +1733,7 @@ void nanny_get_old_password(DESCRIPTOR_DATA* d, const char* argument)
     if (chk == BERR)
     {
         if (d->character && d->character->desc)
-            d->character->desc = NULL;
+            d->character->desc = nullptr;
 
         close_socket(d, FALSE);
         return;
@@ -1749,7 +1749,7 @@ void nanny_get_old_password(DESCRIPTOR_DATA* d, const char* argument)
     }
 
     mudstrlcpy(buf, ch->name, MAX_STRING_LENGTH);
-    d->character->desc = NULL;
+    d->character->desc = nullptr;
     free_char(d->character);
     fOld = load_char_obj(d, buf, FALSE, FALSE);
     if (!fOld)
@@ -1799,9 +1799,9 @@ void nanny_confirm_new_name(DESCRIPTOR_DATA* d, const char* argument)
             /*
        * clear descriptor pointer to get rid of bug message in log
        */
-            d->character->desc = NULL;
+            d->character->desc = nullptr;
             free_char(d->character);
-            d->character = NULL;
+            d->character = nullptr;
             d->connected = CON_GET_NAME;
             break;
 
@@ -2168,7 +2168,7 @@ void nanny_read_motd(DESCRIPTOR_DATA* d, const char* argument)
         OBJ_DATA* obj;
         int     iLang;
 
-        ch->pcdata->clan = NULL;
+        ch->pcdata->clan = nullptr;
 
         ch->perm_lck    = number_range(6, 18);
         ch->perm_frc    = number_range(-2000, 20);
@@ -2270,7 +2270,7 @@ void nanny_read_motd(DESCRIPTOR_DATA* d, const char* argument)
        */
         {
             OBJ_INDEX_DATA* obj_ind = get_obj_index(10424);
-            if (obj_ind != NULL)
+            if (obj_ind != nullptr)
             {
                 obj = create_object(obj_ind, 0);
                 obj_to_char(obj, ch);
@@ -2317,7 +2317,7 @@ void nanny_read_motd(DESCRIPTOR_DATA* d, const char* argument)
 
     if (get_timer(ch, TIMER_PKILLED) > 0)
         remove_timer(ch, TIMER_PKILLED);
-    if (ch->plr_home != NULL)
+    if (ch->plr_home != nullptr)
     {
         char           filename[256];
         FILE           * fph;
@@ -2333,14 +2333,14 @@ void nanny_read_motd(DESCRIPTOR_DATA* d, const char* argument)
 
         snprintf(filename, 256, "%s%c/%s.home", PLAYER_DIR, tolower(ch->name[0]), capitalize(ch->name));
 
-        if ((fph = fopen(filename, "r")) != NULL)
+        if ((fph = fopen(filename, "r")) != nullptr)
         {
             int     iNest;
             OBJ_DATA* tobj, * tobj_next;
 
             rset_supermob(storeroom);
             for (iNest = 0; iNest < MAX_NEST; iNest++)
-                rgObjNest[iNest] = NULL;
+                rgObjNest[iNest] = nullptr;
 
             for (;;)
             {
@@ -2385,7 +2385,7 @@ void nanny_read_motd(DESCRIPTOR_DATA* d, const char* argument)
         }
     }
 
-    act(AT_ACTION, "$n has entered the game.", ch, NULL, NULL, TO_ROOM);
+    act(AT_ACTION, "$n has entered the game.", ch, nullptr, nullptr, TO_ROOM);
     do_look(ch, "auto");
     mail_count(ch);
 }
@@ -2464,9 +2464,9 @@ short check_reconnect(DESCRIPTOR_DATA* d, const char* name, bool fConn)
                     /*
                 * clear descriptor pointer to get rid of bug message in log
                 */
-                    d->character->desc = NULL;
+                    d->character->desc = nullptr;
                     free_char(d->character);
-                    d->character = NULL;
+                    d->character = nullptr;
                 }
                 return BERR;
             }
@@ -2480,13 +2480,13 @@ short check_reconnect(DESCRIPTOR_DATA* d, const char* name, bool fConn)
                 /*
              * clear descriptor pointer to get rid of bug message in log
              */
-                d->character->desc = NULL;
+                d->character->desc = nullptr;
                 free_char(d->character);
                 d->character = ch;
                 ch->desc     = d;
                 ch->timer    = 0;
                 send_to_char("Reconnecting.\r\n", ch);
-                act(AT_ACTION, "$n has reconnected.", ch, NULL, NULL, TO_ROOM);
+                act(AT_ACTION, "$n has reconnected.", ch, nullptr, nullptr, TO_ROOM);
                 snprintf(log_buf, MAX_STRING_LENGTH, "%s (%s) reconnected.", ch->name, d->host);
                 log_string_plus(log_buf, LOG_COMM, UMAX(sysdata.log_level, ch->top_level));
                 d->connected = CON_PLAYING;
@@ -2540,7 +2540,7 @@ bool check_multi(DESCRIPTOR_DATA* d, const char* name)
                 LOG_COMM, sysdata.log_level, "%s attempting to multiplay with %s.",
                 dold->original ? dold->original->name : dold->character->name, d->character->name
             );
-            d->character = NULL;
+            d->character = nullptr;
             free_char(d->character);
             return TRUE;
         }
@@ -2578,16 +2578,16 @@ short check_playing(DESCRIPTOR_DATA* d, const char* name, bool kick)
             /*
           * clear descriptor pointer to get rid of bug message in log
           */
-            d->character->desc = NULL;
+            d->character->desc = nullptr;
             free_char(d->character);
             d->character = ch;
             ch->desc     = d;
             ch->timer    = 0;
             if (ch->switched)
                 do_return(ch->switched, "");
-            ch->switched = NULL;
+            ch->switched = nullptr;
             send_to_char("Reconnecting.\r\n", ch);
-            act(AT_ACTION, "$n has reconnected, kicking off old link.", ch, NULL, NULL, TO_ROOM);
+            act(AT_ACTION, "$n has reconnected, kicking off old link.", ch, nullptr, nullptr, TO_ROOM);
             snprintf(log_buf, MAX_STRING_LENGTH, "%s@%s reconnected, kicking off old link.", ch->name, d->host);
             log_string_plus(log_buf, LOG_COMM, UMAX(sysdata.log_level, ch->top_level));
             d->connected = cstate;
@@ -2607,8 +2607,8 @@ void stop_idling(CHAR_DATA* ch)
     ch->timer = 0;
     char_from_room(ch);
     char_to_room(ch, ch->was_in_room);
-    ch->was_in_room = NULL;
-    act(AT_ACTION, "$n has returned from the void.", ch, NULL, NULL, TO_ROOM);
+    ch->was_in_room = nullptr;
+    act(AT_ACTION, "$n has returned from the void.", ch, nullptr, nullptr, TO_ROOM);
     return;
 }
 
@@ -2756,7 +2756,7 @@ char* act_string(const char* format, CHAR_DATA* to, CHAR_DATA* ch, const void* a
                 case 'p':
                     if (!obj1)
                     {
-                        bug("%s: $p used with NULL obj1!", __func__);
+                        bug("%s: $p used with nullptr obj1!", __func__);
                         i = "something";
                     }
                     else
@@ -2767,7 +2767,7 @@ char* act_string(const char* format, CHAR_DATA* to, CHAR_DATA* ch, const void* a
                 case 'P':
                     if (!obj2)
                     {
-                        bug("%s: $P used with NULL obj2!", __func__);
+                        bug("%s: $P used with nullptr obj2!", __func__);
                         i = "something";
                     }
                     else
@@ -2869,7 +2869,7 @@ void act(short AType, const char* format, CHAR_DATA* ch, const void* arg1, const
     }
 
     if (!ch->in_room)
-        to = NULL;
+        to = nullptr;
     else if (type == TO_CHAR)
         to = ch;
     else
@@ -2890,7 +2890,7 @@ void act(short AType, const char* format, CHAR_DATA* ch, const void* arg1, const
         }
         if (!vch->in_room)
         {
-            bug("%s: vch in NULL room! %s -> %s (%s)", __func__, ch->name, vch->name, format);
+            bug("%s: vch in nullptr room! %s -> %s (%s)", __func__, ch->name, vch->name, format);
             return;
         }
         to = vch;
@@ -2901,7 +2901,7 @@ void act(short AType, const char* format, CHAR_DATA* ch, const void* arg1, const
     {
         OBJ_DATA* to_obj;
 
-        txt = act_string(format, NULL, ch, arg1, arg2);
+        txt = act_string(format, nullptr, ch, arg1, arg2);
         if (IS_SET(to->in_room->progtypes, ACT_PROG))
             rprog_act_trigger(txt, to->in_room, ch, (OBJ_DATA*)arg1, (void*)arg2);
         for (to_obj = to->in_room->first_content; to_obj; to_obj = to_obj->next_content)
@@ -2913,7 +2913,7 @@ void act(short AType, const char* format, CHAR_DATA* ch, const void* arg1, const
     * Anyone feel like telling me the point of looping through the whole
     * room when we're only sending to one char anyways..? -- Alty
     */
-    for (; to; to = (type == TO_CHAR || type == TO_VICT) ? NULL : to->next_in_room)
+    for (; to; to = (type == TO_CHAR || type == TO_VICT) ? nullptr : to->next_in_room)
     {
         if ((!to->desc && (IS_NPC(to) && !IS_SET(to->pIndexData->progtypes, ACT_PROG))) || !IS_AWAKE(to))
             continue;
@@ -3032,7 +3032,7 @@ void display_prompt(DESCRIPTOR_DATA* d)
 
     if (!ch)
     {
-        bug("%s: NULL ch", __func__);
+        bug("%s: nullptr ch", __func__);
         return;
     }
 
@@ -3177,7 +3177,7 @@ bool pager_output(DESCRIPTOR_DATA* d)
         case 'r':lines = -1 - pclines;
             break;
         case 'q':d->pagetop = 0;
-            d->pagepoint    = NULL;
+            d->pagepoint    = nullptr;
             flush_buffer(d, TRUE);
             DISPOSE(d->pagebuf);
             d->pagesize = MAX_STRING_LENGTH;
@@ -3208,7 +3208,7 @@ bool pager_output(DESCRIPTOR_DATA* d)
     if (!*last)
     {
         d->pagetop   = 0;
-        d->pagepoint = NULL;
+        d->pagepoint = nullptr;
         flush_buffer(d, TRUE);
         DISPOSE(d->pagebuf);
         d->pagesize = MAX_STRING_LENGTH;

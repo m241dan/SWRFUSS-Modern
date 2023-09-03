@@ -54,7 +54,7 @@ char* resolve_address(int address)
     struct hostent* from;
     int           addr;
 
-    if ((from = gethostbyaddr((char*)&address, sizeof(address), AF_INET)) != NULL)
+    if ((from = gethostbyaddr((char*)&address, sizeof(address), AF_INET)) != nullptr)
     {
         strncpy(addr_str, strcmp(from->h_name, "localhost") ? from->h_name : "local-host", 256);
     }

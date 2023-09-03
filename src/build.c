@@ -32,8 +32,8 @@ extern int  top_reset;
 extern int  top_ed;
 extern bool fBootDb;
 
-REL_DATA* first_relation = NULL;
-REL_DATA* last_relation  = NULL;
+REL_DATA* first_relation = nullptr;
+REL_DATA* last_relation  = nullptr;
 
 char* sprint_reset(RESET_DATA* pReset, short* num);
 
@@ -807,7 +807,7 @@ void start_editing(CHAR_DATA* ch, const char* data)
     lpos  = 0;
     lines = 0;
     if (!data)
-        bug("%s: data is NULL!", __func__);
+        bug("%s: data is nullptr!", __func__);
     else
         for (;;)
         {
@@ -876,10 +876,10 @@ void stop_editing(CHAR_DATA* ch)
 {
     set_char_color(AT_PLAIN, ch);
     DISPOSE(ch->editor);
-    ch->editor = NULL;
+    ch->editor = nullptr;
     send_to_char("Done.\r\n", ch);
-    ch->dest_buf  = NULL;
-    ch->spare_ptr = NULL;
+    ch->dest_buf  = nullptr;
+    ch->spare_ptr = nullptr;
     ch->substate  = SUB_NONE;
     if (!ch->desc)
     {
@@ -906,7 +906,7 @@ void do_goto(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((location = find_location(ch, arg)) == NULL)
+    if ((location = find_location(ch, arg)) == nullptr)
     {
         vnum = atoi(arg);
         if (vnum < 0 || get_room_index(vnum))
@@ -995,9 +995,9 @@ void do_goto(CHAR_DATA* ch, const char* argument)
     if (!IS_SET(ch->act, PLR_WIZINVIS))
     {
         if (ch->pcdata && ch->pcdata->bamfout[0] != '\0')
-            act(AT_IMMORT, "$T", ch, NULL, ch->pcdata->bamfout, TO_ROOM);
+            act(AT_IMMORT, "$T", ch, nullptr, ch->pcdata->bamfout, TO_ROOM);
         else
-            act(AT_IMMORT, "$n $T", ch, NULL, "leaves in a swirl of the force.", TO_ROOM);
+            act(AT_IMMORT, "$n $T", ch, nullptr, "leaves in a swirl of the force.", TO_ROOM);
     }
 
 
@@ -1013,9 +1013,9 @@ void do_goto(CHAR_DATA* ch, const char* argument)
     if (!IS_SET(ch->act, PLR_WIZINVIS))
     {
         if (ch->pcdata && ch->pcdata->bamfin[0] != '\0')
-            act(AT_IMMORT, "$T", ch, NULL, ch->pcdata->bamfin, TO_ROOM);
+            act(AT_IMMORT, "$T", ch, nullptr, ch->pcdata->bamfin, TO_ROOM);
         else
-            act(AT_IMMORT, "$n $T", ch, NULL, "enters in a swirl of the Force.", TO_ROOM);
+            act(AT_IMMORT, "$n $T", ch, nullptr, "enters in a swirl of the Force.", TO_ROOM);
     }
 
     do_look(ch, "auto");
@@ -1027,7 +1027,7 @@ void do_goto(CHAR_DATA* ch, const char* argument)
         fch_next = fch->next_in_room;
         if (fch->master == ch && IS_IMMORTAL(fch))
         {
-            act(AT_ACTION, "You follow $N.", fch, NULL, ch, TO_CHAR);
+            act(AT_ACTION, "You follow $N.", fch, nullptr, ch, TO_CHAR);
             do_goto(fch, argument);
         }
     }
@@ -1067,7 +1067,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
             if (!ch->dest_buf)
             {
                 send_to_char("Fatal error: report to Thoric.\r\n", ch);
-                bug("%s: sub_mob_desc: NULL ch->dest_buf", __func__);
+                bug("%s: sub_mob_desc: nullptr ch->dest_buf", __func__);
                 ch->substate = SUB_NONE;
                 return;
             }
@@ -1090,7 +1090,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
             return;
     }
 
-    victim           = NULL;
+    victim           = nullptr;
     lockvictim       = FALSE;
     argument         = smash_tilde_static(argument);
 
@@ -1116,7 +1116,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
                 RelDestroy(relMSET_ON, ch, ch->dest_buf);
             send_to_char("Mset mode off.\r\n", ch);
             ch->substate = SUB_NONE;
-            ch->dest_buf = NULL;
+            ch->dest_buf = nullptr;
             if (ch->pcdata && ch->pcdata->subprompt)
                 STRFREE(ch->pcdata->subprompt);
             return;
@@ -1177,7 +1177,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
 
     if (!victim && get_trust(ch) <= LEVEL_IMMORTAL)
     {
-        if ((victim = get_char_room(ch, arg1)) == NULL)
+        if ((victim = get_char_room(ch, arg1)) == nullptr)
         {
             send_to_char("They aren't here.\r\n", ch);
             return;
@@ -1185,7 +1185,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
     }
     else if (!victim)
     {
-        if ((victim = get_char_world(ch, arg1)) == NULL)
+        if ((victim = get_char_world(ch, arg1)) == nullptr)
         {
             send_to_char("No one like that in all the realms.\r\n", ch);
             return;
@@ -1195,13 +1195,13 @@ void do_mset(CHAR_DATA* ch, const char* argument)
     if (get_trust(ch) <= LEVEL_IMMORTAL && !IS_NPC(victim))
     {
         send_to_char("You can't do that!\r\n", ch);
-        ch->dest_buf = NULL;
+        ch->dest_buf = nullptr;
         return;
     }
     if (get_trust(ch) < get_trust(victim) && !IS_NPC(victim))
     {
         send_to_char("You can't do that!\r\n", ch);
-        ch->dest_buf = NULL;
+        ch->dest_buf = nullptr;
         return;
     }
     if (lockvictim)
@@ -1889,7 +1889,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
           * Crash bug fix, oops guess I should have caught this one :)
           * * But it was early in the morning :P --Shaddai
           */
-            if (victim->pcdata->clan == NULL)
+            if (victim->pcdata->clan == nullptr)
                 return;
             /*
           * Added a check on immortals so immortals don't take up
@@ -1904,7 +1904,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
             }
             STRFREE(victim->pcdata->clan_name);
             victim->pcdata->clan_name = STRALLOC("");
-            victim->pcdata->clan      = NULL;
+            victim->pcdata->clan      = nullptr;
             return;
         }
         clan = get_clan(arg3);
@@ -1913,7 +1913,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
             send_to_char("No such clan.\r\n", ch);
             return;
         }
-        if (victim->pcdata->clan != NULL && !IS_IMMORTAL(victim))
+        if (victim->pcdata->clan != nullptr && !IS_IMMORTAL(victim))
         {
             --victim->pcdata->clan->members;
             if (victim->pcdata->clan->members < 0)
@@ -2009,18 +2009,18 @@ void do_mset(CHAR_DATA* ch, const char* argument)
 
         if (!str_cmp(arg3, "none"))
         {
-            victim->spec_fun = NULL;
+            victim->spec_fun = nullptr;
             STRFREE(victim->spec_funname);
             send_to_char("Special function removed.\r\n", ch);
             if (IS_NPC(victim) && IS_SET(victim->act, ACT_PROTOTYPE))
             {
-                victim->pIndexData->spec_fun = NULL;
+                victim->pIndexData->spec_fun = nullptr;
                 STRFREE(victim->pIndexData->spec_funname);
             }
             return;
         }
 
-        if ((specfun = spec_lookup(arg3)) == NULL)
+        if ((specfun = spec_lookup(arg3)) == nullptr)
         {
             send_to_char("No such function.\r\n", ch);
             return;
@@ -2060,18 +2060,18 @@ void do_mset(CHAR_DATA* ch, const char* argument)
 
         if (!str_cmp(arg3, "none"))
         {
-            victim->spec_2 = NULL;
+            victim->spec_2 = nullptr;
             STRFREE(victim->spec_funname2);
             send_to_char("Special function 2 removed.\r\n", ch);
             if (IS_NPC(victim) && IS_SET(victim->act, ACT_PROTOTYPE))
             {
-                victim->pIndexData->spec_2 = NULL;
+                victim->pIndexData->spec_2 = nullptr;
                 STRFREE(victim->pIndexData->spec_funname2);
             }
             return;
         }
 
-        if ((specfun = spec_lookup(arg3)) == NULL)
+        if ((specfun = spec_lookup(arg3)) == nullptr)
         {
             send_to_char("No such function.\r\n", ch);
             return;
@@ -2897,7 +2897,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
             if (!ch->dest_buf)
             {
                 send_to_char("Fatal error: report to www.fusproject.org\r\n", ch);
-                bug("%s: sub_obj_extra: NULL ch->dest_buf", __func__);
+                bug("%s: sub_obj_extra: nullptr ch->dest_buf", __func__);
                 ch->substate = SUB_NONE;
                 return;
             }
@@ -2920,7 +2920,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
             if (!ch->dest_buf)
             {
                 send_to_char("Fatal error: report to smaugmuds.afkmods.com\r\n", ch);
-                bug("%s: sub_obj_long: NULL ch->dest_buf", __func__);
+                bug("%s: sub_obj_long: nullptr ch->dest_buf", __func__);
                 ch->substate = SUB_NONE;
                 return;
             }
@@ -2945,7 +2945,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
             return;
     }
 
-    obj      = NULL;
+    obj      = nullptr;
     argument = smash_tilde_static(argument);
 
     if (ch->substate == SUB_REPEATCMD)
@@ -2971,7 +2971,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
 
             send_to_char("Oset mode off.\r\n", ch);
             ch->substate = SUB_NONE;
-            ch->dest_buf = NULL;
+            ch->dest_buf = nullptr;
             if (ch->pcdata && ch->pcdata->subprompt)
                 STRFREE(ch->pcdata->subprompt);
             return;
@@ -3036,7 +3036,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
 
     if (!obj && get_trust(ch) <= LEVEL_IMMORTAL)
     {
-        if ((obj = get_obj_here(ch, arg1)) == NULL)
+        if ((obj = get_obj_here(ch, arg1)) == nullptr)
         {
             send_to_char("You can't find that here.\r\n", ch);
             return;
@@ -3044,7 +3044,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
     }
     else if (!obj)
     {
-        if ((obj = get_obj_world(ch, arg1)) == NULL)
+        if ((obj = get_obj_world(ch, arg1)) == nullptr)
         {
             send_to_char("There is nothing like that in all the realms.\r\n", ch);
             return;
@@ -3373,7 +3373,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         if (lockobj)
             ch->spare_ptr = obj;
         else
-            ch->spare_ptr = NULL;
+            ch->spare_ptr = nullptr;
         ch->substate      = SUB_OBJ_LONG;
         ch->dest_buf      = obj;
         start_editing(ch, obj->description);
@@ -3438,7 +3438,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         paf->location  = loc;
         paf->modifier  = value;
         paf->bitvector = 0;
-        paf->next      = NULL;
+        paf->next      = nullptr;
         if (IS_OBJ_STAT(obj, ITEM_PROTOTYPE))
         {
             if (loc != APPLY_WEARSPELL && loc != APPLY_REMOVESPELL && loc != APPLY_STRIPSN && loc != APPLY_WEAPONSPELL)
@@ -3568,7 +3568,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         if (lockobj)
             ch->spare_ptr = obj;
         else
-            ch->spare_ptr = NULL;
+            ch->spare_ptr = nullptr;
         ch->substate      = SUB_OBJ_EXTRA;
         ch->dest_buf      = ed;
         start_editing(ch, ed->description);
@@ -3602,7 +3602,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         if (lockobj)
             ch->spare_ptr = obj;
         else
-            ch->spare_ptr = NULL;
+            ch->spare_ptr = nullptr;
         ch->substate      = SUB_OBJ_EXTRA;
         ch->dest_buf      = ed;
         start_editing(ch, ed->description);
@@ -3907,7 +3907,7 @@ void do_rset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((location = find_location(ch, arg1)) == NULL)
+    if ((location = find_location(ch, arg1)) == nullptr)
     {
         send_to_char("No such location.\r\n", ch);
         return;
@@ -4056,7 +4056,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         case SUB_ROOM_DESC: location = (ROOM_INDEX_DATA*)ch->dest_buf;
             if (!location)
             {
-                bug("%s: sub_room_desc: NULL ch->dest_buf", __func__);
+                bug("%s: sub_room_desc: nullptr ch->dest_buf", __func__);
                 location = ch->in_room;
             }
             STRFREE(location->description);
@@ -4067,7 +4067,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         case SUB_ROOM_EXTRA: ed = (EXTRA_DESCR_DATA*)ch->dest_buf;
             if (!ed)
             {
-                bug("%s: sub_room_extra: NULL ch->dest_buf", __func__);
+                bug("%s: sub_room_extra: nullptr ch->dest_buf", __func__);
                 stop_editing(ch);
                 return;
             }
@@ -4460,7 +4460,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
             evnum = atoi(arg3);
         if (numnotdir)
         {
-            if ((xit = get_exit_num(location, edir)) != NULL)
+            if ((xit = get_exit_num(location, edir)) != nullptr)
                 edir = xit->vdir;
         }
         else
@@ -4481,7 +4481,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
             send_to_char("Invalid room number.\r\n", ch);
             return;
         }
-        if ((tmp = get_room_index(evnum)) == NULL)
+        if ((tmp = get_room_index(evnum)) == nullptr)
         {
             send_to_char("Non-existant room.\r\n", ch);
             return;
@@ -4508,10 +4508,10 @@ void do_redit(CHAR_DATA* ch, const char* argument)
             xit->description = STRALLOC("");
             xit->key         = -1;
             xit->exit_info   = 0;
-            act(AT_IMMORT, "$n reveals a hidden passage!", ch, NULL, NULL, TO_ROOM);
+            act(AT_IMMORT, "$n reveals a hidden passage!", ch, nullptr, nullptr, TO_ROOM);
         }
         else
-            act(AT_IMMORT, "Something is different...", ch, NULL, NULL, TO_ROOM);
+            act(AT_IMMORT, "Something is different...", ch, nullptr, nullptr, TO_ROOM);
         if (xit->to_room != tmp)
         {
             xit->to_room = tmp;
@@ -4581,12 +4581,12 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         exnum     = edir;
         if (numnotdir)
         {
-            if ((nxit = get_exit_num(tmploc, edir)) != NULL)
+            if ((nxit = get_exit_num(tmploc, edir)) != nullptr)
                 edir = nxit->vdir;
         }
         else
             nxit = get_exit(tmploc, edir);
-        rxit     = NULL;
+        rxit     = nullptr;
         vnum     = 0;
         rvnum[0] = '\0';
         if (nxit)
@@ -4597,7 +4597,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
             if (nxit->to_room)
                 rxit = get_exit(nxit->to_room, rev_dir[edir]);
             else
-                rxit = NULL;
+                rxit = nullptr;
         }
         snprintf(tmpcmd, MAX_STRING_LENGTH, "exit %s %s %s", arg2, arg3, argument);
         do_redit(ch, tmpcmd);
@@ -4613,7 +4613,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
             if (nxit->to_room)
                 rxit = get_exit(nxit->to_room, rev_dir[edir]);
             else
-                rxit = NULL;
+                rxit = nullptr;
         }
         if (vnum)
         {
@@ -4777,8 +4777,8 @@ void do_ocreate(CHAR_DATA* ch, const char* argument)
     }
     obj = create_object(pObjIndex, get_trust(ch));
     obj_to_char(obj, ch);
-    act(AT_IMMORT, "$n makes some ancient arcane gestures, and opens $s hands to reveal $p!", ch, obj, NULL, TO_ROOM);
-    act(AT_IMMORT, "You make some ancient arcane gestures, and open your hands to reveal $p!", ch, obj, NULL, TO_CHAR);
+    act(AT_IMMORT, "$n makes some ancient arcane gestures, and opens $s hands to reveal $p!", ch, obj, nullptr, TO_ROOM);
+    act(AT_IMMORT, "You make some ancient arcane gestures, and open your hands to reveal $p!", ch, obj, nullptr, TO_CHAR);
 }
 
 void do_mcreate(CHAR_DATA* ch, const char* argument)
@@ -4856,8 +4856,8 @@ void do_mcreate(CHAR_DATA* ch, const char* argument)
     }
     mob = create_mobile(pMobIndex);
     char_to_room(mob, ch->in_room);
-    act(AT_IMMORT, "$n waves $s arms about, and $N appears at $s command!", ch, NULL, mob, TO_ROOM);
-    act(AT_IMMORT, "You wave your arms about, and $N appears at your command!", ch, NULL, mob, TO_CHAR);
+    act(AT_IMMORT, "$n waves $s arms about, and $N appears at $s command!", ch, nullptr, mob, TO_ROOM);
+    act(AT_IMMORT, "You wave your arms about, and $N appears at your command!", ch, nullptr, mob, TO_CHAR);
 }
 
 /*
@@ -4873,7 +4873,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
     short          x, line;
     bool           save;
 
-    if ((d = ch->desc) == NULL)
+    if ((d = ch->desc) == nullptr)
     {
         send_to_char("You have no descriptor.\r\n", ch);
         return;
@@ -4963,7 +4963,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
             for (x = 0; x < edit->numlines; x++)
             {
                 lwptr        = edit->line[x];
-                while ((wptr = strstr(lwptr, word1)) != NULL)
+                while ((wptr = strstr(lwptr, word1)) != nullptr)
                 {
                     ++count;
                     lineln = snprintf(buf, MAX_INPUT_LENGTH, "%s%s", word2, wptr + wordln);
@@ -5226,7 +5226,7 @@ void assign_area(CHAR_DATA* ch)
             log_string_plus(buf, LOG_NORMAL, ch->top_level);
             CREATE(tarea, AREA_DATA, 1);
             LINK(tarea, first_build, last_build, next, prev);
-            tarea->first_room = tarea->last_room = NULL;
+            tarea->first_room = tarea->last_room = nullptr;
             snprintf(buf, MAX_STRING_LENGTH, "{PROTO} %s's area in progress", ch->name);
             tarea->name     = str_dup(buf);
             tarea->filename = str_dup(taf);
@@ -5269,7 +5269,7 @@ void do_aassign(CHAR_DATA* ch, const char* argument)
 
     if (!str_cmp("none", argument) || !str_cmp("null", argument) || !str_cmp("clear", argument))
     {
-        ch->pcdata->area = NULL;
+        ch->pcdata->area = nullptr;
         assign_area(ch);
         if (!ch->pcdata->area)
             send_to_char("Area pointer cleared.\r\n", ch);
@@ -5279,7 +5279,7 @@ void do_aassign(CHAR_DATA* ch, const char* argument)
     }
 
     snprintf(buf, MAX_STRING_LENGTH, "%s", argument);
-    tarea = NULL;
+    tarea = nullptr;
 
     /*	if ( get_trust(ch) >= sysdata.level_modify_proto )   */
 
@@ -5830,7 +5830,7 @@ void fwrite_fuss_mobile(FILE* fpout, MOB_INDEX_DATA* pMobIndex, bool install)
         fprintf(fpout, "VIPFlags   %s~\n", flag_string(pMobIndex->vip_flags, planet_flags));
 
     // Mob has a shop? Add that data to the mob index.
-    if ((pShop = pMobIndex->pShop) != NULL)
+    if ((pShop = pMobIndex->pShop) != nullptr)
     {
         fprintf(
             fpout, "ShopData   %d %d %d %d %d %d %d %d %d\n",
@@ -5840,7 +5840,7 @@ void fwrite_fuss_mobile(FILE* fpout, MOB_INDEX_DATA* pMobIndex, bool install)
     }
 
     // Mob is a repair shop? Add that data to the mob index.
-    if ((pRepair = pMobIndex->rShop) != NULL)
+    if ((pRepair = pMobIndex->rShop) != nullptr)
     {
         fprintf(
             fpout, "RepairData %d %d %d %d %d %d %d\n",
@@ -5955,7 +5955,7 @@ void old_fold_area(AREA_DATA* tarea, const char* filename, bool install)
 
     snprintf(fname, 256, "%s.bak", filename);
     rename(filename, fname);
-    if ((fpout = fopen(filename, "w")) == NULL)
+    if ((fpout = fopen(filename, "w")) == nullptr)
     {
         bug("%s: fopen", __func__);
         perror(filename);
@@ -5988,7 +5988,7 @@ void old_fold_area(AREA_DATA* tarea, const char* filename, bool install)
     fprintf(fpout, "#MOBILES\n");
     for (vnum = tarea->low_m_vnum; vnum <= tarea->hi_m_vnum; vnum++)
     {
-        if ((pMobIndex = get_mob_index(vnum)) == NULL)
+        if ((pMobIndex = get_mob_index(vnum)) == nullptr)
             continue;
         if (install)
             REMOVE_BIT(pMobIndex->act, ACT_PROTOTYPE);
@@ -6087,7 +6087,7 @@ void old_fold_area(AREA_DATA* tarea, const char* filename, bool install)
     fprintf(fpout, "#OBJECTS\n");
     for (vnum = tarea->low_o_vnum; vnum <= tarea->hi_o_vnum; vnum++)
     {
-        if ((pObjIndex = get_obj_index(vnum)) == NULL)
+        if ((pObjIndex = get_obj_index(vnum)) == nullptr)
             continue;
         if (install)
             REMOVE_BIT(pObjIndex->extra_flags, ITEM_PROTOTYPE);
@@ -6193,7 +6193,7 @@ void old_fold_area(AREA_DATA* tarea, const char* filename, bool install)
     fprintf(fpout, "#ROOMS\n");
     for (vnum = tarea->low_r_vnum; vnum <= tarea->hi_r_vnum; vnum++)
     {
-        if ((room = get_room_index(vnum)) == NULL)
+        if ((room = get_room_index(vnum)) == nullptr)
             continue;
         if (install)
         {
@@ -6386,9 +6386,9 @@ void old_fold_area(AREA_DATA* tarea, const char* filename, bool install)
     fprintf(fpout, "#SHOPS\n");
     for (vnum = tarea->low_m_vnum; vnum <= tarea->hi_m_vnum; vnum++)
     {
-        if ((pMobIndex = get_mob_index(vnum)) == NULL)
+        if ((pMobIndex = get_mob_index(vnum)) == nullptr)
             continue;
-        if ((pShop     = pMobIndex->pShop) == NULL)
+        if ((pShop     = pMobIndex->pShop) == nullptr)
             continue;
         fprintf(
             fpout, " %d   %2d %2d %2d %2d %2d   %3d %3d",
@@ -6407,9 +6407,9 @@ void old_fold_area(AREA_DATA* tarea, const char* filename, bool install)
     fprintf(fpout, "#REPAIRS\n");
     for (vnum = tarea->low_m_vnum; vnum <= tarea->hi_m_vnum; vnum++)
     {
-        if ((pMobIndex = get_mob_index(vnum)) == NULL)
+        if ((pMobIndex = get_mob_index(vnum)) == nullptr)
             continue;
-        if ((pRepair   = pMobIndex->rShop) == NULL)
+        if ((pRepair   = pMobIndex->rShop) == nullptr)
             continue;
         fprintf(
             fpout, " %d   %2d %2d %2d         %3d %3d",
@@ -6426,7 +6426,7 @@ void old_fold_area(AREA_DATA* tarea, const char* filename, bool install)
     fprintf(fpout, "%s", "#SPECIALS\n");
     for (vnum = tarea->low_m_vnum; vnum <= tarea->hi_m_vnum; vnum++)
     {
-        if ((pMobIndex = get_mob_index(vnum)) != NULL)
+        if ((pMobIndex = get_mob_index(vnum)) != nullptr)
         {
             if (pMobIndex->spec_fun)
                 fprintf(fpout, "M  %d %s\n", pMobIndex->vnum, pMobIndex->spec_funname);
@@ -6709,7 +6709,7 @@ void do_installarea(CHAR_DATA* ch, const char* argument)
                     /*
                 * remove area from author
                 */
-                    d->character->pcdata->area       = NULL;
+                    d->character->pcdata->area       = nullptr;
                     /*
                 * clear out author vnums
                 */
@@ -7210,7 +7210,7 @@ void do_rlist(CHAR_DATA* ch, const char* argument)
 
     for (vnum = lrange; vnum <= trange; vnum++)
     {
-        if ((room = get_room_index(vnum)) == NULL)
+        if ((room = get_room_index(vnum)) == nullptr)
             continue;
         ch_printf(ch, "%5d) %s\r\n", vnum, room->name);
     }
@@ -7264,7 +7264,7 @@ void do_olist(CHAR_DATA* ch, const char* argument)
 
     for (vnum = lrange; vnum <= trange; vnum++)
     {
-        if ((obj = get_obj_index(vnum)) == NULL)
+        if ((obj = get_obj_index(vnum)) == nullptr)
             continue;
         ch_printf(ch, "%5d) %-20s (%s)\r\n", vnum, obj->name, obj->short_descr);
     }
@@ -7316,7 +7316,7 @@ void do_mlist(CHAR_DATA* ch, const char* argument)
 
     for (vnum = lrange; vnum <= trange; vnum++)
     {
-        if ((mob = get_mob_index(vnum)) == NULL)
+        if ((mob = get_mob_index(vnum)) == nullptr)
             continue;
         ch_printf(ch, "%5d) %-20s '%s'\r\n", vnum, mob->player_name, mob->short_descr);
     }
@@ -7351,7 +7351,7 @@ void do_mpedit(CHAR_DATA* ch, const char* argument)
     char      arg3[MAX_INPUT_LENGTH];
     char      arg4[MAX_INPUT_LENGTH];
     CHAR_DATA * victim;
-    MPROG_DATA* mprog, * mprg, * mprg_next = NULL;
+    MPROG_DATA* mprog, * mprg, * mprg_next = nullptr;
     int       value, mptype                = 0, cnt;
 
     if (IS_NPC(ch))
@@ -7375,7 +7375,7 @@ void do_mpedit(CHAR_DATA* ch, const char* argument)
             if (!ch->dest_buf)
             {
                 send_to_char("Fatal error: report to smaugmuds.afkmods.com.\r\n", ch);
-                bug("%s: sub_mprog_edit: NULL ch->dest_buf", __func__);
+                bug("%s: sub_mprog_edit: nullptr ch->dest_buf", __func__);
                 ch->substate = SUB_NONE;
                 return;
             }
@@ -7407,7 +7407,7 @@ void do_mpedit(CHAR_DATA* ch, const char* argument)
 
     if (get_trust(ch) < LEVEL_GOD)
     {
-        if ((victim = get_char_room(ch, arg1)) == NULL)
+        if ((victim = get_char_room(ch, arg1)) == nullptr)
         {
             send_to_char("They aren't here.\r\n", ch);
             return;
@@ -7415,7 +7415,7 @@ void do_mpedit(CHAR_DATA* ch, const char* argument)
     }
     else
     {
-        if ((victim = get_char_world(ch, arg1)) == NULL)
+        if ((victim = get_char_world(ch, arg1)) == nullptr)
         {
             send_to_char("No one like that in all the realms.\r\n", ch);
             return;
@@ -7607,7 +7607,7 @@ void do_mpedit(CHAR_DATA* ch, const char* argument)
             send_to_char("Unknown program type.\r\n", ch);
             return;
         }
-        if (mprog != NULL)
+        if (mprog != nullptr)
             for (; mprog->next; mprog = mprog->next);
         CREATE(mprg, MPROG_DATA, 1);
         if (mprog)
@@ -7616,7 +7616,7 @@ void do_mpedit(CHAR_DATA* ch, const char* argument)
             victim->pIndexData->mudprogs = mprg;
         victim->pIndexData->progtypes |= (1 << mptype);
         mpedit(ch, mprg, mptype, argument);
-        mprg->next = NULL;
+        mprg->next = nullptr;
         return;
     }
 
@@ -7630,7 +7630,7 @@ void do_opedit(CHAR_DATA* ch, const char* argument)
     char      arg3[MAX_INPUT_LENGTH];
     char      arg4[MAX_INPUT_LENGTH];
     OBJ_DATA  * obj;
-    MPROG_DATA* mprog, * mprg, * mprg_next = NULL;
+    MPROG_DATA* mprog, * mprg, * mprg_next = nullptr;
     int       value, mptype                = 0, cnt;
 
     if (IS_NPC(ch))
@@ -7654,7 +7654,7 @@ void do_opedit(CHAR_DATA* ch, const char* argument)
             if (!ch->dest_buf)
             {
                 send_to_char("Fatal error: report to smaugmuds.afkmods.com.\r\n", ch);
-                bug("%s: sub_oprog_edit: NULL ch->dest_buf", __func__);
+                bug("%s: sub_oprog_edit: nullptr ch->dest_buf", __func__);
                 ch->substate = SUB_NONE;
                 return;
             }
@@ -7689,7 +7689,7 @@ void do_opedit(CHAR_DATA* ch, const char* argument)
 
     if (get_trust(ch) < LEVEL_GOD)
     {
-        if ((obj = get_obj_carry(ch, arg1)) == NULL)
+        if ((obj = get_obj_carry(ch, arg1)) == nullptr)
         {
             send_to_char("You aren't carrying that.\r\n", ch);
             return;
@@ -7697,7 +7697,7 @@ void do_opedit(CHAR_DATA* ch, const char* argument)
     }
     else
     {
-        if ((obj = get_obj_world(ch, arg1)) == NULL)
+        if ((obj = get_obj_world(ch, arg1)) == nullptr)
         {
             send_to_char("Nothing like that in all the realms.\r\n", ch);
             return;
@@ -7883,7 +7883,7 @@ void do_opedit(CHAR_DATA* ch, const char* argument)
             send_to_char("Unknown program type.\r\n", ch);
             return;
         }
-        if (mprog != NULL)
+        if (mprog != nullptr)
             for (; mprog->next; mprog = mprog->next);
         CREATE(mprg, MPROG_DATA, 1);
         if (mprog)
@@ -7892,7 +7892,7 @@ void do_opedit(CHAR_DATA* ch, const char* argument)
             obj->pIndexData->mudprogs = mprg;
         obj->pIndexData->progtypes |= (1 << mptype);
         mpedit(ch, mprg, mptype, argument);
-        mprg->next = NULL;
+        mprg->next = nullptr;
         return;
     }
 
@@ -7926,7 +7926,7 @@ void do_rpedit(CHAR_DATA* ch, const char* argument)
     char      arg1[MAX_INPUT_LENGTH];
     char      arg2[MAX_INPUT_LENGTH];
     char      arg3[MAX_INPUT_LENGTH];
-    MPROG_DATA* mprog, * mprg, * mprg_next = NULL;
+    MPROG_DATA* mprog, * mprg, * mprg_next = nullptr;
     int       value, mptype                = 0, cnt;
 
     if (IS_NPC(ch))
@@ -7950,7 +7950,7 @@ void do_rpedit(CHAR_DATA* ch, const char* argument)
             if (!ch->dest_buf)
             {
                 send_to_char("Fatal error: report to smaugmuds.afkmods.com.\r\n", ch);
-                bug("%s: sub_oprog_edit: NULL ch->dest_buf", __func__);
+                bug("%s: sub_oprog_edit: nullptr ch->dest_buf", __func__);
                 ch->substate = SUB_NONE;
                 return;
             }
@@ -8166,7 +8166,7 @@ void do_rpedit(CHAR_DATA* ch, const char* argument)
             ch->in_room->mudprogs = mprg;
         ch->in_room->progtypes |= (1 << mptype);
         mpedit(ch, mprg, mptype, argument);
-        mprg->next = NULL;
+        mprg->next = nullptr;
         return;
     }
 
@@ -8321,12 +8321,12 @@ void RelCreate(relation_type tp, void* actor, void* subject)
     }
     if (!actor)
     {
-        bug("%s: NULL actor", __func__);
+        bug("%s: nullptr actor", __func__);
         return;
     }
     if (!subject)
     {
-        bug("%s: NULL subject", __func__);
+        bug("%s: nullptr subject", __func__);
         return;
     }
     for (tmp = first_relation; tmp; tmp = tmp->next)
@@ -8357,12 +8357,12 @@ void RelDestroy(relation_type tp, void* actor, void* subject)
     }
     if (!actor)
     {
-        bug("%s: NULL actor", __func__);
+        bug("%s: nullptr actor", __func__);
         return;
     }
     if (!subject)
     {
-        bug("%s: NULL subject", __func__);
+        bug("%s: nullptr subject", __func__);
         return;
     }
     for (rq = first_relation; rq; rq = rq->next)
@@ -8370,7 +8370,7 @@ void RelDestroy(relation_type tp, void* actor, void* subject)
         {
             UNLINK(rq, first_relation, last_relation, next, prev);
             /*
-          * Dispose will also set to NULL the passed parameter
+          * Dispose will also set to nullptr the passed parameter
           */
             DISPOSE(rq);
             break;

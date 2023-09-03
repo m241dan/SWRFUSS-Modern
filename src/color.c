@@ -591,7 +591,7 @@ const char* color_str(short AType, CHAR_DATA* ch)
 {
     if (!ch)
     {
-        bug("%s: NULL ch!", __func__);
+        bug("%s: nullptr ch!", __func__);
         return ("");
     }
 
@@ -729,9 +729,9 @@ const char* random_ansi(short type)
  */
 int colorcode(const char* src, char* dst, DESCRIPTOR_DATA* d, int dstlen, int* vislen)
 {
-    CHAR_DATA * ch     = NULL;
+    CHAR_DATA * ch     = nullptr;
     bool      ansi     = FALSE;
-    const char* sympos = NULL;
+    const char* sympos = nullptr;
 
     /*
      * No descriptor, assume ANSI conversion can't be done.
@@ -1175,7 +1175,7 @@ int colorcode(const char* src, char* dst, DESCRIPTOR_DATA* d, int dstlen, int* v
  *
  * This function returns the intended screen length of a string which has
  * color codes embedded in it.  It does this by stripping the codes out
- * entirely (A NULL descriptor means ANSI will be FALSE).
+ * entirely (A nullptr descriptor means ANSI will be FALSE).
  */
 int color_strlen(const char* src)
 {
@@ -1197,7 +1197,7 @@ int color_strlen(const char* src)
             case '}':  /* BLINK Foreground colour */
                 *dst = '\0';
                 vislen = 0;
-                i += colorcode(&src[i], dst, NULL, 20, &vislen); /* Skip input token */
+                i += colorcode(&src[i], dst, nullptr, 20, &vislen); /* Skip input token */
                 len += vislen; /* Count output token length */
                 break;   /* this was missing - if you have issues, remove it */
 
@@ -1252,7 +1252,7 @@ char* colorize(const char* txt, DESCRIPTOR_DATA* d)
         char      colbuf[20];
         int       ln;
 
-        while ((colstr = strpbrk(prevstr, "&^}hH")) != NULL)
+        while ((colstr = strpbrk(prevstr, "&^}hH")) != nullptr)
         {
             int reslen = 0;
 
@@ -1267,7 +1267,7 @@ char* colorize(const char* txt, DESCRIPTOR_DATA* d)
                     result,
                     prevstr,
                     (colstr - prevstr));  /* Leave this one alone! BAD THINGS(TM) will happen if you don't! */
-                result[reslen + (colstr - prevstr)] = '\0';   /* strncat will NOT NULL terminate this! */
+                result[reslen + (colstr - prevstr)] = '\0';   /* strncat will NOT nullptr terminate this! */
             }
 
             if (colstr[0] == 'h' || colstr[0] == 'H')
@@ -1284,7 +1284,7 @@ char* colorize(const char* txt, DESCRIPTOR_DATA* d)
                             continue;
                         }
 
-            ln = colorcode(colstr, colbuf, d, 20, NULL);
+            ln = colorcode(colstr, colbuf, d, 20, nullptr);
             if (ln > 0)
             {
                 mudstrlcat(result, colbuf, MAX_STRING_LENGTH);
@@ -1311,7 +1311,7 @@ void set_char_color(short AType, CHAR_DATA* ch)
     write_to_buffer(ch->desc, color_str(AType, ch), 0);
     if (!ch->desc)
     {
-        bug("%s: NULL descriptor after WTB! CH: %s", __func__, ch->name ? ch->name : "Unknown?!?");
+        bug("%s: nullptr descriptor after WTB! CH: %s", __func__, ch->name ? ch->name : "Unknown?!?");
         return;
     }
     ch->desc->pagecolor = ch->colors[AType];
@@ -1351,7 +1351,7 @@ void write_to_pager(DESCRIPTOR_DATA* d, const char* txt, size_t length)
         {
             bug("%s: Pager overflow.  Ignoring.", __func__);
             d->pagetop   = 0;
-            d->pagepoint = NULL;
+            d->pagepoint = nullptr;
             DISPOSE(d->pagebuf);
             d->pagesize = MAX_STRING_LENGTH;
             return;
@@ -1380,7 +1380,7 @@ void set_pager_color(short AType, CHAR_DATA* ch)
     write_to_pager(ch->desc, color_str(AType, ch), 0);
     if (!ch->desc)
     {
-        bug("%s: NULL descriptor after WTP! CH: %s", __func__, ch->name ? ch->name : "Unknown?!?");
+        bug("%s: nullptr descriptor after WTP! CH: %s", __func__, ch->name ? ch->name : "Unknown?!?");
         return;
     }
     ch->desc->pagecolor = ch->colors[AType];
@@ -1391,7 +1391,7 @@ void send_to_desc_color(const char* txt, DESCRIPTOR_DATA* d)
 {
     if (!d)
     {
-        bug("%s: NULL *d", __func__);
+        bug("%s: nullptr *d", __func__);
         return;
     }
 
@@ -1408,7 +1408,7 @@ void send_to_char(const char* txt, CHAR_DATA* ch)
 {
     if (!ch)
     {
-        bug("%s: NULL ch!", __func__);
+        bug("%s: nullptr ch!", __func__);
         return;
     }
 
@@ -1420,7 +1420,7 @@ void send_to_pager(const char* txt, CHAR_DATA* ch)
 {
     if (!ch)
     {
-        bug("%s: NULL ch!", __func__);
+        bug("%s: nullptr ch!", __func__);
         return;
     }
 

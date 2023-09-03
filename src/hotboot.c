@@ -135,7 +135,7 @@ void write_ship(FILE* fp, SHIP_DATA* ship)
         fprintf(fp, "Target2 %s~\n", ship->target2->name);
 
     fprintf(fp, "Shipstate %d\n", ship->shipstate);
-    if (ship->dest != NULL && ship->dest[0] != '\0')
+    if (ship->dest != nullptr && ship->dest[0] != '\0')
     {
         fprintf(fp, "LandDest %s~\n", ship->dest);
     }
@@ -157,18 +157,18 @@ void write_ship(FILE* fp, SHIP_DATA* ship)
 
 SHIP_DATA* load_ship(FILE* fp)
 {
-    SHIP_DATA * ship = NULL;
+    SHIP_DATA * ship = nullptr;
     const char* word;
     bool      fMatch;
 
     word = feof(fp) ? "EndShip" : fread_word(fp);
     if (!str_cmp(word, "EndShip"))
-        return NULL;
+        return nullptr;
 
     if (!str_cmp(word, "SHIPFNAME"))
     {
         const char* name      = fread_string_nohash(fp); /* is this right? - Gavin */
-        SHIP_DATA * temp_ship = NULL;
+        SHIP_DATA * temp_ship = nullptr;
 
         for (temp_ship = first_ship; temp_ship; temp_ship = temp_ship->next)
         {
@@ -179,11 +179,11 @@ SHIP_DATA* load_ship(FILE* fp)
             }
         }
 
-        if (ship == NULL)
+        if (ship == nullptr)
         {
             bug("%s: No ship data for filename %s", __func__, name);
             DISPOSE(name);
-            return NULL;
+            return nullptr;
 
             for (;;)
             {
@@ -203,7 +203,7 @@ SHIP_DATA* load_ship(FILE* fp)
                 break;
         }
         bug("%s: shipfname not found", __func__);
-        return NULL;
+        return nullptr;
     }
 
     for (;;)
@@ -350,7 +350,7 @@ SHIP_DATA* load_ship(FILE* fp)
         if (!fMatch && str_cmp(word, "End"))
             bug("%s: no match: %s", __func__, word);
     }
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -359,7 +359,7 @@ SHIP_DATA* load_ship(FILE* fp)
 void save_mobile(FILE* fp, CHAR_DATA* mob)
 {
     AFFECT_DATA* paf;
-    SKILLTYPE  * skill = NULL;
+    SKILLTYPE  * skill = nullptr;
 
     if (!IS_NPC(mob) || !fp)
         return;
@@ -407,7 +407,7 @@ void save_mobile(FILE* fp, CHAR_DATA* mob)
 
     for (paf = mob->first_affect; paf; paf = paf->next)
     {
-        if (paf->type >= 0 && (skill = get_skilltype(paf->type)) == NULL)
+        if (paf->type >= 0 && (skill = get_skilltype(paf->type)) == nullptr)
             continue;
 
         if (paf->type >= 0 && paf->type < TYPE_PERSONAL)
@@ -447,7 +447,7 @@ void save_world(CHAR_DATA* ch)
     log_string("Preserving world state....");
 
     snprintf(filename, 256, "%s%s", SYSTEM_DIR, MOB_FILE);
-    if ((mobfp = fopen(filename, "w")) == NULL)
+    if ((mobfp = fopen(filename, "w")) == nullptr)
     {
         bug("%s: fopen mob file", __func__);
         perror(filename);
@@ -456,7 +456,7 @@ void save_world(CHAR_DATA* ch)
         mobfile++;
 
     snprintf(filename, 256, "%s%s", SYSTEM_DIR, SHIP_FILE);
-    if ((shipfp = fopen(filename, "w")) == NULL)
+    if ((shipfp = fopen(filename, "w")) == nullptr)
     {
         bug("%s: fopen ship file", __func__);
         perror(filename);
@@ -476,13 +476,13 @@ void save_world(CHAR_DATA* ch)
                     continue;
 
                 snprintf(filename, 256, "%s%d", HOTBOOT_DIR, pRoomIndex->vnum);
-                if ((objfp = fopen(filename, "w")) == NULL)
+                if ((objfp = fopen(filename, "w")) == nullptr)
                 {
                     bug("%s: fopen %d", __func__, pRoomIndex->vnum);
                     perror(filename);
                     continue;
                 }
-                fwrite_obj(NULL, pRoomIndex->last_content, objfp, 0, OS_CARRY, TRUE);
+                fwrite_obj(nullptr, pRoomIndex->last_content, objfp, 0, OS_CARRY, TRUE);
                 fprintf(objfp, "%s", "#END\n");
                 FCLOSE(objfp);
             }
@@ -504,7 +504,7 @@ void save_world(CHAR_DATA* ch)
 
     if (shipfile)
     {
-        SHIP_DATA* ship = NULL;
+        SHIP_DATA* ship = nullptr;
 
         for (ship = first_ship; ship; ship = ship->next)
         {
@@ -517,11 +517,11 @@ void save_world(CHAR_DATA* ch)
 
 CHAR_DATA* load_mobile(FILE* fp)
 {
-    CHAR_DATA      * mob        = NULL;
+    CHAR_DATA      * mob        = nullptr;
     const char     * word;
     bool           fMatch;
     int            inroom       = 0;
-    ROOM_INDEX_DATA* pRoomIndex = NULL;
+    ROOM_INDEX_DATA* pRoomIndex = nullptr;
 
     word = feof(fp) ? "EndMobile" : fread_word(fp);
     if (!str_cmp(word, "Vnum"))
@@ -529,10 +529,10 @@ CHAR_DATA* load_mobile(FILE* fp)
         int vnum;
 
         vnum = fread_number(fp);
-        if (get_mob_index(vnum) == NULL)
+        if (get_mob_index(vnum) == nullptr)
         {
             bug("%s: No index data for vnum %d", __func__, vnum);
-            return NULL;
+            return nullptr;
         }
         mob = create_mobile(get_mob_index(vnum));
         if (!mob)
@@ -548,7 +548,7 @@ CHAR_DATA* load_mobile(FILE* fp)
                     break;
             }
             bug("%s: Unable to create mobile for vnum %d", __func__, vnum);
-            return NULL;
+            return nullptr;
         }
     }
     else
@@ -565,7 +565,7 @@ CHAR_DATA* load_mobile(FILE* fp)
         }
 
         bug("%s: Vnum not found", __func__);
-        return NULL;
+        return nullptr;
     }
 
     for (;;)
@@ -746,7 +746,7 @@ CHAR_DATA* load_mobile(FILE* fp)
         if (!fMatch && str_cmp(word, "End"))
             bug("%s: no match: %s", __func__, word);
     }
-    return NULL;
+    return nullptr;
 }
 
 void read_obj_file(char* dirname, char* filename)
@@ -758,21 +758,21 @@ void read_obj_file(char* dirname, char* filename)
 
     vnum = atoi(filename);
 
-    if ((room = get_room_index(vnum)) == NULL)
+    if ((room = get_room_index(vnum)) == nullptr)
     {
         bug("%s: ARGH! Missing room index for %d!", __func__, vnum);
         return;
     }
 
     snprintf(fname, 256, "%s%s", dirname, filename);
-    if ((fp = fopen(fname, "r")) != NULL)
+    if ((fp = fopen(fname, "r")) != nullptr)
     {
         short   iNest;
         OBJ_DATA* tobj, * tobj_next;
 
         rset_supermob(room);
         for (iNest = 0; iNest < MAX_NEST; iNest++)
-            rgObjNest[iNest] = NULL;
+            rgObjNest[iNest] = nullptr;
 
         for (;;)
         {
@@ -873,7 +873,7 @@ void load_world(CHAR_DATA* ch)
     bool      shipfile = FALSE;
 
     snprintf(file1, 256, "%s%s", SYSTEM_DIR, MOB_FILE);
-    if ((mobfp = fopen(file1, "r")) == NULL)
+    if ((mobfp = fopen(file1, "r")) == nullptr)
     {
         bug("%s: fopen mob file", __func__);
         perror(file1);
@@ -882,7 +882,7 @@ void load_world(CHAR_DATA* ch)
         mobfile = TRUE;
 
     snprintf(file2, 256, "%s%s", SYSTEM_DIR, SHIP_FILE);
-    if ((shipfp = fopen(file2, "r")) == NULL)
+    if ((shipfp = fopen(file2, "r")) == nullptr)
     {
         bug("%s: fopen ship file", __func__);
         perror(file1);
@@ -942,7 +942,7 @@ void load_world(CHAR_DATA* ch)
 void do_hotboot(CHAR_DATA* ch, const char* argument)
 {
     FILE           * fp;
-    CHAR_DATA      * victim = NULL;
+    CHAR_DATA      * victim = nullptr;
     DESCRIPTOR_DATA* d, * de_next;
     char           buf[100], buf2[100], buf3[100];
     extern int     control;
@@ -955,7 +955,7 @@ void do_hotboot(CHAR_DATA* ch, const char* argument)
                 d->connected == CON_PLAYING
                 || d->connected == CON_EDITING
             )
-            && (victim = d->character) != NULL && !IS_NPC(victim)
+            && (victim = d->character) != nullptr && !IS_NPC(victim)
             && victim->in_room && victim->fighting && victim->top_level >= 1 && victim->top_level <= MAX_LEVEL)
         {
             found = TRUE;
@@ -1087,13 +1087,13 @@ void do_hotboot(CHAR_DATA* ch, const char* argument)
 #endif
 
     dlclose(sysdata.dlHandle);
-    execl(EXE_FILE, "swreality", buf, "hotboot", buf2, buf3, (char*)NULL);
+    execl(EXE_FILE, "swreality", buf, "hotboot", buf2, buf3, (char*)nullptr);
 
     /*
      * Failed - sucessful exec will not return
      */
     perror("do_hotboot: execl");
-    sysdata.dlHandle = dlopen(NULL, RTLD_LAZY);
+    sysdata.dlHandle = dlopen(nullptr, RTLD_LAZY);
     if (!sysdata.dlHandle)
     {
         bug("%s: FATAL ERROR: Unable to reopen system executable handle!", __func__);
@@ -1106,7 +1106,7 @@ void do_hotboot(CHAR_DATA* ch, const char* argument)
 /* Recover from a hotboot - load players */
 void hotboot_recover(void)
 {
-    DESCRIPTOR_DATA* d                                      = NULL;
+    DESCRIPTOR_DATA* d                                      = nullptr;
     FILE           * fp;
     char           name[100];
     char           host[MAX_STRING_LENGTH];
@@ -1125,7 +1125,7 @@ void hotboot_recover(void)
     unlink(HOTBOOT_FILE); /* In case something crashes - doesn't prevent reading */
     for (;;)
     {
-        d = NULL;
+        d = nullptr;
 
         fscanf(fp, "%d %d %d %d %d %s %s\n", &dcompress, &desc, &room, &dport, &idle, name, host);
 
@@ -1149,7 +1149,7 @@ void hotboot_recover(void)
 
         CREATE(d, DESCRIPTOR_DATA, 1);
         CREATE(d->mccp, MCCP, 1);
-        d->next       = NULL;
+        d->next       = nullptr;
         d->descriptor = desc;
         d->connected  = CON_GET_NAME;
         d->outsize    = 2000;
@@ -1199,8 +1199,8 @@ void hotboot_recover(void)
             LINK(d->character, first_char, last_char, next, prev);
 
             char_to_room(d->character, d->character->in_room);
-            act(AT_MAGIC, "You appear in a swirl of the Force!", d->character, NULL, NULL, TO_CHAR);
-            act(AT_MAGIC, "$n appears in a swrrl of the Force!", d->character, NULL, NULL, TO_ROOM);
+            act(AT_MAGIC, "You appear in a swirl of the Force!", d->character, nullptr, nullptr, TO_CHAR);
+            act(AT_MAGIC, "$n appears in a swrrl of the Force!", d->character, nullptr, nullptr, TO_ROOM);
             d->connected           = CON_PLAYING;
             if (++num_descriptors > sysdata.maxplayers)
                 sysdata.maxplayers = num_descriptors;

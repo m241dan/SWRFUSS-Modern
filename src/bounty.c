@@ -77,7 +77,7 @@ BOUNTY_DATA* get_disintigration(const char* target)
     for (bounty = first_disintigration; bounty; bounty = bounty->next)
         if (!str_cmp(target, bounty->target))
             return bounty;
-    return NULL;
+    return nullptr;
 }
 
 void load_bounties()
@@ -88,13 +88,13 @@ void load_bounties()
     BOUNTY_DATA* bounty;
     long int   amount;
 
-    first_disintigration = NULL;
-    last_disintigration  = NULL;
+    first_disintigration = nullptr;
+    last_disintigration  = nullptr;
 
     log_string("Loading disintigrations...");
 
     snprintf(bountylist, 256, "%s%s", SYSTEM_DIR, DISINTIGRATION_LIST);
-    if ((fpList = fopen(bountylist, "r")) == NULL)
+    if ((fpList = fopen(bountylist, "r")) == nullptr)
     {
         perror(bountylist);
         exit(1);
@@ -264,7 +264,7 @@ void claim_disintigration(CHAR_DATA* ch, CHAR_DATA* victim)
 
     if (ch == victim)
     {
-        if (bounty != NULL)
+        if (bounty != nullptr)
             remove_disintigration(bounty);
         return;
     }
@@ -272,10 +272,10 @@ void claim_disintigration(CHAR_DATA* ch, CHAR_DATA* victim)
     if (bounty && (!ch->pcdata || !ch->pcdata->clan || str_cmp(ch->pcdata->clan->name, "the hunters guild")))
     {
         remove_disintigration(bounty);
-        bounty = NULL;
+        bounty = nullptr;
     }
 
-    if (bounty == NULL)
+    if (bounty == nullptr)
     {
         if (IS_SET(victim->act, PLR_KILLER) && !IS_NPC(ch))
         {

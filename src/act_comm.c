@@ -49,7 +49,7 @@ void sound_to_room(ROOM_INDEX_DATA* room, const char* argument)
 {
     CHAR_DATA* vic;
 
-    if (room == NULL)
+    if (room == nullptr)
         return;
 
     for (vic = room->first_person; vic; vic = vic->next_in_room)
@@ -86,7 +86,7 @@ void do_beep(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL
+    if ((victim = get_char_world(ch, arg)) == nullptr
         || (IS_NPC(victim) && victim->in_room != ch->in_room)
         || (!NOT_AUTHED(ch) && NOT_AUTHED(victim) && !IS_IMMORTAL(ch)))
     {
@@ -150,7 +150,7 @@ void do_beep(CHAR_DATA* ch, const char* argument)
 
     if (IS_SET(victim->deaf, CHANNEL_TELLS) && (!IS_IMMORTAL(ch) || (get_trust(ch) < get_trust(victim))))
     {
-        act(AT_PLAIN, "$E has $S tells turned off.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$E has $S tells turned off.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -275,7 +275,7 @@ const char* drunk_speech(const char* argument, CHAR_DATA* ch)
 
     if (!argument)
     {
-        bug("%s: NULL argument", __func__);
+        bug("%s: nullptr argument", __func__);
         return "";
     }
 
@@ -399,7 +399,7 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
     char           buf2[MAX_STRING_LENGTH];
     DESCRIPTOR_DATA* d;
     int            position;
-    CLAN_DATA      * clan = NULL;
+    CLAN_DATA      * clan = nullptr;
 
     bool ch_comlink = FALSE;
 
@@ -524,7 +524,7 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
             snprintf(buf, MAX_STRING_LENGTH, "(OOC) $n: $t");
             position = ch->position;
             ch->position = POS_STANDING;
-            act(AT_OOC, buf, ch, argument, NULL, TO_CHAR);
+            act(AT_OOC, buf, ch, argument, nullptr, TO_CHAR);
             ch->position = position;
             break;
         case CHANNEL_WARTALK:set_char_color(AT_WARTALK, ch);
@@ -548,7 +548,7 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
                 mudstrlcat(buf, "(i105) $n> $t", MAX_STRING_LENGTH);
             position = ch->position;
             ch->position = POS_STANDING;
-            act(channel == CHANNEL_AVTALK ? AT_AVATAR : AT_IMMORT, buf, ch, argument, NULL, TO_CHAR);
+            act(channel == CHANNEL_AVTALK ? AT_AVATAR : AT_IMMORT, buf, ch, argument, nullptr, TO_CHAR);
             ch->position = position;
             break;
     }
@@ -743,7 +743,7 @@ void do_shiptalk(CHAR_DATA* ch, const char* argument)
 {
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -755,7 +755,7 @@ void do_systemtalk(CHAR_DATA* ch, const char* argument)
 {
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -767,7 +767,7 @@ void do_spacetalk(CHAR_DATA* ch, const char* argument)
 {
     SHIP_DATA* ship;
 
-    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == NULL)
+    if ((ship = ship_from_cockpit(ch->in_room->vnum)) == nullptr)
     {
         send_to_char("&RYou must be in the cockpit of a ship to do that!\r\n", ch);
         return;
@@ -968,10 +968,10 @@ void do_say(CHAR_DATA* ch, const char* argument)
         act(AT_SAY, "$n says '$t'", ch, sbuf, vch, TO_VICT);
     }
     /*    MOBtrigger = FALSE;
-    act( AT_SAY, "$n says '$T'", ch, NULL, argument, TO_ROOM );*/
+    act( AT_SAY, "$n says '$T'", ch, nullptr, argument, TO_ROOM );*/
     ch->act = actflags;
     MOBtrigger = FALSE;
-    act(AT_SAY, "You say '$T'", ch, NULL, drunk_speech(argument, ch), TO_CHAR);
+    act(AT_SAY, "You say '$T'", ch, nullptr, drunk_speech(argument, ch), TO_CHAR);
     if (IS_SET(ch->in_room->room_flags, ROOM_LOGSPEECH))
     {
         snprintf(buf, MAX_STRING_LENGTH, "%s: %s", IS_NPC(ch) ? ch->short_descr : ch->name, argument);
@@ -997,11 +997,11 @@ void do_tell(CHAR_DATA* ch, const char* argument)
     bool     victim_comlink;
     OBJ_DATA * obj;
 
-    switched_victim = NULL;
+    switched_victim = nullptr;
 
     if (IS_SET(ch->deaf, CHANNEL_TELLS) && !IS_IMMORTAL(ch))
     {
-        act(AT_PLAIN, "You have tells turned off... try chan +tells first", ch, NULL, NULL, TO_CHAR);
+        act(AT_PLAIN, "You have tells turned off... try chan +tells first", ch, nullptr, nullptr, TO_CHAR);
         return;
     }
 
@@ -1025,7 +1025,7 @@ void do_tell(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_world(ch, arg)) == NULL
+    if ((victim = get_char_world(ch, arg)) == nullptr
         || (IS_NPC(victim) && victim->in_room != ch->in_room)
         || (!NOT_AUTHED(ch) && NOT_AUTHED(victim) && !IS_IMMORTAL(ch)))
     {
@@ -1105,7 +1105,7 @@ void do_tell(CHAR_DATA* ch, const char* argument)
 
     if (IS_SET(victim->deaf, CHANNEL_TELLS) && (!IS_IMMORTAL(ch) || (get_trust(ch) < get_trust(victim))))
     {
-        act(AT_PLAIN, "$E has $S tells turned off.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$E has $S tells turned off.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -1184,7 +1184,7 @@ void do_reply(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = ch->reply) == NULL)
+    if ((victim = ch->reply) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -1209,7 +1209,7 @@ void do_reply(CHAR_DATA* ch, const char* argument)
 
     if (IS_SET(victim->deaf, CHANNEL_TELLS) && (!IS_IMMORTAL(ch) || (get_trust(ch) < get_trust(victim))))
     {
-        act(AT_PLAIN, "$E has $S tells turned off.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$E has $S tells turned off.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
@@ -1273,9 +1273,9 @@ void do_emote(CHAR_DATA* ch, const char* argument)
         mudstrlcat(buf, ".", MAX_STRING_LENGTH);
 
     MOBtrigger = FALSE;
-    act(AT_ACTION, "$n $T", ch, NULL, buf, TO_ROOM);
+    act(AT_ACTION, "$n $T", ch, nullptr, buf, TO_ROOM);
     MOBtrigger = FALSE;
-    act(AT_ACTION, "$n $T", ch, NULL, buf, TO_CHAR);
+    act(AT_ACTION, "$n $T", ch, nullptr, buf, TO_CHAR);
     ch->act = actflags;
     if (IS_SET(ch->in_room->room_flags, ROOM_LOGSPEECH))
     {
@@ -1364,7 +1364,7 @@ void do_quit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (auction->item != NULL && ((ch == auction->buyer) || (ch == auction->seller)))
+    if (auction->item != nullptr && ((ch == auction->buyer) || (ch == auction->seller)))
     {
         send_to_char("Wait until you have bought/sold the item on auction.\r\n", ch);
         return;
@@ -1384,15 +1384,15 @@ void do_quit(CHAR_DATA* ch, const char* argument)
             "Your surroundings begin to fade as a mystical swirling vortex of colors\r\nenvelops your body... When you come to, things are not as they were.\r\n\r\n",
             ch
         );
-    act(AT_SAY, "A strange voice says, 'We await your return, $n...'", ch, NULL, NULL, TO_CHAR);
-    act(AT_BYE, "$n has left the game.", ch, NULL, NULL, TO_ROOM);
+    act(AT_SAY, "A strange voice says, 'We await your return, $n...'", ch, nullptr, nullptr, TO_CHAR);
+    act(AT_BYE, "$n has left the game.", ch, nullptr, nullptr, TO_ROOM);
     set_char_color(AT_GREY, ch);
 
     snprintf(log_buf, MAX_STRING_LENGTH, "%s has quit.", ch->name);
     quitting_char = ch;
     save_char_obj(ch);
     save_home(ch);
-    saving_char = NULL;
+    saving_char = nullptr;
 
     level = get_trust(ch);
     /*
@@ -1401,7 +1401,7 @@ void do_quit(CHAR_DATA* ch, const char* argument)
     extract_char(ch, TRUE);
     for (x = 0; x < MAX_WEAR; x++)
         for (y = 0; y < MAX_LAYERS; y++)
-            save_equipment[x][y] = NULL;
+            save_equipment[x][y] = nullptr;
 
     log_string_plus(log_buf, LOG_COMM, level);
 }
@@ -1412,7 +1412,7 @@ void send_rip_screen(CHAR_DATA* ch)
     int  num = 0;
     char BUFF[MAX_STRING_LENGTH * 2];
 
-    if ((rpfile = fopen(RIPSCREEN_FILE, "r")) != NULL)
+    if ((rpfile = fopen(RIPSCREEN_FILE, "r")) != nullptr)
     {
         while ((BUFF[num] = fgetc(rpfile)) != EOF)
             num++;
@@ -1428,7 +1428,7 @@ void send_rip_title(CHAR_DATA* ch)
     int  num = 0;
     char BUFF[MAX_STRING_LENGTH * 2];
 
-    if ((rpfile = fopen(RIPTITLE_FILE, "r")) != NULL)
+    if ((rpfile = fopen(RIPTITLE_FILE, "r")) != nullptr)
     {
         while ((BUFF[num] = fgetc(rpfile)) != EOF)
             num++;
@@ -1444,7 +1444,7 @@ void send_ansi_title(CHAR_DATA* ch)
     int  num = 0;
     char BUFF[MAX_STRING_LENGTH * 2];
 
-    if ((rpfile = fopen(ANSITITLE_FILE, "r")) != NULL)
+    if ((rpfile = fopen(ANSITITLE_FILE, "r")) != nullptr)
     {
         while ((BUFF[num] = fgetc(rpfile)) != EOF)
             num++;
@@ -1460,7 +1460,7 @@ void send_ascii_title(CHAR_DATA* ch)
     int  num = 0;
     char BUFF[MAX_STRING_LENGTH];
 
-    if ((rpfile = fopen(ASCTITLE_FILE, "r")) != NULL)
+    if ((rpfile = fopen(ASCTITLE_FILE, "r")) != nullptr)
     {
         while ((BUFF[num] = fgetc(rpfile)) != EOF)
             num++;
@@ -1576,7 +1576,7 @@ void do_save(CHAR_DATA* ch, const char* argument)
 
     save_char_obj(ch);
     save_home(ch);
-    saving_char = NULL;
+    saving_char = nullptr;
     send_to_char("Ok.\r\n", ch);
 }
 
@@ -1609,7 +1609,7 @@ void do_follow(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -1617,7 +1617,7 @@ void do_follow(CHAR_DATA* ch, const char* argument)
 
     if (IS_AFFECTED(ch, AFF_CHARM) && ch->master)
     {
-        act(AT_PLAIN, "But you'd rather follow $N!", ch, NULL, ch->master, TO_CHAR);
+        act(AT_PLAIN, "But you'd rather follow $N!", ch, nullptr, ch->master, TO_CHAR);
         return;
     }
 
@@ -1653,12 +1653,12 @@ void add_follower(CHAR_DATA* ch, CHAR_DATA* master)
     }
 
     ch->master = master;
-    ch->leader = NULL;
+    ch->leader = nullptr;
 
     if (can_see(master, ch))
-        act(AT_ACTION, "$n now follows you.", ch, NULL, master, TO_VICT);
+        act(AT_ACTION, "$n now follows you.", ch, nullptr, master, TO_VICT);
 
-    act(AT_ACTION, "You now follow $N.", ch, NULL, master, TO_CHAR);
+    act(AT_ACTION, "You now follow $N.", ch, nullptr, master, TO_CHAR);
 }
 
 void stop_follower(CHAR_DATA* ch)
@@ -1676,11 +1676,11 @@ void stop_follower(CHAR_DATA* ch)
     }
 
     if (can_see(ch->master, ch))
-        act(AT_ACTION, "$n stops following you.", ch, NULL, ch->master, TO_VICT);
-    act(AT_ACTION, "You stop following $N.", ch, NULL, ch->master, TO_CHAR);
+        act(AT_ACTION, "$n stops following you.", ch, nullptr, ch->master, TO_VICT);
+    act(AT_ACTION, "You stop following $N.", ch, nullptr, ch->master, TO_CHAR);
 
-    ch->master = NULL;
-    ch->leader = NULL;
+    ch->master = nullptr;
+    ch->leader = nullptr;
 }
 
 void die_follower(CHAR_DATA* ch)
@@ -1690,7 +1690,7 @@ void die_follower(CHAR_DATA* ch)
     if (ch->master)
         stop_follower(ch);
 
-    ch->leader = NULL;
+    ch->leader = nullptr;
 
     for (fch = first_char; fch; fch = fch->next)
     {
@@ -1729,12 +1729,12 @@ void do_order(CHAR_DATA* ch, const char* argument)
     if (!str_cmp(arg, "all"))
     {
         fAll   = TRUE;
-        victim = NULL;
+        victim = nullptr;
     }
     else
     {
         fAll        = FALSE;
-        if ((victim = get_char_room(ch, arg)) == NULL)
+        if ((victim = get_char_room(ch, arg)) == nullptr)
         {
             send_to_char("They aren't here.\r\n", ch);
             return;
@@ -1746,7 +1746,7 @@ void do_order(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        if (strstr(argument, "mp") != NULL)
+        if (strstr(argument, "mp") != nullptr)
         {
             send_to_char("No.. I don't think so.\r\n", ch);
             return;
@@ -1786,7 +1786,7 @@ void do_order(CHAR_DATA* ch, const char* argument)
 void do_group(CHAR_DATA* ch, const char* argument)
 {
     char     arg[MAX_INPUT_LENGTH];
-    CHAR_DATA* victim = NULL;
+    CHAR_DATA* victim = nullptr;
 
     one_argument(argument, arg);
 
@@ -1842,8 +1842,8 @@ void do_group(CHAR_DATA* ch, const char* argument)
         {
             if (is_same_group(ch, gch) && (ch != gch))
             {
-                gch->leader = NULL;
-                gch->master = NULL;
+                gch->leader = nullptr;
+                gch->master = nullptr;
                 count++;
                 send_to_char("Your group is disbanded.\r\n", gch);
             }
@@ -1875,13 +1875,13 @@ void do_group(CHAR_DATA* ch, const char* argument)
             send_to_char("You have no eligible group members.\r\n", ch);
         else
         {
-            act(AT_ACTION, "$n groups $s followers.", ch, NULL, victim, TO_ROOM);
+            act(AT_ACTION, "$n groups $s followers.", ch, nullptr, victim, TO_ROOM);
             send_to_char("You group your followers.\r\n", ch);
         }
         return;
     }
 
-    if ((victim = get_char_room(ch, arg)) == NULL)
+    if ((victim = get_char_room(ch, arg)) == nullptr)
     {
         send_to_char("They aren't here.\r\n", ch);
         return;
@@ -1895,23 +1895,23 @@ void do_group(CHAR_DATA* ch, const char* argument)
 
     if (victim->master != ch && ch != victim)
     {
-        act(AT_PLAIN, "$N isn't following you.", ch, NULL, victim, TO_CHAR);
+        act(AT_PLAIN, "$N isn't following you.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
     if (is_same_group(victim, ch) && ch != victim)
     {
-        victim->leader = NULL;
-        act(AT_ACTION, "$n removes $N from $s group.", ch, NULL, victim, TO_NOTVICT);
-        act(AT_ACTION, "$n removes you from $s group.", ch, NULL, victim, TO_VICT);
-        act(AT_ACTION, "You remove $N from your group.", ch, NULL, victim, TO_CHAR);
+        victim->leader = nullptr;
+        act(AT_ACTION, "$n removes $N from $s group.", ch, nullptr, victim, TO_NOTVICT);
+        act(AT_ACTION, "$n removes you from $s group.", ch, nullptr, victim, TO_VICT);
+        act(AT_ACTION, "You remove $N from your group.", ch, nullptr, victim, TO_CHAR);
         return;
     }
 
     victim->leader = ch;
-    act(AT_ACTION, "$N joins $n's group.", ch, NULL, victim, TO_NOTVICT);
-    act(AT_ACTION, "You join $n's group.", ch, NULL, victim, TO_VICT);
-    act(AT_ACTION, "$N joins your group.", ch, NULL, victim, TO_CHAR);
+    act(AT_ACTION, "$N joins $n's group.", ch, nullptr, victim, TO_NOTVICT);
+    act(AT_ACTION, "You join $n's group.", ch, nullptr, victim, TO_VICT);
+    act(AT_ACTION, "$N joins your group.", ch, nullptr, victim, TO_CHAR);
 }
 
 /*
@@ -1993,7 +1993,7 @@ void do_split(CHAR_DATA* ch, const char* argument)
     {
         if (gch != ch && is_same_group(gch, ch))
         {
-            act(AT_GOLD, buf, ch, NULL, gch, TO_VICT);
+            act(AT_GOLD, buf, ch, nullptr, gch, TO_VICT);
             gch->gold += share;
         }
     }
@@ -2068,7 +2068,7 @@ void talk_auction(char* argument)
         original = d->original ? d->original : d->character;  /* if switched */
         if ((d->connected == CON_PLAYING) && !IS_SET(original->deaf, CHANNEL_AUCTION)
             && !IS_SET(original->in_room->room_flags, ROOM_SILENCE) && !NOT_AUTHED(original))
-            act(AT_GOSSIP, buf, original, NULL, NULL, TO_CHAR);
+            act(AT_GOSSIP, buf, original, nullptr, nullptr, TO_CHAR);
     }
 }
 
@@ -2098,7 +2098,7 @@ bool knows_language(CHAR_DATA* ch, int language, CHAR_DATA* cch)
        */
         if (IS_NPC(ch) || IS_NPC(cch))
             return TRUE;
-        if (ch->pcdata->clan == cch->pcdata->clan && ch->pcdata->clan != NULL)
+        if (ch->pcdata->clan == cch->pcdata->clan && ch->pcdata->clan != nullptr)
             return TRUE;
     }
 
@@ -2286,7 +2286,7 @@ void do_languages(CHAR_DATA* ch, const char* argument)
         }
         if (race_table[ch->race].language & lang_array[lang] || ch->pcdata->learned[sn] >= 99)
         {
-            act(AT_PLAIN, "You are already fluent in $t.", ch, lang_names[lang], NULL, TO_CHAR);
+            act(AT_PLAIN, "You are already fluent in $t.", ch, lang_names[lang], nullptr, TO_CHAR);
             return;
         }
         for (sch = ch->in_room->first_person; sch; sch = sch->next_in_room)
@@ -2315,15 +2315,15 @@ void do_languages(CHAR_DATA* ch, const char* argument)
         ch->pcdata->learned[sn] = UMIN(ch->pcdata->learned[sn], 99);
         SET_BIT(ch->speaks, lang_array[lang]);
         if (ch->pcdata->learned[sn] == prct)
-            act(AT_PLAIN, "You begin lessons in $t.", ch, lang_names[lang], NULL, TO_CHAR);
+            act(AT_PLAIN, "You begin lessons in $t.", ch, lang_names[lang], nullptr, TO_CHAR);
         else if (ch->pcdata->learned[sn] < 60)
-            act(AT_PLAIN, "You continue lessons in $t.", ch, lang_names[lang], NULL, TO_CHAR);
+            act(AT_PLAIN, "You continue lessons in $t.", ch, lang_names[lang], nullptr, TO_CHAR);
         else if (ch->pcdata->learned[sn] < 60 + prct)
-            act(AT_PLAIN, "You feel you can start communicating in $t.", ch, lang_names[lang], NULL, TO_CHAR);
+            act(AT_PLAIN, "You feel you can start communicating in $t.", ch, lang_names[lang], nullptr, TO_CHAR);
         else if (ch->pcdata->learned[sn] < 99)
-            act(AT_PLAIN, "You become more fluent in $t.", ch, lang_names[lang], NULL, TO_CHAR);
+            act(AT_PLAIN, "You become more fluent in $t.", ch, lang_names[lang], nullptr, TO_CHAR);
         else
-            act(AT_PLAIN, "You now speak perfect $t.", ch, lang_names[lang], NULL, TO_CHAR);
+            act(AT_PLAIN, "You now speak perfect $t.", ch, lang_names[lang], nullptr, TO_CHAR);
         return;
     }
     for (lang = 0; lang_array[lang] != LANG_UNKNOWN; lang++)
