@@ -71,18 +71,15 @@ void do_score(CHAR_DATA* ch, const char* argument)
         ch, "Align: %-5d    Wimpy: %-3d                    Time:   %s\r",
         ch->alignment, ch->wimpy, ctime(&current_time));
 
-    if (ch->skill_level[FORCE_ABILITY] > 1 || IS_IMMORTAL(ch))
-        ch_printf(
-            ch, "Hit Points: %d of %d     Move: %d of %d     Force: %d of %d\r\n",
-            ch->hit, ch->max_hit, ch->move, ch->max_move, ch->mana, ch->max_mana
-        );
-    else
-        ch_printf(ch, "Hit Points: %d of %d     Move: %d of %d\r\n", ch->hit, ch->max_hit, ch->move, ch->max_move);
+    ch_printf(
+        ch, "Hit Points: %d of %d     Move: %d of %d     Force: %d of %d\r\n",
+        ch->hit, ch->max_hit, ch->move, ch->max_move, ch->mana, ch->max_mana
+    );
 
     ch_printf(
-        ch, "Str: %2d  Dex: %2d  Con: %2d  Int: %2d  Wis: %2d  Cha: %2d  Lck: ??  Frc: ??\r\n",
+        ch, "Str: %2d  Dex: %2d  Con: %2d  Int: %2d  Wis: %2d  Cha: %2d  Frc: %2d\r\n",
         get_curr_str(ch), get_curr_dex(ch), get_curr_con(ch), get_curr_int(ch), get_curr_wis(ch),
-        get_curr_cha(ch));
+        get_curr_cha(ch), get_curr_frc(ch));
 
     send_to_char("----------------------------------------------------------------------------\r\n", ch);
 
@@ -90,16 +87,10 @@ void do_score(CHAR_DATA* ch, const char* argument)
         int ability;
 
         for (ability = 0; ability < MAX_ABILITY; ability++)
-            if (ability != FORCE_ABILITY || ch->skill_level[FORCE_ABILITY] > 1)
-                ch_printf(
-                    ch, "%-15s   Level: %-3d   Max: %-3d   Exp: %-10ld   Next: %-10d\r\n",
-                    ability_name[ability], ch->skill_level[ability], max_level(ch, ability), ch->experience[ability],
-                    exp_level(ch->skill_level[ability] + 1));
-            else
-                ch_printf(
-                    ch, "%-15s   Level: %-3d   Max: ???   Exp: %-10ld          Next: ???\r\n",
-                    ability_name[ability], ch->skill_level[ability], ch->experience[ability]
-                );
+            ch_printf(
+                ch, "%-15s   Level: %-3d   Max: %-3d   Exp: %-10ld   Next: %-10d\r\n",
+                ability_name[ability], ch->skill_level[ability], max_level(ch, ability), ch->experience[ability],
+                exp_level(ch->skill_level[ability] + 1));
     }
 
     send_to_char("----------------------------------------------------------------------------\r\n", ch);
