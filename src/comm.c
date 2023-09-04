@@ -1881,22 +1881,25 @@ void nanny_get_new_sex(DESCRIPTOR_DATA* d, const char* argument)
     write_to_buffer(d, "\r\nYou may choose from the following races, or type help [race] to learn more:\r\n[", 0);
     buf[0] = '\0';
 
-    // there is a better way to do this but the c++23 standard library is just not fully implemented yet... (sigh)
-    for (const auto& [index, name] : race_table | std::views::transform([](const auto& race) {return race.race_name;}) | std::views::enumerate)
-    {
-        if (index > 0)
+    const auto races = *std::ranges::fold_left_first(
+        race_table | std::views::transform([](const race_type& race) {return std::string{race.race_name};}),
+        [](std::string acc, const std::string_view race_name)
         {
-            if (strlen(buf) + strlen(name) > 77)
+            const auto joiner = [&]() -> std::string
             {
-                mudstrlcat(buf, "\r\n", MAX_STRING_LENGTH);
-                write_to_buffer(d, buf, 0);
-                buf[0] = '\0';
-            }
-            else
-                mudstrlcat(buf, " ", MAX_STRING_LENGTH);
+                auto lines_count = std::ranges::count(acc, '\n') + 1;  // +1 to account for the fact that we start on "line 1" if there are no newlines
+                if (acc.length() + race_name.length() > (77 * lines_count))
+                    return "\r\n ";
+                else
+                    return " ";
+            }();
+
+            return std::move(acc.append(joiner).append(race_name));
         }
-        mudstrlcat(buf, name, MAX_STRING_LENGTH);
-    }
+    );
+
+    mudstrlcat(buf, races.c_str(), MAX_STRING_LENGTH);
+
 
     mudstrlcat(buf, "]\r\n: ", MAX_STRING_LENGTH);
     write_to_buffer(d, buf, 0);
