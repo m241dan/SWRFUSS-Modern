@@ -1922,31 +1922,16 @@ void nanny_get_new_race(DESCRIPTOR_DATA* d, const char* argument)
         return;
     }
 
-    write_to_buffer(d, "\r\nPlease choose a main ability from the folowing classes:\r\n[", 0);
-    buf[0] = '\0';
+    // add stats for races
+    ch->perm_str += race_iter->str_plus;
+    ch->perm_int += race_iter->int_plus;
+    ch->perm_wis += race_iter->wis_plus;
+    ch->perm_dex += race_iter->dex_plus;
+    ch->perm_con += race_iter->con_plus;
+    ch->perm_cha += race_iter->cha_plus;
 
-    for (iClass = 0; iClass < MAX_ABILITY; iClass++)
-    {
-        if (ability_name[iClass] && ability_name[iClass][0] != '\0')
-        {
-            if (iClass > 0)
-            {
-                if (strlen(buf) + strlen(ability_name[iClass]) > 77)
-                {
-                    mudstrlcat(buf, "\r\n", MAX_STRING_LENGTH);
-                    write_to_buffer(d, buf, 0);
-                    buf[0] = '\0';
-                }
-                else
-                    mudstrlcat(buf, " ", MAX_STRING_LENGTH);
-            }
-            mudstrlcat(buf, ability_name[iClass], MAX_STRING_LENGTH);
-        }
-    }
-
-    mudstrlcat(buf, "]\r\n: ", MAX_STRING_LENGTH);
-    write_to_buffer(d, buf, 0);
-    d->connected = CON_GET_NEW_CLASS;
+    write_to_buffer(d, "\r\nWould you like ANSI or no graphic/color support, (R/A/N)? ", 0);
+    d->connected = CON_GET_WANT_RIPANSI;
 }
 
 void nanny_get_new_class(DESCRIPTOR_DATA* d, const char* argument)
