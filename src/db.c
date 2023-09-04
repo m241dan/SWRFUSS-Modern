@@ -57,6 +57,7 @@ TELEPORT_DATA* last_teleport;
 OBJ_DATA         * extracted_obj_queue;
 EXTRACT_CHAR_DATA* extracted_char_queue;
 
+std::vector<CHAR_DATA*> characters;
 CHAR_DATA * first_char;
 CHAR_DATA * last_char;
 const char* help_greeting;
@@ -960,6 +961,7 @@ void load_helps(FILE* fp)
  */
 void add_char(CHAR_DATA* ch)
 {
+    characters.emplace_back(ch);
     LINK(ch, first_char, last_char, next, prev);
 }
 
