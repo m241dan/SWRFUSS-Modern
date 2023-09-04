@@ -2022,15 +2022,8 @@ void nanny_read_motd(DESCRIPTOR_DATA* d, const char* argument)
         ch->pcdata->clan = nullptr;
 
         ch->perm_lck    = number_range(6, 18);
-        ch->perm_frc    = number_range(-2000, 20);
         ch->affected_by = race_table[ch->race].affected;
         ch->perm_lck += race_table[ch->race].lck_plus;
-        ch->perm_frc += race_table[ch->race].frc_plus;
-
-        if (ch->race == RACE_DUINUOGWUIN || ch->main_ability == FORCE_ABILITY)
-            ch->perm_frc = URANGE(1, ch->perm_frc, 20);
-        else
-            ch->perm_frc = URANGE(0, ch->perm_frc, 20);
 
         for (iLang = 0; lang_array[iLang] != LANG_UNKNOWN; iLang++)
             if (lang_array[iLang] == race_table[ch->race].language)
@@ -2078,10 +2071,7 @@ void nanny_read_motd(DESCRIPTOR_DATA* d, const char* argument)
         ch->hit          = ch->max_hit;
         ch->hit += race_table[ch->race].hit;
         ch->move         = ch->max_move;
-        if (ch->perm_frc > 0)
-            ch->max_mana = 100 + 100 * ch->perm_frc;
-        else
-            ch->max_mana = 0;
+        ch->max_mana     = 100 * ch->perm_frc;
         ch->mana         = ch->max_mana;
         snprintf(buf, MAX_STRING_LENGTH, "%s the %s", ch->name, race_table[ch->race].race_name);
         set_title(ch, buf);
