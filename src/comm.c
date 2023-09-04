@@ -46,6 +46,7 @@
 #include <arpa/inet.h>
 #include <arpa/telnet.h>
 #include <netdb.h>
+#include <algorithm>
 #include <ranges>
 
 #define MAX_NEST        100
@@ -1919,17 +1920,17 @@ void nanny_get_new_race(DESCRIPTOR_DATA* d, const char* argument)
         return;
     }
 
-    for (iRace = 0; iRace < MAX_RACE; iRace++)
+    const auto race_iter = std::ranges::find_if(race_table, [&](const race_type& race_info)
     {
-        if (toupper(arg[0]) == toupper(race_table[iRace].race_name[0])
-            && !str_prefix(arg, race_table[iRace].race_name))
-        {
-            ch->race = iRace;
-            break;
-        }
-    }
+        return !str_prefix(arg, race_info.race_name);
+    });
 
-    if (iRace == MAX_RACE || !race_table[iRace].race_name || race_table[iRace].race_name[0] == '\0')
+    if (race_iter != race_table.end())
+    {
+        // get the index of the iterator with the distance function
+        ch->race = static_cast<short>(std::distance(race_table.begin(), race_iter));
+    }
+    else
     {
         write_to_buffer(d, "That's not a race.\r\nWhat IS your race? ", 0);
         return;
