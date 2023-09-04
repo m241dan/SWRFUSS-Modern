@@ -105,12 +105,6 @@ int max_level(CHAR_DATA* ch, int ability)
 
     if (ability == COMBAT_ABILITY)
     {
-        if (ch->main_ability == COMBAT_ABILITY)
-            level = 100;
-        if (ch->main_ability == FORCE_ABILITY)
-            level = 25;
-        if (ch->main_ability == HUNTING_ABILITY)
-            level = 25;
         if (ch->race == RACE_WOOKIEE)
             level += 30;
         if (ch->race == RACE_NOGHRI)
@@ -128,16 +122,6 @@ int max_level(CHAR_DATA* ch, int ability)
 
     if (ability == PILOTING_ABILITY)
     {
-        if (ch->main_ability == ability)
-            level = 100;
-        if (ch->main_ability == ENGINEERING_ABILITY)
-            level = 25;
-        if (ch->main_ability == HUNTING_ABILITY)
-            level = 25;
-        if (ch->main_ability == SMUGGLING_ABILITY)
-            level = 50;
-        if (ch->main_ability == FORCE_ABILITY)
-            level = 25;
         if (ch->race == RACE_HUTT)
             level -= 10;
         if (ch->race == RACE_GAMORREAN)
@@ -151,10 +135,6 @@ int max_level(CHAR_DATA* ch, int ability)
 
     if (ability == ENGINEERING_ABILITY)
     {
-        if (ch->main_ability == ability)
-            level = 100;
-        if (ch->main_ability == PILOTING_ABILITY)
-            level = 20;
         if (ch->race == RACE_WOOKIEE)
             level += 10;
         if (ch->race == RACE_RODIAN)
@@ -176,8 +156,6 @@ int max_level(CHAR_DATA* ch, int ability)
 
     if (ability == HUNTING_ABILITY)
     {
-        if (ch->main_ability == ability)
-            level = 100;
         if (ch->race == RACE_WOOKIEE)
             level += 10;
         if (ch->race == RACE_RODIAN)
@@ -200,12 +178,6 @@ int max_level(CHAR_DATA* ch, int ability)
 
     if (ability == SMUGGLING_ABILITY)
     {
-        if (ch->main_ability == ability)
-            level = 100;
-        if (ch->main_ability == PILOTING_ABILITY)
-            level = 20;
-        if (ch->main_ability == ENGINEERING_ABILITY)
-            level = 25;
         if (ch->race == RACE_TWI_LEK)
             level += 40;
         if (ch->race == RACE_MON_CALAMARI)
@@ -229,12 +201,6 @@ int max_level(CHAR_DATA* ch, int ability)
 
     if (ability == LEADERSHIP_ABILITY)
     {
-        if (ch->main_ability == ability)
-            level = 100;
-        if (ch->main_ability == COMBAT_ABILITY)
-            level = 50;
-        if (ch->main_ability == DIPLOMACY_ABILITY)
-            level = 50;
         if (ch->race == RACE_TWI_LEK)
             level -= 25;
         if (ch->race == RACE_RODIAN)
@@ -256,12 +222,6 @@ int max_level(CHAR_DATA* ch, int ability)
 
     if (ability == DIPLOMACY_ABILITY)
     {
-        if (ch->main_ability == ability)
-            level = 100;
-        if (ch->main_ability == PILOTING_ABILITY)
-            level = 10;
-        if (ch->main_ability == LEADERSHIP_ABILITY)
-            level = 50;
         if (ch->race == RACE_WOOKIEE)
             level -= 50;
         if (ch->race == RACE_TWI_LEK)
@@ -293,16 +253,12 @@ int max_level(CHAR_DATA* ch, int ability)
         level += ch->perm_cha * 3;
     }
 
-    level = URANGE(1, level, 150);
-
     if (ability == FORCE_ABILITY)
     {
-        if (ch->main_ability == ability)
-            level = 20;
-        else
-            level = 0;
         level += ch->perm_frc * 5;
     }
+
+    level = URANGE(1, level, 150);
 
     return level;
 }
