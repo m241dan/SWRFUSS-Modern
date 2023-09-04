@@ -1883,7 +1883,7 @@ void nanny_get_new_sex(DESCRIPTOR_DATA* d, const char* argument)
     buf[0] = '\0';
 
     const auto races = *alg::fold_left_first(
-        race_table | view::transform([](const race_type& race) {return std::string{race.race_name};}),
+        race_table | decomp_race_table_race_name(),
         [](std::string acc, const std::string_view race_name)
         {
             const auto joiner = [&]() -> std::string

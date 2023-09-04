@@ -23,6 +23,7 @@
 #include <sys/cdefs.h>
 #include <sys/time.h>
 #include <vector>
+#include "namespaces.h"
 
 #ifndef __cplusplus
 typedef unsigned char bool;
@@ -3155,6 +3156,12 @@ const std::vector<race_type> race_table {
     {"Chadra-Fan",   AFF_INFRARED,    -3, +3, 0,  +2, -1, 0,  0, 0, 0, 0,   0, 0, 0, LANG_CHADRA_FAN},
     {"Quarren",      AFF_AQUA_BREATH + AFF_INFRARED, -1, +1, 0, +1, -1, 0, 0, 0, 0, 0, 0, 0, 0, LANG_MON_CALAMARI},
 };
+
+constexpr auto decomp_race_table_race_name()
+{
+    return view::transform([](const race_type& race) {return std::string{race.race_name};});
+}
+
 extern const struct liq_type  liq_table[LIQ_MAX];
 extern const char* const attack_table[13];
 extern const char* const ability_name[MAX_ABILITY];
