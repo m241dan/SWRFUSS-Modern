@@ -48,6 +48,7 @@
 #include <netdb.h>
 #include <algorithm>
 #include <ranges>
+#include "namespaces.h"
 
 #define MAX_NEST        100
 static OBJ_DATA* rgObjNest[MAX_NEST];
@@ -1881,13 +1882,13 @@ void nanny_get_new_sex(DESCRIPTOR_DATA* d, const char* argument)
     write_to_buffer(d, "\r\nYou may choose from the following races, or type help [race] to learn more:\r\n[", 0);
     buf[0] = '\0';
 
-    const auto races = *std::ranges::fold_left_first(
-        race_table | std::views::transform([](const race_type& race) {return std::string{race.race_name};}),
+    const auto races = *alg::fold_left_first(
+        race_table | view::transform([](const race_type& race) {return std::string{race.race_name};}),
         [](std::string acc, const std::string_view race_name)
         {
             const auto joiner = [&]() -> std::string
             {
-                auto lines_count = std::ranges::count(acc, '\n') + 1;  // +1 to account for the fact that we start on "line 1" if there are no newlines
+                auto lines_count = alg::count(acc, '\n') + 1;  // +1 to account for the fact that we start on "line 1" if there are no newlines
                 if (acc.length() + race_name.length() > (77 * lines_count))
                     return "\r\n ";
                 else
@@ -1923,7 +1924,7 @@ void nanny_get_new_race(DESCRIPTOR_DATA* d, const char* argument)
         return;
     }
 
-    const auto race_iter = std::ranges::find_if(race_table, [&](const race_type& race_info)
+    const auto race_iter = alg::find_if(race_table, [&](const race_type& race_info)
     {
         return !str_prefix(arg, race_info.race_name);
     });
