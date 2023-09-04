@@ -3209,8 +3209,6 @@ void do_users(CHAR_DATA* ch, const char* argument)
                 break;
             case CON_PRESS_ENTER:st = "Press enter";
                 break;
-            case CON_ROLL_STATS:st = "Rolling stats";
-                break;
             default:st = "Invalid!!!!";
                 break;
         }

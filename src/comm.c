@@ -127,12 +127,6 @@ void nanny_get_new_sex(DESCRIPTOR_DATA* d, const char* argument);
 
 void nanny_get_new_race(DESCRIPTOR_DATA* d, const char* argument);
 
-void nanny_get_new_class(DESCRIPTOR_DATA* d, const char* argument);
-
-void nanny_roll_stats(DESCRIPTOR_DATA* d, const char* argument);
-
-void nanny_stats_ok(DESCRIPTOR_DATA* d, const char* argument);
-
 void nanny_get_want_ripansi(DESCRIPTOR_DATA* d, const char* argument);
 
 void nanny_get_msp(DESCRIPTOR_DATA* d, const char* argument);
@@ -1522,15 +1516,6 @@ void nanny(DESCRIPTOR_DATA* d, const char* argument)
         case CON_GET_NEW_RACE:nanny_get_new_race(d, argument);
             break;
 
-        case CON_GET_NEW_CLASS:nanny_get_new_class(d, argument);
-            break;
-
-        case CON_ROLL_STATS:nanny_roll_stats(d, argument);
-            break;
-
-        case CON_STATS_OK:nanny_stats_ok(d, argument);
-            break;
-
         case CON_GET_WANT_RIPANSI:nanny_get_want_ripansi(d, argument);
             break;
 
@@ -1929,112 +1914,6 @@ void nanny_get_new_race(DESCRIPTOR_DATA* d, const char* argument)
     ch->perm_dex += race_iter->dex_plus;
     ch->perm_con += race_iter->con_plus;
     ch->perm_cha += race_iter->cha_plus;
-
-    write_to_buffer(d, "\r\nWould you like ANSI or no graphic/color support, (R/A/N)? ", 0);
-    d->connected = CON_GET_WANT_RIPANSI;
-}
-
-void nanny_get_new_class(DESCRIPTOR_DATA* d, const char* argument)
-{
-    CHAR_DATA* ch = d->character;
-    char     arg[MAX_STRING_LENGTH];
-    int      iClass;
-
-    argument = one_argument(argument, arg);
-
-    if (!str_cmp(arg, "help"))
-    {
-        do_help(ch, argument);
-        write_to_buffer(d, "Please choose an ability class: ", 0);
-        return;
-    }
-
-    for (iClass = 0; iClass < MAX_ABILITY; iClass++)
-    {
-        if (toupper(arg[0]) == toupper(ability_name[iClass][0]) && !str_prefix(arg, ability_name[iClass]))
-        {
-            ch->main_ability = iClass;
-            break;
-        }
-    }
-
-    if (iClass == MAX_ABILITY || !ability_name[iClass] || ability_name[iClass][0] == '\0')
-    {
-        write_to_buffer(d, "That's not a skill class.\r\nWhat IS it going to be? ", 0);
-        return;
-    }
-
-    write_to_buffer(d, "\r\nRolling stats....\r\n", 0);
-    d->connected = CON_ROLL_STATS;
-
-    /* The reason we're calling nanny_roll_stats() here is because otherwise
-   * we'd need to either 1) copy/paste most of the code from that function
-   * or 2) hit enter before it would be called automatically. I think this
-   * is nicer. */
-    nanny_roll_stats(d, argument);
-}
-
-void nanny_roll_stats(DESCRIPTOR_DATA* d, const char* argument)
-{
-    CHAR_DATA* ch = d->character;
-
-    ch->perm_str = number_range(1, 6) + number_range(1, 6) + number_range(1, 6);
-    ch->perm_int = number_range(3, 6) + number_range(1, 6) + number_range(1, 6);
-    ch->perm_wis = number_range(3, 6) + number_range(1, 6) + number_range(1, 6);
-    ch->perm_dex = number_range(3, 6) + number_range(1, 6) + number_range(1, 6);
-    ch->perm_con = number_range(3, 6) + number_range(1, 6) + number_range(1, 6);
-    ch->perm_cha = number_range(3, 6) + number_range(1, 6) + number_range(1, 6);
-
-    ch->perm_str += race_table[ch->race].str_plus;
-    ch->perm_int += race_table[ch->race].int_plus;
-    ch->perm_wis += race_table[ch->race].wis_plus;
-    ch->perm_dex += race_table[ch->race].dex_plus;
-    ch->perm_con += race_table[ch->race].con_plus;
-    ch->perm_cha += race_table[ch->race].cha_plus;
-
-    buffer_printf(
-        d, "\r\nSTR: %d  INT: %d  WIS: %d  DEX: %d  CON: %d  CHA: %d\r\n",
-        ch->perm_str, ch->perm_int, ch->perm_wis, ch->perm_dex, ch->perm_con, ch->perm_cha
-    );
-
-    write_to_buffer(d, "\r\nAre these stats OK? ", 0);
-    d->connected = CON_STATS_OK;
-}
-
-void nanny_stats_ok(DESCRIPTOR_DATA* d, const char* argument)
-{
-    CHAR_DATA* ch = d->character;
-
-    switch (argument[0])
-    {
-        case 'y':
-        case 'Y':break;
-        case 'n':
-        case 'N':ch->perm_str = number_range(1, 6) + number_range(1, 6) + number_range(1, 6);
-            ch->perm_int      = number_range(3, 6) + number_range(1, 6) + number_range(1, 6);
-            ch->perm_wis      = number_range(3, 6) + number_range(1, 6) + number_range(1, 6);
-            ch->perm_dex      = number_range(3, 6) + number_range(1, 6) + number_range(1, 6);
-            ch->perm_con      = number_range(3, 6) + number_range(1, 6) + number_range(1, 6);
-            ch->perm_cha      = number_range(3, 6) + number_range(1, 6) + number_range(1, 6);
-
-            ch->perm_str += race_table[ch->race].str_plus;
-            ch->perm_int += race_table[ch->race].int_plus;
-            ch->perm_wis += race_table[ch->race].wis_plus;
-            ch->perm_dex += race_table[ch->race].dex_plus;
-            ch->perm_con += race_table[ch->race].con_plus;
-            ch->perm_cha += race_table[ch->race].cha_plus;
-
-            buffer_printf(
-                d, "\r\nSTR: %d  INT: %d  WIS: %d  DEX: %d  CON: %d  CHA: %d\r\n",
-                ch->perm_str, ch->perm_int, ch->perm_wis, ch->perm_dex,
-                ch->perm_con, ch->perm_cha
-            );
-
-            write_to_buffer(d, "\r\nOK? ", 0);
-            return;
-        default:write_to_buffer(d, "Invalid selection.\r\nYES or NO? ", 0);
-            return;
-    }
 
     write_to_buffer(d, "\r\nWould you like ANSI or no graphic/color support, (R/A/N)? ", 0);
     d->connected = CON_GET_WANT_RIPANSI;
