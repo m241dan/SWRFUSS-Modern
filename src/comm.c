@@ -369,24 +369,6 @@ int init_socket(int gport)
 }
 
 /*
-static void SegVio()
-{
-  CHAR_DATA *ch;
-  char buf[MAX_STRING_LENGTH];
-
-  log_string( "SEGMENTATION VIOLATION" );
-  log_string( lastplayercmd );
-  for ( ch = first_char; ch; ch = ch->next )
-  {
-    snprintf( buf, MAX_STRING_LENGTH, "%cPC: %-20s room: %d", IS_NPC(ch) ? 'N' : ' ',
-    		ch->name, ch->in_room->vnum );
-    log_string( buf );
-  }
-  exit(0);
-}
-*/
-
-/*
  * LAG alarm!							-Thoric
  */
 static void caught_alarm(int signum)
