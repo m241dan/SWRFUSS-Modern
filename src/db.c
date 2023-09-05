@@ -2311,14 +2311,14 @@ void area_update(void)
                 snprintf(buf, MAX_STRING_LENGTH, "%s\r\n", pArea->resetmsg);
             else
                 mudstrlcpy(buf, "You hear some squeaking sounds...\r\n", MAX_STRING_LENGTH);
-            for (pch = first_char; pch; pch = pch->next)
+            alg::for_each(characters, [&](auto* pch)
             {
                 if (!IS_NPC(pch) && IS_AWAKE(pch) && pch->in_room && pch->in_room->area == pArea)
                 {
                     set_char_color(AT_RESET, pch);
                     send_to_char(buf, pch);
                 }
-            }
+            });
         }
 
         /*
@@ -4643,27 +4643,27 @@ void delete_room(ROOM_INDEX_DATA* room)
             extract_char(ch, TRUE);
     }
 
-    for (ch = first_char; ch; ch = ch->next)
+    for (auto* gch : characters)
     {
-        if (ch->was_in_room == room)
-            ch->was_in_room = ch->in_room;
-        if (ch->substate == SUB_ROOM_DESC && ch->dest_buf == room)
+        if (gch->was_in_room == room)
+            gch->was_in_room = gch->in_room;
+        if (gch->substate == SUB_ROOM_DESC && gch->dest_buf == room)
         {
-            send_to_char("The room is no more.\r\n", ch);
-            stop_editing(ch);
-            ch->substate = SUB_NONE;
-            ch->dest_buf = nullptr;
+            send_to_char("The room is no more.\r\n", gch);
+            stop_editing(gch);
+            gch->substate = SUB_NONE;
+            gch->dest_buf = nullptr;
         }
-        else if (ch->substate == SUB_ROOM_EXTRA && ch->dest_buf)
+        else if (gch->substate == SUB_ROOM_EXTRA && gch->dest_buf)
         {
             for (ed = room->first_extradesc; ed; ed = ed->next)
             {
-                if (ed == ch->dest_buf)
+                if (ed == gch->dest_buf)
                 {
-                    send_to_char("The room is no more.\r\n", ch);
-                    stop_editing(ch);
-                    ch->substate = SUB_NONE;
-                    ch->dest_buf = nullptr;
+                    send_to_char("The room is no more.\r\n", gch);
+                    stop_editing(gch);
+                    gch->substate = SUB_NONE;
+                    gch->dest_buf = nullptr;
                     break;
                 }
             }
@@ -4731,7 +4731,6 @@ void delete_obj(OBJ_INDEX_DATA* obj)
     EXTRA_DESCR_DATA* ed;
     AFFECT_DATA     * af;
     MPROG_DATA      * mp;
-    CHAR_DATA       * ch;
 
     /*
     * Remove references to object index
@@ -4743,7 +4742,7 @@ void delete_obj(OBJ_INDEX_DATA* obj)
             extract_obj(o);
     }
 
-    for (ch = first_char; ch; ch = ch->next)
+    for (auto* ch : characters)
     {
         if (ch->substate == SUB_OBJ_EXTRA && ch->dest_buf)
         {
@@ -4825,13 +4824,10 @@ void delete_mob(MOB_INDEX_DATA* mob)
 {
     int           hash;
     MOB_INDEX_DATA* prev;
-    CHAR_DATA     * ch, * ch_next;
     MPROG_DATA    * mp;
 
-    for (ch = first_char; ch; ch = ch_next)
+    for (auto* ch : characters)
     {
-        ch_next = ch->next;
-
         if (ch->pIndexData == mob)
             extract_char(ch, TRUE);
         else if (ch->substate == SUB_MPROG_EDIT && ch->dest_buf)

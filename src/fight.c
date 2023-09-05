@@ -211,7 +211,6 @@ int max_fight(CHAR_DATA* ch)
 void violence_update(void)
 {
     char       buf[MAX_STRING_LENGTH];
-    CHAR_DATA  * ch;
     CHAR_DATA  * lst_ch;
     CHAR_DATA  * victim;
     CHAR_DATA  * rch, * rch_next;
@@ -221,25 +220,9 @@ void violence_update(void)
     SKILLTYPE  * skill;
 
     lst_ch  = nullptr;
-    for (ch = last_char; ch; lst_ch = ch, ch = gch_prev)
+    alg::for_each(characters, [&](auto* ch)
     {
         set_cur_char(ch);
-
-        if (ch == first_char && ch->prev)
-        {
-            bug("%s: ERROR: first_char->prev != nullptr, fixing...", __func__);
-            ch->prev = nullptr;
-        }
-
-        gch_prev = ch->prev;
-
-        if (gch_prev && gch_prev->next != ch)
-        {
-            bug("FATAL: %s: %s->prev->next doesn't point to ch.\r\nShort-cutting here", __func__, ch->name);
-            ch->prev = nullptr;
-            gch_prev = nullptr;
-            do_shout(ch, "Thoric says, 'Prepare for the worst!'");
-        }
 
         /*
        * See if we got a pointer to someone who recently died...
@@ -249,7 +232,7 @@ void violence_update(void)
        * and should not already be in another fight already
        */
         if (char_died(ch))
-            continue;
+            return;
 
         /*
        * See if we got a pointer to some bad looking data...
@@ -272,7 +255,7 @@ void violence_update(void)
                 mudstrlcpy(buf, "lst_ch: nullptr", MAX_STRING_LENGTH);
             log_string(buf);
             gch_prev = nullptr;
-            continue;
+            return;
         }
 
         /*
@@ -304,7 +287,7 @@ void violence_update(void)
         }
 
         if (char_died(ch))
-            continue;
+            return;
 
         /*
        * We need spells that have shorter durations than an hour.
@@ -341,7 +324,7 @@ void violence_update(void)
         }
 
         if ((victim = who_fighting(ch)) == nullptr || IS_AFFECTED(ch, AFF_PARALYSIS))
-            continue;
+            return;
 
         retcode = rNONE;
 
@@ -357,23 +340,23 @@ void violence_update(void)
             stop_fighting(ch, FALSE);
 
         if (char_died(ch))
-            continue;
+            return;
 
         if (retcode == rCHAR_DIED || (victim = who_fighting(ch)) == nullptr)
-            continue;
+            return;
 
         /*
        *  Mob triggers
        */
         rprog_rfight_trigger(ch);
         if (char_died(ch))
-            continue;
+            return;
         mprog_hitprcnt_trigger(ch, victim);
         if (char_died(ch))
-            continue;
+            return;
         mprog_fight_trigger(ch, victim);
         if (char_died(ch))
-            continue;
+            return;
 
         /*
        * Fun for the whole family!
@@ -424,7 +407,8 @@ void violence_update(void)
                 }
             }
         }
-    }
+        lst_ch = ch;
+    });
 }
 
 /*
@@ -2002,22 +1986,20 @@ void free_fight(CHAR_DATA* ch)
  */
 void stop_fighting(CHAR_DATA* ch, bool fBoth)
 {
-    CHAR_DATA* fch;
-
     free_fight(ch);
     update_pos(ch);
 
     if (!fBoth)   /* major short cut here by Thoric */
         return;
 
-    for (fch = first_char; fch; fch = fch->next)
+    alg::for_each(characters, [&](auto* fch)
     {
         if (who_fighting(fch) == ch)
         {
             free_fight(fch);
             update_pos(fch);
         }
-    }
+    });
 }
 
 void death_cry(CHAR_DATA* ch)

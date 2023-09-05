@@ -383,7 +383,6 @@ void move_ships()
     SHIP_DATA   * target;
     float       dx, dy, dz, change;
     char        buf[MAX_STRING_LENGTH];
-    CHAR_DATA   * ch;
     bool        ch_found = FALSE;
 
     for (missile = first_missile; missile; missile = m_next)
@@ -427,7 +426,8 @@ void move_ships()
                         target->name
                     );
                     echo_to_system(AT_ORANGE, target, buf, ship);
-                    for (ch = first_char; ch; ch = ch->next)
+                    alg::for_each(characters, [&](auto* ch)
+                    {
                         if (!IS_NPC(ch) && nifty_is_name(missile->fired_by, ch->name))
                         {
                             ch_found = TRUE;
@@ -436,6 +436,7 @@ void move_ships()
                                 30 + missile->missiletype * missile->missiletype * missile->missiletype * 30, ch
                             );
                         }
+                    });
                     if (!ch_found)
                         damage_ship(
                             target, 20 + missile->missiletype * missile->missiletype * 20,

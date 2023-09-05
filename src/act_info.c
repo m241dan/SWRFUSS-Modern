@@ -2481,7 +2481,6 @@ void do_compare(CHAR_DATA* ch, const char* argument)
 void do_where(CHAR_DATA* ch, const char* argument)
 {
     char           arg[MAX_INPUT_LENGTH];
-    CHAR_DATA      * victim;
     DESCRIPTOR_DATA* d;
     bool           found;
 
@@ -2496,6 +2495,8 @@ void do_where(CHAR_DATA* ch, const char* argument)
     set_pager_color(AT_PERSON, ch);
     if (arg[0] == '\0')
     {
+        CHAR_DATA      * victim;
+
         if (get_trust(ch) >= LEVEL_IMMORTAL)
             send_to_pager("Players logged in:\r\n", ch);
         else
@@ -2517,18 +2518,24 @@ void do_where(CHAR_DATA* ch, const char* argument)
     }
     else
     {
-        found       = FALSE;
-        for (victim = first_char; victim; victim = victim->next)
-            if (victim->in_room
+        const auto search_criteria = [&](auto* victim)
+        {
+            return
+                victim->in_room
                 && victim->in_room->area == ch->in_room->area
                 && !IS_AFFECTED(victim, AFF_HIDE)
-                && !IS_AFFECTED(victim, AFF_SNEAK) && can_see(ch, victim) && is_name(arg, victim->name))
-            {
-                found = TRUE;
-                pager_printf(ch, "%-28s %s\r\n", PERS(victim, ch), victim->in_room->name);
-                break;
-            }
-        if (!found)
+                && !IS_AFFECTED(victim, AFF_SNEAK) && can_see(ch, victim) && is_name(arg, victim->name)
+           ;
+        };
+
+        const auto victim_iter = alg::find_if(characters, search_criteria);
+
+        if (victim_iter != characters.end())
+        {
+            auto* victim = *victim_iter;
+            pager_printf(ch, "%-28s %s\r\n", PERS(victim, ch), victim->in_room->name);
+        }
+        else
             act(AT_PLAIN, "You didn't find any $T.", ch, nullptr, arg, TO_CHAR);
     }
 }

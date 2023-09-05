@@ -826,7 +826,6 @@ void do_at(CHAR_DATA* ch, const char* argument)
     char           arg[MAX_INPUT_LENGTH];
     ROOM_INDEX_DATA* location;
     ROOM_INDEX_DATA* original;
-    CHAR_DATA      * wch;
 
     argument = one_argument(argument, arg);
 
@@ -865,7 +864,7 @@ void do_at(CHAR_DATA* ch, const char* argument)
     * See if 'ch' still exists before continuing!
     * Handles 'at XXXX quit' case.
     */
-    for (wch = first_char; wch; wch = wch->next)
+    for(const auto* wch : characters)
     {
         if (wch == ch)
         {
@@ -1452,8 +1451,6 @@ void do_ofind(CHAR_DATA* ch, const char* argument)
 void do_mwhere(CHAR_DATA* ch, const char* argument)
 {
     char     arg[MAX_INPUT_LENGTH];
-    CHAR_DATA* victim;
-    bool     found;
 
     one_argument(argument, arg);
     if (arg[0] == '\0')
@@ -1463,21 +1460,27 @@ void do_mwhere(CHAR_DATA* ch, const char* argument)
     }
 
     set_pager_color(AT_PLAIN, ch);
-    found       = FALSE;
-    for (victim = first_char; victim; victim = victim->next)
-    {
-        if (IS_NPC(victim) && victim->in_room && nifty_is_name(arg, victim->name))
-        {
-            found = TRUE;
-            pager_printf(
-                ch, "[%5d] %-28s [%5d] %s\r\n",
-                victim->pIndexData->vnum, victim->short_descr, victim->in_room->vnum, victim->in_room->name
-            );
-        }
-    }
 
-    if (!found)
-        act(AT_PLAIN, "You didn't find any $T.", ch, nullptr, arg, TO_CHAR);
+    const auto matches_criteria = [&](auto* ch)
+    {
+        return IS_NPC(ch) && ch->in_room && nifty_is_name(arg, ch->name);
+    };
+
+    const auto print_found = [&](auto* victim)
+    {
+        pager_printf(
+            ch,
+            "[%5d] %-28s [%5d] %s\r\n",
+            victim->pIndexData->vnum,
+            victim->short_descr,
+            victim->in_room->vnum,
+            victim->in_room->name
+        );
+    };
+
+    const auto print_none_found = [&] {act(AT_PLAIN, "You didn't find any $T.", ch, nullptr, arg, TO_CHAR);};
+
+    alg::for_each_or(characters | view::filter(matches_criteria), print_found, print_none_found);
 }
 
 void do_bodybag(CHAR_DATA* ch, const char* argument)
@@ -1655,9 +1658,11 @@ void do_reboot(CHAR_DATA* ch, const char* argument)
     * Save all characters before booting.
     */
     if (str_cmp(argument, "nosave"))
-        for (vch = first_char; vch; vch = vch->next)
+        alg::for_each(characters, [](auto* vch)
+        {
             if (!IS_NPC(vch))
                 save_char_obj(vch);
+        });
 
     mud_down = TRUE;
 }
@@ -1690,9 +1695,11 @@ void do_shutdown(CHAR_DATA* ch, const char* argument)
     * Save all characters before booting.
     */
     if (str_cmp(argument, "nosave"))
-        for (vch = first_char; vch; vch = vch->next)
+        alg::for_each(characters, [](auto* vch)
+        {
             if (!IS_NPC(vch))
                 save_char_obj(vch);
+        });
     mud_down = TRUE;
 }
 
@@ -2502,7 +2509,7 @@ void do_restore(CHAR_DATA* ch, const char* argument)
         ch->pcdata->restore_time = current_time;
         save_char_obj(ch);
         send_to_char("Ok.\r\n", ch);
-        for (vch = first_char; vch; vch = vch_next)
+        alg::for_each(characters, [&](auto* vch)
         {
             vch_next = vch->next;
 
@@ -2515,7 +2522,7 @@ void do_restore(CHAR_DATA* ch, const char* argument)
                 update_pos(vch);
                 act(AT_IMMORT, "$n has restored you.", ch, nullptr, vch, TO_VICT);
             }
-        }
+        });
     }
     else
     {
@@ -3252,25 +3259,21 @@ void do_force(CHAR_DATA* ch, const char* argument)
 
     if (!str_cmp(arg, "all"))
     {
-        CHAR_DATA* vch;
-        CHAR_DATA* vch_next;
-
         if (mobsonly)
         {
             send_to_char("Force whom to do what?\r\n", ch);
             return;
         }
 
-        for (vch = first_char; vch; vch = vch_next)
-        {
-            vch_next = vch->next;
 
+        alg::for_each(characters, [&](auto* vch)
+        {
             if (!IS_NPC(vch) && get_trust(vch) < get_trust(ch))
             {
                 act(AT_IMMORT, "$n forces you to '$t'.", ch, argument, vch, TO_VICT);
                 interpret(vch, argument);
             }
-        }
+        });
     }
     else
     {
@@ -4340,17 +4343,14 @@ void do_destro(CHAR_DATA* ch, const char* argument)
  */
 void close_area(AREA_DATA* pArea)
 {
-    CHAR_DATA      * ech, * ech_next;
     OBJ_DATA       * eobj, * eobj_next;
     ROOM_INDEX_DATA* rid, * rid_next;
     OBJ_INDEX_DATA * oid, * oid_next;
     MOB_INDEX_DATA * mid, * mid_next;
     int            icnt;
 
-    for (ech = first_char; ech; ech = ech_next)
+    for (auto* ech : characters)
     {
-        ech_next = ech->next;
-
         if (ech->fighting)
             stop_fighting(ech, TRUE);
         if (IS_NPC(ech))
@@ -4440,7 +4440,6 @@ void close_all_areas(void)
 
 void do_destroy(CHAR_DATA* ch, const char* argument)
 {
-    CHAR_DATA   * victim;
     char        arg[MAX_INPUT_LENGTH];
     char        pfile[256];
     char        backup[256];
@@ -4474,19 +4473,20 @@ void do_destroy(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    for (victim = first_char; victim; victim = victim->next)
-        if (!IS_NPC(victim) && !str_cmp(victim->name, arg))
-            break;
+    const auto valid_victim = [&](auto* victim) {return !IS_NPC(victim) && !str_cmp(victim->name, arg);};
 
-    if (!victim)
+    const auto victim_iter = alg::find_if(characters, valid_victim);
+
+    if (victim_iter == characters.end())
     {
         DESCRIPTOR_DATA* d;
+        CHAR_DATA* victim;
 
         /*
        * Make sure they aren't halfway logged in.
        */
         for (d = first_descriptor; d; d = d->next)
-            if ((victim = d->character) && !IS_NPC(victim) && !str_cmp(victim->name, arg))
+            if ((victim = d->character) && valid_victim(victim))
                 break;
         if (d)
             close_socket(d, TRUE);
@@ -4495,10 +4495,10 @@ void do_destroy(CHAR_DATA* ch, const char* argument)
     {
         int x, y;
 
-        quitting_char = victim;
-        save_char_obj(victim);
+        quitting_char = *victim_iter;
+        save_char_obj(*victim_iter);
         saving_char = nullptr;
-        extract_char(victim, TRUE);
+        extract_char(*victim_iter, TRUE);
         for (x = 0; x < MAX_WEAR; x++)
             for (y = 0; y < MAX_LAYERS; y++)
                 save_equipment[x][y] = nullptr;
@@ -4694,21 +4694,15 @@ void do_for(CHAR_DATA* ch, const char* argument)
 
     if (strchr(argument, '#')) /* replace # ? */
     {
-        /*
-       * char_list - last_char, p_next - gch_prev -- TRI
-       */
-        for (p = last_char; p; p = p_prev)
+        alg::for_each(characters | view::reverse, [&](auto* p)
         {
-            p_prev = p->prev; /* TRI */
             /*
-          * p_next = p->next;
-          *//*
-          * In case someone DOES try to AT MOBS SLAY #
-          */
+             * In case someone DOES try to AT MOBS SLAY #
+             */
             found  = FALSE;
 
             if (!(p->in_room) || room_is_private(p, p->in_room) || (p == ch))
-                continue;
+                return;
 
             if (IS_NPC(p) && fMobs)
                 found = TRUE;
@@ -4753,7 +4747,7 @@ void do_for(CHAR_DATA* ch, const char* argument)
                 char_to_room(ch, old_room);
 
             }  /* if found */
-        }  /* for every char */
+        }); /* for every char */
     }
     else  /* just for every room with the appropriate people in it */
     {

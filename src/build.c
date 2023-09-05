@@ -3446,14 +3446,14 @@ void do_oset(CHAR_DATA* ch, const char* argument)
                 CHAR_DATA* vch;
                 OBJ_DATA * eq;
 
-                for (vch = first_char; vch; vch = vch->next)
+                alg::for_each(characters, [&](auto* vch)
                 {
                     for (eq = vch->first_carrying; eq; eq = eq->next_content)
                     {
                         if (eq->pIndexData == obj->pIndexData && eq->wear_loc != WEAR_NONE)
                             affect_modify(vch, paf, TRUE);
                     }
-                }
+                });
             }
             LINK(paf, obj->pIndexData->first_affect, obj->pIndexData->last_affect, next, prev);
         }
@@ -3502,14 +3502,14 @@ void do_oset(CHAR_DATA* ch, const char* argument)
                         CHAR_DATA* vch;
                         OBJ_DATA * eq;
 
-                        for (vch = first_char; vch; vch = vch->next)
+                        alg::for_each(characters, [&](auto* vch)
                         {
                             for (eq = vch->first_carrying; eq; eq = eq->next_content)
                             {
                                 if (eq->pIndexData == pObjIndex && eq->wear_loc != WEAR_NONE)
                                     affect_modify(vch, paf, FALSE);
                             }
-                        }
+                        });
                     }
                     DISPOSE(paf);
                     send_to_char("Removed.\n\r", ch);

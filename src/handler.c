@@ -157,10 +157,10 @@ void explode(OBJ_DATA* obj)
     if (obj->armed_by)
     {
         ROOM_INDEX_DATA* room;
-        CHAR_DATA      * xch;
-        bool           held = FALSE;
+        bool held = FALSE;
 
-        for (xch = first_char; xch; xch = xch->next)
+        alg::for_each(characters, [&](auto* xch)
+        {
             if (!IS_NPC(xch) && nifty_is_name(obj->armed_by, xch->name))
             {
                 if (obj->carried_by)
@@ -182,6 +182,7 @@ void explode(OBJ_DATA* obj)
                     room_explode(obj, xch, room);
                 }
             }
+        });
     }
     make_scraps(obj);
 }
@@ -1499,7 +1500,6 @@ void extract_obj(OBJ_DATA* obj)
  */
 void extract_char(CHAR_DATA* ch, bool fPull)
 {
-    CHAR_DATA      * wch;
     OBJ_DATA       * obj;
     ROOM_INDEX_DATA* location;
     REL_DATA       * RQueue, * rq_next;
@@ -1570,14 +1570,14 @@ void extract_char(CHAR_DATA* ch, bool fPull)
 
     if (IS_NPC(ch) && IS_SET(ch->act, ACT_MOUNTED))
     {
-        for (wch = first_char; wch; wch = wch->next)
+        alg::for_each(characters, [&](auto* wch)
         {
             if (wch->mount == ch)
             {
                 wch->mount    = nullptr;
                 wch->position = POS_STANDING;
             }
-        }
+        });
         REMOVE_BIT(ch->act, ACT_MOUNTED);
     }
 
@@ -1618,9 +1618,11 @@ void extract_char(CHAR_DATA* ch, bool fPull)
     if (ch->switched && ch->switched->desc)
         do_return(ch->switched, "");
 
-    for (wch = first_char; wch; wch = wch->next)
+    alg::for_each(characters, [&](auto* wch)
+    {
         if (wch->reply == ch)
             wch->reply = nullptr;
+    });
 
     std::erase(characters, ch);
     UNLINK(ch, first_char, last_char, next, prev);
@@ -1728,13 +1730,13 @@ CHAR_DATA* get_char_world(CHAR_DATA* ch, const char* argument)
     /*
     * check the world for an exact match
     */
-    for (wch = first_char; wch; wch = wch->next)
-        if ((nifty_is_name(arg, wch->name) || (IS_NPC(wch) && vnum == wch->pIndexData->vnum)) && is_wizvis(ch, wch))
+    for (auto* wchl : characters)
+        if ((nifty_is_name(arg, wchl->name) || (IS_NPC(wchl) && vnum == wchl->pIndexData->vnum)) && is_wizvis(ch, wchl))
         {
-            if (number == 0 && !IS_NPC(wch))
-                return wch;
+            if (number == 0 && !IS_NPC(wchl))
+                return wchl;
             else if (++count == number)
-                return wch;
+                return wchl;
         }
 
     /*
@@ -1765,14 +1767,14 @@ CHAR_DATA* get_char_world(CHAR_DATA* ch, const char* argument)
     * Added by Narn, Sept/96
     */
     count    = 0;
-    for (wch = first_char; wch; wch = wch->next)
+    for (auto* wchl : characters)
     {
-        if (!nifty_is_name_prefix(arg, wch->name))
+        if (!nifty_is_name_prefix(arg, wchl->name))
             continue;
-        if (number == 0 && !IS_NPC(wch) && is_wizvis(ch, wch))
-            return wch;
-        else if (++count == number && is_wizvis(ch, wch))
-            return wch;
+        if (number == 0 && !IS_NPC(wchl) && is_wizvis(ch, wchl))
+            return wchl;
+        else if (++count == number && is_wizvis(ch, wchl))
+            return wchl;
     }
 
     return nullptr;
@@ -3788,10 +3790,10 @@ int times_killed(CHAR_DATA* ch, CHAR_DATA* mob)
 
 void check_switches(bool possess)
 {
-    CHAR_DATA* ch;
-
-    for (ch = first_char; ch; ch = ch->next)
+    alg::for_each(characters, [&](auto* ch)
+    {
         check_switch(ch, possess);
+    });
 }
 
 void check_switch(CHAR_DATA* ch, bool possess)

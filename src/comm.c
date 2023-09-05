@@ -2454,9 +2454,7 @@ bool check_parse_name(const char* name)
  */
 short check_reconnect(DESCRIPTOR_DATA* d, const char* name, bool fConn)
 {
-    CHAR_DATA* ch;
-
-    for (ch = first_char; ch; ch = ch->next)
+    for (auto* ch : characters)
     {
         if (!IS_NPC(ch) && (!fConn || !ch->desc) && ch->name && !str_cmp(name, ch->name))
         {
@@ -2954,7 +2952,6 @@ void do_name(CHAR_DATA* ch, const char* argument)
     char        ucase_argument[MAX_STRING_LENGTH];
     char        fname[256];
     struct stat fst;
-    CHAR_DATA   * tmp;
 
     if (!NOT_AUTHED(ch) || ch->pcdata->auth_state != 2)
     {
@@ -2977,13 +2974,13 @@ void do_name(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    for (tmp = first_char; tmp; tmp = tmp->next)
-    {
-        if (!str_cmp(ucase_argument, tmp->name))
-            break;
-    }
+    auto tmp_iter = alg::find_if(
+        characters,
+        [&](const auto* name) {return !str_cmp(ucase_argument, name);},
+        &char_data::name
+    );
 
-    if (tmp)
+    if (tmp_iter != characters.end())
     {
         send_to_char("That name is already taken.  Please choose another.\r\n", ch);
         return;

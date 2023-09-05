@@ -1653,21 +1653,21 @@ ch_ret spell_call_lightning(int sn, int level, CHAR_DATA* ch, void* vo)
     act(AT_MAGIC, "$n calls Lightning to strike $s foes!", ch, nullptr, nullptr, TO_ROOM);
 
     ch_died  = FALSE;
-    for (vch = first_char; vch; vch = vch_next)
+    alg::for_each(characters, [&](auto* vch)
     {
         vch_next = vch->next;
         if (!vch->in_room)
-            continue;
+            return;
         if (vch->in_room == ch->in_room)
         {
             if (!IS_NPC(vch) && IS_SET(vch->act, PLR_WIZINVIS) && vch->pcdata->wizinvis >= LEVEL_IMMORTAL)
-                continue;
+                return;
 
             if (vch != ch && (IS_NPC(ch) ? !IS_NPC(vch) : IS_NPC(vch)))
                 retcode = damage(ch, vch, saves_spell_staff(level, vch) ? dam / 2 : dam, sn);
             if (retcode == rCHAR_DIED || char_died(ch))
                 ch_died = TRUE;
-            continue;
+            return;
         }
 
         if (!ch_died && vch->in_room->area == ch->in_room->area && IS_OUTSIDE(vch) && IS_AWAKE(vch))
@@ -1675,7 +1675,7 @@ ch_ret spell_call_lightning(int sn, int level, CHAR_DATA* ch, void* vo)
             set_char_color(AT_MAGIC, vch);
             send_to_char("Lightning flashes in the sky.\r\n", vch);
         }
-    }
+    });
 
     if (ch_died)
         return rCHAR_DIED;
@@ -2176,30 +2176,29 @@ ch_ret spell_earthquake(int sn, int level, CHAR_DATA* ch, void* vo)
     act(AT_MAGIC, "The earth trembles beneath your feet!", ch, nullptr, nullptr, TO_CHAR);
     act(AT_MAGIC, "$n makes the earth tremble and shiver.", ch, nullptr, nullptr, TO_ROOM);
 
-    for (vch = first_char; vch; vch = vch_next)
+    alg::for_each(characters, [&](auto* vch)
     {
-        vch_next = vch->next;
         if (!vch->in_room)
-            continue;
+            return;
         if (vch->in_room == ch->in_room)
         {
             if (!IS_NPC(vch) && IS_SET(vch->act, PLR_WIZINVIS) && vch->pcdata->wizinvis >= LEVEL_IMMORTAL)
-                continue;
+                return;
 
             if (IS_AFFECTED(vch, AFF_FLOATING) || IS_AFFECTED(vch, AFF_FLYING))
-                continue;
+                return;
 
             if (ch == vch)
-                continue;
+                return;
 
             retcode = damage(ch, vch, level + dice(2, 8), sn);
             if (retcode == rCHAR_DIED || char_died(ch))
             {
                 ch_died = TRUE;
-                continue;
+                return;
             }
             if (char_died(vch))
-                continue;
+                return;
         }
 
         if (!ch_died && vch->in_room->area == ch->in_room->area)
@@ -2207,7 +2206,7 @@ ch_ret spell_earthquake(int sn, int level, CHAR_DATA* ch, void* vo)
             set_char_color(AT_MAGIC, vch);
             send_to_char("The earth trembles and shivers.\r\n", vch);
         }
-    }
+    });
 
     if (ch_died)
         return rCHAR_DIED;

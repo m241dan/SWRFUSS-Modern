@@ -735,34 +735,19 @@ void mobile_update(void)
     /*
     * Examine all mobs.
     */
-    for (ch = last_char; ch; ch = gch_prev)
+    alg::for_each(characters | view::reverse, [&](auto* ch)
     {
         set_cur_char(ch);
-        if (ch == first_char && ch->prev)
-        {
-            bug("%s: first_char->prev != nullptr... fixed", __func__);
-            ch->prev = nullptr;
-        }
-
-        gch_prev = ch->prev;
-
-        if (gch_prev && gch_prev->next != ch)
-        {
-            bug("FATAL: %s: %s->prev->next doesn't point to ch.", __func__, ch->name);
-            gch_prev = nullptr;
-            ch->prev = nullptr;
-            do_shout(ch, "Thoric says, 'Prepare for the worst!'");
-        }
 
         if (!IS_NPC(ch))
         {
             drunk_randoms(ch);
             halucinations(ch);
-            continue;
+            return;
         }
 
         if (!ch->in_room || IS_AFFECTED(ch, AFF_CHARM) || IS_AFFECTED(ch, AFF_PARALYSIS))
-            continue;
+            return;
 
         /* Clean up 'animated corpses' that are not charmed' - Scryn */
 
@@ -773,7 +758,7 @@ void mobile_update(void)
 
             if (IS_NPC(ch))   /* Guard against purging switched? */
                 extract_char(ch, TRUE);
-            continue;
+            return;
         }
 
         if (!IS_SET(ch->act, ACT_RUNNING) && !IS_SET(ch->act, ACT_SENTINEL) && !ch->fighting && ch->hunting)
@@ -791,7 +776,7 @@ void mobile_update(void)
             else
                 WAIT_STATE(ch, 1 * PULSE_PER_SECOND);
             hunt_victim(ch);
-            continue;
+            return;
         }
         else if (!ch->fighting && !ch->hunting
                  && !IS_SET(ch->act, ACT_RUNNING) && ch->was_sentinel && ch->position >= POS_STANDING)
@@ -810,17 +795,17 @@ void mobile_update(void)
         if (!IS_SET(ch->act, ACT_RUNNING) && ch->spec_fun)
         {
             if ((*ch->spec_fun)(ch))
-                continue;
+                return;
             if (char_died(ch))
-                continue;
+                return;
         }
 
         if (!IS_SET(ch->act, ACT_RUNNING) && ch->spec_2)
         {
             if ((*ch->spec_2)(ch))
-                continue;
+                return;
             if (char_died(ch))
-                continue;
+                return;
         }
 
         /*
@@ -829,27 +814,27 @@ void mobile_update(void)
         if (IS_SET(ch->pIndexData->progtypes, SCRIPT_PROG))
         {
             mprog_script_trigger(ch);
-            continue;
+            return;
         }
 
         if (ch != cur_char)
         {
             bug("%s: ch != cur_char after spec_fun", __func__);
-            continue;
+            return;
         }
 
         /*
        * That's all for sleeping / busy monster
        */
         if (ch->position != POS_STANDING)
-            continue;
+            return;
 
 
         if (IS_SET(ch->act, ACT_MOUNTED))
         {
             if (IS_SET(ch->act, ACT_AGGRESSIVE))
                 do_emote(ch, "snarls and growls.");
-            continue;
+            return;
         }
 
         if (IS_SET(ch->in_room->room_flags, ROOM_SAFE) && IS_SET(ch->act, ACT_AGGRESSIVE))
@@ -862,9 +847,9 @@ void mobile_update(void)
         {
             mprog_random_trigger(ch);
             if (char_died(ch))
-                continue;
+                return;
             if (ch->position < POS_STANDING)
-                continue;
+                return;
         }
 
         /*
@@ -873,14 +858,14 @@ void mobile_update(void)
         mprog_hour_trigger(ch);
 
         if (char_died(ch))
-            continue;
+            return;
 
         rprog_hour_trigger(ch);
         if (char_died(ch))
-            continue;
+            return;
 
         if (ch->position < POS_STANDING)
-            continue;
+            return;
 
         /*
        * Scavenge
@@ -896,7 +881,7 @@ void mobile_update(void)
             for (obj = ch->in_room->first_content; obj; obj = obj->next_content)
             {
                 if (IS_OBJ_STAT(obj, ITEM_PROTOTYPE) && !IS_SET(ch->act, ACT_PROTOTYPE))
-                    continue;
+                    return;
 
                 if (CAN_WEAR(obj, ITEM_TAKE) && obj->cost > max && !IS_OBJ_STAT(obj, ITEM_BURRIED))
                 {
@@ -950,9 +935,9 @@ void mobile_update(void)
           * continue - Kahn
           */
             if (char_died(ch))
-                continue;
+                return;
             if (retcode != rNONE || IS_SET(ch->act, ACT_SENTINEL) || ch->position < POS_STANDING)
-                continue;
+                return;
         }
 
         /*
@@ -993,7 +978,7 @@ void mobile_update(void)
             if (found)
                 retcode                                    = move_char(ch, pexit, 0);
         }
-    }
+    });
 }
 
 void update_taxes(void)
@@ -1200,20 +1185,9 @@ void char_update(void)
     short    save_count = 0;
 
     ch_save = nullptr;
-    for (ch = last_char; ch; ch = gch_prev)
+    alg::for_each(characters | view::reverse, [&](auto* ch)
     {
-        if (ch == first_char && ch->prev)
-        {
-            bug("%s: first_char->prev != nullptr... fixed", __func__);
-            ch->prev = nullptr;
-        }
-        gch_prev = ch->prev;
         set_cur_char(ch);
-        if (gch_prev && gch_prev->next != ch)
-        {
-            bug("%s: ch->prev->next != ch", __func__);
-            return;
-        }
 
         /*
        *  Do a room_prog rand check right off the bat
@@ -1223,18 +1197,18 @@ void char_update(void)
             rprog_random_trigger(ch);
 
         if (char_died(ch))
-            continue;
+            return;
 
         if (IS_NPC(ch))
             mprog_time_trigger(ch);
 
         if (char_died(ch))
-            continue;
+            return;
 
         rprog_time_trigger(ch);
 
         if (char_died(ch))
-            continue;
+            return;
 
         /*
        * See if player should be auto-saved.
@@ -1357,7 +1331,7 @@ void char_update(void)
             else if (ch->position == POS_MORTAL)
                 damage(ch, ch, 4, TYPE_UNDEFINED);
             if (char_died(ch))
-                continue;
+                return;
             if (ch->mental_state >= 30)
                 switch ((ch->mental_state + 5) / 10)
                 {
@@ -1477,7 +1451,7 @@ void char_update(void)
             }
         }
 
-    }
+    });
 }
 
 /*
@@ -1688,19 +1662,18 @@ void char_check(void)
 
     cnt = (cnt + 1) % 2;
 
-    for (ch = first_char; ch; ch = ch_next)
+    alg::for_each(characters, [&](auto* ch)
     {
         set_cur_char(ch);
-        ch_next = ch->next;
         will_fall(ch, 0);
 
         if (char_died(ch))
-            continue;
+            return;
 
         if (IS_NPC(ch))
         {
             if (cnt != 0)
-                continue;
+                return;
 
             /*
           * running mobs  -Thoric
@@ -1711,22 +1684,22 @@ void char_check(void)
                 {
                     WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
                     hunt_victim(ch);
-                    continue;
+                    return;
                 }
 
                 if (ch->spec_fun)
                 {
                     if ((*ch->spec_fun)(ch))
-                        continue;
+                        return;
                     if (char_died(ch))
-                        continue;
+                        return;
                 }
                 if (ch->spec_2)
                 {
                     if ((*ch->spec_2)(ch))
-                        continue;
+                        return;
                     if (char_died(ch))
-                        continue;
+                        return;
                 }
 
                 if (!IS_SET(ch->act, ACT_SENTINEL)
@@ -1740,12 +1713,12 @@ void char_check(void)
                 {
                     retcode = move_char(ch, pexit, 0);
                     if (char_died(ch))
-                        continue;
+                        return;
                     if (retcode != rNONE || IS_SET(ch->act, ACT_SENTINEL) || ch->position < POS_STANDING)
-                        continue;
+                        return;
                 }
             }
-            continue;
+            return;
         }
         else
         {
@@ -1778,7 +1751,7 @@ void char_check(void)
             }
 
             if (char_died(ch))
-                continue;
+                return;
 
             if (ch->in_room
                 && ((ch->in_room->sector_type == SECT_WATER_NOSWIM) || (ch->in_room->sector_type == SECT_WATER_SWIM)))
@@ -1806,7 +1779,7 @@ void char_check(void)
                 }
             }
         }
-    }
+    });
 }
 
 /*
@@ -2288,8 +2261,6 @@ void reboot_check(time_t reset)
 
     if (new_boot_time_t <= current_time)
     {
-        CHAR_DATA* vch;
-
         if (auction->item)
         {
             snprintf(buf, MAX_STRING_LENGTH, "Sale of %s has been stopped by mud.", auction->item->short_descr);
@@ -2307,9 +2278,11 @@ void reboot_check(time_t reset)
                        "presence\r\nas life here is reconstructed.", ECHOTAR_ALL
         );
 
-        for (vch = first_char; vch; vch = vch->next)
+        alg::for_each(characters, [&](auto* vch)
+        {
             if (!IS_NPC(vch))
                 save_char_obj(vch);
+        });
         mud_down = TRUE;
         return;
     }

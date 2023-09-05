@@ -1035,7 +1035,6 @@ void do_fill(CHAR_DATA* ch, const char* argument)
     {
         OBJ_DATA  * otmp, * otmp_next;
         char      name[MAX_INPUT_LENGTH];
-        CHAR_DATA * gch;
         const char* pd;
         bool      found = FALSE;
 
@@ -1083,7 +1082,7 @@ void do_fill(CHAR_DATA* ch, const char* argument)
                     bool fGroup;
 
                     fGroup   = FALSE;
-                    for (gch = first_char; gch; gch = gch->next)
+                    for (auto* gch : characters)
                     {
                         if (!IS_NPC(gch) && is_same_group(ch, gch) && !str_cmp(name, gch->name))
                         {

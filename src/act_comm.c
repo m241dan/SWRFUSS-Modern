@@ -1685,20 +1685,18 @@ void stop_follower(CHAR_DATA* ch)
 
 void die_follower(CHAR_DATA* ch)
 {
-    CHAR_DATA* fch;
-
     if (ch->master)
         stop_follower(ch);
 
     ch->leader = nullptr;
 
-    for (fch = first_char; fch; fch = fch->next)
+    alg::for_each(characters, [&](auto* fch)
     {
         if (fch->master == ch)
             stop_follower(fch);
         if (fch->leader == ch)
             fch->leader = fch;
-    }
+    });
 }
 
 void do_order(CHAR_DATA* ch, const char* argument)
@@ -1792,7 +1790,6 @@ void do_group(CHAR_DATA* ch, const char* argument)
 
     if (arg[0] == '\0')
     {
-        CHAR_DATA* gch;
         CHAR_DATA* leader;
 
         leader = ch->leader ? ch->leader : ch;
@@ -1800,7 +1797,7 @@ void do_group(CHAR_DATA* ch, const char* argument)
         ch_printf(ch, "%s's group:\r\n", PERS(leader, ch));
 
         /* Changed so that no info revealed on possess */
-        for (gch = first_char; gch; gch = gch->next)
+        alg::for_each(characters, [&](auto* gch)
         {
             if (is_same_group(gch, ch))
             {
@@ -1823,14 +1820,13 @@ void do_group(CHAR_DATA* ch, const char* argument)
                         capitalize(PERS(gch, ch)), gch->hit, gch->max_hit, gch->move, gch->max_move
                     );
             }
-        }
+        });
         return;
     }
 
     if (!strcmp(arg, "disband"))
     {
-        CHAR_DATA* gch;
-        int      count = 0;
+        int count = 0;
 
         if (ch->leader || ch->master)
         {
@@ -1838,7 +1834,7 @@ void do_group(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        for (gch = first_char; gch; gch = gch->next)
+        alg::for_each(characters, [&](auto* gch)
         {
             if (is_same_group(ch, gch) && (ch != gch))
             {
@@ -1847,7 +1843,7 @@ void do_group(CHAR_DATA* ch, const char* argument)
                 count++;
                 send_to_char("Your group is disbanded.\r\n", gch);
             }
-        }
+        });
 
         if (count == 0)
             send_to_char("You have no group members to disband.\r\n", ch);
@@ -2001,8 +1997,6 @@ void do_split(CHAR_DATA* ch, const char* argument)
 
 void do_gtell(CHAR_DATA* ch, const char* argument)
 {
-    CHAR_DATA* gch;
-
     if (argument[0] == '\0')
     {
         send_to_char("Tell your group what?\r\n", ch);
@@ -2018,7 +2012,7 @@ void do_gtell(CHAR_DATA* ch, const char* argument)
     /*
     * Note use of send_to_char, so gtell works on sleepers.
     */
-    for (gch = first_char; gch; gch = gch->next)
+    alg::for_each(characters, [&](auto* gch)
     {
         if (is_same_group(gch, ch))
         {
@@ -2032,7 +2026,7 @@ void do_gtell(CHAR_DATA* ch, const char* argument)
             else
                 ch_printf(gch, "%s tells the group '%s'.\r\n", ch->name, scramble(argument, ch->speaking));
         }
-    }
+    });
 }
 
 /*

@@ -775,7 +775,6 @@ void do_mpat(CHAR_DATA* ch, const char* argument)
     char           arg[MAX_INPUT_LENGTH];
     ROOM_INDEX_DATA* location;
     ROOM_INDEX_DATA* original;
-    CHAR_DATA      * wch;
 
     if (IS_AFFECTED(ch, AFF_CHARM))
         return;
@@ -809,7 +808,7 @@ void do_mpat(CHAR_DATA* ch, const char* argument)
     * See if 'ch' still exists before continuing!
     * Handles 'at XXXX quit' case.
     */
-    for (wch = first_char; wch; wch = wch->next)
+    for (auto* wch : characters)
         if (wch == ch)
         {
             char_from_room(ch);

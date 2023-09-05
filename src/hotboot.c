@@ -491,13 +491,13 @@ void save_world(CHAR_DATA* ch)
 
     if (mobfile)
     {
-        for (rch = first_char; rch; rch = rch->next)
+        alg::for_each(characters, [&](auto* rch)
         {
             if (!IS_NPC(rch) || rch == supermob || IS_SET(rch->act, ACT_PROTOTYPE) || IS_SET(rch->act, ACT_PET))
-                continue;
+                return;
             else
                 save_mobile(mobfp, rch);
-        }
+        });
         fprintf(mobfp, "%s", "#END\n");
         FCLOSE(mobfp);
     }
@@ -1196,6 +1196,7 @@ void hotboot_recover(void)
             /*
              * Insert in the char_list
              */
+            characters.emplace_back(d->character);
             LINK(d->character, first_char, last_char, next, prev);
 
             char_to_room(d->character, d->character->in_room);

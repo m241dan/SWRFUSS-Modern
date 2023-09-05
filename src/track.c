@@ -340,8 +340,6 @@ void found_prey(CHAR_DATA* ch, CHAR_DATA* victim)
 
 void hunt_victim(CHAR_DATA* ch)
 {
-    bool     found;
-    CHAR_DATA* tmp;
     short    ret;
 
     if (!ch || !ch->hunting || !ch->hunting->who)
@@ -350,11 +348,9 @@ void hunt_victim(CHAR_DATA* ch)
     /*
      * make sure the char still exists
      */
-    for (found = FALSE, tmp = first_char; tmp && !found; tmp = tmp->next)
-        if (ch->hunting->who == tmp)
-            found = TRUE;
+    auto found_iter = alg::find(characters, ch->hunting->who);
 
-    if (!found)
+    if (found_iter == characters.end())
     {
         do_say(ch, "Damn!  My prey is gone!!");
         stop_hunting(ch);
