@@ -58,8 +58,6 @@ OBJ_DATA         * extracted_obj_queue;
 EXTRACT_CHAR_DATA* extracted_char_queue;
 
 std::vector<CHAR_DATA*> characters;
-CHAR_DATA * first_char;
-CHAR_DATA * last_char;
 const char* help_greeting;
 char      log_buf[MAX_STRING_LENGTH];
 
@@ -458,8 +456,6 @@ void boot_db(bool fCopyOver)
     sysdata.maxplayers = 0;
     first_object         = nullptr;
     last_object          = nullptr;
-    first_char           = nullptr;
-    last_char            = nullptr;
     first_area           = nullptr;
     last_area            = nullptr;
     first_area_name      = nullptr;
@@ -962,7 +958,6 @@ void load_helps(FILE* fp)
 void add_char(CHAR_DATA* ch)
 {
     characters.emplace_back(ch);
-    LINK(ch, first_char, last_char, next, prev);
 }
 
 /*

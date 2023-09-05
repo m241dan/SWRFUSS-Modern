@@ -3236,8 +3236,6 @@ extern SPEC_LIST        * last_specfun;
 extern BAN_DATA         * first_ban;
 extern BAN_DATA         * last_ban;
 extern std::vector<CHAR_DATA*> characters;
-extern CHAR_DATA        * first_char;
-extern CHAR_DATA        * last_char;
 extern DESCRIPTOR_DATA  * first_descriptor;
 extern DESCRIPTOR_DATA  * last_descriptor;
 extern BOARD_DATA       * first_board;

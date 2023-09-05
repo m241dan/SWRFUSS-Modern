@@ -1625,7 +1625,6 @@ void extract_char(CHAR_DATA* ch, bool fPull)
     });
 
     std::erase(characters, ch);
-    UNLINK(ch, first_char, last_char, next, prev);
 
     if (ch->desc)
     {

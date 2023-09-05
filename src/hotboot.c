@@ -1197,7 +1197,6 @@ void hotboot_recover(void)
              * Insert in the char_list
              */
             characters.emplace_back(d->character);
-            LINK(d->character, first_char, last_char, next, prev);
 
             char_to_room(d->character, d->character->in_room);
             act(AT_MAGIC, "You appear in a swirl of the Force!", d->character, nullptr, nullptr, TO_CHAR);
