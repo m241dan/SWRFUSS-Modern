@@ -980,7 +980,7 @@ void char_from_room(CHAR_DATA* ch)
     ch->prev_in_room = nullptr;
 
     if (!IS_NPC(ch) && get_timer2(ch, TIMER_SHOVEDRAG) > 0)
-        remove_timer(ch, TIMER_SHOVEDRAG);
+        remove_timer2(ch, TIMER_SHOVEDRAG);
 }
 
 /*
