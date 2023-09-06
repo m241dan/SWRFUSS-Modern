@@ -215,7 +215,6 @@ void violence_update(void)
     CHAR_DATA  * victim;
     CHAR_DATA  * rch, * rch_next;
     AFFECT_DATA* paf, * paf_next;
-    TIMER      * timer, * timer_next;
     ch_ret     retcode;
     SKILLTYPE  * skill;
 
@@ -266,25 +265,23 @@ void violence_update(void)
                 ch->fighting->xp = ((ch->fighting->xp * 9) / 10);
 
 
-        for (timer = ch->first_timer; timer; timer = timer_next)
-        {
-            timer_next = timer->next;
-            if (--timer->count <= 0)
-            {
-                if (timer->type == TIMER_DO_FUN)
-                {
-                    int tempsub;
+        alg::for_each(ch->timers, ops::decrement, &timer_data::count);
+        const auto expired_timers = alg::remove(ch->timers, 0, &timer_data::count);
 
-                    tempsub = ch->substate;
-                    ch->substate = timer->value;
-                    (timer->do_fun)(ch, "");
-                    if (char_died(ch))
-                        break;
-                    ch->substate = tempsub;
-                }
-                extract_timer(ch, timer);
-            }
+        for (const auto& timer : expired_timers
+                               | view::filter([](const auto& timer) {return timer.type == TIMER_DO_FUN;}))
+        {
+            int tempsub;
+
+            tempsub = ch->substate;
+            ch->substate = timer.value;
+            (timer.do_fun)(ch, "");
+            if (char_died(ch))
+                break;
+            ch->substate = tempsub;
         }
+
+        ch->timers.erase(expired_timers.begin(), expired_timers.end());
 
         if (char_died(ch))
             return;

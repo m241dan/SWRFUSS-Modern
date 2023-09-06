@@ -2721,8 +2721,6 @@ void free_char(CHAR_DATA* ch)
         affect_remove(ch, paf);
 
     ch->timers.clear();
-    while ((timer = ch->first_timer) != nullptr)
-        extract_timer(ch, timer);
 
     STRFREE(ch->name);
     STRFREE(ch->short_descr);

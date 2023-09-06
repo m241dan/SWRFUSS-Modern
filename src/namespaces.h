@@ -117,4 +117,8 @@ namespace view {
     using namespace std::views;
 }
 
+namespace ops {
+    const auto decrement = [](auto& i) {i--;};
+}
+
 #endif //SWRGM_NAMESPACES_H
