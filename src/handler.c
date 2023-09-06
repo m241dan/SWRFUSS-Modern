@@ -1019,7 +1019,7 @@ void char_to_room(CHAR_DATA* ch, ROOM_INDEX_DATA* pRoomIndex)
         ++ch->in_room->light;
 
     if (!IS_NPC(ch) && IS_SET(ch->in_room->room_flags, ROOM_SAFE) && get_timer(ch, TIMER_SHOVEDRAG) <= 0)
-        add_timer(ch, TIMER_SHOVEDRAG, 10, nullptr, 0);   /*-30 Seconds-*/
+        add_timer2(ch, TIMER_SHOVEDRAG, 10, nullptr, 0);   /*-30 Seconds-*/
 
     /*
     * Delayed Teleport rooms             -Thoric

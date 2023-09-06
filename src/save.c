@@ -1338,7 +1338,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 KEY("Prompt", ch->pcdata->prompt, fread_string(fp));
                 if (!str_cmp(word, "PTimer"))
                 {
-                    add_timer(ch, TIMER_PKILLED, fread_number(fp), nullptr, 0);
+                    add_timer2(ch, TIMER_PKILLED, fread_number(fp), nullptr, 0);
                     fMatch = TRUE;
                     break;
                 }

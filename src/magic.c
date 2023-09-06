@@ -1139,7 +1139,7 @@ void do_cast(CHAR_DATA* ch, const char* argument)
             /*
           * multi-participant spells         -Thoric
           */
-            add_timer(ch, TIMER_DO_FUN, UMIN(skill->beats / 10, 3), do_cast, 1);
+            add_timer2(ch, TIMER_DO_FUN, UMIN(skill->beats / 10, 3), do_cast, 1);
             act(AT_MAGIC, "You begin to feel the force in yourself and those around you...", ch, nullptr, nullptr, TO_CHAR);
             act(AT_MAGIC, "$n reaches out with the force to those around...", ch, nullptr, nullptr, TO_ROOM);
             snprintf(staticbuf, MAX_STRING_LENGTH, "%s %s", arg2, target_name);

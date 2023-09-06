@@ -424,7 +424,7 @@ ch_ret multi_hit(CHAR_DATA* ch, CHAR_DATA* victim, int dt)
     * add timer if player is attacking another player
     */
     if (!IS_NPC(ch) && !IS_NPC(victim))
-        add_timer(ch, TIMER_RECENTFIGHT, 20, nullptr, 0);
+        add_timer2(ch, TIMER_RECENTFIGHT, 20, nullptr, 0);
 
     if (!IS_NPC(ch) && IS_SET(ch->act, PLR_NICE) && !IS_NPC(victim))
         return rNONE;
@@ -1610,7 +1610,7 @@ ch_ret damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
             victim->experience[COMBAT_ABILITY] -= lose_exp;
         }
 
-        add_timer(victim, TIMER_RECENTFIGHT, 100, nullptr, 0);
+        add_timer2(victim, TIMER_RECENTFIGHT, 100, nullptr, 0);
     }
 
     /*

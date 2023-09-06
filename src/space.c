@@ -6367,7 +6367,7 @@ void do_target(CHAR_DATA* ch, const char* argument)
             {
                 send_to_char("&GTracking target.\r\n", ch);
                 act(AT_PLAIN, "$n makes some adjustments on the targeting computer.", ch, nullptr, argument, TO_ROOM);
-                add_timer(ch, TIMER_DO_FUN, 1, do_target, 1);
+                add_timer2(ch, TIMER_DO_FUN, 1, do_target, 1);
                 ch->dest_buf = str_dup(arg);
                 return;
             }
@@ -7214,9 +7214,9 @@ void do_repairship(CHAR_DATA* ch, const char* argument)
                 send_to_char("&GYou begin your repairs\r\n", ch);
                 act(AT_PLAIN, "$n begins repairing the ships $T.", ch, nullptr, argument, TO_ROOM);
                 if (!str_cmp(arg, "hull"))
-                    add_timer(ch, TIMER_DO_FUN, 15, do_repairship, 1);
+                    add_timer2(ch, TIMER_DO_FUN, 15, do_repairship, 1);
                 else
-                    add_timer(ch, TIMER_DO_FUN, 5, do_repairship, 1);
+                    add_timer2(ch, TIMER_DO_FUN, 5, do_repairship, 1);
                 ch->dest_buf = str_dup(arg);
                 return;
             }

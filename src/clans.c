@@ -1662,7 +1662,7 @@ void do_shove(CHAR_DATA* ch, const char* argument)
     * Remove protection from shove/drag if char shoves -- Blodkai
     */
     if (IS_SET(ch->in_room->room_flags, ROOM_SAFE) && get_timer(ch, TIMER_SHOVEDRAG) <= 0)
-        add_timer(ch, TIMER_SHOVEDRAG, 10, nullptr, 0);
+        add_timer2(ch, TIMER_SHOVEDRAG, 10, nullptr, 0);
 }
 
 void do_drag(CHAR_DATA* ch, const char* argument)
