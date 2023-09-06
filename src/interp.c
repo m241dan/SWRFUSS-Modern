@@ -89,7 +89,6 @@ void interpret(CHAR_DATA* ch, const char* argument)
     char           command[MAX_INPUT_LENGTH];
     char           logline[MAX_INPUT_LENGTH];
     char           logname[MAX_INPUT_LENGTH];
-    TIMER          * timer = nullptr;
     CMDTYPE        * cmd   = nullptr;
     int            trust;
     int            loglvl;
@@ -162,8 +161,6 @@ void interpret(CHAR_DATA* ch, const char* argument)
             argument++;
         if (argument[0] == '\0')
             return;
-
-        timer = get_timerptr(ch, TIMER_DO_FUN);
 
         /*
          * REMOVE_BIT( ch->affected_by, AFF_HIDE );
@@ -270,19 +267,22 @@ void interpret(CHAR_DATA* ch, const char* argument)
         write_to_buffer(ch->desc->snoop_by, "\r\n", 2);
     }
 
-    if (timer)
+    const auto [timer, sentinel] = alg::remove(ch->timers, TIMER_DO_FUN, &timer_data::type);
+
+    if (timer != sentinel)
     {
         int tempsub;
 
         tempsub = ch->substate;
         ch->substate = SUB_TIMER_DO_ABORT;
+
         (timer->do_fun)(ch, "");
         if (char_died(ch))
             return;
         if (ch->substate != SUB_TIMER_CANT_ABORT)
         {
             ch->substate = tempsub;
-            extract_timer(ch, timer);
+            ch->timers.erase(timer, sentinel);
         }
         else
         {

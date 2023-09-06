@@ -1188,23 +1188,26 @@ void do_cast(CHAR_DATA* ch, const char* argument)
             {
                 int      cnt = 1;
                 CHAR_DATA* tmp;
-                TIMER    * t;
 
-                for (tmp = ch->in_room->first_person; tmp; tmp = tmp->next_in_room)
-                    if (tmp != ch
-                        && (t = get_timerptr(tmp, TIMER_DO_FUN)) != nullptr
+                for (tmp = ch->in_room->first_person; tmp && tmp != ch; tmp = tmp->next_in_room)
+                {
+                    auto t = alg::find(tmp->timers, TIMER_DO_FUN, &timer_data::type);
+                    if (t != tmp->timers.end()
                         && t->count >= 1 && t->do_fun == do_cast
                         && tmp->tempnum == sn && tmp->dest_buf && !str_cmp((const char*)tmp->dest_buf, staticbuf))
                         ++cnt;
+                }
                 if (cnt >= skill->participants)
                 {
-                    for (tmp = ch->in_room->first_person; tmp; tmp = tmp->next_in_room)
-                        if (tmp != ch
-                            && (t = get_timerptr(tmp, TIMER_DO_FUN)) != nullptr
+                    for (tmp = ch->in_room->first_person; tmp && tmp != ch; tmp = tmp->next_in_room)
+                    {
+                        const auto [t, sentinel] = alg::remove(tmp->timers, TIMER_DO_FUN, &timer_data::type);
+
+                        if (t != tmp->timers.end()
                             && t->count >= 1 && t->do_fun == do_cast
                             && tmp->tempnum == sn && tmp->dest_buf && !str_cmp((const char*)tmp->dest_buf, staticbuf))
                         {
-                            extract_timer(tmp, t);
+                            tmp->timers.erase(t, sentinel);
                             act(
                                 AT_MAGIC,
                                 "Channeling your energy into $n, you help direct the force",
@@ -1222,6 +1225,7 @@ void do_cast(CHAR_DATA* ch, const char* argument)
                             tmp->tempnum  = -1;
                             DISPOSE(tmp->dest_buf);
                         }
+                    }
                     dont_wait = TRUE;
                     send_to_char("You concentrate all the energy into a burst of force!\r\n", ch);
                     vo = locate_targets(ch, arg2, sn, &victim, &obj);
