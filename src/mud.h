@@ -2071,6 +2071,7 @@ struct char_data
     EDITOR_DATA    * editor;
     TIMER          * first_timer;
     TIMER          * last_timer;
+    std::vector<TIMER> timers;
     const char     * name;
     const char     * short_descr;
     const char     * long_descr;
@@ -4784,13 +4785,23 @@ void clean_char_queue args((void));
 
 void add_timer args((CHAR_DATA * ch, short type, short count, DO_FUN * fun, int value ));
 
+void add_timer2 args((CHAR_DATA * ch, short type, short count, DO_FUN * fun, int value ));
+
 TIMER* get_timerptr args((CHAR_DATA * ch, short type ));
+
+TIMER* get_timerptr2 args((CHAR_DATA * ch, short type ));
 
 short get_timer args((CHAR_DATA * ch, short type ));
 
+short get_timer2 args((CHAR_DATA * ch, short type ));
+
 void extract_timer args((CHAR_DATA * ch, TIMER * timer));
 
+void extract_timer2 args((CHAR_DATA * ch, TIMER * timer));
+
 void remove_timer args((CHAR_DATA * ch, short type ));
+
+void remove_timer2 args((CHAR_DATA * ch, short type ));
 
 bool in_soft_range args((CHAR_DATA * ch, AREA_DATA * tarea));
 

@@ -2720,6 +2720,7 @@ void free_char(CHAR_DATA* ch)
     while ((paf = ch->last_affect) != nullptr)
         affect_remove(ch, paf);
 
+    ch->timers.clear();
     while ((timer = ch->first_timer) != nullptr)
         extract_timer(ch, timer);
 

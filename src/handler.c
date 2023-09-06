@@ -3284,6 +3284,21 @@ void add_timer(CHAR_DATA* ch, short type, short count, DO_FUN* fun, int value)
     }
 }
 
+void add_timer2(CHAR_DATA* ch, short type, short count, DO_FUN* fun, int value)
+{
+    // check to see if the timer of this type already exists, if it does, update it
+    // else add a new timer!
+    auto timer_iter = alg::find(ch->timers, type, &timer_data::type);
+    if (timer_iter != ch->timers.end())
+    {
+        timer_iter->count = count;
+        timer_iter->do_fun = fun;
+        timer_iter->value = value;
+    }
+    else
+        ch->timers.emplace_back(nullptr, nullptr, fun, value, type, count);
+}
+
 TIMER* get_timerptr(CHAR_DATA* ch, short type)
 {
     TIMER* timer;
@@ -3294,12 +3309,32 @@ TIMER* get_timerptr(CHAR_DATA* ch, short type)
     return nullptr;
 }
 
+TIMER* get_timerptr2(CHAR_DATA* ch, short type)
+{
+    auto timer_iter = alg::find(ch->timers, type, &timer_data::type);
+
+    if (timer_iter != ch->timers.end())
+        return &(*timer_iter);
+    else
+        return nullptr;
+}
+
 short get_timer(CHAR_DATA* ch, short type)
 {
     TIMER* timer;
 
     if ((timer = get_timerptr(ch, type)) != nullptr)
         return timer->count;
+    else
+        return 0;
+}
+
+short get_timer2(CHAR_DATA* ch, short type)
+{
+    auto timer_iter = alg::find(ch->timers, type, &timer_data::type);
+
+    if (timer_iter != ch->timers.end())
+        return timer_iter->count;
     else
         return 0;
 }
@@ -3316,6 +3351,11 @@ void extract_timer(CHAR_DATA* ch, TIMER* timer)
     DISPOSE(timer);
 }
 
+void extract_timer2(CHAR_DATA*, TIMER*)
+{
+    // I think this method won't be needed, but maybe? I'll have to look at the usecases
+}
+
 void remove_timer(CHAR_DATA* ch, short type)
 {
     TIMER* timer;
@@ -3326,6 +3366,12 @@ void remove_timer(CHAR_DATA* ch, short type)
 
     if (timer)
         extract_timer(ch, timer);
+}
+
+void remove_timer2(CHAR_DATA* ch, short type)
+{
+    const auto [first, last] = alg::remove(ch->timers, type, &timer_data::type);
+    ch->timers.erase(first, last);
 }
 
 bool in_soft_range(CHAR_DATA* ch, AREA_DATA* tarea)
