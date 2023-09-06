@@ -916,13 +916,13 @@ void* locate_targets(CHAR_DATA* ch, char* arg, int sn, CHAR_DATA** victim, OBJ_D
                 * return &pAbort;
                 */
 
-                    if (get_timer(ch, TIMER_PKILLED) > 0)
+                    if (get_timer2(ch, TIMER_PKILLED) > 0)
                     {
                         send_to_char("You have been killed in the last 5 minutes.\r\n", ch);
                         return &pAbort;
                     }
 
-                    if (get_timer(*victim, TIMER_PKILLED) > 0)
+                    if (get_timer2(*victim, TIMER_PKILLED) > 0)
                     {
                         send_to_char("This player has been killed in the last 5 minutes.\r\n", ch);
                         return &pAbort;

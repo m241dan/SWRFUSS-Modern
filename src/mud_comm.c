@@ -1472,7 +1472,7 @@ void do_mpapplyb(CHAR_DATA* ch, const char* argument)
     if (!NOT_AUTHED(victim))
         return;
 
-    if (get_timer(victim, TIMER_APPLIED) >= 1)
+    if (get_timer2(victim, TIMER_APPLIED) >= 1)
         return;
 
     switch (victim->pcdata->auth_state)

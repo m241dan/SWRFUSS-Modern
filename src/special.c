@@ -259,7 +259,7 @@ bool spec_clan_guard(CHAR_DATA* ch)
         v_next = victim->next_in_room;
         if (!can_see(ch, victim))
             continue;
-        if (get_timer(victim, TIMER_RECENTFIGHT) > 0)
+        if (get_timer2(victim, TIMER_RECENTFIGHT) > 0)
             continue;
         if (!IS_NPC(victim) && victim->pcdata && victim->pcdata->clan && IS_AWAKE(victim)
             && str_cmp(ch->name, victim->pcdata->clan->name))
@@ -1094,7 +1094,7 @@ bool spec_stormtrooper(CHAR_DATA* ch)
         v_next = victim->next_in_room;
         if (!can_see(ch, victim))
             continue;
-        if (get_timer(victim, TIMER_RECENTFIGHT) > 0)
+        if (get_timer2(victim, TIMER_RECENTFIGHT) > 0)
             continue;
         if ((IS_NPC(victim) && nifty_is_name("republic", victim->name)
              && victim->fighting && who_fighting(victim) != ch
@@ -1124,7 +1124,7 @@ bool spec_new_republic_trooper(CHAR_DATA* ch)
         v_next = victim->next_in_room;
         if (!can_see(ch, victim))
             continue;
-        if (get_timer(victim, TIMER_RECENTFIGHT) > 0)
+        if (get_timer2(victim, TIMER_RECENTFIGHT) > 0)
             continue;
         if ((IS_NPC(victim) && nifty_is_name("imperial", victim->name)
              && victim->fighting && who_fighting(victim) != ch

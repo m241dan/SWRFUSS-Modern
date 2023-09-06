@@ -2299,10 +2299,10 @@ void nanny_read_motd(DESCRIPTOR_DATA* d, const char* argument)
     {
         char_to_room(ch, get_room_index(wherehome(ch)));
     }
-    if (get_timer(ch, TIMER_SHOVEDRAG) > 0)
+    if (get_timer2(ch, TIMER_SHOVEDRAG) > 0)
         remove_timer(ch, TIMER_SHOVEDRAG);
 
-    if (get_timer(ch, TIMER_PKILLED) > 0)
+    if (get_timer2(ch, TIMER_PKILLED) > 0)
         remove_timer(ch, TIMER_PKILLED);
     if (ch->plr_home != nullptr)
     {

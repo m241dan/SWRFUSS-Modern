@@ -979,7 +979,7 @@ void char_from_room(CHAR_DATA* ch)
     ch->next_in_room = nullptr;
     ch->prev_in_room = nullptr;
 
-    if (!IS_NPC(ch) && get_timer(ch, TIMER_SHOVEDRAG) > 0)
+    if (!IS_NPC(ch) && get_timer2(ch, TIMER_SHOVEDRAG) > 0)
         remove_timer(ch, TIMER_SHOVEDRAG);
 }
 
@@ -1018,7 +1018,7 @@ void char_to_room(CHAR_DATA* ch, ROOM_INDEX_DATA* pRoomIndex)
     if ((obj = get_eq_char(ch, WEAR_LIGHT)) != nullptr && obj->item_type == ITEM_LIGHT && obj->value[2] != 0)
         ++ch->in_room->light;
 
-    if (!IS_NPC(ch) && IS_SET(ch->in_room->room_flags, ROOM_SAFE) && get_timer(ch, TIMER_SHOVEDRAG) <= 0)
+    if (!IS_NPC(ch) && IS_SET(ch->in_room->room_flags, ROOM_SAFE) && get_timer2(ch, TIMER_SHOVEDRAG) <= 0)
         add_timer2(ch, TIMER_SHOVEDRAG, 10, nullptr, 0);   /*-30 Seconds-*/
 
     /*
@@ -2279,7 +2279,7 @@ bool can_see(CHAR_DATA* ch, CHAR_DATA* victim)
         return FALSE;
 
     if (!IS_IMMORTAL(ch) && !IS_NPC(victim) && !victim->desc
-        && get_timer(victim, TIMER_RECENTFIGHT) > 0
+        && get_timer2(victim, TIMER_RECENTFIGHT) > 0
         && (!victim->switched || !IS_AFFECTED(victim->switched, AFF_POSSESS)))
         return FALSE;
 
