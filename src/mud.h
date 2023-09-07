@@ -2069,8 +2069,6 @@ struct char_data
     void           * spare_ptr;
     int            tempnum;
     EDITOR_DATA    * editor;
-    TIMER          * first_timer;
-    TIMER          * last_timer;
     std::vector<TIMER> timers;
     const char     * name;
     const char     * short_descr;
