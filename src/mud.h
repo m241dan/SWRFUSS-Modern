@@ -2051,6 +2051,7 @@ struct char_data
     unsigned short mpscriptpos;
     MOB_INDEX_DATA * pIndexData;
     DESCRIPTOR_DATA* desc;
+    std::vector<AFFECT_DATA> affects;
     AFFECT_DATA    * first_affect;
     AFFECT_DATA    * last_affect;
     NOTE_DATA      * pnote;
