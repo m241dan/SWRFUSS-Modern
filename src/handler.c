@@ -877,6 +877,18 @@ void affect_to_char(CHAR_DATA* ch, AFFECT_DATA* paf)
     affect_modify(ch, paf_new, TRUE);
 }
 
+void affect_to_char2(CHAR_DATA* ch, AFFECT_DATA paf)
+{
+    if (!ch)
+    {
+        bug("%s: nullptr ch!", __func__);
+        return;
+    }
+
+    affect_modify(ch, &paf, TRUE);
+    ch->affects.push_back(paf);
+}
+
 /*
  * Remove an affect from a char.
  */

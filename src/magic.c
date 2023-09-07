@@ -1589,6 +1589,7 @@ ch_ret spell_blindness(int sn, int level, CHAR_DATA* ch, void* vo)
     af.duration  = (int)((1 + (level / 3)) * DUR_CONV);
     af.bitvector = AFF_BLIND;
     affect_to_char(victim, &af);
+    affect_to_char2(victim, af);
     set_char_color(AT_MAGIC, victim);
     send_to_char("You are blinded!\r\n", victim);
     if (ch != victim)
@@ -1739,6 +1740,7 @@ ch_ret spell_change_sex(int sn, int level, CHAR_DATA* ch, void* vo)
     } while (af.modifier == 0);
     af.bitvector = 0;
     affect_to_char(victim, &af);
+    affect_to_char2(victim, af);
     set_char_color(AT_MAGIC, victim);
     send_to_char("You feel different.\r\n", victim);
     if (ch != victim)
@@ -1793,6 +1795,7 @@ ch_ret spell_charm_person(int sn, int level, CHAR_DATA* ch, void* vo)
     af.modifier  = 0;
     af.bitvector = AFF_CHARM;
     affect_to_char(victim, &af);
+    affect_to_char2(victim, af);
     act(AT_MAGIC, "Isn't $n just so nice?", ch, nullptr, victim, TO_VICT);
     act(AT_MAGIC, "$N's eyes glaze over...", ch, nullptr, victim, TO_ROOM);
     if (ch != victim)
@@ -2031,10 +2034,12 @@ ch_ret spell_curse(int sn, int level, CHAR_DATA* ch, void* vo)
     af.modifier  = -1;
     af.bitvector = AFF_CURSE;
     affect_to_char(victim, &af);
+    affect_to_char2(victim, af);
 
     af.location = APPLY_SAVING_SPELL;
     af.modifier = 1;
     affect_to_char(victim, &af);
+    affect_to_char2(victim, af);
 
     send_to_char("You feel the hatred grow within you!\r\n", ch);
     ch->alignment = ch->alignment - 50;
@@ -2380,6 +2385,7 @@ ch_ret spell_faerie_fire(int sn, int level, CHAR_DATA* ch, void* vo)
     af.modifier  = 2 * level;
     af.bitvector = AFF_FAERIE_FIRE;
     affect_to_char(victim, &af);
+    affect_to_char2(victim, af);
     act(AT_PINK, "You are surrounded by a pink outline.", victim, nullptr, nullptr, TO_CHAR);
     act(AT_PINK, "$n is surrounded by a pink outline.", victim, nullptr, nullptr, TO_ROOM);
     return rNONE;
@@ -2685,6 +2691,7 @@ ch_ret spell_invis(int sn, int level, CHAR_DATA* ch, void* vo)
         af.modifier  = 0;
         af.bitvector = AFF_INVISIBLE;
         affect_to_char(victim, &af);
+        affect_to_char2(victim, af);
         act(AT_MAGIC, "You fade out of existence.", victim, nullptr, nullptr, TO_CHAR);
         return rNONE;
     }
@@ -2899,6 +2906,7 @@ ch_ret spell_pass_door(int sn, int level, CHAR_DATA* ch, void* vo)
     af.modifier  = 0;
     af.bitvector = AFF_PASS_DOOR;
     affect_to_char(victim, &af);
+    affect_to_char2(victim, af);
     act(AT_MAGIC, "$n turns translucent.", victim, nullptr, nullptr, TO_ROOM);
     act(AT_MAGIC, "You turn translucent.", victim, nullptr, nullptr, TO_CHAR);
     return rNONE;
@@ -3160,6 +3168,7 @@ ch_ret spell_weaken(int sn, int level, CHAR_DATA* ch, void* vo)
     af.modifier  = -2;
     af.bitvector = 0;
     affect_to_char(victim, &af);
+    affect_to_char2(victim, af);
     set_char_color(AT_MAGIC, victim);
     send_to_char("You feel weaker.\r\n", victim);
     if (ch != victim)
@@ -3774,6 +3783,7 @@ ch_ret spell_animate_dead(int sn, int level, CHAR_DATA* ch, void* vo)
         af.modifier  = 0;
         af.bitvector = AFF_CHARM;
         affect_to_char(mob, &af);
+        affect_to_char2(mob, af);
 
         if (corpse->first_content)
             for (obj = corpse->first_content; obj; obj = obj_next)
@@ -3856,6 +3866,7 @@ ch_ret spell_possess(int sn, int level, CHAR_DATA* ch, void* vo)
     af.modifier  = 0;
     af.bitvector = AFF_POSSESS;
     affect_to_char(victim, &af);
+    affect_to_char2(victim, af);
 
     snprintf(buf, MAX_STRING_LENGTH, "You have possessed %s!\r\n", victim->short_descr);
 
@@ -4407,7 +4418,10 @@ ch_ret spell_affectchar(int sn, int level, CHAR_DATA* ch, void* vo)
         else if (SPELL_FLAG(skill, SF_ACCUMULATIVE))
             affect_join(victim, &af);
         else
+        {
             affect_to_char(victim, &af);
+            affect_to_char2(victim, af);
+        }
     }
     update_pos(victim);
     return retcode;
@@ -4840,6 +4854,7 @@ ch_ret spell_create_mob(int sn, int level, CHAR_DATA* ch, void* vo)
     af.modifier  = 0;
     af.bitvector = AFF_CHARM;
     affect_to_char(mob, &af);
+    affect_to_char2(mob, af);
     return rNONE;
 }
 

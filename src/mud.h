@@ -4658,6 +4658,8 @@ void affect_modify args((CHAR_DATA * ch, AFFECT_DATA * paf, bool fAdd ));
 
 void affect_to_char args((CHAR_DATA * ch, AFFECT_DATA * paf));
 
+void affect_to_char2 args((CHAR_DATA * ch, AFFECT_DATA paf));
+
 void affect_remove args((CHAR_DATA * ch, AFFECT_DATA * paf));
 
 void affect_strip args((CHAR_DATA * ch, int sn ));

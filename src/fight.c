@@ -935,6 +935,7 @@ ch_ret one_hit(CHAR_DATA* ch, CHAR_DATA* victim, int dt)
                     af.duration  = 7;
                     af.bitvector = AFF_PARALYSIS;
                     affect_to_char(victim, &af);
+                    affect_to_char2(victim, af);
                     update_pos(victim);
                     if (IS_NPC(victim))
                     {
