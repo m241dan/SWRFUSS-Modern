@@ -4783,23 +4783,9 @@ void queue_extracted_char args((CHAR_DATA * ch, bool extract ));
 
 void clean_char_queue args((void));
 
-void add_timer args((CHAR_DATA * ch, short type, short count, DO_FUN * fun, int value ));
-
 void add_timer2 args((CHAR_DATA * ch, short type, short count, DO_FUN * fun, int value ));
 
-TIMER* get_timerptr args((CHAR_DATA * ch, short type ));
-
-TIMER* get_timerptr2 args((CHAR_DATA * ch, short type ));
-
-short get_timer args((CHAR_DATA * ch, short type ));
-
 short get_timer2 args((CHAR_DATA * ch, short type ));
-
-void extract_timer args((CHAR_DATA * ch, TIMER * timer));
-
-void extract_timer2 args((CHAR_DATA * ch, TIMER * timer));
-
-void remove_timer args((CHAR_DATA * ch, short type ));
 
 void remove_timer2 args((CHAR_DATA * ch, short type ));
 

@@ -3261,29 +3261,6 @@ void clean_char_queue()
  * Add a timer to ch						-Thoric
  * Support for "call back" time delayed commands
  */
-void add_timer(CHAR_DATA* ch, short type, short count, DO_FUN* fun, int value)
-{
-    TIMER* timer;
-
-    for (timer = ch->first_timer; timer; timer = timer->next)
-        if (timer->type == type)
-        {
-            timer->count  = count;
-            timer->do_fun = fun;
-            timer->value  = value;
-            break;
-        }
-    if (!timer)
-    {
-        CREATE(timer, TIMER, 1);
-        timer->count  = count;
-        timer->type   = type;
-        timer->do_fun = fun;
-        timer->value  = value;
-        LINK(timer, ch->first_timer, ch->last_timer, next, prev);
-    }
-}
-
 void add_timer2(CHAR_DATA* ch, short type, short count, DO_FUN* fun, int value)
 {
     // check to see if the timer of this type already exists, if it does, update it
@@ -3299,36 +3276,6 @@ void add_timer2(CHAR_DATA* ch, short type, short count, DO_FUN* fun, int value)
         ch->timers.emplace_back(nullptr, nullptr, fun, value, type, count);
 }
 
-TIMER* get_timerptr(CHAR_DATA* ch, short type)
-{
-    TIMER* timer;
-
-    for (timer = ch->first_timer; timer; timer = timer->next)
-        if (timer->type == type)
-            return timer;
-    return nullptr;
-}
-
-TIMER* get_timerptr2(CHAR_DATA* ch, short type)
-{
-    auto timer_iter = alg::find(ch->timers, type, &timer_data::type);
-
-    if (timer_iter != ch->timers.end())
-        return &(*timer_iter);
-    else
-        return nullptr;
-}
-
-short get_timer(CHAR_DATA* ch, short type)
-{
-    TIMER* timer;
-
-    if ((timer = get_timerptr(ch, type)) != nullptr)
-        return timer->count;
-    else
-        return 0;
-}
-
 short get_timer2(CHAR_DATA* ch, short type)
 {
     auto timer_iter = alg::find(ch->timers, type, &timer_data::type);
@@ -3337,35 +3284,6 @@ short get_timer2(CHAR_DATA* ch, short type)
         return timer_iter->count;
     else
         return 0;
-}
-
-void extract_timer(CHAR_DATA* ch, TIMER* timer)
-{
-    if (!timer)
-    {
-        bug("%s: nullptr timer", __func__);
-        return;
-    }
-
-    UNLINK(timer, ch->first_timer, ch->last_timer, next, prev);
-    DISPOSE(timer);
-}
-
-void extract_timer2(CHAR_DATA*, TIMER*)
-{
-    // I think this method won't be needed, but maybe? I'll have to look at the usecases
-}
-
-void remove_timer(CHAR_DATA* ch, short type)
-{
-    TIMER* timer;
-
-    for (timer = ch->first_timer; timer; timer = timer->next)
-        if (timer->type == type)
-            break;
-
-    if (timer)
-        extract_timer(ch, timer);
 }
 
 void remove_timer2(CHAR_DATA* ch, short type)
