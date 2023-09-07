@@ -2717,6 +2717,12 @@ void free_char(CHAR_DATA* ch)
     while ((obj = ch->last_carrying) != nullptr)
         extract_obj(obj);
 
+    alg::for_each(ch->affects, [&](auto& affect)
+    {
+        affect_modify(ch, &affect, FALSE);
+    });
+    ch->affects.clear();
+
     while ((paf = ch->last_affect) != nullptr)
         affect_remove(ch, paf);
 
