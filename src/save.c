@@ -434,8 +434,8 @@ void fwrite_char(CHAR_DATA* ch, FILE* fp)
             fprintf(fp, "PKills       %d\n", ch->pcdata->pkills);
         if (ch->pcdata->pdeaths)
             fprintf(fp, "PDeaths      %d\n", ch->pcdata->pdeaths);
-        if (get_timer2(ch, TIMER_PKILLED) && (get_timer2(ch, TIMER_PKILLED) > 0))
-            fprintf(fp, "PTimer       %d\n", get_timer2(ch, TIMER_PKILLED));
+        if (get_timer(ch, TIMER_PKILLED) && (get_timer(ch, TIMER_PKILLED) > 0))
+            fprintf(fp, "PTimer       %d\n", get_timer(ch, TIMER_PKILLED));
         fprintf(fp, "MKills       %d\n", ch->pcdata->mkills);
         fprintf(fp, "MDeaths      %d\n", ch->pcdata->mdeaths);
         if (ch->pcdata->illegal_pk)
@@ -1338,7 +1338,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 KEY("Prompt", ch->pcdata->prompt, fread_string(fp));
                 if (!str_cmp(word, "PTimer"))
                 {
-                    add_timer2(ch, TIMER_PKILLED, fread_number(fp), nullptr, 0);
+                    add_timer(ch, TIMER_PKILLED, fread_number(fp), nullptr, 0);
                     fMatch = TRUE;
                     break;
                 }

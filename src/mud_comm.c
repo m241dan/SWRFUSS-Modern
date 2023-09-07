@@ -1472,7 +1472,7 @@ void do_mpapplyb(CHAR_DATA* ch, const char* argument)
     if (!NOT_AUTHED(victim))
         return;
 
-    if (get_timer2(victim, TIMER_APPLIED) >= 1)
+    if (get_timer(victim, TIMER_APPLIED) >= 1)
         return;
 
     switch (victim->pcdata->auth_state)
@@ -1486,7 +1486,7 @@ void do_mpapplyb(CHAR_DATA* ch, const char* argument)
             );
             log_string(log_buf);
             to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
-            add_timer2(victim, TIMER_APPLIED, 10, nullptr, 0);
+            add_timer(victim, TIMER_APPLIED, 10, nullptr, 0);
             victim->pcdata->auth_state = 1;
             break;
 
@@ -1496,7 +1496,7 @@ void do_mpapplyb(CHAR_DATA* ch, const char* argument)
                     "Your name has been deemed unsuitable by the gods.  Please choose a more apropriate name with the 'name' command.\r\n",
                     victim
                 );
-            add_timer2(victim, TIMER_APPLIED, 10, nullptr, 0);
+            add_timer(victim, TIMER_APPLIED, 10, nullptr, 0);
             break;
 
         case 3:send_to_char("The gods permit you to enter the Star Wars Reality.\r\n", victim);

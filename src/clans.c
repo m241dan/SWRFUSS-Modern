@@ -1606,7 +1606,7 @@ void do_shove(CHAR_DATA* ch, const char* argument)
     }
 
     exit_dir = get_dir(arg2);
-    if (IS_SET(victim->in_room->room_flags, ROOM_SAFE) && get_timer2(victim, TIMER_SHOVEDRAG) <= 0)
+    if (IS_SET(victim->in_room->room_flags, ROOM_SAFE) && get_timer(victim, TIMER_SHOVEDRAG) <= 0)
     {
         send_to_char("That character cannot be shoved right now.\r\n", ch);
         return;
@@ -1661,8 +1661,8 @@ void do_shove(CHAR_DATA* ch, const char* argument)
     /*
     * Remove protection from shove/drag if char shoves -- Blodkai
     */
-    if (IS_SET(ch->in_room->room_flags, ROOM_SAFE) && get_timer2(ch, TIMER_SHOVEDRAG) <= 0)
-        add_timer2(ch, TIMER_SHOVEDRAG, 10, nullptr, 0);
+    if (IS_SET(ch->in_room->room_flags, ROOM_SAFE) && get_timer(ch, TIMER_SHOVEDRAG) <= 0)
+        add_timer(ch, TIMER_SHOVEDRAG, 10, nullptr, 0);
 }
 
 void do_drag(CHAR_DATA* ch, const char* argument)
@@ -1717,7 +1717,7 @@ void do_drag(CHAR_DATA* ch, const char* argument)
 
     exit_dir = get_dir(arg2);
 
-    if (IS_SET(victim->in_room->room_flags, ROOM_SAFE) && get_timer2(victim, TIMER_SHOVEDRAG) <= 0)
+    if (IS_SET(victim->in_room->room_flags, ROOM_SAFE) && get_timer(victim, TIMER_SHOVEDRAG) <= 0)
     {
         send_to_char("That character cannot be dragged right now.\r\n", ch);
         return;

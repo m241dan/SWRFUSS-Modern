@@ -1391,7 +1391,7 @@ void do_detrap(CHAR_DATA* ch, const char* argument)
             act(AT_ACTION, "You carefully begin your attempt to remove a trap from $p...", ch, obj, nullptr, TO_CHAR);
             act(AT_ACTION, "$n carefully attempts to remove a trap from $p...", ch, obj, nullptr, TO_ROOM);
             ch->dest_buf = str_dup(obj->name);
-            add_timer2(ch, TIMER_DO_FUN, 3, do_detrap, 1);
+            add_timer(ch, TIMER_DO_FUN, 3, do_detrap, 1);
             /*	    WAIT_STATE( ch, skill_table[gsn_detrap]->beats ); */
             return;
         case 1:
@@ -1506,7 +1506,7 @@ void do_dig(CHAR_DATA* ch, const char* argument)
                         return;
                 }
             }
-            add_timer2(ch, TIMER_DO_FUN, UMIN(skill_table[gsn_dig]->beats / 10, 3), do_dig, 1);
+            add_timer(ch, TIMER_DO_FUN, UMIN(skill_table[gsn_dig]->beats / 10, 3), do_dig, 1);
             ch->dest_buf = str_dup(arg);
             send_to_char("You begin digging...\r\n", ch);
             act(AT_PLAIN, "$n begins digging...", ch, nullptr, nullptr, TO_ROOM);
@@ -1644,7 +1644,7 @@ void do_search(CHAR_DATA* ch, const char* argument)
                     return;
                 }
             }
-            add_timer2(ch, TIMER_DO_FUN, UMIN(skill_table[gsn_search]->beats / 10, 3), do_search, 1);
+            add_timer(ch, TIMER_DO_FUN, UMIN(skill_table[gsn_search]->beats / 10, 3), do_search, 1);
             send_to_char("You begin your search...\r\n", ch);
             ch->dest_buf = str_dup(arg);
             return;

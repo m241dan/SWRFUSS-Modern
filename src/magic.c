@@ -916,13 +916,13 @@ void* locate_targets(CHAR_DATA* ch, char* arg, int sn, CHAR_DATA** victim, OBJ_D
                 * return &pAbort;
                 */
 
-                    if (get_timer2(ch, TIMER_PKILLED) > 0)
+                    if (get_timer(ch, TIMER_PKILLED) > 0)
                     {
                         send_to_char("You have been killed in the last 5 minutes.\r\n", ch);
                         return &pAbort;
                     }
 
-                    if (get_timer2(*victim, TIMER_PKILLED) > 0)
+                    if (get_timer(*victim, TIMER_PKILLED) > 0)
                     {
                         send_to_char("This player has been killed in the last 5 minutes.\r\n", ch);
                         return &pAbort;
@@ -1139,7 +1139,7 @@ void do_cast(CHAR_DATA* ch, const char* argument)
             /*
           * multi-participant spells         -Thoric
           */
-            add_timer2(ch, TIMER_DO_FUN, UMIN(skill->beats / 10, 3), do_cast, 1);
+            add_timer(ch, TIMER_DO_FUN, UMIN(skill->beats / 10, 3), do_cast, 1);
             act(AT_MAGIC, "You begin to feel the force in yourself and those around you...", ch, nullptr, nullptr, TO_CHAR);
             act(AT_MAGIC, "$n reaches out with the force to those around...", ch, nullptr, nullptr, TO_ROOM);
             snprintf(staticbuf, MAX_STRING_LENGTH, "%s %s", arg2, target_name);

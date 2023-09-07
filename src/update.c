@@ -1870,7 +1870,7 @@ void aggr_update(void)
                 continue;
             }
 
-            if (get_timer2(victim, TIMER_RECENTFIGHT) > 0)
+            if (get_timer(victim, TIMER_RECENTFIGHT) > 0)
                 continue;
 
             if (IS_NPC(ch) && IS_SET(ch->attacks, ATCK_BACKSTAB))
