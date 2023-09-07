@@ -290,35 +290,38 @@ void violence_update(void)
        * We need spells that have shorter durations than an hour.
        * So a melee round sounds good to me... -Thoric
        */
-        for (paf = ch->first_affect; paf; paf = paf_next)
+        alg::for_each(ch->affects, [](AFFECT_DATA& affect)
         {
-            paf_next = paf->next;
-            if (paf->duration > 0)
-                paf->duration--;
-            else if (paf->duration < 0);
-            else
+            if (affect.duration > 0)
+                affect.duration--;
+        });
+
+        const auto affects_to_remove = alg::remove(ch->affects, 0, &affect_data::duration);
+
+        alg::for_each(affects_to_remove, [&](AFFECT_DATA& affect)
+        {
+            const auto* skill = get_skilltype(affect.type);
+
+            if (affect.type > 0 && skill && skill->msg_off)
             {
-                if (!paf_next || paf_next->type != paf->type || paf_next->duration > 0)
-                {
-                    skill = get_skilltype(paf->type);
-                    if (paf->type > 0 && skill && skill->msg_off)
-                    {
-                        set_char_color(AT_WEAROFF, ch);
-                        send_to_char(skill->msg_off, ch);
-                        send_to_char("\r\n", ch);
-                    }
-                }
-                if (paf->type == gsn_possess)
-                {
-                    ch->desc->character           = ch->desc->original;
-                    ch->desc->original            = nullptr;
-                    ch->desc->character->desc     = ch->desc;
-                    ch->desc->character->switched = nullptr;
-                    ch->desc                      = nullptr;
-                }
-                affect_remove(ch, paf);
+                set_char_color(AT_WEAROFF, ch);
+                send_to_char(skill->msg_off, ch);
+                send_to_char("\r\n", ch);
             }
-        }
+
+            if (affect.type == gsn_possess)
+            {
+                ch->desc->character           = ch->desc->original;
+                ch->desc->original            = nullptr;
+                ch->desc->character->desc     = ch->desc;
+                ch->desc->character->switched = nullptr;
+                ch->desc                      = nullptr;
+            }
+
+            affect_modify(ch, &affect, FALSE);
+        });
+
+        ch->affects.erase(affects_to_remove.begin(), affects_to_remove.end());
 
         if ((victim = who_fighting(ch)) == nullptr || IS_AFFECTED(ch, AFF_PARALYSIS))
             return;

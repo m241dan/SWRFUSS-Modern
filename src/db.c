@@ -2723,9 +2723,6 @@ void free_char(CHAR_DATA* ch)
     });
     ch->affects.clear();
 
-    while ((paf = ch->last_affect) != nullptr)
-        affect_remove(ch, paf);
-
     ch->timers.clear();
 
     STRFREE(ch->name);

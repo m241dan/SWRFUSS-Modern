@@ -2124,8 +2124,13 @@ ch_ret spell_dispel_magic(int sn, int level, CHAR_DATA* ch, void* vo)
     {
         set_char_color(AT_MAGIC, ch);
         send_to_char("You pass your hands around your body...\r\n", ch);
-        while (victim->first_affect)
-            affect_remove(victim, victim->first_affect);
+
+        alg::for_each(ch->affects, [&](auto& affect)
+        {
+            affect_modify(ch, &affect, FALSE);
+        });
+        ch->affects.clear();
+
         victim->affected_by = race_table[victim->race].affected;
         return rNONE;
     }

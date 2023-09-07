@@ -890,23 +890,6 @@ void affect_to_char2(CHAR_DATA* ch, AFFECT_DATA paf)
 }
 
 /*
- * Remove an affect from a char.
- */
-void affect_remove(CHAR_DATA* ch, AFFECT_DATA* paf)
-{
-    if (!ch->first_affect)
-    {
-        bug("%s: no affect.", __func__);
-        return;
-    }
-
-    affect_modify(ch, paf, FALSE);
-
-    UNLINK(paf, ch->first_affect, ch->last_affect, next, prev);
-    DISPOSE(paf);
-}
-
-/*
  * Strip all affects of a given sn.
  */
 void affect_strip(CHAR_DATA* ch, int sn)
@@ -914,12 +897,13 @@ void affect_strip(CHAR_DATA* ch, int sn)
     AFFECT_DATA* paf;
     AFFECT_DATA* paf_next;
 
-    for (paf = ch->first_affect; paf; paf = paf_next)
+    const auto affects_to_remove = alg::remove(ch->affects, sn, &affect_data::type);
+
+    alg::for_each(affects_to_remove, [&](auto& affect)
     {
-        paf_next = paf->next;
-        if (paf->type == sn)
-            affect_remove(ch, paf);
-    }
+        affect_modify(ch, &affect, FALSE);
+    });
+    ch->affects.erase(affects_to_remove.begin(), affects_to_remove.end());
 }
 
 /*
@@ -953,7 +937,7 @@ void affect_join(CHAR_DATA* ch, AFFECT_DATA* paf)
                 paf->modifier = UMIN(5000, paf->modifier + paf_old->modifier);
             else
                 paf->modifier = paf_old->modifier;
-            affect_remove(ch, paf_old);
+//            affect_remove(ch, paf_old);
             break;
         }
 
