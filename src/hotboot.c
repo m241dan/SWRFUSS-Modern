@@ -358,7 +358,6 @@ SHIP_DATA* load_ship(FILE* fp)
  */
 void save_mobile(FILE* fp, CHAR_DATA* mob)
 {
-    AFFECT_DATA* paf;
     SKILLTYPE  * skill = nullptr;
 
     if (!IS_NPC(mob) || !fp)
@@ -405,22 +404,22 @@ void save_mobile(FILE* fp, CHAR_DATA* mob)
     fprintf(fp, "Flags %d\n", mob->act);
     fprintf(fp, "AffectedBy   %d\n", mob->affected_by);
 
-    for (paf = mob->first_affect; paf; paf = paf->next)
+    alg::for_each(mob->affects, [&](auto& paf)
     {
-        if (paf->type >= 0 && (skill = get_skilltype(paf->type)) == nullptr)
-            continue;
+        if (paf.type >= 0 && (skill = get_skilltype(paf.type)) == nullptr)
+            return;
 
-        if (paf->type >= 0 && paf->type < TYPE_PERSONAL)
+        if (paf.type >= 0 && paf.type < TYPE_PERSONAL)
             fprintf(
                 fp, "AffectData   '%s' %3d %3d %3d %d\n",
-                skill->name, paf->duration, paf->modifier, paf->location, paf->bitvector
+                skill->name, paf.duration, paf.modifier, paf.location, paf.bitvector
             );
         else
             fprintf(
                 fp, "Affect       %3d %3d %3d %3d %d\n",
-                paf->type, paf->duration, paf->modifier, paf->location, paf->bitvector
+                paf.type, paf.duration, paf.modifier, paf.location, paf.bitvector
             );
-    }
+    });
 
     de_equip_char(mob);
 
@@ -619,7 +618,7 @@ CHAR_DATA* load_mobile(FILE* fp)
                         || paf->location == APPLY_REMOVESPELL || paf->location == APPLY_STRIPSN)
                         paf->modifier = slot_lookup(paf->modifier);
                     paf->bitvector    = fread_number(fp);
-                    LINK(paf, mob->first_affect, mob->last_affect, next, prev);
+                    mob->affects.push_back(*paf);
                     fMatch = TRUE;
                     break;
                 }

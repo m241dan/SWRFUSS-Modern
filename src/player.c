@@ -271,7 +271,7 @@ void do_score(CHAR_DATA* ch, const char* argument)
             ch_printf(ch, "Area Loaded [%s]\r\n", (IS_SET(ch->pcdata->area->status, AREA_LOADED)) ? "yes" : "no");
         }
     }
-    if (ch->first_affect)
+    if (!ch->affects.empty())
     {
         int      i;
         SKILLTYPE* sktmp;
@@ -279,10 +279,10 @@ void do_score(CHAR_DATA* ch, const char* argument)
         i = 0;
         send_to_char("----------------------------------------------------------------------------\r\n", ch);
         send_to_char("AFFECT DATA:                            ", ch);
-        for (paf = ch->first_affect; paf; paf = paf->next)
+        alg::for_each(ch->affects, [&](const auto& paf) -> void
         {
-            if ((sktmp = get_skilltype(paf->type)) == nullptr)
-                continue;
+            if ((sktmp = get_skilltype(paf.type)) == nullptr)
+                return;
             if (ch->top_level < 20)
             {
                 ch_printf(ch, "[%-34.34s]    ", sktmp->name);
@@ -293,24 +293,24 @@ void do_score(CHAR_DATA* ch, const char* argument)
             }
             else
             {
-                if (paf->modifier == 0)
-                    ch_printf(ch, "[%-24.24s;%5d rds]    ", sktmp->name, paf->duration);
-                else if (paf->modifier > 999)
+                if (paf.modifier == 0)
+                    ch_printf(ch, "[%-24.24s;%5d rds]    ", sktmp->name, paf.duration);
+                else if (paf.modifier > 999)
                     ch_printf(
                         ch, "[%-15.15s; %7.7s;%5d rds]    ",
-                        sktmp->name, tiny_affect_loc_name(paf->location), paf->duration
+                        sktmp->name, tiny_affect_loc_name(paf.location), paf.duration
                     );
                 else
                     ch_printf(
                         ch, "[%-11.11s;%+-3.3d %7.7s;%5d rds]    ",
-                        sktmp->name, paf->modifier, tiny_affect_loc_name(paf->location), paf->duration
+                        sktmp->name, paf.modifier, tiny_affect_loc_name(paf.location), paf.duration
                     );
                 if (i == 0)
                     i = 1;
                 if ((++i % 2) == 0)
                     send_to_char("\r\n", ch);
             }
-        }
+        });
     }
     send_to_char("\r\n", ch);
 }
@@ -594,11 +594,12 @@ void do_oldscore(CHAR_DATA* ch, const char* argument)
     else
         send_to_char("satanic.\r\n", ch);
 
-    if (ch->first_affect)
+    if (!ch->affects.empty())
     {
         send_to_char("You are affected by:\r\n", ch);
-        for (paf = ch->first_affect; paf; paf = paf->next)
-            if ((skill = get_skilltype(paf->type)) != nullptr)
+        alg::for_each(ch->affects, [&](auto& paf)
+        {
+            if ((skill = get_skilltype(paf.type)) != nullptr)
             {
                 ch_printf(ch, "Spell: '%s'", skill->name);
 
@@ -606,11 +607,12 @@ void do_oldscore(CHAR_DATA* ch, const char* argument)
                     ch_printf(
                         ch,
                         " modifies %s by %d for %d rounds",
-                        affect_loc_name(paf->location), paf->modifier, paf->duration
+                        affect_loc_name(paf.location), paf.modifier, paf.duration
                     );
 
                 send_to_char(".\r\n", ch);
             }
+        });
     }
 
     if (!IS_NPC(ch) && IS_IMMORTAL(ch))
@@ -693,7 +695,7 @@ void do_affected(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!ch->first_affect)
+    if (ch->affects.empty())
     {
         set_char_color(AT_SCORE, ch);
         send_to_char("\r\nNo cantrip or skill affects you.\r\n", ch);
@@ -701,22 +703,24 @@ void do_affected(CHAR_DATA* ch, const char* argument)
     else
     {
         send_to_char("\r\n", ch);
-        for (paf = ch->first_affect; paf; paf = paf->next)
-            if ((skill = get_skilltype(paf->type)) != nullptr)
+        alg::for_each(ch->affects, [&](auto& paf)
+        {
+            if ((skill = get_skilltype(paf.type)) != nullptr)
             {
                 set_char_color(AT_BLUE, ch);
                 send_to_char("Affected:  ", ch);
                 set_char_color(AT_SCORE, ch);
                 if (ch->top_level >= 20)
                 {
-                    if (paf->duration < 25)
+                    if (paf.duration < 25)
                         set_char_color(AT_WHITE, ch);
-                    if (paf->duration < 6)
+                    if (paf.duration < 6)
                         set_char_color(AT_WHITE + AT_BLINK, ch);
-                    ch_printf(ch, "(%5d)   ", paf->duration);
+                    ch_printf(ch, "(%5d)   ", paf.duration);
                 }
                 ch_printf(ch, "%-18s\r\n", skill->name);
             }
+        });
     }
 }
 

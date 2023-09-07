@@ -2052,8 +2052,6 @@ struct char_data
     MOB_INDEX_DATA * pIndexData;
     DESCRIPTOR_DATA* desc;
     std::vector<AFFECT_DATA> affects;
-    AFFECT_DATA    * first_affect;
-    AFFECT_DATA    * last_affect;
     NOTE_DATA      * pnote;
     NOTE_DATA      * comments;
     OBJ_DATA       * first_carrying;

@@ -494,22 +494,22 @@ void fwrite_char(CHAR_DATA* ch, FILE* fp)
         }
     }
 
-    for (paf = ch->first_affect; paf; paf = paf->next)
+    alg::for_each(ch->affects, [&](auto& paf)
     {
-        if (paf->type >= 0 && (skill = get_skilltype(paf->type)) == nullptr)
-            continue;
+        if (paf.type >= 0 && (skill = get_skilltype(paf.type)) == nullptr)
+            return;
 
-        if (paf->type >= 0 && paf->type < TYPE_PERSONAL)
+        if (paf.type >= 0 && paf.type < TYPE_PERSONAL)
             fprintf(
                 fp, "AffectData   '%s' %3d %3d %3d %10d\n",
-                skill->name, paf->duration, paf->modifier, paf->location, paf->bitvector
+                skill->name, paf.duration, paf.modifier, paf.location, paf.bitvector
             );
         else
             fprintf(
                 fp, "Affect       %3d %3d %3d %3d %10d\n",
-                paf->type, paf->duration, paf->modifier, paf->location, paf->bitvector
+                paf.type, paf.duration, paf.modifier, paf.location, paf.bitvector
             );
-    }
+    });
 
     track   = URANGE(2, ((ch->top_level + 3) * MAX_KILLTRACK) / LEVEL_AVATAR, MAX_KILLTRACK);
     for (sn = 0; sn < track; sn++)
@@ -1037,7 +1037,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     paf->modifier  = fread_number(fp);
                     paf->location  = fread_number(fp);
                     paf->bitvector = fread_number(fp);
-                    LINK(paf, ch->first_affect, ch->last_affect, next, prev);
+                    ch->affects.push_back(*paf);
                     fMatch = TRUE;
                     break;
                 }

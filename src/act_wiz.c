@@ -1350,14 +1350,16 @@ void do_mstat(CHAR_DATA* ch, const char* argument)
     ch_printf(ch, "Susceptible: %s\r\n", flag_string(victim->susceptible, ris_flags));
     ch_printf(ch, "Attacks    : %s\r\n", flag_string(victim->attacks, attack_flags));
     ch_printf(ch, "Defenses   : %s\r\n", flag_string(victim->defenses, defense_flags));
-    for (paf = victim->first_affect; paf; paf = paf->next)
-        if ((skill = get_skilltype(paf->type)) != nullptr)
+    alg::for_each(victim->affects, [&](auto& paf)
+    {
+        if ((skill = get_skilltype(paf.type)) != nullptr)
             ch_printf(
                 ch,
                 "%s: '%s' modifies %s by %d for %d rounds with bits %s.\r\n",
                 skill_tname[skill->type],
                 skill->name,
-                affect_loc_name(paf->location), paf->modifier, paf->duration, affect_bit_name(paf->bitvector));
+                affect_loc_name(paf.location), paf.modifier, paf.duration, affect_bit_name(paf.bitvector));
+    })   ;
 }
 
 void do_mfind(CHAR_DATA* ch, const char* argument)

@@ -2649,8 +2649,6 @@ void clear_char(CHAR_DATA* ch)
     ch->prev_in_room   = nullptr;
     ch->fighting       = nullptr;
     ch->switched       = nullptr;
-    ch->first_affect   = nullptr;
-    ch->last_affect    = nullptr;
     ch->prev_cmd       = nullptr; /* maps */
     ch->last_cmd       = nullptr;
     ch->dest_buf       = nullptr;

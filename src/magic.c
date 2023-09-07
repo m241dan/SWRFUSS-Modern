@@ -2623,31 +2623,31 @@ ch_ret spell_identify(int sn, int level, CHAR_DATA* ch, void* vo)
         {
             ch_printf(ch, "%s appears to be affected by: ", victim->name);
 
-            if (!victim->first_affect)
+            if (victim->affects.empty())
             {
                 send_to_char("nothing.\r\n", ch);
                 return rNONE;
             }
 
-            for (paf = victim->first_affect; paf; paf = paf->next)
+            if (victim->affects.size() == 1)
             {
-                if (victim->first_affect != victim->last_affect)
-                {
-                    if (paf != victim->last_affect && (sktmp = get_skilltype(paf->type)) != nullptr)
-                        ch_printf(ch, "%s, ", sktmp->name);
-
-                    if (paf == victim->last_affect && (sktmp = get_skilltype(paf->type)) != nullptr)
-                    {
-                        ch_printf(ch, "and %s.\r\n", sktmp->name);
-                        return rNONE;
-                    }
-                }
+                if ((sktmp = get_skilltype(paf->type)) != nullptr)
+                    ch_printf(ch, "%s.\r\n", sktmp->name);
                 else
+                    send_to_char("\r\n", ch);
+                return rNONE;
+            }
+            else
+            {
+                alg::for_each(victim->affects.begin(), victim->affects.end() - 1, [&](auto& paf)
                 {
-                    if ((sktmp = get_skilltype(paf->type)) != nullptr)
-                        ch_printf(ch, "%s.\r\n", sktmp->name);
-                    else
-                        send_to_char("\r\n", ch);
+                    if (auto* sktmp = get_skilltype(paf.type); sktmp != nullptr)
+                        ch_printf(ch, "%s, ", sktmp->name);
+                });
+
+                if ((sktmp = get_skilltype(ch->affects.back().type)) != nullptr)
+                {
+                    ch_printf(ch, "and %s.\r\n", sktmp->name);
                     return rNONE;
                 }
             }

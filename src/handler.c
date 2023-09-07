@@ -867,7 +867,7 @@ void affect_to_char(CHAR_DATA* ch, AFFECT_DATA* paf)
     }
 
     CREATE(paf_new, AFFECT_DATA, 1);
-    LINK(paf_new, ch->first_affect, ch->last_affect, next, prev);
+//    LINK(paf_new, ch->first_affect, ch->last_affect, next, prev);
     paf_new->type      = paf->type;
     paf_new->duration  = paf->duration;
     paf_new->location  = paf->location;
@@ -911,13 +911,7 @@ void affect_strip(CHAR_DATA* ch, int sn)
  */
 bool is_affected(CHAR_DATA* ch, int sn)
 {
-    AFFECT_DATA* paf;
-
-    for (paf = ch->first_affect; paf; paf = paf->next)
-        if (paf->type == sn)
-            return TRUE;
-
-    return FALSE;
+    return alg::find(ch->affects, sn, &affect_data::type) != ch->affects.end();
 }
 
 /*
@@ -927,21 +921,21 @@ bool is_affected(CHAR_DATA* ch, int sn)
  */
 void affect_join(CHAR_DATA* ch, AFFECT_DATA* paf)
 {
-    AFFECT_DATA* paf_old;
-
-    for (paf_old = ch->first_affect; paf_old; paf_old = paf_old->next)
-        if (paf_old->type == paf->type)
-        {
-            paf->duration     = UMIN(1000000, paf->duration + paf_old->duration);
-            if (paf->modifier)
-                paf->modifier = UMIN(5000, paf->modifier + paf_old->modifier);
-            else
-                paf->modifier = paf_old->modifier;
-//            affect_remove(ch, paf_old);
-            break;
-        }
-
-    affect_to_char(ch, paf);
+//    AFFECT_DATA* paf_old;
+//
+//    for (paf_old = ch->first_affect; paf_old; paf_old = paf_old->next)
+//        if (paf_old->type == paf->type)
+//        {
+//            paf->duration     = UMIN(1000000, paf->duration + paf_old->duration);
+//            if (paf->modifier)
+//                paf->modifier = UMIN(5000, paf->modifier + paf_old->modifier);
+//            else
+//                paf->modifier = paf_old->modifier;
+////            affect_remove(ch, paf_old);
+//            break;
+//        }
+//
+//    affect_to_char(ch, paf);
 }
 
 void affect_join2(CHAR_DATA*ch, AFFECT_DATA paf)
@@ -3001,8 +2995,10 @@ void fix_char(CHAR_DATA* ch)
 
     de_equip_char(ch);
 
-    for (aff = ch->first_affect; aff; aff = aff->next)
-        affect_modify(ch, aff, FALSE);
+    alg::for_each(ch->affects, [&](auto& aff)
+    {
+        affect_modify(ch, &aff, FALSE);
+    });
 
     ch->affected_by         = race_table[ch->race].affected;
     ch->mental_state        = -10;
@@ -3026,8 +3022,10 @@ void fix_char(CHAR_DATA* ch)
     ch->saving_spell_staff  = 0;
     ch->saving_poison_death = 0;
 
-    for (aff = ch->first_affect; aff; aff = aff->next)
-        affect_modify(ch, aff, TRUE);
+    alg::for_each(ch->affects, [&](auto& aff)
+    {
+        affect_modify(ch, &aff, TRUE);
+    });
 
     ch->carry_weight = 0;
     ch->carry_number = 0;
@@ -3788,7 +3786,6 @@ void check_switches(bool possess)
 
 void check_switch(CHAR_DATA* ch, bool possess)
 {
-    AFFECT_DATA* paf;
     CMDTYPE    * cmd;
     int        hash, trust = get_trust(ch);
 
@@ -3797,11 +3794,11 @@ void check_switch(CHAR_DATA* ch, bool possess)
 
     if (!possess)
     {
-        for (paf = ch->switched->first_affect; paf; paf = paf->next)
+        for (auto& paf : ch->switched->affects)
         {
-            if (paf->duration == -1)
+            if (paf.duration == -1)
                 continue;
-            if (paf->type != -1 && skill_table[paf->type]->spell_fun == spell_possess)
+            if (paf.type != -1 && skill_table[paf.type]->spell_fun == spell_possess)
                 return;
         }
     }
