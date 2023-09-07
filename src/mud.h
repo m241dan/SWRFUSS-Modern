@@ -4668,6 +4668,8 @@ bool is_affected args((CHAR_DATA * ch, int sn ));
 
 void affect_join args((CHAR_DATA * ch, AFFECT_DATA * paf));
 
+void affect_join2 args((CHAR_DATA*ch, AFFECT_DATA paf));
+
 void char_from_room args((CHAR_DATA * ch));
 
 void char_to_room args((CHAR_DATA * ch, ROOM_INDEX_DATA * pRoomIndex));

@@ -1461,6 +1461,7 @@ ch_ret damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
         af.modifier  = -2;
         af.bitvector = AFF_POISON;
         affect_join(victim, &af);
+        affect_join2(victim, af);
         victim->mental_state = URANGE(20, victim->mental_state + 2, 100);
     }
 

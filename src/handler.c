@@ -960,6 +960,37 @@ void affect_join(CHAR_DATA* ch, AFFECT_DATA* paf)
     affect_to_char(ch, paf);
 }
 
+void affect_join2(CHAR_DATA*ch, AFFECT_DATA paf)
+{
+    const auto [buffed_duration, buffed_modifier] = [&]() -> std::tuple<int, int>
+    {
+        const auto [paf_old, sentinel] = alg::remove(ch->affects, paf.type, &affect_data::type);
+
+        if (paf_old != sentinel)
+        {
+            const int new_duration = UMIN(1000000, paf.duration + paf_old->duration);
+            const int new_modifier = [&]()
+            {
+                if (paf.modifier)
+                    return UMIN(5000, paf.modifier + paf_old->modifier);
+                else
+                    return paf_old->modifier;
+            }();
+            affect_modify(ch, &(*paf_old), false);
+            ch->affects.erase(paf_old, sentinel);
+
+            return {new_duration, new_modifier};
+        }
+
+        return {0, 0};
+    }();
+
+    paf.duration = buffed_duration;
+    paf.modifier = buffed_modifier;
+
+    affect_to_char2(ch, paf);
+}
+
 /*
  * Move a char out of a room.
  */

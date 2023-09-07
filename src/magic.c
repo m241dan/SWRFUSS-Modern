@@ -1842,6 +1842,7 @@ ch_ret spell_chill_touch(int sn, int level, CHAR_DATA* ch, void* vo)
         af.modifier  = -1;
         af.bitvector = 0;
         affect_join(victim, &af);
+        affect_join2(victim, af);
     }
     else
     {
@@ -2935,6 +2936,7 @@ ch_ret spell_poison(int sn, int level, CHAR_DATA* ch, void* vo)
     af.modifier  = -2;
     af.bitvector = AFF_POISON;
     affect_join(victim, &af);
+    affect_join2(victim, af);
     set_char_color(AT_MAGIC, victim);
     send_to_char("You feel very sick.\r\n", victim);
     victim->mental_state = URANGE(20, victim->mental_state + (first ? 5 : 0), 100);
@@ -3091,6 +3093,7 @@ ch_ret spell_sleep(int sn, int level, CHAR_DATA* ch, void* vo)
     af.modifier  = 0;
     af.bitvector = AFF_SLEEP;
     affect_join(victim, &af);
+    affect_join2(victim, af);
 
     /*
     * Added by Narn at the request of Dominus.
@@ -4416,7 +4419,10 @@ ch_ret spell_affectchar(int sn, int level, CHAR_DATA* ch, void* vo)
             }
         }
         else if (SPELL_FLAG(skill, SF_ACCUMULATIVE))
+        {
             affect_join(victim, &af);
+            affect_join2(victim, af);
+        }
         else
         {
             affect_to_char(victim, &af);

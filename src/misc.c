@@ -1387,6 +1387,7 @@ void do_drink(CHAR_DATA* ch, const char* argument)
                 af.modifier      = 0;
                 af.bitvector     = AFF_POISON;
                 affect_join(ch, &af);
+                affect_join2(ch, af);
             }
 
             obj->value[1] -= amount;
@@ -1500,6 +1501,7 @@ void do_eat(CHAR_DATA* ch, const char* argument)
                 af.modifier  = 0;
                 af.bitvector = AFF_POISON;
                 affect_join(ch, &af);
+                affect_join2(ch, af);
             }
             break;
 
