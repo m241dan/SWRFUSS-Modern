@@ -412,13 +412,11 @@ void immune_casting(SKILLTYPE* skill, CHAR_DATA* ch, CHAR_DATA* victim, OBJ_DATA
  */
 void say_spell(CHAR_DATA* ch, int sn)
 {
-    CHAR_DATA* rch;
-
-    for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
+    alg::for_each(ch->in_room->persons, [&](auto* rch)
     {
         if (rch != ch)
             act(AT_MAGIC, "$n pauses and concentrates for a moment.", ch, nullptr, rch, TO_VICT);
-    }
+    });
 
     return;
 }

@@ -1022,7 +1022,7 @@ void do_goto(CHAR_DATA* ch, const char* argument)
 
     if (ch->in_room == in_room)
         return;
-    for (fch = in_room->first_person; fch; fch = fch_next)
+    alg::for_each(in_room->persons, [&](auto* fch)
     {
         fch_next = fch->next_in_room;
         if (fch->master == ch && IS_IMMORTAL(fch))
@@ -1030,7 +1030,7 @@ void do_goto(CHAR_DATA* ch, const char* argument)
             act(AT_ACTION, "You follow $N.", fch, nullptr, ch, TO_CHAR);
             do_goto(fch, argument);
         }
-    }
+    });
 }
 
 void do_mset(CHAR_DATA* ch, const char* argument)
@@ -5578,12 +5578,11 @@ void fwrite_fuss_room(FILE* fpout, ROOM_INDEX_DATA* room, bool install)
         REMOVE_BIT(room->room_flags, ROOM_PROTOTYPE);
 
         // purge room of (prototyped) mobiles
-        for (victim = room->first_person; victim; victim = vnext)
+        alg::for_each(room->persons, [&](auto* victim)
         {
-            vnext = victim->next_in_room;
             if (IS_NPC(victim) && IS_SET(victim->act, ACT_PROTOTYPE))
                 extract_char(victim, true);
-        }
+        });
 
         // purge room of (prototyped) objects
         for (obj = room->first_content; obj; obj = obj_next)
@@ -6207,12 +6206,11 @@ void old_fold_area(AREA_DATA* tarea, const char* filename, bool install)
             /*
           * purge room of (prototyped) mobiles
           */
-            for (victim = room->first_person; victim; victim = vnext)
+            alg::for_each(room->persons, [&](auto* victim)
             {
-                vnext = victim->next_in_room;
                 if (IS_NPC(victim) && IS_SET(victim->act, ACT_PROTOTYPE))
                     extract_char(victim, TRUE);
-            }
+            });
             /*
           * purge room of (prototyped) objects
           */

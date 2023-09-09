@@ -42,7 +42,7 @@ const char* const spell_class[] = {"none", "lunar", "solar", "travel", "summon",
 
 const char* const target_type[] = {"ignore", "offensive", "defensive", "self", "objinv"};
 
-void show_char_to_char(CHAR_DATA* list, CHAR_DATA* ch);
+void show_char_to_char(const std::vector<CHAR_DATA*>& list, CHAR_DATA* ch);
 
 bool validate_spec_fun(const char* name);
 

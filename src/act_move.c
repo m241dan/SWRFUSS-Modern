@@ -356,7 +356,7 @@ void clear_vrooms()
 
     for (hash = 0; hash < 64; hash++)
     {
-        while (vroom_hash[hash] && !vroom_hash[hash]->first_person && !vroom_hash[hash]->first_content)
+        while (vroom_hash[hash] && !vroom_hash[hash]->persons.front() && !vroom_hash[hash]->first_content)
         {
             room = vroom_hash[hash];
             vroom_hash[hash] = room->next;
@@ -368,7 +368,7 @@ void clear_vrooms()
         for (room = vroom_hash[hash]; room; room = room_next)
         {
             room_next = room->next;
-            if (!room->first_person && !room->first_content)
+            if (!room->persons.empty() && !room->first_content)
             {
                 if (prev)
                     prev->next = room_next;
@@ -901,10 +901,9 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
     */
     if (to_room->tunnel > 0)
     {
-        CHAR_DATA* ctmp;
         int      count = ch->mount ? 1 : 0;
 
-        for (ctmp = to_room->first_person; ctmp; ctmp = ctmp->next_in_room)
+        for (auto *ctmp : to_room->persons)
             if (++count >= to_room->tunnel)
             {
                 if (ch->mount && count == to_room->tunnel)
@@ -1102,14 +1101,11 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
     */
     if (!fall)
     {
-        CHAR_DATA* fch;
         CHAR_DATA* nextinroom;
-        int      chars = 0, count = 0;
+        int count = 0;
+        auto chars = from_room->persons.size();
 
-        for (fch = from_room->first_person; fch; fch = fch->next_in_room)
-            chars++;
-
-        for (fch = from_room->first_person; fch && (count < chars); fch = nextinroom)
+        for (auto fch = from_room->persons.front(); fch && (count < chars); ++fch)
         {
             nextinroom = fch->next_in_room;
             count++;
@@ -1365,8 +1361,11 @@ void do_open(CHAR_DATA* ch, const char* argument)
             {
                 CHAR_DATA* rch;
 
-                for (rch = pexit->to_room->first_person; rch; rch = rch->next_in_room)
+                alg::for_each(pexit->to_room->persons, [&](auto* rch)
+                {
                     act(AT_ACTION, "The $d opens.", rch, nullptr, pexit_rev->keyword, TO_CHAR);
+                });
+
                 sound_to_room(pexit->to_room, "!!SOUND(door)");
             }
             remove_bexit_flag(pexit, EX_CLOSED);
@@ -1461,11 +1460,12 @@ void do_close(CHAR_DATA* ch, const char* argument)
        */
         if ((pexit_rev = pexit->rexit) != nullptr && pexit_rev->to_room == ch->in_room)
         {
-            CHAR_DATA* rch;
-
             SET_BIT(pexit_rev->exit_info, EX_CLOSED);
-            for (rch = pexit->to_room->first_person; rch; rch = rch->next_in_room)
+            alg::for_each(pexit->to_room->persons, [&](auto* rch)
+            {
                 act(AT_ACTION, "The $d closes.", rch, nullptr, pexit_rev->keyword, TO_CHAR);
+            });
+
         }
         set_bexit_flag(pexit, EX_CLOSED);
         if ((door = pexit->vdir) >= 0 && door < 10)
@@ -1781,10 +1781,10 @@ void do_bashdoor(CHAR_DATA* ch, const char* argument)
                     REMOVE_BIT(pexit_rev->exit_info, EX_LOCKED);
                 SET_BIT(pexit_rev->exit_info, EX_BASHED);
 
-                for (rch = to_room->first_person; rch; rch = rch->next_in_room)
+                alg::for_each(to_room->persons, [&](auto* rch)
                 {
                     act(AT_SKILL, "The $d crashes open!", rch, nullptr, pexit_rev->keyword, TO_CHAR);
-                }
+                });
             }
             damage(ch, ch, (ch->max_hit / 20), gsn_bashdoor);
 
@@ -2044,7 +2044,6 @@ void teleportch(CHAR_DATA* ch, ROOM_INDEX_DATA* room, bool show)
 
 void teleport(CHAR_DATA* ch, int room, int flags)
 {
-    CHAR_DATA      * nch, * nch_next;
     ROOM_INDEX_DATA* pRoomIndex;
     bool           show;
 
@@ -2064,11 +2063,10 @@ void teleport(CHAR_DATA* ch, int room, int flags)
         teleportch(ch, pRoomIndex, show);
         return;
     }
-    for (nch = ch->in_room->first_person; nch; nch = nch_next)
+    alg::for_each(ch->in_room->persons, [&](auto *nch)
     {
-        nch_next = nch->next_in_room;
         teleportch(nch, pRoomIndex, show);
-    }
+    });
 }
 
 /*

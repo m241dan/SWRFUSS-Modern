@@ -617,12 +617,12 @@ void echo_to_room(
         return;
 
 
-    for (vic = room->first_person; vic; vic = vic->next_in_room)
+    alg::for_each(room->persons, [&](auto* vic)
     {
         set_char_color(AT_COLOR, vic);
         send_to_char(argument, vic);
         send_to_char("\r\n", vic);
-    }
+    });
 }
 
 void do_recho(CHAR_DATA* ch, const char* argument)
@@ -1030,7 +1030,7 @@ void do_rstat(CHAR_DATA* ch, const char* argument)
     }
 
     send_to_char("Characters:", ch);
-    for (rch = location->first_person; rch; rch = rch->next_in_room)
+    alg::for_each(location->persons, [&](auto* rch)
     {
         if (can_see(ch, rch))
         {
@@ -1038,7 +1038,7 @@ void do_rstat(CHAR_DATA* ch, const char* argument)
             one_argument(rch->name, buf);
             send_to_char(buf, ch);
         }
-    }
+    });
 
     send_to_char(".\r\nObjects:   ", ch);
     for (obj = location->first_content; obj; obj = obj->next_content)
@@ -2046,15 +2046,13 @@ void do_purge(CHAR_DATA* ch, const char* argument)
         /*
        * 'purge'
        */
-        CHAR_DATA* vnext;
         OBJ_DATA * obj_next;
 
-        for (victim = ch->in_room->first_person; victim; victim = vnext)
+        alg::for_each(ch->in_room->persons, [&](auto* victim)
         {
-            vnext = victim->next_in_room;
             if (IS_NPC(victim) && victim != ch && !IS_SET(victim->act, ACT_POLYMORPHED))
                 extract_char(victim, TRUE);
-        }
+        });
 
         for (obj = ch->in_room->first_content; obj; obj = obj_next)
         {
@@ -2973,9 +2971,8 @@ void do_peace(CHAR_DATA* ch, const char* argument)
     CHAR_DATA* rch;
 
     act(AT_IMMORT, "$n booms, 'PEACE!'", ch, nullptr, nullptr, TO_ROOM);
-    for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
+    alg::for_each(ch->in_room->persons, [&](auto* rch)
     {
-        if (rch->fighting)
         {
             stop_fighting(rch, TRUE);
             do_sit(rch, "");
@@ -2987,7 +2984,7 @@ void do_peace(CHAR_DATA* ch, const char* argument)
         stop_hating(rch);
         stop_hunting(rch);
         stop_fearing(rch);
-    }
+    });
 
     send_to_char("Ok.\r\n", ch);
 }
@@ -4617,7 +4614,6 @@ target in them. Private rooms are not violated.
 */
 const char* name_expand(CHAR_DATA* ch)
 {
-    int      count = 1;
     CHAR_DATA* rch;
     char     name[MAX_INPUT_LENGTH];  /*  HOPEFULLY no mob has a name longer than THAT */
 
@@ -4637,11 +4633,9 @@ const char* name_expand(CHAR_DATA* ch)
     /*
     * ->people changed to ->first_person -- TRI
     */
-    for (rch = ch->in_room->first_person; rch && (rch != ch); rch = rch->next_in_room)
-        if (is_name(name, rch->name))
-            count++;
+    auto count = alg::count_if(ch->in_room->persons, [&](auto *rch) {return is_name(name, rch->name);}) + 1;
 
-    snprintf(outbuf, MAX_STRING_LENGTH, "%d.%s", count, name);
+    snprintf(outbuf, MAX_STRING_LENGTH, "%d.%s", static_cast<int>(count), name);
     return outbuf;
 }
 
@@ -4763,7 +4757,7 @@ void do_for(CHAR_DATA* ch, const char* argument)
              */
                 if (fEverywhere) /* Everywhere executes always */
                     found = TRUE;
-                else if (!room->first_person)   /* Skip it if room is empty */
+                else if (room->persons.empty())   /* Skip it if room is empty */
                     continue;
                 /*
              * ->people changed to first_person -- TRI
@@ -4778,21 +4772,19 @@ void do_for(CHAR_DATA* ch, const char* argument)
                 /*
              * ->people to ->first_person -- TRI
              */
-                for (p = room->first_person; p && !found; p = p->next_in_room)
+                auto p_iter = alg::find_if(room->persons, [&](auto* p)
                 {
-
                     if (p == ch)  /* do not execute on oneself */
-                        continue;
+                        return false;
 
-                    if (IS_NPC(p) && fMobs)
-                        found = TRUE;
-                    else if (!IS_NPC(p) && (get_trust(p) >= LEVEL_IMMORTAL) && fGods)
-                        found = TRUE;
-                    else if (!IS_NPC(p) && (get_trust(p) <= LEVEL_IMMORTAL) && fMortals)
-                        found = TRUE;
-                }  /* for everyone inside the room */
+                    return
+                           IS_NPC(p) && fMobs
+                        || !IS_NPC(p) && (get_trust(p) >= LEVEL_IMMORTAL) && fGods
+                        || !IS_NPC(p) && (get_trust(p) <= LEVEL_IMMORTAL) && fMortals
+                    ;
+                });
 
-                if (found && !room_is_private(p, room))   /* Any of the required type here AND room not private? */
+                if (p_iter != room->persons.end() && !room_is_private(*p_iter, room))   /* Any of the required type here AND room not private? */
                 {
                     /*
                 * This may be ineffective. Consider moving character out of old_room

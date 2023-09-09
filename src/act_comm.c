@@ -52,9 +52,11 @@ void sound_to_room(ROOM_INDEX_DATA* room, const char* argument)
     if (room == nullptr)
         return;
 
-    for (vic = room->first_person; vic; vic = vic->next_in_room)
+    alg::for_each(room->persons, [&](auto* vic)
+    {
         if (!IS_NPC(vic) && IS_SET(vic->act, PLR_SOUND))
             send_to_char(argument, vic);
+    });
 
 }
 
@@ -954,19 +956,19 @@ void do_say(CHAR_DATA* ch, const char* argument)
     actflags = ch->act;
     if (IS_NPC(ch))
         REMOVE_BIT(ch->act, ACT_SECRETIVE);
-    for (vch = ch->in_room->first_person; vch; vch = vch->next_in_room)
+    alg::for_each(ch->in_room->persons, [&](auto* vch)
     {
         const char* sbuf = argument;
 
         if (vch == ch)
-            continue;
+            return;
         if (!knows_language(vch, ch->speaking, ch) && (!IS_NPC(ch) || ch->speaking != 0))
             sbuf = scramble(argument, ch->speaking);
         sbuf     = drunk_speech(sbuf, ch);
 
         MOBtrigger = FALSE;
         act(AT_SAY, "$n says '$t'", ch, sbuf, vch, TO_VICT);
-    }
+    });
     /*    MOBtrigger = FALSE;
     act( AT_SAY, "$n says '$T'", ch, nullptr, argument, TO_ROOM );*/
     ch->act = actflags;
@@ -1758,7 +1760,7 @@ void do_order(CHAR_DATA* ch, const char* argument)
     }
 
     found    = FALSE;
-    for (och = ch->in_room->first_person; och; och = och_next)
+    alg::for_each(ch->in_room->persons, [&](auto* och)
     {
         och_next = och->next_in_room;
 
@@ -1768,7 +1770,7 @@ void do_order(CHAR_DATA* ch, const char* argument)
             act(AT_ACTION, "$n orders you to '$t'.", ch, argument, och, TO_VICT);
             interpret(och, argument);
         }
-    }
+    });
 
     if (found)
     {
@@ -1855,17 +1857,15 @@ void do_group(CHAR_DATA* ch, const char* argument)
 
     if (!strcmp(arg, "all"))
     {
-        CHAR_DATA* rch;
-        int      count = 0;
-
-        for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
+        auto count = alg::count_if(ch->in_room->persons, [&](auto* rch)
         {
             if (ch != rch && !IS_NPC(rch) && rch->master == ch && !ch->master && !ch->leader && !is_same_group(rch, ch))
             {
                 rch->leader = ch;
-                count++;
+                return true;
             }
-        }
+            return false;
+        });
 
         if (count == 0)
             send_to_char("You have no eligible group members.\r\n", ch);
@@ -1918,7 +1918,6 @@ void do_split(CHAR_DATA* ch, const char* argument)
     char     buf[MAX_STRING_LENGTH];
     char     arg[MAX_INPUT_LENGTH];
     CHAR_DATA* gch;
-    int      members;
     int      amount;
     int      share;
     int      extra;
@@ -1951,13 +1950,7 @@ void do_split(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    members  = 0;
-    for (gch = ch->in_room->first_person; gch; gch = gch->next_in_room)
-    {
-        if (is_same_group(gch, ch))
-            members++;
-    }
-
+    auto members = alg::count_if(ch->in_room->persons, [&](auto* gch) {return is_same_group(gch, ch);});
 
     if ((IS_SET(ch->act, PLR_AUTOGOLD)) && (members < 2))
         return;
@@ -1985,14 +1978,14 @@ void do_split(CHAR_DATA* ch, const char* argument)
 
     snprintf(buf, MAX_STRING_LENGTH, "$n splits %d credits.  Your share is %d credits.", amount, share);
 
-    for (gch = ch->in_room->first_person; gch; gch = gch->next_in_room)
+    alg::for_each(ch->in_room->persons, [&](auto* gch)
     {
         if (gch != ch && is_same_group(gch, ch))
         {
             act(AT_GOLD, buf, ch, nullptr, gch, TO_VICT);
             gch->gold += share;
         }
-    }
+    });
 }
 
 void do_gtell(CHAR_DATA* ch, const char* argument)
@@ -2246,7 +2239,6 @@ void do_languages(CHAR_DATA* ch, const char* argument)
     argument = one_argument(argument, arg);
     if (arg[0] != '\0' && !str_prefix(arg, "learn") && !IS_IMMORTAL(ch) && !IS_NPC(ch))
     {
-        CHAR_DATA* sch;
         char     arg2[MAX_INPUT_LENGTH];
         int      prct;
 
@@ -2283,14 +2275,17 @@ void do_languages(CHAR_DATA* ch, const char* argument)
             act(AT_PLAIN, "You are already fluent in $t.", ch, lang_names[lang], nullptr, TO_CHAR);
             return;
         }
-        for (sch = ch->in_room->first_person; sch; sch = sch->next_in_room)
-            if (IS_NPC(sch) &&
-                IS_SET(sch->act, ACT_SCHOLAR) &&
-                knows_language(sch, ch->speaking, ch) &&
-                knows_language(sch, lang_array[lang], sch) &&
-                (!sch->speaking || knows_language(ch, sch->speaking, sch)))
-                break;
-        if (!sch)
+        auto sch_iter = alg::find_if(ch->in_room->persons, [&](auto* sch)
+        {
+            return
+                   IS_NPC(sch)
+                && IS_SET(sch->act, ACT_SCHOLAR)
+                && knows_language(sch, ch->speaking, ch)
+                && knows_language(sch, lang_array[lang], sch)
+                && (!sch->speaking || knows_language(ch, sch->speaking, sch))
+            ;
+        });
+        if (sch_iter == ch->in_room->persons.end())
         {
             send_to_char("There is no one who can teach that language here.\r\n", ch);
             return;

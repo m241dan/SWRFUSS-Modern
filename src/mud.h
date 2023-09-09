@@ -2481,8 +2481,7 @@ struct room_index_data
 {
     ROOM_INDEX_DATA * next;
     ROOM_INDEX_DATA * next_sort;
-    CHAR_DATA       * first_person;
-    CHAR_DATA       * last_person;
+    std::vector<CHAR_DATA*> persons;
     OBJ_DATA        * first_content;
     OBJ_DATA        * last_content;
     EXTRA_DESCR_DATA* first_extradesc;

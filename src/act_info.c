@@ -66,7 +66,7 @@ void show_char_to_char_0(CHAR_DATA* victim, CHAR_DATA* ch);
 
 void show_char_to_char_1(CHAR_DATA* victim, CHAR_DATA* ch);
 
-void show_char_to_char(CHAR_DATA* list, CHAR_DATA* ch);
+void show_char_to_char(const std::vector<CHAR_DATA*>& list, CHAR_DATA* ch);
 
 void show_ships_to_char(SHIP_DATA* ship, CHAR_DATA* ch);
 
@@ -643,14 +643,12 @@ void show_char_to_char_1(CHAR_DATA* victim, CHAR_DATA* ch)
         learn_from_failure(ch, gsn_peek);
 }
 
-void show_char_to_char(CHAR_DATA* list, CHAR_DATA* ch)
+void show_char_to_char(const std::vector<CHAR_DATA*>& list, CHAR_DATA* ch)
 {
-    CHAR_DATA* rch;
-
-    for (rch = list; rch; rch = rch->next_in_room)
+    alg::for_each(list, [&](auto* rch)
     {
         if (rch == ch)
-            continue;
+            return;
 
         if (can_see(ch, rch))
         {
@@ -666,7 +664,7 @@ void show_char_to_char(CHAR_DATA* list, CHAR_DATA* ch)
             set_char_color(AT_BLOOD, ch);
             send_to_char("The red form of a living creature is here.\r\n", ch);
         }
-    }
+    });
 }
 
 void show_ships_to_char(SHIP_DATA* ship, CHAR_DATA* ch)
@@ -770,7 +768,7 @@ void do_look(CHAR_DATA* ch, const char* argument)
         set_char_color(AT_DGREY, ch);
         send_to_char("It is pitch black ... \r\n", ch);
         if (!*argument || !str_cmp(argument, "auto"))
-            show_char_to_char(ch->in_room->first_person, ch);
+            show_char_to_char(ch->in_room->persons, ch);
         return;
     }
 
@@ -822,7 +820,7 @@ void do_look(CHAR_DATA* ch, const char* argument)
 
         show_ships_to_char(ch->in_room->first_ship, ch);
         show_list_to_char(ch->in_room->first_content, ch, FALSE, FALSE);
-        show_char_to_char(ch->in_room->first_person, ch);
+        show_char_to_char(ch->in_room->persons, ch);
 
         if (str_cmp(arg1, "auto"))
             if ((ship = ship_from_cockpit(ch->in_room->vnum)) != nullptr)
@@ -2672,17 +2670,18 @@ void do_practice(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        for (mob = ch->in_room->first_person; mob; mob = mob->next_in_room)
-            if (IS_NPC(mob) && IS_SET(mob->act, ACT_PRACTICE))
-                break;
+        auto mob_iter = alg::find_if(ch->in_room->persons, [&](auto* mob)
+        {
+            return IS_NPC(mob) && IS_SET(mob->act, ACT_PRACTICE);
+        });
 
-        if (!mob)
+        if (mob_iter == ch->in_room->persons.end())
         {
             send_to_char("You can't do that here.\r\n", ch);
             return;
         }
 
-
+        mob = *mob_iter;
         sn = skill_lookup(argument);
 
         if (sn == -1)

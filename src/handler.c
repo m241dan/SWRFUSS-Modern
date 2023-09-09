@@ -65,9 +65,8 @@ void room_explode_1(OBJ_DATA* obj, CHAR_DATA* xch, ROOM_INDEX_DATA* room, int bl
         return;
 
     SET_BIT(room->room_flags, BFS_MARK);
-    for (rch = room->first_person; rch; rch = rnext)
+    alg::for_each(room->persons, [&](auto* rch)
     {
-        rnext = rch->next_in_room;
         act(AT_WHITE, "The shockwave from a massive explosion rips through your body!", rch, obj, nullptr, TO_CHAR);
 
         dam = number_range(obj->value[0], obj->value[1]);
@@ -85,7 +84,7 @@ void room_explode_1(OBJ_DATA* obj, CHAR_DATA* xch, ROOM_INDEX_DATA* room, int bl
                 start_hunting(rch, xch);
             }
         }
-    }
+    });
 
     for (robj = room->first_content; robj; robj = robj_next)
     {
@@ -177,8 +176,8 @@ void explode(OBJ_DATA* obj)
 
                 if (room)
                 {
-                    if (!held && room->first_person)
-                        act(AT_WHITE, "$p EXPLODES!", room->first_person, obj, nullptr, TO_ROOM);
+                    if (!held && !room->persons.empty())
+                        act(AT_WHITE, "$p EXPLODES!", room->persons.front(), obj, nullptr, TO_ROOM);
                     room_explode(obj, xch, room);
                 }
             }
