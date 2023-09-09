@@ -719,8 +719,7 @@ void do_takedrug(CHAR_DATA* ch, const char* argument)
             af.modifier      = -5;
             af.duration      = ch->pcdata->drug_level[drug];
             af.bitvector     = AFF_POISON;
-            affect_to_char(ch, &af);
-            affect_to_char2(ch, af);
+            affect_to_char(ch, af);
             ch->hit = 1;
         }
 
@@ -737,8 +736,7 @@ void do_takedrug(CHAR_DATA* ch, const char* argument)
                     af.modifier  = -10;
                     af.duration  = URANGE(1, ch->pcdata->drug_level[drug] - ch->pcdata->addiction[drug], obj->value[1]);
                     af.bitvector = AFF_TRUESIGHT;
-                    affect_to_char(ch, &af);
-                    affect_to_char2(ch, af);
+                    affect_to_char(ch, af);
                 }
                 break;
 
@@ -752,8 +750,7 @@ void do_takedrug(CHAR_DATA* ch, const char* argument)
                     af.modifier  = 0;
                     af.duration  = URANGE(1, ch->pcdata->drug_level[drug] - ch->pcdata->addiction[drug], obj->value[1]);
                     af.bitvector = AFF_SANCTUARY;
-                    affect_to_char(ch, &af);
-                    affect_to_char2(ch, af);
+                    affect_to_char(ch, af);
                 }
                 break;
 
@@ -766,8 +763,7 @@ void do_takedrug(CHAR_DATA* ch, const char* argument)
                                       2 * (ch->pcdata->drug_level[drug] - ch->pcdata->addiction[drug]),
                                       2 * obj->value[1]);
                 af.bitvector = AFF_NONE;
-                affect_to_char(ch, &af);
-                affect_to_char2(ch, af);
+                affect_to_char(ch, af);
 
                 af.type      = -1;
                 af.location  = APPLY_HITROLL;
@@ -776,8 +772,7 @@ void do_takedrug(CHAR_DATA* ch, const char* argument)
                                       2 * (ch->pcdata->drug_level[drug] - ch->pcdata->addiction[drug]),
                                       2 * obj->value[1]);
                 af.bitvector = AFF_NONE;
-                affect_to_char(ch, &af);
-                affect_to_char2(ch, af);
+                affect_to_char(ch, af);
 
                 break;
 
@@ -790,8 +785,7 @@ void do_takedrug(CHAR_DATA* ch, const char* argument)
                                       2 * (ch->pcdata->drug_level[drug] - ch->pcdata->addiction[drug]),
                                       2 * obj->value[1]);
                 af.bitvector = AFF_NONE;
-                affect_to_char(ch, &af);
-                affect_to_char2(ch, af);
+                affect_to_char(ch, af);
 
                 af.type      = sn;
                 af.location  = APPLY_CON;
@@ -800,8 +794,7 @@ void do_takedrug(CHAR_DATA* ch, const char* argument)
                                       2 * (ch->pcdata->drug_level[drug] - ch->pcdata->addiction[drug]),
                                       2 * obj->value[1]);
                 af.bitvector = AFF_NONE;
-                affect_to_char(ch, &af);
-                affect_to_char2(ch, af);
+                affect_to_char(ch, af);
 
                 break;
 
@@ -1386,8 +1379,7 @@ void do_drink(CHAR_DATA* ch, const char* argument)
                 af.location      = APPLY_NONE;
                 af.modifier      = 0;
                 af.bitvector     = AFF_POISON;
-                affect_join(ch, &af);
-                affect_join2(ch, af);
+                affect_join(ch, af);
             }
 
             obj->value[1] -= amount;
@@ -1500,8 +1492,7 @@ void do_eat(CHAR_DATA* ch, const char* argument)
                 af.location  = APPLY_NONE;
                 af.modifier  = 0;
                 af.bitvector = AFF_POISON;
-                affect_join(ch, &af);
-                affect_join2(ch, af);
+                affect_join(ch, af);
             }
             break;
 

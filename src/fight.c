@@ -937,8 +937,7 @@ ch_ret one_hit(CHAR_DATA* ch, CHAR_DATA* victim, int dt)
                     af.modifier  = 20;
                     af.duration  = 7;
                     af.bitvector = AFF_PARALYSIS;
-                    affect_to_char(victim, &af);
-                    affect_to_char2(victim, af);
+                    affect_to_char(victim, af);
                     update_pos(victim);
                     if (IS_NPC(victim))
                     {
@@ -1463,8 +1462,7 @@ ch_ret damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
         af.location  = APPLY_STR;
         af.modifier  = -2;
         af.bitvector = AFF_POISON;
-        affect_join(victim, &af);
-        affect_join2(victim, af);
+        affect_join(victim, af);
         victim->mental_state = URANGE(20, victim->mental_state + 2, 100);
     }
 

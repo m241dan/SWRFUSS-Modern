@@ -4654,17 +4654,13 @@ bool nifty_is_name_prefix(const char* str, const char* namelist);
 
 void affect_modify args((CHAR_DATA * ch, AFFECT_DATA * paf, bool fAdd ));
 
-void affect_to_char args((CHAR_DATA * ch, AFFECT_DATA * paf));
-
-void affect_to_char2 args((CHAR_DATA * ch, AFFECT_DATA paf));
+void affect_to_char args((CHAR_DATA * ch, AFFECT_DATA paf));
 
 void affect_strip args((CHAR_DATA * ch, int sn ));
 
 bool is_affected args((CHAR_DATA * ch, int sn ));
 
-void affect_join args((CHAR_DATA * ch, AFFECT_DATA * paf));
-
-void affect_join2 args((CHAR_DATA*ch, AFFECT_DATA paf));
+void affect_join args((CHAR_DATA*ch, AFFECT_DATA paf));
 
 void char_from_room args((CHAR_DATA * ch));
 

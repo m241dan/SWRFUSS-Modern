@@ -1302,8 +1302,7 @@ void do_gouge(CHAR_DATA* ch, const char* argument)
                 af.modifier  = -6;
                 af.duration  = 3 + (ch->skill_level[COMBAT_ABILITY] / 20);
                 af.bitvector = AFF_BLIND;
-                affect_to_char(victim, &af);
-                affect_to_char2(victim, af);
+                affect_to_char(victim, af);
                 act(AT_SKILL, "You can't see a thing!", victim, nullptr, nullptr, TO_CHAR);
             }
             WAIT_STATE(ch, PULSE_VIOLENCE);
@@ -2300,8 +2299,7 @@ void do_stun(CHAR_DATA* ch, const char* argument)
             af.modifier  = 20;
             af.duration  = 3;
             af.bitvector = AFF_PARALYSIS;
-            affect_to_char(victim, &af);
-            affect_to_char2(victim, af);
+            affect_to_char(victim, af);
             update_pos(victim);
         }
     }
@@ -2666,8 +2664,7 @@ void do_sneak(CHAR_DATA* ch, const char* argument)
         af.location  = APPLY_NONE;
         af.modifier  = 0;
         af.bitvector = AFF_SNEAK;
-        affect_to_char(ch, &af);
-        affect_to_char2(ch, af);
+        affect_to_char(ch, af);
         learn_from_success(ch, gsn_sneak);
     }
     else
@@ -3341,8 +3338,7 @@ void do_berserk(CHAR_DATA* ch, const char* argument)
     af.location  = APPLY_STR;
     af.modifier  = 1;
     af.bitvector = AFF_BERSERK;
-    affect_to_char(ch, &af);
-    affect_to_char2(ch, af);
+    affect_to_char(ch, af);
     send_to_char("You start to lose control..\r\n", ch);
     learn_from_success(ch, gsn_berserk);
 }

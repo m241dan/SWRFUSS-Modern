@@ -850,34 +850,7 @@ void affect_modify(CHAR_DATA* ch, AFFECT_DATA* paf, bool fAdd)
 /*
  * Give an affect to a char.
  */
-void affect_to_char(CHAR_DATA* ch, AFFECT_DATA* paf)
-{
-    AFFECT_DATA* paf_new;
-
-    if (!ch)
-    {
-        bug("%s: nullptr ch!", __func__);
-        return;
-    }
-
-    if (!paf)
-    {
-        bug("%s: nullptr paf!", __func__);
-        return;
-    }
-
-    CREATE(paf_new, AFFECT_DATA, 1);
-//    LINK(paf_new, ch->first_affect, ch->last_affect, next, prev);
-    paf_new->type      = paf->type;
-    paf_new->duration  = paf->duration;
-    paf_new->location  = paf->location;
-    paf_new->modifier  = paf->modifier;
-    paf_new->bitvector = paf->bitvector;
-
-    affect_modify(ch, paf_new, TRUE);
-}
-
-void affect_to_char2(CHAR_DATA* ch, AFFECT_DATA paf)
+void affect_to_char(CHAR_DATA* ch, AFFECT_DATA paf)
 {
     if (!ch)
     {
@@ -919,26 +892,8 @@ bool is_affected(CHAR_DATA* ch, int sn)
  * Limitations put in place by Thoric, they may be high... but at least
  * they're there :)
  */
-void affect_join(CHAR_DATA* ch, AFFECT_DATA* paf)
-{
-//    AFFECT_DATA* paf_old;
-//
-//    for (paf_old = ch->first_affect; paf_old; paf_old = paf_old->next)
-//        if (paf_old->type == paf->type)
-//        {
-//            paf->duration     = UMIN(1000000, paf->duration + paf_old->duration);
-//            if (paf->modifier)
-//                paf->modifier = UMIN(5000, paf->modifier + paf_old->modifier);
-//            else
-//                paf->modifier = paf_old->modifier;
-////            affect_remove(ch, paf_old);
-//            break;
-//        }
-//
-//    affect_to_char(ch, paf);
-}
 
-void affect_join2(CHAR_DATA*ch, AFFECT_DATA paf)
+void affect_join(CHAR_DATA*ch, AFFECT_DATA paf)
 {
     const auto [buffed_duration, buffed_modifier] = [&]() -> std::tuple<int, int>
     {
@@ -966,7 +921,7 @@ void affect_join2(CHAR_DATA*ch, AFFECT_DATA paf)
     paf.duration = buffed_duration;
     paf.modifier = buffed_modifier;
 
-    affect_to_char2(ch, paf);
+    affect_to_char(ch, paf);
 }
 
 /*

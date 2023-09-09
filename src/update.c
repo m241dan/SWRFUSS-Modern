@@ -511,8 +511,7 @@ void gain_addiction(CHAR_DATA* ch)
                         af.modifier  = 10;
                         af.duration  = ch->pcdata->addiction[drug];
                         af.bitvector = AFF_BLIND;
-                        affect_to_char(ch, &af);
-                        affect_to_char2(ch, af);
+                        affect_to_char(ch, af);
                     }
                 case SPICE_CARSANUM:
                     if (!IS_AFFECTED(ch, AFF_WEAKEN))
@@ -522,8 +521,7 @@ void gain_addiction(CHAR_DATA* ch)
                         af.modifier  = -10;
                         af.duration  = ch->pcdata->addiction[drug];
                         af.bitvector = AFF_WEAKEN;
-                        affect_to_char(ch, &af);
-                        affect_to_char2(ch, af);
+                        affect_to_char(ch, af);
                     }
                 case SPICE_RYLL:
                     if (!IS_AFFECTED(ch, AFF_WEAKEN))
@@ -533,8 +531,7 @@ void gain_addiction(CHAR_DATA* ch)
                         af.modifier  = -5;
                         af.duration  = ch->pcdata->addiction[drug];
                         af.bitvector = AFF_WEAKEN;
-                        affect_to_char(ch, &af);
-                        affect_to_char2(ch, af);
+                        affect_to_char(ch, af);
                     }
                 case SPICE_ANDRIS:
                     if (!IS_AFFECTED(ch, AFF_WEAKEN))
@@ -544,8 +541,7 @@ void gain_addiction(CHAR_DATA* ch)
                         af.modifier  = -5;
                         af.duration  = ch->pcdata->addiction[drug];
                         af.bitvector = AFF_WEAKEN;
-                        affect_to_char(ch, &af);
-                        affect_to_char2(ch, af);
+                        affect_to_char(ch, af);
                     }
             }
         }
