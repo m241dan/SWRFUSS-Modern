@@ -4493,8 +4493,9 @@ ch_ret spell_affect(int sn, int level, CHAR_DATA* ch, void* vo)
         return rSPELL_FAILED;
     }
 
-    for (; victim; victim = victim->next_in_room)
+    for(auto* victim_l : victim->in_room->persons)
     {
+        victim = victim_l;
         if (groupsp || areasp)
         {
             if ((groupsp && !is_same_group(victim, ch))

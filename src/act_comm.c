@@ -1706,8 +1706,6 @@ void do_order(CHAR_DATA* ch, const char* argument)
     char     arg[MAX_INPUT_LENGTH];
     char     argbuf[MAX_INPUT_LENGTH];
     CHAR_DATA* victim;
-    CHAR_DATA* och;
-    CHAR_DATA* och_next;
     bool     found;
     bool     fAll;
 
@@ -1762,8 +1760,6 @@ void do_order(CHAR_DATA* ch, const char* argument)
     found    = FALSE;
     alg::for_each(ch->in_room->persons, [&](auto* och)
     {
-        och_next = och->next_in_room;
-
         if (IS_AFFECTED(och, AFF_CHARM) && och->master == ch && (fAll || och == victim) && !IS_IMMORTAL(och))
         {
             found = TRUE;

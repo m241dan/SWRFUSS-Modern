@@ -893,8 +893,6 @@ void do_goto(CHAR_DATA* ch, const char* argument)
 {
     char           arg[MAX_INPUT_LENGTH];
     ROOM_INDEX_DATA* location;
-    CHAR_DATA      * fch;
-    CHAR_DATA      * fch_next;
     ROOM_INDEX_DATA* in_room;
     AREA_DATA      * pArea;
     int            vnum;
@@ -1024,7 +1022,6 @@ void do_goto(CHAR_DATA* ch, const char* argument)
         return;
     alg::for_each(in_room->persons, [&](auto* fch)
     {
-        fch_next = fch->next_in_room;
         if (fch->master == ch && IS_IMMORTAL(fch))
         {
             act(AT_ACTION, "You follow $N.", fch, nullptr, ch, TO_CHAR);

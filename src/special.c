@@ -244,15 +244,11 @@ bool spec_jedi(CHAR_DATA* ch)
 
 bool spec_clan_guard(CHAR_DATA* ch)
 {
-    CHAR_DATA* victim;
-    CHAR_DATA* v_next;
-
     if (!IS_AWAKE(ch) || ch->fighting)
         return FALSE;
 
     for (auto* victim : ch->in_room->persons)
     {
-        v_next = victim->next_in_room;
         if (!can_see(ch, victim))
             continue;
         if (get_timer(victim, TIMER_RECENTFIGHT) > 0)

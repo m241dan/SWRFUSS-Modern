@@ -2031,8 +2031,6 @@ struct char_data
 {
     CHAR_DATA      * next;
     CHAR_DATA      * prev;
-    CHAR_DATA      * next_in_room;
-    CHAR_DATA      * prev_in_room;
     CHAR_DATA      * master;
     CHAR_DATA      * leader;
     FIGHT_DATA     * fighting;

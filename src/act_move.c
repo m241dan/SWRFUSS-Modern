@@ -1107,7 +1107,6 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
 
         for (auto fch = from_room->persons.front(); fch && (count < chars); ++fch)
         {
-            nextinroom = fch->next_in_room;
             count++;
             if (fch != ch  /* loop room bug fix here by Thoric */
                 && fch->master == ch && fch->position == POS_STANDING)

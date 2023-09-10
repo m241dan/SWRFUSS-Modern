@@ -951,8 +951,6 @@ void char_from_room(CHAR_DATA* ch)
 
     std::erase(ch->in_room->persons, ch);
     ch->in_room      = nullptr;
-    ch->next_in_room = nullptr;
-    ch->prev_in_room = nullptr;
 
     if (!IS_NPC(ch) && get_timer(ch, TIMER_SHOVEDRAG) > 0)
         remove_timer(ch, TIMER_SHOVEDRAG);

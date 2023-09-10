@@ -2898,26 +2898,16 @@ void act(short AType, const char* format, CHAR_DATA* ch, const void* arg1, const
     * Anyone feel like telling me the point of looping through the whole
     * room when we're only sending to one char anyways..? -- Alty
     */
-    for (; to; to = (type == TO_CHAR || type == TO_VICT) ? nullptr : to->next_in_room)
+
+    const auto format_and_send = [&](auto* to)
     {
         if ((!to->desc && (IS_NPC(to) && !IS_SET(to->pIndexData->progtypes, ACT_PROG))) || !IS_AWAKE(to))
-            continue;
+            return;
 
-        if (type == TO_CHAR && to != ch)
-            continue;
-        if (type == TO_VICT && (to != vch || to == ch))
-            continue;
-        if (type == TO_ROOM && to == ch)
-            continue;
-        if (type == TO_NOTVICT && (to == ch || to == vch))
-            continue;
+        const char* txt = act_string(format, to, ch, arg1, arg2);
+        set_char_color(AType, to);
+        send_to_char(txt, to);
 
-        txt = act_string(format, to, ch, arg1, arg2);
-        if (to->desc)
-        {
-            set_char_color(AType, to);
-            send_to_char(txt, to);
-        }
         if (MOBtrigger)
         {
             /*
@@ -2925,6 +2915,34 @@ void act(short AType, const char* format, CHAR_DATA* ch, const void* arg1, const
           */
             mprog_act_trigger(txt, to, ch, (OBJ_DATA*)arg1, (void*)arg2);
         }
+    };
+
+    switch(type)
+    {
+        case TO_CHAR:
+            format_and_send(ch);
+            break;
+        case TO_VICT:
+            format_and_send(vch);
+            break;
+        case TO_NOTVICT:
+            alg::for_each(
+                  ch->in_room->persons
+                | view::drop_while(ops::same_as(vch))
+                | view::drop_while(ops::same_as(ch)),
+                format_and_send
+            );
+            break;
+        case TO_ROOM:
+            alg::for_each(
+                  ch->in_room->persons
+                | view::drop_while(ops::same_as(ch)),
+                format_and_send
+            );
+            break;
+        default:
+            bug("%s: bad 'type' received: '%d' for '%s'", __func__, type, format);
+            break;
     }
     MOBtrigger    = TRUE;
 }
