@@ -154,4 +154,39 @@ namespace ops {
     }
 }
 
+namespace concepts {
+    template<class T>
+    concept can_follow = requires(T t)
+    {
+        { t.master };
+    };
+
+    template<class T>
+    concept has_position = requires(T t)
+    {
+        { t.position };
+    };
+}
+
+namespace ops {
+    template<class T> requires concepts::can_follow<std::remove_pointer_t<std::remove_cvref_t<T>>>
+    constexpr auto is_follower(T&& leader)
+    {
+        return [&](T&& follower) -> bool
+        {
+            return std::forward<T>(follower)->master == std::forward<T>(leader);
+        };
+    }
+
+    template<class U>
+    constexpr auto in_position(U&& pos)
+    {
+        return [&]<class T> requires concepts::has_position<std::remove_pointer_t<std::remove_cvref_t<T>>>
+        (T&& ch) -> bool
+        {
+            return std::forward<T>(ch)->position == std::forward<U>(pos);
+        };
+    }
+};
+
 #endif //SWRGM_NAMESPACES_H
