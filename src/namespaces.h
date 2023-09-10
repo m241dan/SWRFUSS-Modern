@@ -119,6 +119,14 @@ namespace view {
 
 namespace ops {
     const auto decrement = [](auto& i) {i--;};
+    template<class T>
+    auto same_as(T&& lhs)
+    {
+        return [&](T&& rhs) -> bool
+        {
+            return std::forward<T>(lhs) == std::forward<T>(rhs);
+        };
+    }
 }
 
 #endif //SWRGM_NAMESPACES_H
