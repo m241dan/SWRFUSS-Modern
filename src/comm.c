@@ -2928,15 +2928,15 @@ void act(short AType, const char* format, CHAR_DATA* ch, const void* arg1, const
         case TO_NOTVICT:
             alg::for_each(
                   ch->in_room->persons
-                | view::drop_while(ops::same_as(vch))
-                | view::drop_while(ops::same_as(ch)),
+                | view::drop_if(ops::same_as(vch))
+                | view::drop_if(ops::same_as(ch)),
                 format_and_send
             );
             break;
         case TO_ROOM:
             alg::for_each(
                   ch->in_room->persons
-                | view::drop_while(ops::same_as(ch)),
+                | view::drop_if(ops::same_as(ch)),
                 format_and_send
             );
             break;

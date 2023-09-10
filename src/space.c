@@ -4441,8 +4441,8 @@ void destroy_ship(SHIP_DATA* ship, CHAR_DATA* ch)
         {
             auto immortals = std::vector<CHAR_DATA*> {room->persons.size()};
             auto others = std::vector<CHAR_DATA*> {room->persons.size()};
-            alg::copy(room->persons | view::take_while([&](auto* rch) {return IS_IMMORTAL(rch);}), immortals.begin());
-            alg::copy(room->persons | view::take_while([&](auto* rch) {return !IS_IMMORTAL(rch);}), others.begin());
+            alg::copy(room->persons | view::take_if([&](auto* rch) {return IS_IMMORTAL(rch);}), immortals.begin());
+            alg::copy(room->persons | view::take_if([&](auto* rch) {return !IS_IMMORTAL(rch);}), others.begin());
 
             alg::for_each(immortals, [&](auto* rch)
             {

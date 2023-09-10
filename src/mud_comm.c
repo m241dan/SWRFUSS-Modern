@@ -865,7 +865,7 @@ void do_mptransfer(CHAR_DATA* ch, const char* argument)
     */
     if (!str_cmp(arg1, "all"))
     {
-        alg::for_each(ch->in_room->persons | view::drop_while(ops::same_as(ch)), [&](auto* victim)
+        alg::for_each(ch->in_room->persons | view::drop_if(ops::same_as(ch)), [&](auto* victim)
         {
             transfer_char(ch, victim, location);
         });

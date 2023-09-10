@@ -951,12 +951,14 @@ bool spec_dark_jedi(CHAR_DATA* ch)
     if (ch->position != POS_FIGHTING)
         return FALSE;
 
-    const auto victim_iter = alg::find_if(ch->in_room->persons | view::drop_while(ops::same_as(ch)), [&](auto* victim)
+    auto others_in_room = ch->in_room->persons | view::drop_if(ops::equal_to(ch));
+
+    const auto victim_iter = alg::find_if(others_in_room, [&](auto* victim)
     {
         return who_fighting(victim) && number_bits(2) == 0;
     });
 
-    if (victim_iter == ch->in_room->persons.end())
+    if (victim_iter == others_in_room.end())
         return false;
 
     CHAR_DATA * victim = *victim_iter;
