@@ -753,7 +753,7 @@ void mobile_update(void)
 
         if (ch->pIndexData->vnum == 5 && !IS_AFFECTED(ch, AFF_CHARM))
         {
-            if (ch->in_room->first_person)
+            if (!ch->in_room->persons.empty())
                 act(AT_MAGIC, "$n returns to the dust from whence $e came.", ch, nullptr, nullptr, TO_ROOM);
 
             if (IS_NPC(ch))   /* Guard against purging switched? */
@@ -951,11 +951,10 @@ void mobile_update(void)
             && !IS_SET(pexit->exit_info, EX_CLOSED)
             && !IS_SET(pexit->to_room->room_flags, ROOM_NO_MOB))
         {
-            CHAR_DATA* rch;
             bool     found;
 
             found    = FALSE;
-            for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
+            for (auto* rch : ch->in_room->persons)
             {
                 if (is_fearing(ch, rch))
                 {
@@ -1637,8 +1636,9 @@ void obj_update(void)
         {
             act(AT_TEMP, message, obj->carried_by, obj, nullptr, TO_CHAR);
         }
-        else if (obj->in_room && (rch = obj->in_room->first_person) != nullptr && !IS_OBJ_STAT(obj, ITEM_BURRIED))
+        else if (obj->in_room && !obj->in_room->persons.empty() && !IS_OBJ_STAT(obj, ITEM_BURRIED))
         {
+            rch = obj->in_room->persons.front();
             act(AT_TEMP, message, rch, obj, nullptr, TO_ROOM);
             act(AT_TEMP, message, rch, obj, nullptr, TO_CHAR);
         }
@@ -1798,7 +1798,7 @@ void char_check(void)
 void aggr_update(void)
 {
     DESCRIPTOR_DATA     * d, * dnext;
-    CHAR_DATA           * wch, * ch, * ch_next, * victim;
+    CHAR_DATA           * wch, * victim;
     struct act_prog_data* apdtmp;
 
     /*
@@ -1841,37 +1841,35 @@ void aggr_update(void)
         if (char_died(wch) || IS_NPC(wch) || wch->top_level >= LEVEL_IMMORTAL || !wch->in_room)
             continue;
 
-        for (ch = wch->in_room->first_person; ch; ch = ch_next)
+        alg::for_each(wch->in_room->persons, [&](auto* ch)
         {
             int count = 0;
-
-            ch_next = ch->next_in_room;
 
             if (!IS_NPC(ch)
                 || ch->fighting
                 || IS_AFFECTED(ch, AFF_CHARM) || !IS_AWAKE(ch) || (IS_SET(ch->act, ACT_WIMPY)) || !can_see(ch, wch))
-                continue;
+                return;
 
             if (is_hating(ch, wch))
             {
                 found_prey(ch, wch);
-                continue;
+                return;
             }
 
             if (!IS_SET(ch->act, ACT_AGGRESSIVE)
                 || IS_SET(ch->act, ACT_MOUNTED) || IS_SET(ch->in_room->room_flags, ROOM_SAFE))
-                continue;
+                return;
 
             victim         = wch;
 
             if (!victim)
             {
                 bug("%s: null victim.", __func__, count);
-                continue;
+                return;
             }
 
             if (get_timer(victim, TIMER_RECENTFIGHT) > 0)
-                continue;
+                return;
 
             if (IS_NPC(ch) && IS_SET(ch->attacks, ATCK_BACKSTAB))
             {
@@ -1885,17 +1883,17 @@ void aggr_update(void)
                     if (!IS_AWAKE(victim) || number_percent() + 5 < ch->top_level)
                     {
                         global_retcode = multi_hit(ch, victim, gsn_backstab);
-                        continue;
+                        return;
                     }
                     else
                     {
                         global_retcode = damage(ch, victim, 0, gsn_backstab);
-                        continue;
+                        return;
                     }
                 }
             }
             global_retcode = multi_hit(ch, victim, TYPE_UNDEFINED);
-        }
+        });
     }
 }
 
@@ -1909,7 +1907,6 @@ bool check_social(CHAR_DATA* ch, const char* command, const char* argument);
 void drunk_randoms(CHAR_DATA* ch)
 {
     CHAR_DATA* rvch = nullptr;
-    CHAR_DATA* vch;
     short    drunk;
     short    position;
 
@@ -1933,9 +1930,11 @@ void drunk_randoms(CHAR_DATA* ch)
         check_social(ch, "fart", "");
     else if (drunk > (10 + (get_curr_con(ch) / 5)) && number_percent() < (2 * drunk / 18))
     {
-        for (vch = ch->in_room->first_person; vch; vch = vch->next_in_room)
+        alg::for_each(ch->in_room->persons, [&](auto* vch)
+        {
             if (number_percent() < 10)
                 rvch = vch;
+        });
         check_social(ch, "puke", (rvch ? rvch->name : ""));
     }
 
@@ -2008,9 +2007,9 @@ void tele_update(void)
         tele_next = tele->next;
         if (--tele->timer <= 0)
         {
-            if (tele->room->first_person)
+            if (!tele->room->persons.empty())
             {
-                teleport(tele->room->first_person, tele->room->tele_vnum, TELE_TRANSALL);
+                teleport(tele->room->persons.front(), tele->room->tele_vnum, TELE_TRANSALL);
             }
             UNLINK(tele, first_teleport, last_teleport, next, prev);
             DISPOSE(tele);
@@ -2218,8 +2217,8 @@ void remove_portal(OBJ_DATA* portal)
     /*
     * send a message to toRoom
     */
-    if (toRoom && (ch = toRoom->first_person) != nullptr)
-        act(AT_PLAIN, "A magical portal above winks from existence.", ch, nullptr, nullptr, TO_ROOM);
+    if (toRoom && !toRoom->persons.empty())
+        act(AT_PLAIN, "A magical portal above winks from existence.", toRoom->persons.front(), nullptr, nullptr, TO_ROOM);
 }
 
 void reboot_check(time_t reset)

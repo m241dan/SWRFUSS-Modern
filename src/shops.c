@@ -44,9 +44,16 @@ CHAR_DATA* find_keeper(CHAR_DATA* ch)
     SHOP_DATA* pShop;
 
     pShop       = nullptr;
-    for (keeper = ch->in_room->first_person; keeper; keeper = keeper->next_in_room)
-        if (IS_NPC(keeper) && (pShop = keeper->pIndexData->pShop) != nullptr)
-            break;
+    const auto keeper_iter = alg::find_if(ch->in_room->persons, [](auto* keeper)
+    {
+        return IS_NPC(keeper) && keeper->pIndexData->pShop;
+    });
+
+    if (keeper_iter != ch->in_room->persons.end())
+    {
+        keeper = *keeper_iter;
+        pShop = keeper->pIndexData->pShop;
+    }
 
     if (!pShop)
     {
@@ -87,9 +94,16 @@ CHAR_DATA* find_fixer(CHAR_DATA* ch)
     REPAIR_DATA* rShop;
 
     rShop       = nullptr;
-    for (keeper = ch->in_room->first_person; keeper; keeper = keeper->next_in_room)
-        if (IS_NPC(keeper) && (rShop = keeper->pIndexData->rShop) != nullptr)
-            break;
+    const auto keeper_iter = alg::find_if(ch->in_room->persons, [](auto* keeper)
+    {
+        return IS_NPC(keeper) && keeper->pIndexData->pShop;
+    });
+
+    if (keeper_iter != ch->in_room->persons.end())
+    {
+        keeper = *keeper_iter;
+        rShop = keeper->pIndexData->rShop;
+    }
 
     if (!rShop)
     {
@@ -511,15 +525,15 @@ void do_list(CHAR_DATA* ch, const char* argument)
         }
 
         found    = FALSE;
-        for (pet = pRoomIndexNext->first_person; pet; pet = pet->next_in_room)
+
+        auto pets = pRoomIndexNext->persons
+            | view::filter([&](auto* pet) {return IS_SET(pet->act, ACT_PET) && IS_NPC(pet);});
+
+        if (!pets.empty())
         {
-            if (IS_SET(pet->act, ACT_PET) && IS_NPC(pet))
+            send_to_char("Pets for sale:\r\n", ch);
+            alg::for_each(pets, [&](auto* pet)
             {
-                if (!found)
-                {
-                    found = TRUE;
-                    send_to_char("Pets for sale:\r\n", ch);
-                }
                 ch_printf(
                     ch,
                     "[%2d] %8d - %s\r\n",
@@ -527,9 +541,9 @@ void do_list(CHAR_DATA* ch, const char* argument)
                     10 * pet->top_level * pet->top_level,
                     pet->short_descr
                 );
-            }
+            });
         }
-        if (!found)
+        else
             send_to_char("Sorry, we're out of pets right now.\r\n", ch);
         return;
     }

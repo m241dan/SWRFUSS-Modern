@@ -386,10 +386,11 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             progbug("Bad vnum to 'mobinroom'", mob);
             return BERR;
         }
-        lhsvl     = 0;
-        for (oMob = mob->in_room->first_person; oMob; oMob = oMob->next_in_room)
-            if (IS_NPC(oMob) && oMob->pIndexData->vnum == vnum)
-                lhsvl++;
+        lhsvl = alg::count_if(mob->in_room->persons, [&](auto* oMob)
+        {
+            return IS_NPC(oMob) && oMob->pIndexData->vnum == vnum;
+        });
+
         rhsvl     = atoi(rval);
         if (rhsvl < 1)
             rhsvl = 1;
@@ -1294,14 +1295,16 @@ void mprog_driver(const char* com_list, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_DA
     *
     */
 
-    count    = 0;
-    for (vch = mob->in_room->first_person; vch; vch = vch->next_in_room)
+    count = alg::count_if(mob->in_room->persons, [&](auto* vch)
+    {
         if (!IS_NPC(vch))
         {
             if (number_range(0, count) == 0)
                 rndm = vch;
-            count++;
+            return true;
         }
+        return false;
+    });
 
     mudstrlcpy(tmpcmndlst, com_list, MAX_STRING_LENGTH);
     command_list = tmpcmndlst;
@@ -2026,32 +2029,28 @@ void mprog_give_trigger(CHAR_DATA* mob, CHAR_DATA* ch, OBJ_DATA* obj)
 
 void mprog_greet_trigger(CHAR_DATA* ch)
 {
-    CHAR_DATA* vmob, * vmob_next;
-
 #ifdef DEBUG
                                                                                                                             char buf[MAX_STRING_LENGTH];
    snprintf( buf, MAX_STRING_LENGTH, "mprog_greet_trigger -> %s", ch->name );
    log_string( buf );
 #endif
-
-    for (vmob = ch->in_room->first_person; vmob; vmob = vmob_next)
+    alg::for_each(ch->in_room->persons, [&](auto* vmob)
     {
-        vmob_next = vmob->next_in_room;
         if (!IS_NPC(vmob) || vmob->fighting || !IS_AWAKE(vmob))
-            continue;
+            return;
 
         /*
        * Don't let a mob trigger itself, nor one instance of a mob
        * trigger another instance.
        */
         if (IS_NPC(ch) && ch->pIndexData == vmob->pIndexData)
-            continue;
+            return;
 
         if (vmob->pIndexData->progtypes & GREET_PROG)
             mprog_percent_check(vmob, ch, nullptr, nullptr, GREET_PROG);
         else if (vmob->pIndexData->progtypes & ALL_GREET_PROG)
             mprog_percent_check(vmob, ch, nullptr, nullptr, ALL_GREET_PROG);
-    }
+    });
 }
 
 void mprog_hitprcnt_trigger(CHAR_DATA* mob, CHAR_DATA* ch)
@@ -2087,17 +2086,15 @@ void mprog_hour_trigger(CHAR_DATA* mob)
 
 void mprog_speech_trigger(const char* txt, CHAR_DATA* actor)
 {
-    CHAR_DATA* vmob;
-
-    for (vmob = actor->in_room->first_person; vmob; vmob = vmob->next_in_room)
+    alg::for_each(actor->in_room->persons, [&](auto* vmob)
     {
         if (IS_NPC(vmob) && (vmob->pIndexData->progtypes & SPEECH_PROG))
         {
             if (IS_NPC(actor) && actor->pIndexData == vmob->pIndexData)
-                continue;
+                return;
             mprog_wordlist_check(txt, vmob, actor, nullptr, nullptr, SPEECH_PROG);
         }
-    }
+    });
 }
 
 void mprog_script_trigger(CHAR_DATA* mob)

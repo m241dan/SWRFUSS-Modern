@@ -315,18 +315,13 @@ bool check_skill(CHAR_DATA* ch, const char* command, const char* argument)
 
         if (skill_table[sn]->target == TAR_CHAR_OFFENSIVE && victim != ch && !char_died(victim))
         {
-            CHAR_DATA* vch;
-            CHAR_DATA* vch_next;
-
-            for (vch = ch->in_room->first_person; vch; vch = vch_next)
+            const auto vch = alg::find_if(ch->in_room->persons, [&](auto *vch)
             {
-                vch_next = vch->next_in_room;
-                if (victim == vch && !victim->fighting && victim->master != ch)
-                {
-                    retcode = multi_hit(victim, ch, TYPE_UNDEFINED);
-                    break;
-                }
-            }
+                return victim == vch && !victim->fighting && victim->master != ch;
+            });
+
+            if (vch != ch->in_room->persons.end())
+                retcode = multi_hit(victim, ch, TYPE_UNDEFINED);
         }
         return TRUE;
     }
@@ -2451,7 +2446,6 @@ void trip(CHAR_DATA* ch, CHAR_DATA* victim)
 void do_pick(CHAR_DATA* ch, const char* argument)
 {
     char     arg[MAX_INPUT_LENGTH];
-    CHAR_DATA* gch;
     OBJ_DATA * obj;
     EXIT_DATA* pexit;
     SHIP_DATA* ship;
@@ -2484,15 +2478,16 @@ void do_pick(CHAR_DATA* ch, const char* argument)
     /*
     * look for guards
     */
-    for (gch = ch->in_room->first_person; gch; gch = gch->next_in_room)
+    const auto gch = alg::find_if(ch->in_room->persons, [&](auto* gch)
     {
-        if (IS_NPC(gch) && IS_AWAKE(gch) && ch->skill_level[SMUGGLING_ABILITY] < gch->top_level)
-        {
-            act(AT_PLAIN, "$N is standing too close to the lock.", ch, nullptr, gch, TO_CHAR);
-            return;
-        }
-    }
+        return IS_NPC(gch) && IS_AWAKE(gch) && ch->skill_level[SMUGGLING_ABILITY] < gch->top_level;
+    });
 
+    if (gch != ch->in_room->persons.end())
+    {
+        act(AT_PLAIN, "$N is standing too close to the lock.", ch, nullptr, *gch, TO_CHAR);
+        return;
+    }
 
     if ((pexit = find_door(ch, arg, TRUE)) != nullptr)
     {
@@ -3348,8 +3343,6 @@ ch_ret one_hit(CHAR_DATA* ch, CHAR_DATA* victim, int dt);
 
 void do_hitall(CHAR_DATA* ch, const char* argument)
 {
-    CHAR_DATA* vch;
-    CHAR_DATA* vch_next;
     short    nvict = 0;
     short    nhit  = 0;
     short    percent;
@@ -3360,15 +3353,14 @@ void do_hitall(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!ch->in_room->first_person)
+    if (ch->in_room->persons.empty())
     {
         send_to_char("There's no one here!\r\n", ch);
         return;
     }
     percent  = IS_NPC(ch) ? 80 : ch->pcdata->learned[gsn_hitall];
-    for (vch = ch->in_room->first_person; vch; vch = vch_next)
+    for (auto* vch : ch->in_room->persons)
     {
-        vch_next = vch->next_in_room;
         if (is_same_group(ch, vch) || !is_legal_kill(ch, vch) || !can_see(ch, vch) || is_safe(ch, vch))
             continue;
         if (++nvict > ch->skill_level[COMBAT_ABILITY] / 5)
@@ -3483,7 +3475,7 @@ void do_scan(CHAR_DATA* ch, const char* argument)
         send_to_char(ch->in_room->name, ch);
         send_to_char("\r\n", ch);
         show_list_to_char(ch->in_room->first_content, ch, FALSE, FALSE);
-        show_char_to_char(ch->in_room->first_person, ch);
+        show_char_to_char(ch->in_room->persons, ch);
 
         switch (ch->in_room->sector_type)
         {

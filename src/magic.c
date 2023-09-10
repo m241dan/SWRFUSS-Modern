@@ -1184,20 +1184,19 @@ void do_cast(CHAR_DATA* ch, const char* argument)
             ch->substate = SUB_NONE;
             if (skill->participants > 1)
             {
-                int      cnt = 1;
                 CHAR_DATA* tmp;
 
-                for (tmp = ch->in_room->first_person; tmp && tmp != ch; tmp = tmp->next_in_room)
+                auto cnt = alg::count_if(ch->in_room->persons, [&](auto* tmp)
                 {
                     auto t = alg::find(tmp->timers, TIMER_DO_FUN, &timer_data::type);
-                    if (t != tmp->timers.end()
+                    return t != tmp->timers.end()
                         && t->count >= 1 && t->do_fun == do_cast
-                        && tmp->tempnum == sn && tmp->dest_buf && !str_cmp((const char*)tmp->dest_buf, staticbuf))
-                        ++cnt;
-                }
+                        && tmp->tempnum == sn && tmp->dest_buf && !str_cmp((const char*)tmp->dest_buf, staticbuf);
+                });
+
                 if (cnt >= skill->participants)
                 {
-                    for (tmp = ch->in_room->first_person; tmp && tmp != ch; tmp = tmp->next_in_room)
+                    alg::for_each(ch->in_room->persons, [&](auto* tmp)
                     {
                         const auto [t, sentinel] = alg::remove(tmp->timers, TIMER_DO_FUN, &timer_data::type);
 
@@ -1223,7 +1222,8 @@ void do_cast(CHAR_DATA* ch, const char* argument)
                             tmp->tempnum  = -1;
                             DISPOSE(tmp->dest_buf);
                         }
-                    }
+                    });
+
                     dont_wait = TRUE;
                     send_to_char("You concentrate all the energy into a burst of force!\r\n", ch);
                     vo = locate_targets(ch, arg2, sn, &victim, &obj);
@@ -1378,19 +1378,11 @@ void do_cast(CHAR_DATA* ch, const char* argument)
     */
     if (skill->target == TAR_CHAR_OFFENSIVE && victim && !char_died(victim) && victim != ch)
     {
-        CHAR_DATA* vch, * vch_next;
+        auto vch = alg::find(ch->in_room->persons, victim);
 
-        for (vch = ch->in_room->first_person; vch; vch = vch_next)
-        {
-            vch_next = vch->next_in_room;
-
-            if (vch == victim)
-            {
-                if (victim->master != ch && !victim->fighting)
-                    retcode = multi_hit(victim, ch, TYPE_UNDEFINED);
-                break;
-            }
-        }
+        if (vch != ch->in_room->persons.end())
+            if (victim->master != ch && !victim->fighting)
+                retcode = multi_hit(victim, ch, TYPE_UNDEFINED);
     }
 }
 
@@ -1521,18 +1513,13 @@ ch_ret obj_cast_spell(int sn, int level, CHAR_DATA* ch, CHAR_DATA* victim, OBJ_D
 
     if (skill->target == TAR_CHAR_OFFENSIVE && victim != ch && !char_died(victim))
     {
-        CHAR_DATA* vch;
-        CHAR_DATA* vch_next;
-
-        for (vch = ch->in_room->first_person; vch; vch = vch_next)
+        auto vch = alg::find_if(ch->in_room->persons, [&](auto* vch)
         {
-            vch_next = vch->next_in_room;
-            if (victim == vch && !victim->fighting && victim->master != ch)
-            {
-                retcode = multi_hit(victim, ch, TYPE_UNDEFINED);
-                break;
-            }
-        }
+            return victim == vch && !victim->fighting && victim->master != ch;
+        });
+
+        if (vch != ch->in_room->persons.end())
+            retcode = multi_hit(victim, ch, TYPE_UNDEFINED);
     }
 
     return retcode;
@@ -2390,18 +2377,16 @@ ch_ret spell_faerie_fire(int sn, int level, CHAR_DATA* ch, void* vo)
 
 ch_ret spell_faerie_fog(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA* ich;
-
     act(AT_MAGIC, "$n conjures a cloud of purple smoke.", ch, nullptr, nullptr, TO_ROOM);
     act(AT_MAGIC, "You conjure a cloud of purple smoke.", ch, nullptr, nullptr, TO_CHAR);
 
-    for (ich = ch->in_room->first_person; ich; ich = ich->next_in_room)
+    alg::for_each(ch->in_room->persons, [&](auto* ich)
     {
         if (!IS_NPC(ich) && IS_SET(ich->act, PLR_WIZINVIS))
-            continue;
+            return;
 
         if (ich == ch || saves_spell_staff(level, ich))
-            continue;
+            return;
 
         affect_strip(ich, gsn_invis);
         affect_strip(ich, gsn_mass_invis);
@@ -2413,7 +2398,7 @@ ch_ret spell_faerie_fog(int sn, int level, CHAR_DATA* ch, void* vo)
             REMOVE_BIT(ich->affected_by, AFF_SNEAK);
         act(AT_MAGIC, "$n is revealed!", ich, nullptr, nullptr, TO_ROOM);
         act(AT_MAGIC, "You are revealed!", ich, nullptr, nullptr, TO_CHAR);
-    }
+    });
     return rNONE;
 }
 
@@ -3124,7 +3109,6 @@ ch_ret spell_ventriloquate(int sn, int level, CHAR_DATA* ch, void* vo)
     char     buf1[MAX_STRING_LENGTH];
     char     buf2[MAX_STRING_LENGTH];
     char     speaker[MAX_INPUT_LENGTH];
-    CHAR_DATA* vch;
 
     target_name = one_argument(target_name, speaker);
 
@@ -3132,14 +3116,14 @@ ch_ret spell_ventriloquate(int sn, int level, CHAR_DATA* ch, void* vo)
     snprintf(buf2, MAX_STRING_LENGTH, "Someone makes %s say '%s'.\r\n", speaker, target_name);
     buf1[0] = UPPER(buf1[0]);
 
-    for (vch = ch->in_room->first_person; vch; vch = vch->next_in_room)
+    alg::for_each(ch->in_room->persons, [&](auto* vch)
     {
         if (!is_name(speaker, vch->name))
         {
             set_char_color(AT_SAY, vch);
             send_to_char(saves_spell_staff(level, vch) ? buf2 : buf1, vch);
         }
-    }
+    });
 
     return rNONE;
 }
@@ -3347,8 +3331,6 @@ ch_ret spell_frost_breath(int sn, int level, CHAR_DATA* ch, void* vo)
 
 ch_ret spell_gas_breath(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA* vch;
-    CHAR_DATA* vch_next;
     int      dam;
     int      hpch;
     bool     ch_died;
@@ -3362,11 +3344,10 @@ ch_ret spell_gas_breath(int sn, int level, CHAR_DATA* ch, void* vo)
         return rNONE;
     }
 
-    for (vch = ch->in_room->first_person; vch; vch = vch_next)
+    alg::for_each(ch->in_room->persons, [&](auto* vch)
     {
-        vch_next = vch->next_in_room;
         if (!IS_NPC(vch) && IS_SET(vch->act, PLR_WIZINVIS) && vch->pcdata->wizinvis >= LEVEL_IMMORTAL)
-            continue;
+            return;
 
         if (IS_NPC(ch) ? !IS_NPC(vch) : IS_NPC(vch))
         {
@@ -3377,7 +3358,7 @@ ch_ret spell_gas_breath(int sn, int level, CHAR_DATA* ch, void* vo)
             if (damage(ch, vch, dam, sn) == rCHAR_DIED || char_died(ch))
                 ch_died = TRUE;
         }
-    }
+    });
     if (ch_died)
         return rCHAR_DIED;
     else
@@ -4051,8 +4032,6 @@ void do_revert(CHAR_DATA* ch, const char* argument)
 7/10/96 */
 ch_ret spell_spiral_blast(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA* vch;
-    CHAR_DATA* vch_next;
     int      dam;
     int      hpch;
     bool     ch_died;
@@ -4072,11 +4051,10 @@ ch_ret spell_spiral_blast(int sn, int level, CHAR_DATA* ch, void* vo)
     ch->alignment = URANGE(-1000, ch->alignment, 1000);
     sith_penalty(ch);
 
-    for (vch = ch->in_room->first_person; vch; vch = vch_next)
+    alg::for_each(ch->in_room->persons, [&](auto* vch)
     {
-        vch_next = vch->next_in_room;
         if (!IS_NPC(vch) && IS_SET(vch->act, PLR_WIZINVIS) && vch->pcdata->wizinvis >= LEVEL_IMMORTAL)
-            continue;
+            return;
 
         if (IS_NPC(ch) ? !IS_NPC(vch) : IS_NPC(vch))
         {
@@ -4090,7 +4068,7 @@ ch_ret spell_spiral_blast(int sn, int level, CHAR_DATA* ch, void* vo)
             if (damage(ch, vch, dam, sn) == rCHAR_DIED || char_died(ch))
                 ch_died = TRUE;
         }
-    }
+    });
 
     if (ch_died)
         return rCHAR_DIED;
@@ -4204,7 +4182,6 @@ ch_ret spell_attack(int sn, int level, CHAR_DATA* ch, void* vo)
  */
 ch_ret spell_area_attack(int sn, int level, CHAR_DATA* ch, void* vo)
 {
-    CHAR_DATA* vch, * vch_next;
     SKILLTYPE* skill = get_skilltype(sn);
     bool     saved;
     bool     affects;
@@ -4228,10 +4205,8 @@ ch_ret spell_area_attack(int sn, int level, CHAR_DATA* ch, void* vo)
     if (skill->hit_room && skill->hit_room[0] != '\0')
         act(AT_MAGIC, skill->hit_room, ch, nullptr, nullptr, TO_ROOM);
 
-    for (vch = ch->in_room->first_person; vch; vch = vch_next)
+    for (auto* vch : ch->in_room->persons)
     {
-        vch_next    = vch->next_in_room;
-
         if (!IS_NPC(vch) && IS_SET(vch->act, PLR_WIZINVIS) && vch->pcdata->wizinvis >= LEVEL_IMMORTAL)
             continue;
 
@@ -4507,9 +4482,9 @@ ch_ret spell_affect(int sn, int level, CHAR_DATA* ch, void* vo)
         if (skill->hit_vict && skill->hit_vict[0] != '\0')
             hitvict = TRUE;
         if (victim)
-            victim  = victim->in_room->first_person;
+            victim  = victim->in_room->persons.front();
         else
-            victim = ch->in_room->first_person;
+            victim = ch->in_room->persons.front();
     }
     if (!victim)
     {

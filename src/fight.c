@@ -213,7 +213,7 @@ void violence_update(void)
     char       buf[MAX_STRING_LENGTH];
     CHAR_DATA  * lst_ch;
     CHAR_DATA  * victim;
-    CHAR_DATA  * rch, * rch_next;
+    CHAR_DATA  * rch;
     AFFECT_DATA* paf, * paf_next;
     ch_ret     retcode;
     SKILLTYPE  * skill;
@@ -361,10 +361,9 @@ void violence_update(void)
         /*
        * Fun for the whole family!
        */
-        for (rch = ch->in_room->first_person; rch; rch = rch_next)
-        {
-            rch_next = rch->next_in_room;
 
+        for(auto* rch : ch->in_room->persons)
+        {
             if (IS_AWAKE(rch) && !rch->fighting)
             {
                 /*
@@ -386,13 +385,12 @@ void violence_update(void)
                         break;
                     if (rch->pIndexData == ch->pIndexData || number_bits(3) == 0)
                     {
-                        CHAR_DATA* vch;
                         CHAR_DATA* target;
                         int      number;
 
                         target   = nullptr;
                         number   = 0;
-                        for (vch = ch->in_room->first_person; vch; vch = vch->next)
+                        for (auto* vch : ch->in_room->persons)
                         {
                             if (can_see(rch, vch) && is_same_group(vch, victim) && number_range(0, number) == 0)
                             {
@@ -1618,7 +1616,6 @@ ch_ret damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
     */
     if (victim->position == POS_DEAD)
     {
-        CHAR_DATA* gch;
         OBJ_DATA * new_corpse;
 
         group_gain(ch, victim);
@@ -1640,9 +1637,11 @@ ch_ret damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
             /*
           * Add to kill tracker for grouped chars, as well. -Halcyon
           */
-            for (gch = ch->in_room->first_person; gch; gch = gch->next_in_room)
+            alg::for_each(ch->in_room->persons, [&](auto* gch)
+            {
                 if (is_same_group(gch, ch) && !IS_NPC(gch) && gch != ch)
                     add_kill(gch, victim);
+            });
         }
 
         check_killer(ch, victim);
@@ -2196,7 +2195,6 @@ OBJ_DATA* raw_kill(CHAR_DATA* ch, CHAR_DATA* victim)
 
 void group_gain(CHAR_DATA* ch, CHAR_DATA* victim)
 {
-    CHAR_DATA* gch, * gch_next;
     CHAR_DATA* lch;
     int      xp;
     int      members;
@@ -2210,11 +2208,11 @@ void group_gain(CHAR_DATA* ch, CHAR_DATA* victim)
 
     members = 0;
 
-    for (gch = ch->in_room->first_person; gch; gch = gch->next_in_room)
+    alg::for_each(ch->in_room->persons, [&](auto* gch)
     {
         if (is_same_group(gch, ch))
             members++;
-    }
+    });
 
     if (members == 0)
     {
@@ -2224,15 +2222,13 @@ void group_gain(CHAR_DATA* ch, CHAR_DATA* victim)
 
     lch = ch->leader ? ch->leader : ch;
 
-    for (gch = ch->in_room->first_person; gch; gch = gch_next)
+    alg::for_each(ch->in_room->persons, [&](auto* gch)
     {
         OBJ_DATA* obj;
         OBJ_DATA* obj_next;
 
-        gch_next = gch->next_in_room;
-
         if (!is_same_group(gch, ch))
-            continue;
+            return;
 
         xp = (int)(xp_compute(gch, victim) / members);
 
@@ -2283,7 +2279,7 @@ void group_gain(CHAR_DATA* ch, CHAR_DATA* victim)
                     break;
             }
         }
-    }
+    });
 }
 
 int align_compute(CHAR_DATA* gch, CHAR_DATA* victim)

@@ -96,10 +96,10 @@ void make_scraps(OBJ_DATA* obj)
     }
     else if (obj->in_room)
     {
-        if ((ch = obj->in_room->first_person) != nullptr)
+        if (!obj->in_room->persons.empty())
         {
-            act(AT_OBJECT, "$p is reduced to little more than scraps.", ch, obj, nullptr, TO_ROOM);
-            act(AT_OBJECT, "$p is reduced to little more than scraps.", ch, obj, nullptr, TO_CHAR);
+            act(AT_OBJECT, "$p is reduced to little more than scraps.", obj->in_room->persons.front(), obj, nullptr, TO_ROOM);
+            act(AT_OBJECT, "$p is reduced to little more than scraps.", obj->in_room->persons.front(), obj, nullptr, TO_CHAR);
         }
         obj_to_room(scraps, obj->in_room);
     }

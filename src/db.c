@@ -1786,8 +1786,6 @@ void load_rooms(AREA_DATA* tarea, FILE* fp)
         {
             oldroom = FALSE;
             CREATE(pRoomIndex, ROOM_INDEX_DATA, 1);
-            pRoomIndex->first_person  = nullptr;
-            pRoomIndex->last_person   = nullptr;
             pRoomIndex->first_content = nullptr;
             pRoomIndex->last_content  = nullptr;
         }
@@ -4627,16 +4625,22 @@ void delete_room(ROOM_INDEX_DATA* room)
 
     UNLINK(room, room->area->first_room, room->area->last_room, next_aroom, prev_aroom);
 
-    while ((ch = room->first_person) != nullptr)
+    std::vector<CHAR_DATA*> players {room->persons.size()};
+    std::vector<CHAR_DATA*> npcs {room->persons.size()};
+
+    alg::copy(room->persons | view::filter([&](auto* ch) {return !IS_NPC(ch);}), players.begin());
+    alg::copy(room->persons | view::filter([&](auto* ch) {return IS_NPC(ch);}), npcs.begin());
+
+    alg::for_each(players, [&](auto* ch)
     {
-        if (!IS_NPC(ch))
-        {
-            char_from_room(ch);
-            char_to_room(ch, limbo);
-        }
-        else
-            extract_char(ch, TRUE);
-    }
+        char_from_room(ch);
+        char_to_room(ch, limbo);
+    });
+
+    alg::for_each(npcs, [&](auto* ch)
+    {
+        extract_char(ch, TRUE);
+    });
 
     for (auto* gch : characters)
     {
@@ -4896,8 +4900,6 @@ ROOM_INDEX_DATA* make_room(int vnum, AREA_DATA* area)
     int            iHash;
 
     CREATE(pRoomIndex, ROOM_INDEX_DATA, 1);
-    pRoomIndex->first_person    = nullptr;
-    pRoomIndex->last_person     = nullptr;
     pRoomIndex->first_content   = nullptr;
     pRoomIndex->last_content    = nullptr;
     pRoomIndex->first_reset     = pRoomIndex->last_reset = nullptr;

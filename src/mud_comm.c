@@ -638,14 +638,14 @@ void do_mppurge(CHAR_DATA* ch, const char* argument)
         /*
        * 'purge'
        */
-        CHAR_DATA* vnext;
-
-        for (victim = ch->in_room->first_person; victim; victim = vnext)
+        auto victim_iter = alg::find_if(ch->in_room->persons, [&](auto* victim)
         {
-            vnext = victim->next_in_room;
-            if (IS_NPC(victim) && victim != ch)
-                extract_char(victim, TRUE);
-        }
+            return IS_NPC(victim) && victim != ch;
+        });
+
+        if (victim_iter != ch->in_room->persons.end())
+            extract_char(*victim_iter, TRUE);
+
         while (ch->in_room->first_content)
             extract_obj(ch->in_room->first_content);
 
@@ -865,15 +865,10 @@ void do_mptransfer(CHAR_DATA* ch, const char* argument)
     */
     if (!str_cmp(arg1, "all"))
     {
-        for (victim = ch->in_room->first_person; victim; victim = nextinroom)
+        alg::for_each(ch->in_room->persons | view::drop_while(ops::same_as(ch)), [&](auto* victim)
         {
-            nextinroom = victim->next_in_room;
-
-            if (ch == victim)
-                continue;
-
             transfer_char(ch, victim, location);
-        }
+        });
         return;
     }
 
@@ -929,11 +924,11 @@ void do_mpforce(CHAR_DATA* ch, const char* argument)
 
     if (!str_cmp(arg, "all"))
     {
-        CHAR_DATA* vch;
-
-        for (vch = ch->in_room->first_person; vch; vch = vch->next_in_room)
+        alg::for_each(ch->in_room->persons, [&](auto* vch)
+        {
             if (get_trust(vch) < get_trust(ch) && can_see(ch, vch))
                 interpret(vch, argument);
+        });
     }
     else
     {
@@ -1790,7 +1785,6 @@ ch_ret simple_damage(CHAR_DATA* ch, CHAR_DATA* victim, int dam, int dt)
 CHAR_DATA* get_char_room_mp(CHAR_DATA* ch, const char* argument)
 {
     char     arg[MAX_INPUT_LENGTH];
-    CHAR_DATA* rch;
     int      number, count, vnum;
 
     number = number_argument(argument, arg);
@@ -1804,7 +1798,7 @@ CHAR_DATA* get_char_room_mp(CHAR_DATA* ch, const char* argument)
 
     count = 0;
 
-    for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
+    for (auto* rch : ch->in_room->persons)
         if ((nifty_is_name(arg, rch->name) || (IS_NPC(rch) && vnum == rch->pIndexData->vnum)))
         {
             if (number == 0 && !IS_NPC(rch))
@@ -1816,7 +1810,7 @@ CHAR_DATA* get_char_room_mp(CHAR_DATA* ch, const char* argument)
     if (vnum != -1)
         return nullptr;
     count    = 0;
-    for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
+    for (auto* rch : ch->in_room->persons)
     {
         if (!nifty_is_name_prefix(arg, rch->name))
             continue;

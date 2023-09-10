@@ -1678,7 +1678,6 @@ void do_recite(CHAR_DATA* ch, const char* argument)
 void pullorpush(CHAR_DATA* ch, OBJ_DATA* obj, bool pull)
 {
     char           buf[MAX_STRING_LENGTH];
-    CHAR_DATA      * rch;
     bool           isup;
     ROOM_INDEX_DATA* room, * to_room = nullptr;
     EXIT_DATA      * pexit, * pexit_rev;
@@ -1781,11 +1780,11 @@ void pullorpush(CHAR_DATA* ch, OBJ_DATA* obj, bool pull)
             maxd = 5;
 
         randomize_exits(room, maxd);
-        for (rch = room->first_person; rch; rch = rch->next_in_room)
+        alg::for_each(room->persons, [&](auto* rch)
         {
             send_to_char("You hear a loud rumbling sound.\r\n", rch);
             send_to_char("Something seems different...\r\n", rch);
-        }
+        });
     }
 
     /* Death support added by Remcon */
@@ -2030,13 +2029,17 @@ void pullorpush(CHAR_DATA* ch, OBJ_DATA* obj, bool pull)
         if (IS_SET(obj->value[0], TRIG_OPEN) && IS_SET(pexit->exit_info, EX_CLOSED))
         {
             REMOVE_BIT(pexit->exit_info, EX_CLOSED);
-            for (rch = room->first_person; rch; rch = rch->next_in_room)
+            alg::for_each(room->persons, [&](auto* rch)
+            {
                 act(AT_ACTION, "The $d opens.", rch, nullptr, pexit->keyword, TO_CHAR);
+            });
             if ((pexit_rev = pexit->rexit) != nullptr && pexit_rev->to_room == ch->in_room)
             {
                 REMOVE_BIT(pexit_rev->exit_info, EX_CLOSED);
-                for (rch = to_room->first_person; rch; rch = rch->next_in_room)
+                alg::for_each(room->persons, [&](auto* rch)
+                {
                     act(AT_ACTION, "The $d opens.", rch, nullptr, pexit_rev->keyword, TO_CHAR);
+                });
             }
             check_room_for_traps(ch, trap_door[edir]);
             return;
@@ -2044,13 +2047,18 @@ void pullorpush(CHAR_DATA* ch, OBJ_DATA* obj, bool pull)
         if (IS_SET(obj->value[0], TRIG_CLOSE) && !IS_SET(pexit->exit_info, EX_CLOSED))
         {
             SET_BIT(pexit->exit_info, EX_CLOSED);
-            for (rch = room->first_person; rch; rch = rch->next_in_room)
+            alg::for_each(room->persons, [&](auto* rch)
+            {
                 act(AT_ACTION, "The $d closes.", rch, nullptr, pexit->keyword, TO_CHAR);
+            });
+
             if ((pexit_rev = pexit->rexit) != nullptr && pexit_rev->to_room == ch->in_room)
             {
                 SET_BIT(pexit_rev->exit_info, EX_CLOSED);
-                for (rch = to_room->first_person; rch; rch = rch->next_in_room)
+                alg::for_each(to_room->persons, [&](auto* rch)
+                {
                     act(AT_ACTION, "The $d closes.", rch, nullptr, pexit_rev->keyword, TO_CHAR);
+                });
             }
             check_room_for_traps(ch, trap_door[edir]);
             return;
@@ -2621,8 +2629,6 @@ void do_hail(CHAR_DATA* ch, const char* argument)
 void do_train(CHAR_DATA* ch, const char* argument)
 {
     char     arg[MAX_INPUT_LENGTH];
-    CHAR_DATA* mob;
-    bool     tfound     = FALSE;
     bool     successful = FALSE;
 
     if (IS_NPC(ch))
@@ -2633,7 +2639,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
     switch (ch->substate)
     {
         default:
-
+        {
             if (arg[0] == '\0')
             {
                 send_to_char("Train what?\r\n", ch);
@@ -2650,18 +2656,20 @@ void do_train(CHAR_DATA* ch, const char* argument)
                 return;
             }
 
-            for (mob = ch->in_room->first_person; mob; mob = mob->next_in_room)
-                if (IS_NPC(mob) && IS_SET(mob->act, ACT_TRAIN))
+            auto mob_iter = alg::find_if(
+                ch->in_room->persons, [&](auto* mob)
                 {
-                    tfound = TRUE;
-                    break;
+                    return IS_NPC(mob) && IS_SET(mob->act, ACT_TRAIN);
                 }
+            );
 
-            if ((!mob) || (!tfound))
+            if (mob_iter == ch->in_room->persons.end())
             {
                 send_to_char("You can't do that here.\r\n", ch);
                 return;
             }
+
+            CHAR_DATA* mob = *mob_iter;
 
             if (str_cmp(arg, "str") && str_cmp(arg, "strength")
                 && str_cmp(arg, "dex") && str_cmp(arg, "dexterity")
@@ -2761,7 +2769,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
             add_timer(ch, TIMER_DO_FUN, 10, do_train, 1);
             ch->dest_buf = str_dup(arg);
             return;
-
+        }
         case 1:
             if (!ch->dest_buf)
                 return;

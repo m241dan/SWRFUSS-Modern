@@ -109,16 +109,14 @@ bool write_to_descriptor(int desc, char* txt, int length);
 
 void echo_to_room_dnr(int ecolor, ROOM_INDEX_DATA* room, const char* argument)
 {
-    CHAR_DATA* vic;
-
     if (room == nullptr)
         return;
 
-    for (vic = room->first_person; vic; vic = vic->next_in_room)
+    alg::for_each(room->persons, [&](auto* vic)
     {
         set_char_color(ecolor, vic);
         send_to_char(argument, vic);
-    }
+    });
 }
 
 bool land_bus(SHIP_DATA* ship, int destination)
@@ -2108,7 +2106,6 @@ void sound_to_ship(SHIP_DATA* ship, const char* argument)
 {
     int            roomnum;
     ROOM_INDEX_DATA* room;
-    CHAR_DATA      * vic;
 
     for (roomnum = ship->firstroom; roomnum <= ship->lastroom; roomnum++)
     {
@@ -2116,11 +2113,11 @@ void sound_to_ship(SHIP_DATA* ship, const char* argument)
         if (room == nullptr)
             continue;
 
-        for (vic = room->first_person; vic; vic = vic->next_in_room)
+        alg::for_each(room->persons, [&](auto* vic)
         {
             if (!IS_NPC(vic) && IS_SET(vic->act, PLR_SOUND))
                 send_to_char(argument, vic);
-        }
+        });
     }
 }
 
@@ -4442,23 +4439,24 @@ void destroy_ship(SHIP_DATA* ship, CHAR_DATA* ch)
 
         if (room != nullptr)
         {
-            rch = room->first_person;
-            while (rch)
+            auto immortals = std::vector<CHAR_DATA*> {room->persons.size()};
+            auto others = std::vector<CHAR_DATA*> {room->persons.size()};
+            alg::copy(room->persons | view::take_while([&](auto* rch) {return IS_IMMORTAL(rch);}), immortals.begin());
+            alg::copy(room->persons | view::take_while([&](auto* rch) {return !IS_IMMORTAL(rch);}), others.begin());
+
+            alg::for_each(immortals, [&](auto* rch)
             {
-                if (IS_IMMORTAL(rch))
-                {
-                    char_from_room(rch);
-                    char_to_room(rch, get_room_index(wherehome(rch)));
-                }
+                char_from_room(rch);
+                char_to_room(rch, get_room_index(wherehome(rch)));
+            });
+
+            alg::for_each(others, [&](auto* rch)
+            {
+                if (ch)
+                    raw_kill(ch, rch);
                 else
-                {
-                    if (ch)
-                        raw_kill(ch, rch);
-                    else
-                        raw_kill(rch, rch);
-                }
-                rch = room->first_person;
-            }
+                    raw_kill(rch, rch);
+            });
 
             for (robj = room->first_content; robj; robj = robj->next_content)
             {
@@ -4515,10 +4513,9 @@ void do_board(CHAR_DATA* ch, const char* argument)
 
         if (toroom->tunnel > 0)
         {
-            CHAR_DATA* ctmp;
             int      count = 0;
 
-            for (ctmp = toroom->first_person; ctmp; ctmp = ctmp->next_in_room)
+            for (auto* ctmp : toroom->persons)
                 if (++count >= toroom->tunnel)
                 {
                     send_to_char("There is no room for you in there.\r\n", ch);
@@ -7739,8 +7736,6 @@ ch_ret drive_ship(CHAR_DATA* ch, SHIP_DATA* ship, EXIT_DATA* pexit, int fall)
     ch_ret         retcode;
     short          door;
     bool           drunk = FALSE;
-    CHAR_DATA      * rch;
-    CHAR_DATA      * next_rch;
 
     if (!IS_NPC(ch))
         if (IS_DRUNK(ch, 2) && (ch->position != POS_SHOVE) && (ch->position != POS_DRAG))
@@ -7908,10 +7903,9 @@ ch_ret drive_ship(CHAR_DATA* ch, SHIP_DATA* ship, EXIT_DATA* pexit, int fall)
 
     if (to_room->tunnel > 0)
     {
-        CHAR_DATA* ctmp;
         int      count = 0;
 
-        for (ctmp = to_room->first_person; ctmp; ctmp = ctmp->next_in_room)
+        for (auto* ctmp : to_room->persons)
             if (++count >= to_room->tunnel)
             {
                 send_to_char("There is no room for you in there.\r\n", ch);
@@ -7989,9 +7983,8 @@ ch_ret drive_ship(CHAR_DATA* ch, SHIP_DATA* ship, EXIT_DATA* pexit, int fall)
     snprintf(buf, MAX_STRING_LENGTH, "%s %s from %s.", ship->name, txt, dtxt);
     echo_to_room(AT_ACTION, get_room_index(ship->location), buf);
 
-    for (rch = ch->in_room->last_person; rch; rch = next_rch)
+    for (auto* rch : ch->in_room->persons)
     {
-        next_rch = rch->prev_in_room;
         original = rch->in_room;
         char_from_room(rch);
         char_to_room(rch, to_room);

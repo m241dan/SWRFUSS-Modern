@@ -2858,7 +2858,7 @@ void act(short AType, const char* format, CHAR_DATA* ch, const void* arg1, const
     else if (type == TO_CHAR)
         to = ch;
     else
-        to = ch->in_room->first_person;
+        to = ch->in_room->persons.front();
 
     /*
     * ACT_SECRETIVE handling

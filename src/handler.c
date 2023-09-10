@@ -949,7 +949,7 @@ void char_from_room(CHAR_DATA* ch)
         && obj->item_type == ITEM_LIGHT && obj->value[2] != 0 && ch->in_room->light > 0)
         --ch->in_room->light;
 
-    UNLINK(ch, ch->in_room->first_person, ch->in_room->last_person, next_in_room, prev_in_room);
+    std::erase(ch->in_room->persons, ch);
     ch->in_room      = nullptr;
     ch->next_in_room = nullptr;
     ch->prev_in_room = nullptr;
@@ -984,7 +984,7 @@ void char_to_room(CHAR_DATA* ch, ROOM_INDEX_DATA* pRoomIndex)
     ch->in_room       = pRoomIndex;
     if (ch->home_vnum < 1)
         ch->home_vnum = ch->in_room->vnum;
-    LINK(ch, pRoomIndex->first_person, pRoomIndex->last_person, next_in_room, prev_in_room);
+    pRoomIndex->persons.push_back(ch);
 
     if (!IS_NPC(ch))
         if (++ch->in_room->area->nplayer > ch->in_room->area->max_players)
@@ -1634,14 +1634,22 @@ CHAR_DATA* get_char_room(CHAR_DATA* ch, const char* argument)
 
     count = 0;
 
-    for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
+    const auto rch_iter = alg::find_if(ch->in_room->persons, [&](auto* rch)
+    {
         if (can_see(ch, rch) && (nifty_is_name(arg, rch->name) || (IS_NPC(rch) && vnum == rch->pIndexData->vnum)))
         {
             if (number == 0 && !IS_NPC(rch))
-                return rch;
+                return true;
             else if (++count == number)
-                return rch;
-        }
+                return true;
+        };
+        return false;
+    });
+
+    if (rch_iter != ch->in_room->persons.end())
+    {
+        return *rch_iter;
+    }
 
     if (vnum != -1)
         return nullptr;
@@ -1652,14 +1660,18 @@ CHAR_DATA* get_char_room(CHAR_DATA* ch, const char* argument)
     * Added by Narn, Sept/96
     */
     count    = 0;
-    for (rch = ch->in_room->first_person; rch; rch = rch->next_in_room)
+
+    const auto rch_iter2 = alg::find_if(ch->in_room->persons, [&](auto* rch)
     {
         if (!can_see(ch, rch) || !nifty_is_name_prefix(arg, rch->name))
-            continue;
-        if (number == 0 && !IS_NPC(rch))
-            return rch;
-        else if (++count == number)
-            return rch;
+            return false;
+
+        return (number == 0 && !IS_NPC(rch)) || (++count == number);
+    });
+
+    if (rch_iter2 != ch->in_room->persons.end())
+    {
+        return *rch_iter2;
     }
 
     return nullptr;
@@ -1690,7 +1702,7 @@ CHAR_DATA* get_char_world(CHAR_DATA* ch, const char* argument)
     /*
     * check the room for an exact match
     */
-    for (wch = ch->in_room->first_person; wch; wch = wch->next_in_room)
+    for (auto* wch : ch->in_room->persons)
         if ((nifty_is_name(arg, wch->name) || (IS_NPC(wch) && vnum == wch->pIndexData->vnum)) && is_wizvis(ch, wch))
         {
             if (number == 0 && !IS_NPC(wch))
@@ -1725,7 +1737,7 @@ CHAR_DATA* get_char_world(CHAR_DATA* ch, const char* argument)
     * Added by Narn, Sept/96
     */
     count    = 0;
-    for (wch = ch->in_room->first_person; wch; wch = wch->next_in_room)
+    for (auto* wch : ch->in_room->persons)
     {
         if (!nifty_is_name_prefix(arg, wch->name))
             continue;
@@ -2185,7 +2197,6 @@ bool room_is_dark(ROOM_INDEX_DATA* pRoomIndex)
 bool room_is_private(CHAR_DATA* ch, ROOM_INDEX_DATA* pRoomIndex)
 {
     CHAR_DATA* rch;
-    int      count;
 
     if (!ch)
     {
@@ -2202,10 +2213,7 @@ bool room_is_private(CHAR_DATA* ch, ROOM_INDEX_DATA* pRoomIndex)
     if (IS_SET(pRoomIndex->room_flags, ROOM_PLR_HOME) && ch->plr_home != pRoomIndex)
         return TRUE;
 
-    count = 0;
-
-    for (rch = pRoomIndex->first_person; rch; rch = rch->next_in_room)
-        count++;
+    const auto count = pRoomIndex->persons.size();
 
     if (IS_SET(pRoomIndex->room_flags, ROOM_PRIVATE) && count >= 2)
         return TRUE;

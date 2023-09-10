@@ -365,13 +365,12 @@ void delete_reset(RESET_DATA* pReset)
 
 void instaroom(CHAR_DATA* ch, ROOM_INDEX_DATA* pRoom, bool dodoors)
 {
-    CHAR_DATA* rch;
     OBJ_DATA * obj;
 
-    for (rch = pRoom->first_person; rch; rch = rch->next_in_room)
+    alg::for_each(pRoom->persons, [&](auto* rch)
     {
         if (!IS_NPC(rch))
-            continue;
+            return;
 
         add_reset(pRoom, 'M', 1, rch->pIndexData->vnum, rch->pIndexData->count, pRoom->vnum);
 
@@ -382,7 +381,7 @@ void instaroom(CHAR_DATA* ch, ROOM_INDEX_DATA* pRoom, bool dodoors)
             else
                 add_obj_reset(pRoom, 'E', obj, 1, obj->wear_loc);
         }
-    }
+    });
     for (obj = pRoom->first_content; obj; obj = obj->next_content)
         add_obj_reset(pRoom, 'O', obj, obj->count, pRoom->vnum);
     if (dodoors)
