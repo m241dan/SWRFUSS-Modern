@@ -115,6 +115,23 @@ namespace alg {
 
 namespace view {
     using namespace std::views;
+
+    template<class T>
+    constexpr auto take_if(T&& pred)
+    {
+        return filter(std::forward<T>(pred));
+    }
+
+    template<class T>
+    constexpr auto drop_if(T&& pred)
+    {
+        const auto not_pred = [&]<class... Args>(Args&&... args)
+        {
+            return !std::forward<T>(pred)(std::forward<Args>(args)...);
+        };
+        return filter(not_pred);
+    }
+
 }
 
 namespace ops {
