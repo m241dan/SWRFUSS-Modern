@@ -127,6 +127,14 @@ namespace ops {
             return std::forward<T>(lhs) == std::forward<T>(rhs);
         };
     }
+    template<class T>
+    auto not_same_as(T&& lhs)
+    {
+        return [&](T&& rhs) -> bool
+        {
+            return std::forward<T>(lhs) != std::forward<T>(rhs);
+        };
+    }
 }
 
 #endif //SWRGM_NAMESPACES_H
