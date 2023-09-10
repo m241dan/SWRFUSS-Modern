@@ -1103,9 +1103,9 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
     {
         std::vector<CHAR_DATA*> followers;
         alg::copy(
-            from_room->persons | view::drop_if(ops::same_as(ch))
-                               | view::take_if(ops::is_follower(ch))
-                               | view::take_if(ops::in_position(POS_STANDING)),
+            from_room->persons | view::drop_if(ops::equal_to(ch))
+                               | view::take_if(ops::equal_to(ch, &char_data::master))
+                               | view::take_if(ops::equal_to(POS_STANDING, &char_data::position)),
             std::back_inserter(followers)
         );
 
