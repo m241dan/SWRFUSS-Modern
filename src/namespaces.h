@@ -166,6 +166,12 @@ namespace concepts {
     {
         { t.position };
     };
+
+    template<class T, class U>
+    concept equalable = requires(T a, U b)
+    {
+        { a == b } -> std::convertible_to<bool>;
+    };
 }
 
 namespace ops {
@@ -185,6 +191,18 @@ namespace ops {
         (T&& ch) -> bool
         {
             return std::forward<T>(ch)->position == std::forward<U>(pos);
+        };
+    }
+
+    template<class T, class Proj = std::identity>
+    constexpr auto equal_to(T&& rhs, Proj proj = {})
+    {
+        // The following requires clause works nice IF the types have operation== for itself.
+        // - requires equalable<typename std::projected<U, Proj>::value_type, std::remove_pointer_t<std::remove_cvref_t<T>>>
+        // We'll get there at some point...
+        return [rhs=std::forward<T>(rhs), proj=std::move(proj)]<class U>(U&& lhs) -> bool
+        {
+            return rhs == std::invoke(proj, std::forward<U>(lhs));
         };
     }
 };
