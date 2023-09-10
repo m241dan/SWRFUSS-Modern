@@ -1101,32 +1101,37 @@ ch_ret move_char(CHAR_DATA* ch, EXIT_DATA* pexit, int fall)
     */
     if (!fall)
     {
-        CHAR_DATA* nextinroom;
-        int count = 0;
-        auto chars = from_room->persons.size();
+        std::vector<CHAR_DATA*> followers;
+        alg::copy(
+            from_room->persons | view::drop_if(ops::same_as(ch))
+                               | view::take_if([&](auto* fch) {
+                                   return fch->master == ch;
+                               })
+                               | view::take_if([&](auto* fch) {
+                                   return fch->position == POS_STANDING;
+                               }),
+            std::back_inserter(followers)
+        );
 
-        for (auto fch = from_room->persons.front(); fch && (count < chars); ++fch)
+        alg::for_each(followers, [&](auto* fch)
         {
-            count++;
-            if (fch != ch  /* loop room bug fix here by Thoric */
-                && fch->master == ch && fch->position == POS_STANDING)
+            if (!get_exit(from_room, door))
             {
-                if (!get_exit(from_room, door))
-                {
-                    act(
-                        AT_ACTION,
-                        "The entrance closes behind $N, preventing you from following!",
-                        fch,
-                        nullptr,
-                        ch,
-                        TO_CHAR
-                    );
-                    continue;
-                }
+                act(
+                    AT_ACTION,
+                    "The entrance closes behind $N, preventing you from following!",
+                    fch,
+                    nullptr,
+                    ch,
+                    TO_CHAR
+                );
+            }
+            else
+            {
                 act(AT_ACTION, "You follow $N.", fch, nullptr, ch, TO_CHAR);
                 move_char(fch, pexit, 0);
             }
-        }
+        });
     }
 
     if (ch->in_room->first_content)
