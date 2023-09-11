@@ -308,10 +308,6 @@ typedef enum
 #include "dns.h"
 #include "color.h"
 
-#ifdef IMC
-#include "imc.h"
-#endif
-
 /*
 * do_who output structure -- Narn
 */
@@ -2216,9 +2212,6 @@ struct pc_data
     short       drug_level[10];
     int         wanted_flags;
     long        bank;
-#ifdef IMC
-    IMC_CHARDATA *imcchardata;
-#endif
     bool hotboot;  /* hotboot tracker */
 };
 

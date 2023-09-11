@@ -1056,10 +1056,6 @@ void do_hotboot(CHAR_DATA* ch, const char* argument)
     fprintf(fp, "%s", "-1");
     FCLOSE(fp);
 
-#ifdef IMC
-    imc_hotboot(  );
-#endif
-
     /*
      * added this in case there's a need to debug the contents of the various files
      */
@@ -1076,14 +1072,7 @@ void do_hotboot(CHAR_DATA* ch, const char* argument)
      */
     snprintf(buf, 100, "%d", port);
     snprintf(buf2, 100, "%d", control);
-#ifdef IMC
-    if( this_imcmud )
-       snprintf( buf3, 100, "%d", this_imcmud->desc );
-    else
-       mudstrlcpy( buf3, "-1", 100 );
-#else
     mudstrlcpy(buf3, "-1", 100);
-#endif
 
     dlclose(sysdata.dlHandle);
     execl(EXE_FILE, "swreality", buf, "hotboot", buf2, buf3, (char*)nullptr);
