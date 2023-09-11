@@ -162,13 +162,6 @@ int main(int argc, char** argv)
     struct timeval now_time;
     bool           fCopyOver = FALSE;
 
-    /*
-    * Memory debugging if needed.
-    */
-#if defined(MALLOC_DEBUG)
-    malloc_debug( 2 );
-#endif
-
     DONT_UPPER       = FALSE;
     num_descriptors  = 0;
     first_descriptor = nullptr;
@@ -396,11 +389,6 @@ void accept_new(int ctrl)
     /*
     * int maxdesc; Moved up for use with id.c as extern
     */
-
-#if defined(MALLOC_DEBUG)
-                                                                                                                            if( malloc_verify(  ) != 1 )
-      abort(  );
-#endif
 
     /*
     * Poll all active descriptors.
