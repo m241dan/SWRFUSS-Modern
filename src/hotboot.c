@@ -942,13 +942,12 @@ void do_hotboot(CHAR_DATA* ch, const char* argument)
 {
     FILE           * fp;
     CHAR_DATA      * victim = nullptr;
-    DESCRIPTOR_DATA* d, * de_next;
     char           buf[100], buf2[100], buf3[100];
     extern int     control;
     int            count    = 0;
     bool           found    = FALSE;
 
-    for (d = first_descriptor; d; d = d->next)
+    for (auto* d : descriptors)
     {
         if ((
                 d->connected == CON_PLAYING
@@ -969,7 +968,7 @@ void do_hotboot(CHAR_DATA* ch, const char* argument)
     }
 
     found  = FALSE;
-    for (d = first_descriptor; d; d = d->next)
+    for (auto* d : descriptors)
     {
         if (d->connected == CON_EDITING && d->character)
         {
@@ -1020,38 +1019,43 @@ void do_hotboot(CHAR_DATA* ch, const char* argument)
     /*
      * For each playing descriptor, save its state
      */
-    for (d = first_descriptor; d; d = de_next)
+    std::vector<DESCRIPTOR_DATA*> new_logins;
+    alg::copy(
+        descriptors | view::take_if([&](auto* d) {return !d->character || d->connected < CON_PLAYING;}),
+        std::back_inserter(new_logins)
+    );
+
+    // kick out new logins
+    alg::for_each(new_logins, [&](auto* d)
+    {
+        write_to_descriptor(d, "\r\nSorry, we are rebooting. Come back in a few minutes.\r\n", 0);
+        close_socket(d, FALSE);  /* throw'em out */
+    });
+
+
+    alg::for_each(descriptors, [&](auto* d)
     {
         CHAR_DATA* och = CH(d);
 
-        de_next = d->next;   /* We delete from the list , so need to save this */
-        if (!d->character || d->connected < CON_PLAYING)  /* drop those logging on */
-        {
-            write_to_descriptor(d, "\r\nSorry, we are rebooting. Come back in a few minutes.\r\n", 0);
-            close_socket(d, FALSE);  /* throw'em out */
-        }
-        else
-        {
-            fprintf(
-                fp,
-                "%d %d %d %d %d %s %s\n",
-                d->can_compress,
-                d->descriptor,
-                och->in_room->vnum,
-                d->port,
-                d->idle,
-                och->name,
-                d->host
-            );
-            /*
-             * One of two places this gets changed
-             */
-            och->pcdata->hotboot = TRUE;
-            save_char_obj(och);
-            write_to_descriptor(d, buf, 0);
-            compressEnd(d);
-        }
-    }
+        fprintf(
+            fp,
+            "%d %d %d %d %d %s %s\n",
+            d->can_compress,
+            d->descriptor,
+            och->in_room->vnum,
+            d->port,
+            d->idle,
+            och->name,
+            d->host
+        );
+        /*
+         * One of two places this gets changed
+         */
+        och->pcdata->hotboot = TRUE;
+        save_char_obj(och);
+        write_to_descriptor(d, buf, 0);
+        compressEnd(d);
+    });
 
     fprintf(fp, "%s", "-1");
     FCLOSE(fp);
@@ -1137,7 +1141,6 @@ void hotboot_recover(void)
 
         CREATE(d, DESCRIPTOR_DATA, 1);
         CREATE(d->mccp, MCCP, 1);
-        d->next       = nullptr;
         d->descriptor = desc;
         d->connected  = CON_GET_NAME;
         d->outsize    = 2000;
@@ -1154,7 +1157,7 @@ void hotboot_recover(void)
         d->host = STRALLOC(host);
         d->port = dport;
         d->idle = idle;
-        LINK(d, first_descriptor, last_descriptor, next, prev);
+        descriptors.push_back(d);
         d->connected    = CON_COPYOVER_RECOVER;   /* negative so close_socket will cut them off */
         d->can_compress = dcompress;
         if (d->can_compress)

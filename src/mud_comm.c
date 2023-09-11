@@ -832,7 +832,6 @@ void do_mptransfer(CHAR_DATA* ch, const char* argument)
     char           arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
     ROOM_INDEX_DATA* location;
     CHAR_DATA      * victim, * nextinroom;
-    DESCRIPTOR_DATA* d;
 
     if (!IS_NPC(ch) || IS_AFFECTED(ch, AFF_CHARM))
     {
@@ -877,17 +876,17 @@ void do_mptransfer(CHAR_DATA* ch, const char* argument)
     */
     if (!str_cmp(arg1, "area"))
     {
-        for (d = first_descriptor; d; d = d->next)
+        alg::for_each(descriptors, [&](auto* d)
         {
             if (!d->character || (d->connected != CON_PLAYING && d->connected != CON_EDITING)
                 || ch->in_room->area != d->character->in_room->area)
-                continue;
+                return;
 
             if (ch == d->character)
-                continue;
+                return;
 
             transfer_char(ch, d->character, location);
-        }
+        });
         return;
     }
 

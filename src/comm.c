@@ -65,9 +65,7 @@ void show_condition(CHAR_DATA* ch, CHAR_DATA* victim);
 /*
  * Global variables.
  */
-DESCRIPTOR_DATA* first_descriptor;  /* First descriptor     */
-DESCRIPTOR_DATA* last_descriptor;   /* Last descriptor      */
-DESCRIPTOR_DATA* d_next;   /* Next descriptor in loop */
+std::vector<DESCRIPTOR_DATA*> descriptors;
 int            num_descriptors;
 bool           mud_down; /* Shutdown       */
 bool           wizlock;  /* Game is wizlocked    */
@@ -164,8 +162,6 @@ int main(int argc, char** argv)
 
     DONT_UPPER       = FALSE;
     num_descriptors  = 0;
-    first_descriptor = nullptr;
-    last_descriptor  = nullptr;
     sysdata.NO_NAME_RESOLVING = TRUE;
     sysdata.WAIT_FOR_AUTH     = TRUE;
 
@@ -270,7 +266,6 @@ int main(int argc, char** argv)
 
 void init_descriptor(DESCRIPTOR_DATA* dnew, int desc)
 {
-    dnew->next         = nullptr;
     dnew->descriptor   = desc;
     dnew->connected    = CON_GET_NAME;
     dnew->outsize      = 2000;
@@ -385,7 +380,6 @@ bool check_bad_desc(int desc)
 void accept_new(int ctrl)
 {
     static struct timeval null_time;
-    DESCRIPTOR_DATA       * d;
     /*
     * int maxdesc; Moved up for use with id.c as extern
     */
@@ -399,7 +393,7 @@ void accept_new(int ctrl)
     FD_SET(ctrl, &in_set);
     maxdesc = ctrl;
     newdesc = 0;
-    for (d  = first_descriptor; d; d = d->next)
+    alg::for_each(descriptors, [&](auto *d)
     {
         maxdesc = UMAX(maxdesc, d->descriptor);
         FD_SET(d->descriptor, &in_set);
@@ -410,9 +404,7 @@ void accept_new(int ctrl)
             maxdesc = UMAX(maxdesc, d->ifd);
             FD_SET(d->ifd, &in_set);
         }
-        if (d == last_descriptor)
-            break;
-    }
+    });
 
     if (select(maxdesc + 1, &in_set, &out_set, &exc_set, &null_time) < 0)
     {
@@ -437,7 +429,6 @@ void game_loop(void)
 {
     struct timeval last_time;
     char           cmdline[MAX_INPUT_LENGTH];
-    DESCRIPTOR_DATA* d;
     /*  time_t	last_check = 0;  */
 
     signal(SIGPIPE, SIG_IGN);
@@ -458,14 +449,8 @@ void game_loop(void)
        * Kick out descriptors with raised exceptions
        * or have been idle, then check for input.
        */
-        for (d = first_descriptor; d; d = d_next)
+        alg::for_each(descriptors, [&](auto *d)
         {
-            if (d == d->next)
-            {
-                bug("%s: descriptor loop found & fixed", __func__);
-                d->next = nullptr;
-            }
-            d_next = d->next;
 
             d->idle++;  /* make it so a descriptor can idle out */
             if (FD_ISSET(d->descriptor, &exc_set))
@@ -476,7 +461,7 @@ void game_loop(void)
                     save_char_obj(d->character);
                 d->outtop = 0;
                 close_socket(d, TRUE);
-                continue;
+                return;
             }
             else if ((!d->character && d->idle > 360)  /* 2 mins */
                      || (d->connected != CON_PLAYING && d->idle > 1200)  /* 5 mins */
@@ -485,7 +470,7 @@ void game_loop(void)
                 write_to_descriptor(d, "Idle timeout... disconnecting.\r\n", 0);
                 d->outtop = 0;
                 close_socket(d, TRUE);
-                continue;
+                return;
             }
             else
             {
@@ -503,7 +488,7 @@ void game_loop(void)
                             save_char_obj(d->character);
                         d->outtop = 0;
                         close_socket(d, FALSE);
-                        continue;
+                        return;
                     }
                 }
 
@@ -514,7 +499,7 @@ void game_loop(void)
                 if (d->character && d->character->wait > 0)
                 {
                     --d->character->wait;
-                    continue;
+                    return;
                 }
 
                 read_from_buffer(d);
@@ -543,9 +528,7 @@ void game_loop(void)
                         }
                 }
             }
-            if (d == last_descriptor)
-                break;
-        }
+        });
 
         /*
        * Autonomous game motion.
@@ -555,10 +538,8 @@ void game_loop(void)
         /*
        * Output.
        */
-        for (d = first_descriptor; d; d = d_next)
+        alg::for_each(descriptors, [&](auto* d)
         {
-            d_next = d->next;
-
             if ((d->fcommand || d->outtop > 0) && FD_ISSET(d->descriptor, &out_set))
             {
                 if (d->pagepoint)
@@ -579,9 +560,7 @@ void game_loop(void)
                     close_socket(d, FALSE);
                 }
             }
-            if (d == last_descriptor)
-                break;
-        }
+        });
 
         /*
        * Synchronize to a clock.
@@ -714,17 +693,7 @@ void new_descriptor(int new_desc)
     /*
     * Init descriptor data.
     */
-    if (!last_descriptor && first_descriptor)
-    {
-        DESCRIPTOR_DATA* d;
-
-        bug("%s: last_desc is nullptr, but first_desc is not! ...fixing", __func__);
-        for (d = first_descriptor; d; d = d->next)
-            if (!d->next)
-                last_descriptor = d;
-    }
-
-    LINK(dnew, first_descriptor, last_descriptor, next, prev);
+    descriptors.push_back(dnew);
 
     /*
     * MCCP Compression
@@ -775,7 +744,6 @@ void free_desc(DESCRIPTOR_DATA* d)
 void close_socket(DESCRIPTOR_DATA* dclose, bool force)
 {
     CHAR_DATA      * ch;
-    DESCRIPTOR_DATA* d;
     bool           DoNotUnlink = FALSE;
 
     if (dclose->ipid != -1)
@@ -803,9 +771,11 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
     /*
     * stop snooping everyone else
     */
-    for (d = first_descriptor; d; d = d->next)
+    alg::for_each(descriptors, [&](auto* d)
+    {
         if (d->snoop_by == dclose)
             d->snoop_by = nullptr;
+    });
 
     /*
     * Check for switched people who go link-dead. -- Altrag
@@ -825,60 +795,6 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
     }
 
     ch = dclose->character;
-
-    /*
-    * sanity check :(
-    */
-    if (!dclose->prev && dclose != first_descriptor)
-    {
-        DESCRIPTOR_DATA* dp, * dn;
-        bug(
-            "%s: %s desc:%p != first_desc:%p and desc->prev = nullptr!", __func__,
-            ch ? ch->name : d->host, dclose, first_descriptor
-        );
-        dp     = nullptr;
-        for (d = first_descriptor; d; d = dn)
-        {
-            dn = d->next;
-            if (d == dclose)
-            {
-                bug("%s: %s desc:%p found, prev should be:%p, fixing.", __func__, ch ? ch->name : d->host, dclose, dp);
-                dclose->prev = dp;
-                break;
-            }
-            dp = d;
-        }
-        if (!dclose->prev)
-        {
-            bug("%s: %s desc:%p could not be found!.", __func__, ch ? ch->name : dclose->host, dclose);
-            DoNotUnlink = TRUE;
-        }
-    }
-    if (!dclose->next && dclose != last_descriptor)
-    {
-        DESCRIPTOR_DATA* dp, * dn;
-        bug(
-            "%s: %s desc:%p != last_desc:%p and desc->next = nullptr!", __func__,
-            ch ? ch->name : d->host, dclose, last_descriptor
-        );
-        dn     = nullptr;
-        for (d = last_descriptor; d; d = dp)
-        {
-            dp = d->prev;
-            if (d == dclose)
-            {
-                bug("%s: %s desc:%p found, next should be:%p, fixing.", __func__, ch ? ch->name : d->host, dclose, dn);
-                dclose->next = dn;
-                break;
-            }
-            dn = d;
-        }
-        if (!dclose->next)
-        {
-            bug("%s: %s desc:%p could not be found!.", __func__, ch ? ch->name : dclose->host, dclose);
-            DoNotUnlink = TRUE;
-        }
-    }
 
     if (dclose->character)
     {
@@ -908,9 +824,7 @@ void close_socket(DESCRIPTOR_DATA* dclose, bool force)
         /*
        * make sure loop doesn't get messed up
        */
-        if (d_next == dclose)
-            d_next = d_next->next;
-        UNLINK(dclose, first_descriptor, last_descriptor, next, prev);
+        std::erase(descriptors, dclose);
     }
 
     compressEnd(dclose);
@@ -2456,9 +2370,7 @@ short check_reconnect(DESCRIPTOR_DATA* d, const char* name, bool fConn)
  */
 bool check_multi(DESCRIPTOR_DATA* d, const char* name)
 {
-    DESCRIPTOR_DATA* dold;
-
-    for (dold = first_descriptor; dold; dold = dold->next)
+    for (auto* dold : descriptors)
     {
         if (dold != d
             && (dold->character || dold->original)
@@ -2507,10 +2419,9 @@ short check_playing(DESCRIPTOR_DATA* d, const char* name, bool kick)
 {
     CHAR_DATA* ch;
 
-    DESCRIPTOR_DATA* dold;
     int            cstate;
 
-    for (dold = first_descriptor; dold; dold = dold->next)
+    for (auto* dold : descriptors)
     {
         if (dold != d
             && (dold->character || dold->original)

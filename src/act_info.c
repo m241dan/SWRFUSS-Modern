@@ -2044,7 +2044,6 @@ void do_who(CHAR_DATA* ch, const char* argument)
     char           char_name[MAX_INPUT_LENGTH];
     char           extra_title[MAX_INPUT_LENGTH];
     char           race_text[MAX_INPUT_LENGTH];
-    DESCRIPTOR_DATA* d;
     int            iRace;
     int            iLevelLower;
     int            iLevelUpper;
@@ -2162,14 +2161,14 @@ void do_who(CHAR_DATA* ch, const char* argument)
     }
 
     /* start from last to first to get it in the proper order */
-    for (d = last_descriptor; d; d = d->prev)
+    alg::for_each(descriptors | view::reverse, [&](auto* d)
     {
         CHAR_DATA * wch;
         char const* race;
 
         if ((d->connected != CON_PLAYING && d->connected != CON_EDITING)
             || (!can_see(ch, d->character) && IS_IMMORTAL(d->character)) || d->original)
-            continue;
+            return;
 
         wch = d->original ? d->original : d->character;
 
@@ -2177,7 +2176,7 @@ void do_who(CHAR_DATA* ch, const char* argument)
             || wch->top_level > iLevelUpper
             || (fImmortalOnly && wch->top_level < LEVEL_IMMORTAL)
             || (fRaceRestrict && !rgfRace[wch->race]) || (fClanMatch && (pClan != wch->pcdata->clan)) /* SB */  )
-            continue;
+            return;
 
         nMatch++;
 
@@ -2290,7 +2289,7 @@ void do_who(CHAR_DATA* ch, const char* argument)
                 break;
 
         }
-    }
+    });
 
     /*
     * Ok, now we have three separate linked lists and what remains is to
@@ -2479,8 +2478,6 @@ void do_compare(CHAR_DATA* ch, const char* argument)
 void do_where(CHAR_DATA* ch, const char* argument)
 {
     char           arg[MAX_INPUT_LENGTH];
-    DESCRIPTOR_DATA* d;
-    bool           found;
 
     if (get_trust(ch) < LEVEL_IMMORTAL)
     {
@@ -2499,19 +2496,20 @@ void do_where(CHAR_DATA* ch, const char* argument)
             send_to_pager("Players logged in:\r\n", ch);
         else
             pager_printf(ch, "Players near you in %s:\r\n", ch->in_room->area->name);
-        found  = FALSE;
-        for (d = first_descriptor; d; d = d->next)
-            if ((d->connected == CON_PLAYING || d->connected == CON_EDITING)
-                && (victim = d->character) != nullptr
-                && !IS_NPC(victim)
-                && victim->in_room
-                && (victim->in_room->area == ch->in_room->area || get_trust(ch) >= LEVEL_IMMORTAL)
-                && can_see(ch, victim))
-            {
-                found = TRUE;
-                pager_printf(ch, "%-28s %s\r\n", victim->name, victim->in_room->name);
-            }
-        if (!found)
+
+        const auto d = alg::find_if(descriptors, [&](auto* d)
+        {
+            return (d->connected == CON_PLAYING || d->connected == CON_EDITING)
+                   && (victim = d->character) != nullptr
+                   && !IS_NPC(victim)
+                   && victim->in_room
+                   && (victim->in_room->area == ch->in_room->area || get_trust(ch) >= LEVEL_IMMORTAL)
+                   && can_see(ch, victim);
+        });
+
+        if (d != descriptors.end())
+            pager_printf(ch, "%-28s %s\r\n", victim->name, victim->in_room->name);
+        else
             send_to_char("None\r\n", ch);
     }
     else

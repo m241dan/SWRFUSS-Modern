@@ -399,7 +399,6 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
 {
     char           buf[MAX_STRING_LENGTH];
     char           buf2[MAX_STRING_LENGTH];
-    DESCRIPTOR_DATA* d;
     int            position;
     CLAN_DATA      * clan = nullptr;
 
@@ -561,7 +560,7 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
         append_to_file(LOG_FILE, buf2);
     }
 
-    for (d = first_descriptor; d; d = d->next)
+    alg::for_each(descriptors, [&](auto* d)
     {
         CHAR_DATA* och;
         CHAR_DATA* vch;
@@ -603,42 +602,42 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
                     }
 
                 if (!ch_comlink)
-                    continue;
+                    return;
             }
 
             if (channel == CHANNEL_IMMTALK && !IS_IMMORTAL(och))
-                continue;
+                return;
             if (channel == CHANNEL_103 && get_trust(och) < 103)
-                continue;
+                return;
             if (channel == CHANNEL_104 && get_trust(och) < 104)
-                continue;
+                return;
             if (channel == CHANNEL_105 && get_trust(och) < 105)
-                continue;
+                return;
             if (channel == CHANNEL_WARTALK && NOT_AUTHED(och))
-                continue;
+                return;
             if (channel == CHANNEL_AVTALK && !IS_HERO(och))
-                continue;
+                return;
 
             if (IS_SET(vch->in_room->room_flags, ROOM_SILENCE))
-                continue;
+                return;
 
             if (channel == CHANNEL_YELL || channel == CHANNEL_SHOUT)
             {
                 if (ch->in_room != och->in_room)
-                    continue;
+                    return;
             }
 
             if (channel == CHANNEL_CLAN || channel == CHANNEL_ORDER || channel == CHANNEL_GUILD)
             {
 
                 if (IS_NPC(vch))
-                    continue;
+                    return;
 
                 if (!vch->pcdata->clan)
-                    continue;
+                    return;
 
                 if (vch->pcdata->clan != clan && vch->pcdata->clan->mainclan != clan)
-                    continue;
+                    return;
             }
 
             if (channel == CHANNEL_SHIP || channel == CHANNEL_SPACE || channel == CHANNEL_SYSTEM)
@@ -647,23 +646,23 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
                 SHIP_DATA* target;
 
                 if (!ship)
-                    continue;
+                    return;
 
                 if (!vch->in_room)
-                    continue;
+                    return;
 
                 if (channel == CHANNEL_SHIP)
                     if (vch->in_room->vnum > ship->lastroom || vch->in_room->vnum < ship->firstroom)
-                        continue;
+                        return;
 
                 target = ship_from_cockpit(vch->in_room->vnum);
 
                 if (!target)
-                    continue;
+                    return;
 
                 if (channel == CHANNEL_SYSTEM)
                     if (target->starsystem != ship->starsystem)
-                        continue;
+                        return;
             }
 
             position = vch->position;
@@ -692,20 +691,19 @@ void talk_channel(CHAR_DATA* ch, const char* argument, int channel, const char* 
                 act(AT_GOSSIP, buf, ch, sbuf, vch, TO_VICT);
             vch->position = position;
         }
-    }
+    });
 }
 
 void to_channel(const char* argument, int channel, const char* verb, short level)
 {
     char           buf[MAX_STRING_LENGTH];
-    DESCRIPTOR_DATA* d;
 
-    if (!first_descriptor || argument[0] == '\0')
+    if (descriptors.empty() || argument[0] == '\0')
         return;
 
     snprintf(buf, MAX_STRING_LENGTH, "%s: %s\r\n", verb, argument);
 
-    for (d = first_descriptor; d; d = d->next)
+    alg::for_each(descriptors, [&](auto *d)
     {
         CHAR_DATA* och;
         CHAR_DATA* vch;
@@ -714,18 +712,18 @@ void to_channel(const char* argument, int channel, const char* verb, short level
         vch = d->character;
 
         if (!och || !vch)
-            continue;
+            return;
         if (!IS_IMMORTAL(vch)
             || (get_trust(vch) < sysdata.build_level && channel == CHANNEL_BUILD)
             || (get_trust(vch) < sysdata.log_level && (channel == CHANNEL_LOG || channel == CHANNEL_COMM)))
-            continue;
+            return;
 
         if (d->connected == CON_PLAYING && !IS_SET(och->deaf, channel) && get_trust(vch) >= level)
         {
             set_char_color(AT_LOG, vch);
             send_to_char(buf, vch);
         }
-    }
+    });
 }
 
 void do_chat(CHAR_DATA* ch, const char* argument)
@@ -2040,19 +2038,18 @@ bool is_same_group(CHAR_DATA* ach, CHAR_DATA* bch)
 
 void talk_auction(char* argument)
 {
-    DESCRIPTOR_DATA* d;
     char           buf[MAX_STRING_LENGTH];
-    CHAR_DATA      * original;
 
     snprintf(buf, MAX_STRING_LENGTH, "Auction: %s", argument);  /* last %s to reset color */
 
-    for (d = first_descriptor; d; d = d->next)
+    alg::for_each(descriptors, [&](auto* d)
     {
-        original = d->original ? d->original : d->character;  /* if switched */
+        CHAR_DATA* original {d->original ? d->original : d->character};  /* if switched */
+
         if ((d->connected == CON_PLAYING) && !IS_SET(original->deaf, CHANNEL_AUCTION)
             && !IS_SET(original->in_room->room_flags, ROOM_SILENCE) && !NOT_AUTHED(original))
             act(AT_GOSSIP, buf, original, nullptr, nullptr, TO_CHAR);
-    }
+    });
 }
 
 /*

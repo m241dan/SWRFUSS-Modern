@@ -1023,7 +1023,6 @@ void update_taxes(void)
 void weather_update(void)
 {
     char           buf[MAX_STRING_LENGTH];
-    DESCRIPTOR_DATA* d;
     int            diff;
     short          AT_TEMP = AT_PLAIN;
 
@@ -1075,7 +1074,7 @@ void weather_update(void)
 
     if (buf[0] != '\0')
     {
-        for (d = first_descriptor; d; d = d->next)
+        alg::for_each(descriptors, [&](auto* d)
         {
             if (d->connected == CON_PLAYING
                 && IS_OUTSIDE(d->character)
@@ -1085,7 +1084,7 @@ void weather_update(void)
                 && d->character->in_room->sector_type != SECT_OCEANFLOOR
                 && d->character->in_room->sector_type != SECT_UNDERGROUND)
                 act(AT_TEMP, buf, d->character, 0, 0, TO_CHAR);
-        }
+        });
         buf[0] = '\0';
     }
     /*
@@ -1165,11 +1164,11 @@ void weather_update(void)
 
     if (buf[0] != '\0')
     {
-        for (d = first_descriptor; d; d = d->next)
+        alg::for_each(descriptors, [&](auto* d)
         {
             if (d->connected == CON_PLAYING && IS_OUTSIDE(d->character) && IS_AWAKE(d->character))
                 act(AT_TEMP, buf, d->character, 0, 0, TO_CHAR);
-        }
+        });
     }
 }
 
@@ -1797,7 +1796,6 @@ void char_check(void)
  */
 void aggr_update(void)
 {
-    DESCRIPTOR_DATA     * d, * dnext;
     CHAR_DATA           * wch, * victim;
     struct act_prog_data* apdtmp;
 
@@ -1832,14 +1830,13 @@ void aggr_update(void)
     * Just check descriptors here for victims to aggressive mobs
     * We can check for linkdead victims to mobile_update   -Thoric
     */
-    for (d = first_descriptor; d; d = dnext)
+    alg::for_each(descriptors, [&](auto* d)
     {
-        dnext = d->next;
         if ((d->connected != CON_PLAYING && d->connected != CON_EDITING) || (wch = d->character) == nullptr)
-            continue;
+            return;
 
         if (char_died(wch) || IS_NPC(wch) || wch->top_level >= LEVEL_IMMORTAL || !wch->in_room)
-            continue;
+            return;
 
         alg::for_each(wch->in_room->persons, [&](auto* ch)
         {
@@ -1894,7 +1891,7 @@ void aggr_update(void)
             }
             global_retcode = multi_hit(ch, victim, TYPE_UNDEFINED);
         });
-    }
+    });
 }
 
 /* From interp.c */
@@ -2023,10 +2020,9 @@ void tele_update(void)
 void auth_update(void)
 {
     CHAR_DATA      * victim;
-    DESCRIPTOR_DATA* d;
     bool           first_time = TRUE; /* so titles are only done once */
 
-    for (d = first_descriptor; d; d = d->next)
+    alg::for_each(descriptors, [&](auto* d)
     {
         victim = d->character;
         if (victim && IS_WAITING_FOR_AUTH(victim))
@@ -2047,7 +2043,7 @@ void auth_update(void)
             );
             to_channel(log_buf, CHANNEL_MONITOR, "Monitor", 1);
         }
-    }
+    });
 }
 
 /*

@@ -149,12 +149,11 @@ void do_restrict(CHAR_DATA* ch, const char* argument)
  */
 CHAR_DATA* get_waiting_desc(CHAR_DATA* ch, char* name)
 {
-    DESCRIPTOR_DATA     * d;
     CHAR_DATA           * ret_char = nullptr;
     static unsigned int number_of_hits;
 
     number_of_hits = 0;
-    for (d         = first_descriptor; d; d = d->next)
+    for (auto* d : descriptors)
     {
         if (d->character && (!str_prefix(name, d->character->name)) && IS_WAITING_FOR_AUTH(d->character))
         {
@@ -181,7 +180,6 @@ void do_authorize(CHAR_DATA* ch, const char* argument)
     char           arg2[MAX_INPUT_LENGTH];
     char           buf[MAX_STRING_LENGTH];
     CHAR_DATA      * victim;
-    DESCRIPTOR_DATA* d;
 
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
@@ -192,7 +190,8 @@ void do_authorize(CHAR_DATA* ch, const char* argument)
         send_to_char("Pending authorizations:\r\n", ch);
         send_to_char(" Chosen Character Name\r\n", ch);
         send_to_char("---------------------------------------------\r\n", ch);
-        for (d = first_descriptor; d; d = d->next)
+        alg::for_each(descriptors, [&](auto* d)
+        {
             if ((victim = d->character) != nullptr && IS_WAITING_FOR_AUTH(victim))
                 ch_printf(
                     ch,
@@ -201,6 +200,7 @@ void do_authorize(CHAR_DATA* ch, const char* argument)
                     victim->desc->host,
                     race_table[victim->race].race_name
                 );
+        });
         return;
     }
 
@@ -392,7 +392,6 @@ void do_deny(CHAR_DATA* ch, const char* argument)
 void do_disconnect(CHAR_DATA* ch, const char* argument)
 {
     char           arg[MAX_INPUT_LENGTH];
-    DESCRIPTOR_DATA* d;
     CHAR_DATA      * victim;
 
     one_argument(argument, arg);
@@ -420,14 +419,13 @@ void do_disconnect(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    for (d = first_descriptor; d; d = d->next)
+    const auto d = alg::find(descriptors, victim->desc);
+
+    if (d != descriptors.end())
     {
-        if (d == victim->desc)
-        {
-            close_socket(d, FALSE);
-            send_to_char("Ok.\r\n", ch);
-            return;
-        }
+        close_socket(*d, FALSE);
+        send_to_char("Ok.\r\n", ch);
+        return;
     }
 
     bug("%s: *** desc not found ***.", __func__);
@@ -469,7 +467,6 @@ void do_fquit(CHAR_DATA* ch, const char* argument)
 void do_forceclose(CHAR_DATA* ch, const char* argument)
 {
     char           arg[MAX_INPUT_LENGTH];
-    DESCRIPTOR_DATA* d;
     int            desc;
 
     one_argument(argument, arg);
@@ -480,19 +477,19 @@ void do_forceclose(CHAR_DATA* ch, const char* argument)
     }
     desc = atoi(arg);
 
-    for (d = first_descriptor; d; d = d->next)
+    const auto d_iter = alg::find(descriptors, desc, &descriptor_data::descriptor);
+
+    if (d_iter != descriptors.end())
     {
-        if (d->descriptor == desc)
+        DESCRIPTOR_DATA* d = *d_iter;
+        if (d->character && get_trust(d->character) >= get_trust(ch))
         {
-            if (d->character && get_trust(d->character) >= get_trust(ch))
-            {
-                send_to_char("They might not like that...\r\n", ch);
-                return;
-            }
-            close_socket(d, FALSE);
-            send_to_char("Ok.\r\n", ch);
+            send_to_char("They might not like that...\r\n", ch);
             return;
         }
+        close_socket(d, FALSE);
+        send_to_char("Ok.\r\n", ch);
+        return;
     }
 
     send_to_char("Not found!\r\n", ch);
@@ -534,31 +531,22 @@ void do_pardon(CHAR_DATA* ch, const char* argument)
 
 void echo_to_all(short AT_COLOR, const char* argument, short tar)
 {
-    DESCRIPTOR_DATA* d;
-
     if (!argument || argument[0] == '\0')
         return;
 
-    for (d = first_descriptor; d; d = d->next)
+    auto echo_to = descriptors
+        | view::take_if(ops::equal_to(CON_PLAYING, &descriptor_data::connected))
+        | view::take_if(ops::equal_to(CON_EDITING, &descriptor_data::connected))
+        | view::drop_if([&](auto* d) {return tar == ECHOTAR_PC && IS_NPC(d->character);}) /* don't echo to NPCs */
+        | view::drop_if([&](auto* d) {return tar == ECHOTAR_IMM && !IS_IMMORTAL(d->character);}) /* don't echo to Mortals */
+    ;
+
+    alg::for_each(echo_to, [&](auto* d)
     {
-        /*
-       * Added showing echoes to players who are editing, so they won't
-       * miss out on important info like upcoming reboots. --Narn
-       */
-        if (d->connected == CON_PLAYING || d->connected == CON_EDITING)
-        {
-            /*
-          * This one is kinda useless except for switched..
-          */
-            if (tar == ECHOTAR_PC && IS_NPC(d->character))
-                continue;
-            else if (tar == ECHOTAR_IMM && !IS_IMMORTAL(d->character))
-                continue;
-            set_char_color(AT_COLOR, d->character);
-            send_to_char(argument, d->character);
-            send_to_char("\r\n", d->character);
-        }
-    }
+        set_char_color(AT_COLOR, d->character);
+        send_to_char(argument, d->character);
+        send_to_char("\r\n", d->character);
+    });
 }
 
 void do_echo(CHAR_DATA* ch, const char* argument)
@@ -749,7 +737,6 @@ void do_transfer(CHAR_DATA* ch, const char* argument)
     char           arg1[MAX_INPUT_LENGTH];
     char           arg2[MAX_INPUT_LENGTH];
     ROOM_INDEX_DATA* location;
-    DESCRIPTOR_DATA* d;
     CHAR_DATA      * victim;
 
     set_char_color(AT_IMMORT, ch);
@@ -776,11 +763,11 @@ void do_transfer(CHAR_DATA* ch, const char* argument)
 
     if (!str_cmp(arg1, "all") && get_trust(ch) >= LEVEL_GREATER)
     {
-        for (d = first_descriptor; d; d = d->next)
+        alg::for_each(descriptors, [&](auto* d)
         {
             if (d->connected == CON_PLAYING && d->character && d->character != ch && d->character->in_room)
                 transfer_char(ch, d->character, location);
-        }
+        });
         return;
     }
 
@@ -1708,7 +1695,6 @@ void do_shutdown(CHAR_DATA* ch, const char* argument)
 void do_snoop(CHAR_DATA* ch, const char* argument)
 {
     char           arg[MAX_INPUT_LENGTH];
-    DESCRIPTOR_DATA* d;
     CHAR_DATA      * victim;
 
     one_argument(argument, arg);
@@ -1734,9 +1720,11 @@ void do_snoop(CHAR_DATA* ch, const char* argument)
     if (victim == ch)
     {
         send_to_char("Cancelling all snoops.\r\n", ch);
-        for (d = first_descriptor; d; d = d->next)
+        alg::for_each(descriptors, [&](auto* d)
+        {
             if (d->snoop_by == ch->desc)
                 d->snoop_by = nullptr;
+        });
         return;
     }
 
@@ -1758,6 +1746,7 @@ void do_snoop(CHAR_DATA* ch, const char* argument)
 
     if (ch->desc)
     {
+        DESCRIPTOR_DATA* d;
         for (d = ch->desc->snoop_by; d; d = d->snoop_by)
             if (d->character == victim || d->original == victim)
             {
@@ -3173,7 +3162,6 @@ void do_noresolve(CHAR_DATA* ch, const char* argument)
 /* Output of command reformmated by Samson 2-8-98, and again on 4-7-98 */
 void do_users(CHAR_DATA* ch, const char* argument)
 {
-    DESCRIPTOR_DATA* d;
     int            count;
     const char     * st;
 
@@ -3182,7 +3170,7 @@ void do_users(CHAR_DATA* ch, const char* argument)
     count = 0;
     send_to_pager("Desc|     Constate      |Idle|    Player    | HostIP                   \r\n", ch);
     send_to_pager("----+-------------------+----+--------------+--------------------------\r\n", ch);
-    for (d = first_descriptor; d; d = d->next)
+    alg::for_each(descriptors, [&](auto* d)
     {
         switch (d->connected)
         {
@@ -3235,7 +3223,7 @@ void do_users(CHAR_DATA* ch, const char* argument)
                 );
             }
         }
-    }
+    });
     pager_printf(ch, "%d user%s.\r\n", count, count == 1 ? "" : "s");
 }
 
@@ -3650,8 +3638,6 @@ void do_loadup(CHAR_DATA* ch, const char* argument)
     if (check_parse_name(name) && lstat(fname, &fst) != -1)
     {
         CREATE(d, DESCRIPTOR_DATA, 1);
-        d->next      = nullptr;
-        d->prev      = nullptr;
         d->connected = CON_GET_NAME;
         d->outsize   = 2000;
         CREATE(d->outbuf, char, d->outsize);
@@ -4478,17 +4464,20 @@ void do_destroy(CHAR_DATA* ch, const char* argument)
 
     if (victim_iter == characters.end())
     {
-        DESCRIPTOR_DATA* d;
         CHAR_DATA* victim;
 
         /*
        * Make sure they aren't halfway logged in.
        */
-        for (d = first_descriptor; d; d = d->next)
+        for (auto *d : descriptors)
+        {
             if ((victim = d->character) && valid_victim(victim))
+            {
+                if (d)
+                    close_socket(d, TRUE);
                 break;
-        if (d)
-            close_socket(d, TRUE);
+            }
+        }
     }
     else
     {

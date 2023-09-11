@@ -2154,18 +2154,20 @@ OBJ_DATA* raw_kill(CHAR_DATA* ch, CHAR_DATA* victim)
         victim->pcdata->clan->members--;
     }
 
+    // pretty sure this is unreachable...
+    // like the server would crash before this if statement is true...
     if (!victim)
     {
-        DESCRIPTOR_DATA* d;
+//        DESCRIPTOR_DATA* d;
 
         /*
        * Make sure they aren't halfway logged in.
        */
-        for (d = first_descriptor; d; d = d->next)
-            if ((victim = d->character) && !IS_NPC(victim))
-                break;
-        if (d)
-            close_socket(d, TRUE);
+//        for (d = first_descriptor; d; d = d->next)
+//            if ((victim = d->character) && !IS_NPC(victim))
+//                break;
+//        if (d)
+//            close_socket(d, TRUE);
     }
     else
     {

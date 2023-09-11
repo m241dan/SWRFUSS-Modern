@@ -6648,7 +6648,6 @@ void do_installarea(CHAR_DATA* ch, const char* argument)
     char           arg[256];
     char           buf[256];
     int            num;
-    DESCRIPTOR_DATA* d;
 
     argument = one_argument(argument, arg);
     if (arg[0] == '\0')
@@ -6697,7 +6696,7 @@ void do_installarea(CHAR_DATA* ch, const char* argument)
             /*
           * Fix up author if online
           */
-            for (d = first_descriptor; d; d = d->next)
+            alg::for_each(descriptors, [&](auto* d)
             {
                 if (d->character && d->character->pcdata && d->character->pcdata->area == tarea)
                 {
@@ -6715,7 +6714,7 @@ void do_installarea(CHAR_DATA* ch, const char* argument)
                     d->character->pcdata->m_range_lo = 0;
                     d->character->pcdata->m_range_hi = 0;
                 }
-            }
+            });
 
             top_area++;
             send_to_char("Writing area.lst...\r\n", ch);

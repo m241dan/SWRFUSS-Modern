@@ -679,15 +679,7 @@ extern int    top_prog;
 
 short player_count(void)
 {
-    DESCRIPTOR_DATA* d;
-    short          count = 0;
-
-    for (d = first_descriptor; d; d = d->next)
-    {
-        if (d->connected >= CON_PLAYING)
-            count++;
-    }
-    return count;
+    return static_cast<short>(alg::count_if(descriptors, [&](auto *d) {return d->connected >= CON_PLAYING;}));
 }
 
 void send_mssp_data(DESCRIPTOR_DATA* d)

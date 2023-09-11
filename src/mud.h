@@ -417,8 +417,6 @@ typedef enum
 */
 struct descriptor_data
 {
-    DESCRIPTOR_DATA * next;
-    DESCRIPTOR_DATA * prev;
     DESCRIPTOR_DATA * snoop_by;
     CHAR_DATA       * character;
     CHAR_DATA       * original;
@@ -3224,8 +3222,7 @@ extern SPEC_LIST        * last_specfun;
 extern BAN_DATA         * first_ban;
 extern BAN_DATA         * last_ban;
 extern std::vector<CHAR_DATA*> characters;
-extern DESCRIPTOR_DATA  * first_descriptor;
-extern DESCRIPTOR_DATA  * last_descriptor;
+extern std::vector<DESCRIPTOR_DATA*> descriptors;
 extern BOARD_DATA       * first_board;
 extern BOARD_DATA       * last_board;
 extern OBJ_DATA         * first_object;
