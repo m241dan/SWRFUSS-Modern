@@ -3193,7 +3193,7 @@ void do_users(CHAR_DATA* ch, const char* argument)
             {
                 count++;
                 pager_printf(
-                    ch, " %3d| %-17s |%4d| %-12s | %s \r\n", d->descriptor, st, d->idle / 4,
+                    ch, " %3d| %-17s |%4ld| %-12s | %s \r\n", d->descriptor, st, std::chrono::duration_cast<std::chrono::seconds>(d->idle).count(),
                     d->original ? d->original->name : d->character ? d->character->name : "(None!)", d->host
                 );
             }
@@ -3205,7 +3205,7 @@ void do_users(CHAR_DATA* ch, const char* argument)
             {
                 count++;
                 pager_printf(
-                    ch, " %3d| %2zu|%4d| %-12s | %s \r\n", d->descriptor, static_cast<size_t>(d->connected), d->idle / 4,
+                    ch, " %3d| %2zu|%4ld| %-12s | %s \r\n", d->descriptor, static_cast<size_t>(d->connected), std::chrono::duration_cast<std::chrono::seconds>(d->idle).count(),
                     d->original ? d->original->name : d->character ? d->character->name : "(None!)", d->host
                 );
             }

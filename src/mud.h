@@ -22,6 +22,7 @@
 #include <limits.h>
 #include <sys/cdefs.h>
 #include <sys/time.h>
+#include <chrono>
 #include <vector>
 #include "namespaces.h"
 #include "atom_enum.h"
@@ -347,6 +348,8 @@ typedef enum
     SKY_CLOUDLESS, SKY_CLOUDY, SKY_RAINING, SKY_LIGHTNING
 }                       sky_conditions;
 
+using tick = std::chrono::duration<float, std::ratio<1, 4>>;
+
 struct time_info_data
 {
     int hour;
@@ -520,7 +523,7 @@ struct descriptor_data
     int             port;
     int             descriptor;
     connection_types connected;
-    short           idle;
+    tick            idle;
     short           lines;
     short           scrlen;
     bool            fcommand;

@@ -36,6 +36,8 @@
 #include "sha256.h"
 #include "match.h"
 
+using namespace std::chrono_literals;
+
 /*
  * Socket and TCP/IP stuff.
  */
@@ -270,7 +272,7 @@ void init_descriptor(DESCRIPTOR_DATA* dnew, int desc)
     dnew->descriptor   = desc;
     dnew->connected    = CON_GET_NAME;
     dnew->outsize      = 2000;
-    dnew->idle         = 0;
+    dnew->idle         = 0s;
     dnew->lines        = 0;
     dnew->scrlen       = 24;
     dnew->newstate     = 0;
@@ -464,9 +466,9 @@ void game_loop(void)
                 close_socket(d, TRUE);
                 return;
             }
-            else if ((!d->character && d->idle > 360)  /* 2 mins */
-                     || (d->connected != CON_PLAYING && d->idle > 1200)  /* 5 mins */
-                     || d->idle > 28800) /* 2 hrs  */
+            else if ((!d->character && d->idle > 2min)
+                     || (d->connected != CON_PLAYING && d->idle > 5min)
+                     || d->idle > 2h)
             {
                 write_to_descriptor(d, "Idle timeout... disconnecting.\r\n", 0);
                 d->outtop = 0;
@@ -479,7 +481,7 @@ void game_loop(void)
 
                 if (FD_ISSET(d->descriptor, &in_set))
                 {
-                    d->idle                 = 0;
+                    d->idle = 0s;
                     if (d->character)
                         d->character->timer = 0;
                     if (!read_from_descriptor(d))

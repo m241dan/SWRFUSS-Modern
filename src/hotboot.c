@@ -60,8 +60,11 @@
 #include <string.h>
 #include <stdio.h>
 #include <dlfcn.h>
+#include <chrono>
 #include "mud.h"
 #include "mccp.h"
+
+using namespace std::chrono_literals;
 
 #ifdef CHANGES
 #include "changes.h"
@@ -1044,7 +1047,7 @@ void do_hotboot(CHAR_DATA* ch, const char* argument)
             d->descriptor,
             och->in_room->vnum,
             d->port,
-            d->idle,
+            static_cast<int>(d->idle.count()),
             och->name,
             d->host
         );
@@ -1144,7 +1147,7 @@ void hotboot_recover(void)
         d->descriptor = desc;
         d->connected  = CON_GET_NAME;
         d->outsize    = 2000;
-        d->idle       = 0;
+        d->idle       = 0s;
         d->lines      = 0;
         d->scrlen     = 24;
         d->newstate   = 0;
@@ -1156,7 +1159,7 @@ void hotboot_recover(void)
 
         d->host = STRALLOC(host);
         d->port = dport;
-        d->idle = idle;
+        d->idle = tick{idle};
         descriptors.push_back(d);
         d->connected    = CON_COPYOVER_RECOVER;   /* negative so close_socket will cut them off */
         d->can_compress = dcompress;
