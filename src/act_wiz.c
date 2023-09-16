@@ -28,6 +28,7 @@
 #include <errno.h>
 #include "mud.h"
 #include "sha256.h"
+#include "match.h"
 
 #define RESTORE_INTERVAL 21600
 
@@ -3163,7 +3164,6 @@ void do_noresolve(CHAR_DATA* ch, const char* argument)
 void do_users(CHAR_DATA* ch, const char* argument)
 {
     int            count;
-    const char     * st;
 
     set_pager_color(AT_PLAIN, ch);
 
@@ -3172,33 +3172,20 @@ void do_users(CHAR_DATA* ch, const char* argument)
     send_to_pager("----+-------------------+----+--------------+--------------------------\r\n", ch);
     alg::for_each(descriptors, [&](auto* d)
     {
-        switch (d->connected)
-        {
-            case CON_PLAYING:st = "Playing";
-                break;
-            case CON_GET_NAME:st = "Get name";
-                break;
-            case CON_GET_OLD_PASSWORD:st = "Get password";
-                break;
-            case CON_CONFIRM_NEW_NAME:st = "Confirm name";
-                break;
-            case CON_GET_NEW_PASSWORD:st = "New password";
-                break;
-            case CON_CONFIRM_NEW_PASSWORD:st = "Confirm password";
-                break;
-            case CON_GET_NEW_SEX:st = "Get sex";
-                break;
-            case CON_READ_MOTD:st = "Reading MOTD";
-                break;
-            case CON_EDITING:st = "In line editor";
-                break;
-            case CON_PRESS_ENTER:st = "Press enter";
-                break;
-            case CON_ROLL_STATS:st = "Rolling stats";
-                break;
-            default:st = "Invalid!!!!";
-                break;
-        }
+        const char* st = match(d->connected, overloaded {
+            [](con_playing) {return "Playing";},
+            [](con_get_name) {return "Get name";},
+            [](con_get_old_password) {return "Get password";},
+            [](con_confirm_new_name) {return "Confirm name";},
+            [](con_get_new_password) {return "New password";},
+            [](con_confirm_new_password) {return "Confirm password";},
+            [](con_get_new_sex) {return "Get sex";},
+            [](con_read_motd) {return "Reading MOTD";},
+            [](con_editing) {return "In line editor";},
+            [](con_press_enter) {return "Press enter";},
+            [](con_roll_stats) {return "Rolling stats";},
+            [](auto) {return "Invalid!";},
+        });
 
         if (!argument || argument[0] == '\0')
         {
@@ -3218,7 +3205,7 @@ void do_users(CHAR_DATA* ch, const char* argument)
             {
                 count++;
                 pager_printf(
-                    ch, " %3d| %2d|%4d| %-12s | %s \r\n", d->descriptor, d->connected, d->idle / 4,
+                    ch, " %3d| %2zu|%4d| %-12s | %s \r\n", d->descriptor, static_cast<size_t>(d->connected), d->idle / 4,
                     d->original ? d->original->name : d->character ? d->character->name : "(None!)", d->host
                 );
             }

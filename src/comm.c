@@ -34,6 +34,7 @@
 #include "mccp.h"
 #include "mssp.h"
 #include "sha256.h"
+#include "match.h"
 
 /*
  * Socket and TCP/IP stuff.
@@ -517,15 +518,11 @@ void game_loop(void)
                     if (d->pagepoint)
                         set_pager_input(d, cmdline);
                     else
-                        switch (d->connected)
-                        {
-                            default:nanny(d, cmdline);
-                                break;
-                            case CON_PLAYING:interpret(d->character, cmdline);
-                                break;
-                            case CON_EDITING:edit_buffer(d->character, cmdline);
-                                break;
-                        }
+                        match(d->connected, overloaded {
+                            [&](con_playing) {interpret(d->character, cmdline);},
+                            [&](con_editing) {edit_buffer(d->character, cmdline);},
+                            [&](auto) {nanny(d, cmdline);}
+                        });
                 }
             }
         });
@@ -1378,54 +1375,27 @@ void nanny(DESCRIPTOR_DATA* d, const char* argument)
     while (isspace(*argument))
         argument++;
 
-    switch (d->connected)
-    {
-        default:bug("%s: bad d->connected %d.", __func__, d->connected);
+    match(d->connected, overloaded {
+        [&](auto)
+        {
+            bug("%s: bad d->connected %d.", "nanny", d->connected.value.index());
             close_socket(d, TRUE);
-            return;
-
-        case CON_GET_NAME:nanny_get_name(d, argument);
-            break;
-
-        case CON_GET_OLD_PASSWORD:nanny_get_old_password(d, argument);
-            break;
-
-        case CON_CONFIRM_NEW_NAME:nanny_confirm_new_name(d, argument);
-            break;
-
-        case CON_GET_NEW_PASSWORD:nanny_get_new_password(d, argument);
-            break;
-
-        case CON_CONFIRM_NEW_PASSWORD:nanny_confirm_new_password(d, argument);
-            break;
-
-        case CON_GET_NEW_SEX:nanny_get_new_sex(d, argument);
-            break;
-
-        case CON_GET_NEW_RACE:nanny_get_new_race(d, argument);
-            break;
-
-        case CON_GET_NEW_CLASS:nanny_get_new_class(d, argument);
-            break;
-
-        case CON_ROLL_STATS:nanny_roll_stats(d, argument);
-            break;
-
-        case CON_STATS_OK:nanny_stats_ok(d, argument);
-            break;
-
-        case CON_GET_WANT_RIPANSI:nanny_get_want_ripansi(d, argument);
-            break;
-
-        case CON_GET_MSP:nanny_get_msp(d, argument);
-            break;
-
-        case CON_PRESS_ENTER:nanny_press_enter(d, argument);
-            break;
-
-        case CON_READ_MOTD:nanny_read_motd(d, argument);
-            break;
-    }
+        },
+        [&](con_get_name) {nanny_get_name(d, argument);},
+        [&](con_get_old_password) {nanny_get_old_password(d, argument);},
+        [&](con_confirm_new_name) {nanny_confirm_new_name(d, argument);},
+        [&](con_get_new_password) {nanny_get_new_password(d, argument);},
+        [&](con_confirm_new_password) {nanny_confirm_new_password(d, argument);},
+        [&](con_get_new_sex) {nanny_get_new_sex(d, argument);},
+        [&](con_get_new_race) {nanny_get_new_race(d, argument);},
+        [&](con_get_new_class) {nanny_get_new_class(d, argument);},
+        [&](con_roll_stats) {nanny_roll_stats(d, argument);},
+        [&](con_stats_ok) {nanny_stats_ok(d, argument);},
+        [&](con_get_want_ripansi) {nanny_get_want_ripansi(d, argument);},
+        [&](con_get_msp) {nanny_get_msp(d, argument);},
+        [&](con_press_enter) {nanny_press_enter(d, argument);},
+        [&](con_read_motd) {nanny_read_motd(d, argument);},
+    });
 }
 
 void nanny_get_name(DESCRIPTOR_DATA* d, const char* orig_argument)
@@ -2419,15 +2389,13 @@ short check_playing(DESCRIPTOR_DATA* d, const char* name, bool kick)
 {
     CHAR_DATA* ch;
 
-    int            cstate;
-
     for (auto* dold : descriptors)
     {
         if (dold != d
             && (dold->character || dold->original)
             && !str_cmp(name, dold->original ? dold->original->name : dold->character->name))
         {
-            cstate = dold->connected;
+            auto cstate = dold->connected;
             ch     = dold->original ? dold->original : dold->character;
             if (!ch->name || (cstate != CON_PLAYING && cstate != CON_EDITING))
             {

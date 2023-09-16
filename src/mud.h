@@ -24,6 +24,8 @@
 #include <sys/time.h>
 #include <vector>
 #include "namespaces.h"
+#include "atom_enum.h"
+#include "atoms.h"
 
 #ifndef __cplusplus
 typedef unsigned char bool;
@@ -383,19 +385,110 @@ struct wizent
 /*
 * Connected state for a channel.
 */
-typedef enum
-{
-    CON_GET_NAME                      = -99,
-    CON_GET_OLD_PASSWORD, CON_CONFIRM_NEW_NAME,
-    CON_GET_NEW_PASSWORD, CON_CONFIRM_NEW_PASSWORD,
-    CON_GET_NEW_SEX, CON_GET_NEW_CLASS, CON_READ_MOTD,
-    CON_GET_NEW_RACE, CON_GET_EMULATION, CON_GET_MSP,
-    CON_ROLL_STATS, CON_STATS_OK,
-    CON_GET_WANT_RIPANSI, CON_TITLE, CON_PRESS_ENTER,
-    CON_WAIT_1, CON_WAIT_2, CON_WAIT_3,
-    CON_ACCEPTED, CON_GET_PKILL, CON_READ_IMOTD,
-    CON_COPYOVER_RECOVER, CON_PLAYING = 0, CON_EDITING
-}                       connection_types;
+
+struct con_get_name : public atom<con_get_name> {};
+static constexpr con_get_name CON_GET_NAME {};
+
+struct con_get_old_password : public atom<con_get_old_password> {};
+static constexpr con_get_old_password CON_GET_OLD_PASSWORD {};
+
+struct con_confirm_new_name : public atom<con_confirm_new_name> {};
+static constexpr con_confirm_new_name CON_CONFIRM_NEW_NAME {};
+
+struct con_get_new_password : public atom<con_get_new_password> {};
+static constexpr con_get_new_password CON_GET_NEW_PASSWORD {};
+
+struct con_confirm_new_password : public atom<con_confirm_new_password> {};
+static constexpr con_confirm_new_password CON_CONFIRM_NEW_PASSWORD {};
+
+struct con_get_new_sex : public atom<con_get_new_sex> {};
+static constexpr con_get_new_sex CON_GET_NEW_SEX {};
+
+struct con_get_new_class : public atom<con_get_new_class> {};
+static constexpr con_get_new_class CON_GET_NEW_CLASS {};
+
+struct con_read_motd : public atom<con_read_motd> {};
+static constexpr con_read_motd CON_READ_MOTD {};
+
+struct con_get_new_race : public atom<con_get_new_race> {};
+static constexpr con_get_new_race CON_GET_NEW_RACE {};
+
+struct con_get_emulation : public atom<con_get_emulation> {};
+static constexpr con_get_emulation CON_GET_EMULATION {};
+
+struct con_get_msp : public atom<con_get_msp> {};
+static constexpr con_get_msp CON_GET_MSP {};
+
+struct con_roll_stats : public atom<con_roll_stats> {};
+static constexpr con_roll_stats CON_ROLL_STATS {};
+
+struct con_stats_ok : public atom<con_stats_ok> {};
+static constexpr con_stats_ok CON_STATS_OK {};
+
+struct con_get_want_ripansi : public atom<con_get_want_ripansi> {};
+static constexpr con_get_want_ripansi CON_GET_WANT_RIPANSI {};
+
+struct con_title : public atom<con_title> {};
+static constexpr con_title CON_TITLE {};
+
+struct con_press_enter : public atom<con_press_enter> {};
+static constexpr con_press_enter CON_PRESS_ENTER {};
+
+struct con_wait_1 : public atom<con_wait_1> {};
+static constexpr con_wait_1 CON_WAIT_1 {};
+
+struct con_wait_2 : public atom<con_wait_2> {};
+static constexpr con_wait_2 CON_WAIT_2 {};
+
+struct con_wait_3 : public atom<con_wait_3> {};
+static constexpr con_wait_3 CON_WAIT_3 {};
+
+struct con_accepted : public atom<con_accepted> {};
+static constexpr con_accepted CON_ACCEPTED {};
+
+struct con_get_pkill : public atom<con_get_pkill> {};
+static constexpr con_get_pkill CON_GET_PKILL {};
+
+struct con_read_imotd : public atom<con_read_imotd> {};
+static constexpr con_read_imotd CON_READ_IMOTD {};
+
+struct con_copyover_recover : public atom<con_copyover_recover> {};
+static constexpr con_copyover_recover CON_COPYOVER_RECOVER {};
+
+struct con_playing : public atom<con_playing> {};
+static constexpr con_playing CON_PLAYING {};
+
+struct con_editing : public atom<con_editing> {};
+static constexpr con_editing CON_EDITING {};
+
+using connection_types = atom_enum
+<
+    con_get_name,
+    con_get_old_password,
+    con_confirm_new_name,
+    con_get_new_password,
+    con_confirm_new_password,
+    con_get_new_sex,
+    con_get_new_class,
+    con_read_motd,
+    con_get_new_race,
+    con_get_emulation,
+    con_get_msp,
+    con_roll_stats,
+    con_stats_ok,
+    con_get_want_ripansi,
+    con_title,
+    con_press_enter,
+    con_wait_1,
+    con_wait_2,
+    con_wait_3,
+    con_accepted,
+    con_get_pkill,
+    con_read_imotd,
+    con_copyover_recover,
+    con_playing,
+    con_editing
+>;
 
 /*
 * Character substates
@@ -426,7 +519,7 @@ struct descriptor_data
     const char      * hostip;
     int             port;
     int             descriptor;
-    short           connected;
+    connection_types connected;
     short           idle;
     short           lines;
     short           scrlen;
