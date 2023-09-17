@@ -2171,7 +2171,7 @@ struct char_data
     int            played;
     time_t         logon;
     time_t         save_time;
-    short          timer;
+    tick           timer;
     short          wait;
     short          hit;
     short          max_hit;

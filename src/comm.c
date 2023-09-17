@@ -483,7 +483,7 @@ void game_loop(void)
                 {
                     d->idle = 0s;
                     if (d->character)
-                        d->character->timer = 0;
+                        d->character->timer = 0s;
                     if (!read_from_descriptor(d))
                     {
                         FD_CLR(d->descriptor, &out_set);
@@ -2324,7 +2324,7 @@ short check_reconnect(DESCRIPTOR_DATA* d, const char* name, bool fConn)
                 free_char(d->character);
                 d->character = ch;
                 ch->desc     = d;
-                ch->timer    = 0;
+                ch->timer    = 0s;
                 send_to_char("Reconnecting.\r\n", ch);
                 act(AT_ACTION, "$n has reconnected.", ch, nullptr, nullptr, TO_ROOM);
                 snprintf(log_buf, MAX_STRING_LENGTH, "%s (%s) reconnected.", ch->name, d->host);
@@ -2417,7 +2417,7 @@ short check_playing(DESCRIPTOR_DATA* d, const char* name, bool kick)
             free_char(d->character);
             d->character = ch;
             ch->desc     = d;
-            ch->timer    = 0;
+            ch->timer    = 0s;
             if (ch->switched)
                 do_return(ch->switched, "");
             ch->switched = nullptr;
@@ -2439,7 +2439,7 @@ void stop_idling(CHAR_DATA* ch)
         || ch->desc->connected != CON_PLAYING || !ch->was_in_room || ch->in_room != get_room_index(ROOM_VNUM_LIMBO))
         return;
 
-    ch->timer = 0;
+    ch->timer = 0s;
     char_from_room(ch);
     char_to_room(ch, ch->was_in_room);
     ch->was_in_room = nullptr;

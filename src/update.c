@@ -26,6 +26,8 @@
 #include <math.h>
 #include "mud.h"
 
+using namespace std::chrono_literals;
+
 /* from swskills.c */
 void add_reinforcements(CHAR_DATA* ch);
 
@@ -1432,7 +1434,7 @@ void char_update(void)
 
             if (!IS_NPC(ch))
             {
-                if (++ch->timer > 15 && !ch->desc)
+                if (++ch->timer > 15s && !ch->desc)
                 {
                     if (ch->in_room)
                         char_from_room(ch);
