@@ -4486,7 +4486,7 @@ const char* show_tilde(const char* str);
 
 bool str_cmp(std::string_view astr, std::string_view bstr);
 
-bool str_prefix(const char* astr, const char* bstr);
+bool str_prefix(std::string_view astr, std::string_view bstr);
 
 bool str_infix(const char* astr, const char* bstr);
 

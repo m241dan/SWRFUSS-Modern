@@ -3639,27 +3639,22 @@ bool str_cmp(std::string_view astr, std::string_view bstr)
  * Return TRUE if astr not a prefix of bstr
  *   (compatibility with historical functions).
  */
-bool str_prefix(const char* astr, const char* bstr)
+bool str_prefix(std::string_view astr, std::string_view bstr)
 {
-    if (!astr)
+    using namespace ops;
+
+    if (astr.length() > bstr.length())
     {
-        bug("%s: null astr.", __func__);
-        return TRUE;
+        return true;
     }
 
-    if (!bstr)
-    {
-        bug("%s: null bstr.", __func__);
-        return TRUE;
-    }
-
-    for (; *astr; astr++, bstr++)
-    {
-        if (LOWER(*astr) != LOWER(*bstr))
-            return TRUE;
-    }
-
-    return FALSE;
+    return !alg::all_true(
+        view::zip_transform(
+            _eq_,
+            astr | view::lowercase,
+            bstr | view::lowercase
+        )
+    );
 }
 
 /*
