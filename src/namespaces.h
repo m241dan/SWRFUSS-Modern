@@ -111,6 +111,23 @@ namespace alg {
     };
 
     inline constexpr for_each_or_fn for_each_or;
+
+    struct all_true_fn
+    {
+        template<std::input_iterator I, std::sentinel_for<I> S, class Proj = std::identity>
+        constexpr bool operator()(I first, S last, Proj proj = {}) const
+        {
+            return std::ranges::find_if_not(first, last, [](bool x) {return x;}, std::ref(proj)) == last;
+        }
+
+        template<std::ranges::input_range R, class Proj = std::identity>
+        constexpr bool operator()(R&& r, Proj proj = {}) const
+        {
+            return operator()(std::ranges::begin(r), std::ranges::end(r), std::ref(proj));
+        }
+    };
+
+    inline constexpr all_true_fn all_true;
 }
 
 namespace view {
