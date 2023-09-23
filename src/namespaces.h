@@ -232,6 +232,17 @@ namespace ops {
             return rhs == std::invoke(proj, std::forward<U>(lhs));
         };
     }
+
+    struct eq_fun
+    {
+        template<class T, class U> requires std::equality_comparable_with<T, U>
+        constexpr auto operator()(T&& t, U&& u) -> bool
+        {
+            return std::forward<T>(t) == std::forward<U>(u);
+        }
+    };
+
+    inline constexpr eq_fun _eq_;
 };
 
 #endif //SWRGM_NAMESPACES_H
