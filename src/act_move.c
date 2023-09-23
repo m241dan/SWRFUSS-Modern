@@ -1227,29 +1227,29 @@ EXIT_DATA* find_door(CHAR_DATA* ch, const char* arg, bool quiet)
     EXIT_DATA* pexit;
     int      door;
 
-    if (arg == nullptr || !str_cmp(arg, ""))
+    if (arg == nullptr || !compare(arg, ""))
         return nullptr;
 
     pexit    = nullptr;
-    if (!str_cmp(arg, "n") || !str_cmp(arg, "north"))
+    if (!compare(arg, "n") || !compare(arg, "north"))
         door = 0;
-    else if (!str_cmp(arg, "e") || !str_cmp(arg, "east"))
+    else if (!compare(arg, "e") || !compare(arg, "east"))
         door = 1;
-    else if (!str_cmp(arg, "s") || !str_cmp(arg, "south"))
+    else if (!compare(arg, "s") || !compare(arg, "south"))
         door = 2;
-    else if (!str_cmp(arg, "w") || !str_cmp(arg, "west"))
+    else if (!compare(arg, "w") || !compare(arg, "west"))
         door = 3;
-    else if (!str_cmp(arg, "u") || !str_cmp(arg, "up"))
+    else if (!compare(arg, "u") || !compare(arg, "up"))
         door = 4;
-    else if (!str_cmp(arg, "d") || !str_cmp(arg, "down"))
+    else if (!compare(arg, "d") || !compare(arg, "down"))
         door = 5;
-    else if (!str_cmp(arg, "ne") || !str_cmp(arg, "northeast"))
+    else if (!compare(arg, "ne") || !compare(arg, "northeast"))
         door = 6;
-    else if (!str_cmp(arg, "nw") || !str_cmp(arg, "northwest"))
+    else if (!compare(arg, "nw") || !compare(arg, "northwest"))
         door = 7;
-    else if (!str_cmp(arg, "se") || !str_cmp(arg, "southeast"))
+    else if (!compare(arg, "se") || !compare(arg, "southeast"))
         door = 8;
-    else if (!str_cmp(arg, "sw") || !str_cmp(arg, "southwest"))
+    else if (!compare(arg, "sw") || !compare(arg, "southwest"))
         door = 9;
     else
     {
@@ -1410,7 +1410,7 @@ void do_open(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "hatch"))
+    if (!compare(arg, "hatch"))
     {
         do_openhatch(ch, argument);
         return;
@@ -1501,7 +1501,7 @@ void do_close(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "hatch"))
+    if (!compare(arg, "hatch"))
     {
         do_closehatch(ch, argument);
         return;

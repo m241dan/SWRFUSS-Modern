@@ -1722,7 +1722,7 @@ void do_order(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "all"))
+    if (!compare(arg, "all"))
     {
         fAll   = TRUE;
         victim = nullptr;
@@ -2189,7 +2189,7 @@ void do_speak(CHAR_DATA* ch, const char* argument)
 
     argument = one_argument(argument, arg);
 
-    if (!str_cmp(arg, "all") && IS_IMMORTAL(ch))
+    if (!compare(arg, "all") && IS_IMMORTAL(ch))
     {
         set_char_color(AT_SAY, ch);
         ch->speaking = ~LANG_CLAN;

@@ -453,7 +453,7 @@ int get_otype(const char* type)
     size_t x;
 
     for (x = 0; x < (sizeof(o_types) / sizeof(o_types[0])); x++)
-        if (!str_cmp(type, o_types[x]))
+        if (!compare(type, o_types[x]))
             return x;
     return -1;
 }
@@ -463,7 +463,7 @@ int get_aflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, a_flags[x]))
+        if (!compare(flag, a_flags[x]))
             return x;
     return -1;
 }
@@ -473,7 +473,7 @@ int get_trapflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, trap_flags[x]))
+        if (!compare(flag, trap_flags[x]))
             return x;
     return -1;
 }
@@ -483,7 +483,7 @@ int get_atype(const char* type)
     int x;
 
     for (x = 0; x < MAX_APPLY_TYPE; x++)
-        if (!str_cmp(type, a_types[x]))
+        if (!compare(type, a_types[x]))
             return x;
     return -1;
 }
@@ -493,7 +493,7 @@ int get_npc_race(const char* type)
     int x;
 
     for (x = 0; x < MAX_NPC_RACE; x++)
-        if (!str_cmp(type, npc_race[x]))
+        if (!compare(type, npc_race[x]))
             return x;
     return -1;
 }
@@ -503,7 +503,7 @@ int get_wearloc(const char* type)
     int x;
 
     for (x = 0; x < MAX_WEAR; x++)
-        if (!str_cmp(type, wear_locs[x]))
+        if (!compare(type, wear_locs[x]))
             return x;
     return -1;
 }
@@ -513,7 +513,7 @@ int get_exflag(const char* flag)
     int x;
 
     for (x = 0; x <= MAX_EXFLAG; x++)
-        if (!str_cmp(flag, ex_flags[x]))
+        if (!compare(flag, ex_flags[x]))
             return x;
     return -1;
 }
@@ -523,7 +523,7 @@ int get_rflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, r_flags[x]))
+        if (!compare(flag, r_flags[x]))
             return x;
     return -1;
 }
@@ -533,7 +533,7 @@ int get_mpflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, mprog_flags[x]))
+        if (!compare(flag, mprog_flags[x]))
             return x;
     return -1;
 }
@@ -543,7 +543,7 @@ int get_oflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, o_flags[x]))
+        if (!compare(flag, o_flags[x]))
             return x;
     return -1;
 }
@@ -553,7 +553,7 @@ int get_areaflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, area_flags[x]))
+        if (!compare(flag, area_flags[x]))
             return x;
     return -1;
 }
@@ -563,7 +563,7 @@ int get_wflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, w_flags[x]))
+        if (!compare(flag, w_flags[x]))
             return x;
     return -1;
 }
@@ -573,7 +573,7 @@ int get_actflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, act_flags[x]))
+        if (!compare(flag, act_flags[x]))
             return x;
     return -1;
 }
@@ -583,7 +583,7 @@ int get_vip_flag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, planet_flags[x]))
+        if (!compare(flag, planet_flags[x]))
             return x;
     return -1;
 }
@@ -593,7 +593,7 @@ int get_wanted_flag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, planet_flags[x]))
+        if (!compare(flag, planet_flags[x]))
             return x;
     return -1;
 }
@@ -603,7 +603,7 @@ int get_pcflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, pc_flags[x]))
+        if (!compare(flag, pc_flags[x]))
             return x;
     return -1;
 }
@@ -613,7 +613,7 @@ int get_plrflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, plr_flags[x]))
+        if (!compare(flag, plr_flags[x]))
             return x;
     return -1;
 }
@@ -623,7 +623,7 @@ int get_risflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, ris_flags[x]))
+        if (!compare(flag, ris_flags[x]))
             return x;
     return -1;
 }
@@ -633,7 +633,7 @@ int get_trigflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, trig_flags[x]))
+        if (!compare(flag, trig_flags[x]))
             return x;
     return -1;
 }
@@ -643,7 +643,7 @@ int get_partflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, part_flags[x]))
+        if (!compare(flag, part_flags[x]))
             return x;
     return -1;
 }
@@ -653,7 +653,7 @@ int get_attackflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, attack_flags[x]))
+        if (!compare(flag, attack_flags[x]))
             return x;
     return -1;
 }
@@ -663,7 +663,7 @@ int get_defenseflag(const char* flag)
     int x;
 
     for (x = 0; x < 32; x++)
-        if (!str_cmp(flag, defense_flags[x]))
+        if (!compare(flag, defense_flags[x]))
             return x;
     return -1;
 }
@@ -673,7 +673,7 @@ int get_langflag(const char* flag)
     int x;
 
     for (x = 0; lang_array[x] != LANG_UNKNOWN; x++)
-        if (!str_cmp(flag, lang_names[x]))
+        if (!compare(flag, lang_names[x]))
             return lang_array[x];
     return LANG_UNKNOWN;
 }
@@ -683,7 +683,7 @@ int get_langnum(const char* flag)
     unsigned int x;
 
     for (x = 0; lang_array[x] != LANG_UNKNOWN; x++)
-        if (!str_cmp(flag, lang_names[x]))
+        if (!compare(flag, lang_names[x]))
             return x;
     return -1;
 }
@@ -693,7 +693,7 @@ int get_langnum_save(const char* flag)
     unsigned int x;
 
     for (x = 0; lang_array[x] != LANG_UNKNOWN; x++)
-        if (!str_cmp(flag, lang_names_save[x]))
+        if (!compare(flag, lang_names_save[x]))
             return x;
     return -1;
 }
@@ -703,7 +703,7 @@ int get_secflag(const char* flag)
     unsigned int x;
 
     for (x = 0; x < (sizeof(sector_name) / sizeof(sector_name[0])); x++)
-        if (!str_cmp(flag, sector_name[x]))
+        if (!compare(flag, sector_name[x]))
             return x;
     return -1;
 }
@@ -713,7 +713,7 @@ int get_npc_position(const char* position)
     size_t x;
 
     for (x = 0; x <= POS_DRAG; x++)
-        if (!str_cmp(position, npc_position[x]))
+        if (!compare(position, npc_position[x]))
             return x;
     return -1;
 }
@@ -723,7 +723,7 @@ int get_npc_sex(const char* sex)
     size_t x;
 
     for (x = 0; x <= SEX_FEMALE; x++)
-        if (!str_cmp(sex, npc_sex[x]))
+        if (!compare(sex, npc_sex[x]))
             return x;
     return -1;
 }
@@ -1099,7 +1099,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
             send_to_char("Your victim died!\r\n", ch);
             argument = "done";
         }
-        if (argument[0] == '\0' || !str_cmp(argument, " ") || !str_cmp(argument, "stat"))
+        if (argument[0] == '\0' || !compare(argument, " ") || !compare(argument, "stat"))
         {
             if (victim)
                 do_mstat(ch, victim->name);
@@ -1107,7 +1107,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
                 send_to_char("No victim selected.  Type '?' for help.\r\n", ch);
             return;
         }
-        if (!str_cmp(argument, "done") || !str_cmp(argument, "off"))
+        if (!compare(argument, "done") || !compare(argument, "off"))
         {
             if (ch->dest_buf)
                 RelDestroy(relMSET_ON, ch, ch->dest_buf);
@@ -1134,13 +1134,13 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         mudstrlcpy(arg3, argument, MAX_INPUT_LENGTH);
     }
 
-    if (!str_cmp(arg1, "on"))
+    if (!compare(arg1, "on"))
     {
         send_to_char("Syntax: mset <victim|vnum> on.\r\n", ch);
         return;
     }
 
-    if (arg1[0] == '\0' || (arg2[0] == '\0' && ch->substate != SUB_REPEATCMD) || !str_cmp(arg1, "?"))
+    if (arg1[0] == '\0' || (arg2[0] == '\0' && ch->substate != SUB_REPEATCMD) || !compare(arg1, "?"))
     {
         if (ch->substate == SUB_REPEATCMD)
         {
@@ -1215,7 +1215,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         maxattr = 18;
     }
 
-    if (!str_cmp(arg2, "on"))
+    if (!compare(arg2, "on"))
     {
         CHECK_SUBRESTRICTED(ch);
         ch_printf(ch, "Mset mode on. (Editing %s).\r\n", victim->name);
@@ -1240,7 +1240,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
     if (atoi(arg3) < -1 && value == -1)
         value = atoi(arg3);
 
-    if (!str_cmp(arg2, "str"))
+    if (!compare(arg2, "str"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1255,7 +1255,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "int"))
+    if (!compare(arg2, "int"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1270,7 +1270,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "wis"))
+    if (!compare(arg2, "wis"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1285,7 +1285,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "dex"))
+    if (!compare(arg2, "dex"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1300,7 +1300,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "con"))
+    if (!compare(arg2, "con"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1315,7 +1315,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "cha"))
+    if (!compare(arg2, "cha"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1330,7 +1330,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "lck"))
+    if (!compare(arg2, "lck"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1345,7 +1345,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "frc"))
+    if (!compare(arg2, "frc"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1360,7 +1360,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "sav1"))
+    if (!compare(arg2, "sav1"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1375,7 +1375,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "sav2"))
+    if (!compare(arg2, "sav2"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1390,7 +1390,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "sav3"))
+    if (!compare(arg2, "sav3"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1405,7 +1405,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "sav4"))
+    if (!compare(arg2, "sav4"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1420,7 +1420,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "sav5"))
+    if (!compare(arg2, "sav5"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1435,7 +1435,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "sex"))
+    if (!compare(arg2, "sex"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1450,7 +1450,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "race"))
+    if (!compare(arg2, "race"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1473,7 +1473,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "armor"))
+    if (!compare(arg2, "armor"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1488,7 +1488,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "level"))
+    if (!compare(arg2, "level"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1535,7 +1535,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "numattacks"))
+    if (!compare(arg2, "numattacks"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1556,7 +1556,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "credits"))
+    if (!compare(arg2, "credits"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1566,7 +1566,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hitroll"))
+    if (!compare(arg2, "hitroll"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1576,7 +1576,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "damroll"))
+    if (!compare(arg2, "damroll"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1586,7 +1586,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hp"))
+    if (!compare(arg2, "hp"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1599,7 +1599,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "force"))
+    if (!compare(arg2, "force"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1612,7 +1612,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "move"))
+    if (!compare(arg2, "move"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1625,7 +1625,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "align"))
+    if (!compare(arg2, "align"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1640,7 +1640,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "password"))
+    if (!compare(arg2, "password"))
     {
         char* pwdnew;
 
@@ -1678,7 +1678,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "quest"))
+    if (!compare(arg2, "quest"))
     {
         if (IS_NPC(victim))
         {
@@ -1696,7 +1696,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "qpa"))
+    if (!compare(arg2, "qpa"))
     {
         if (IS_NPC(victim))
         {
@@ -1708,7 +1708,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "qp"))
+    if (!compare(arg2, "qp"))
     {
         if (IS_NPC(victim))
         {
@@ -1726,7 +1726,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "mentalstate"))
+    if (!compare(arg2, "mentalstate"))
     {
         if (value < -100 || value > 100)
         {
@@ -1737,7 +1737,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "emotion"))
+    if (!compare(arg2, "emotion"))
     {
         if (value < -100 || value > 100)
         {
@@ -1748,7 +1748,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "thirst"))
+    if (!compare(arg2, "thirst"))
     {
         if (IS_NPC(victim))
         {
@@ -1766,7 +1766,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "drunk"))
+    if (!compare(arg2, "drunk"))
     {
         if (IS_NPC(victim))
         {
@@ -1784,7 +1784,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "full"))
+    if (!compare(arg2, "full"))
     {
         if (IS_NPC(victim))
         {
@@ -1802,7 +1802,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "blood"))
+    if (!compare(arg2, "blood"))
     {
         if (IS_NPC(victim))
         {
@@ -1820,7 +1820,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "name"))
+    if (!compare(arg2, "name"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -1846,7 +1846,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "minsnoop"))
+    if (!compare(arg2, "minsnoop"))
     {
         if (get_trust(ch) < LEVEL_SUB_IMPLEM)
         {
@@ -1865,7 +1865,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (!str_cmp(arg2, "clan"))
+    if (!compare(arg2, "clan"))
     {
         CLAN_DATA* clan;
 
@@ -1929,7 +1929,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "short"))
+    if (!compare(arg2, "short"))
     {
         STRFREE(victim->short_descr);
         victim->short_descr = STRALLOC(arg3);
@@ -1941,7 +1941,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "long"))
+    if (!compare(arg2, "long"))
     {
         STRFREE(victim->long_descr);
         mudstrlcpy(buf, arg3, MAX_STRING_LENGTH);
@@ -1955,7 +1955,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "description"))
+    if (!compare(arg2, "description"))
     {
         if (arg3[0])
         {
@@ -1979,7 +1979,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "title"))
+    if (!compare(arg2, "title"))
     {
         if (IS_NPC(victim))
         {
@@ -1991,7 +1991,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "spec") || !str_cmp(arg2, "spec_fun"))
+    if (!compare(arg2, "spec") || !compare(arg2, "spec_fun"))
     {
         SPEC_FUN* specfun;
 
@@ -2004,7 +2004,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        if (!str_cmp(arg3, "none"))
+        if (!compare(arg3, "none"))
         {
             victim->spec_fun = nullptr;
             STRFREE(victim->spec_funname);
@@ -2042,7 +2042,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "spec2") || !str_cmp(arg2, "spec_fun2"))
+    if (!compare(arg2, "spec2") || !compare(arg2, "spec_fun2"))
     {
         SPEC_FUN* specfun;
 
@@ -2055,7 +2055,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        if (!str_cmp(arg3, "none"))
+        if (!compare(arg3, "none"))
         {
             victim->spec_2 = nullptr;
             STRFREE(victim->spec_funname2);
@@ -2093,7 +2093,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "flags"))
+    if (!compare(arg2, "flags"))
     {
         bool protoflag = FALSE, ftoggle = FALSE;
 
@@ -2154,7 +2154,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "wanted"))
+    if (!compare(arg2, "wanted"))
     {
         if (IS_NPC(victim))
         {
@@ -2188,7 +2188,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "vip"))
+    if (!compare(arg2, "vip"))
     {
         if (!IS_NPC(victim))
         {
@@ -2219,7 +2219,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "affected"))
+    if (!compare(arg2, "affected"))
     {
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_LESSER)
         {
@@ -2251,7 +2251,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
     /*
     * save some more finger-leather for setting RIS stuff
     */
-    if (!str_cmp(arg2, "r"))
+    if (!compare(arg2, "r"))
     {
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_LESSER)
         {
@@ -2265,7 +2265,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         do_mset(ch, outbuf);
         return;
     }
-    if (!str_cmp(arg2, "i"))
+    if (!compare(arg2, "i"))
     {
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_LESSER)
         {
@@ -2280,7 +2280,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         do_mset(ch, outbuf);
         return;
     }
-    if (!str_cmp(arg2, "s"))
+    if (!compare(arg2, "s"))
     {
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_LESSER)
         {
@@ -2294,7 +2294,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         do_mset(ch, outbuf);
         return;
     }
-    if (!str_cmp(arg2, "ri"))
+    if (!compare(arg2, "ri"))
     {
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_LESSER)
         {
@@ -2311,7 +2311,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "rs"))
+    if (!compare(arg2, "rs"))
     {
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_LESSER)
         {
@@ -2327,7 +2327,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         do_mset(ch, outbuf);
         return;
     }
-    if (!str_cmp(arg2, "is"))
+    if (!compare(arg2, "is"))
     {
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_LESSER)
         {
@@ -2343,7 +2343,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         do_mset(ch, outbuf);
         return;
     }
-    if (!str_cmp(arg2, "ris"))
+    if (!compare(arg2, "ris"))
     {
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_LESSER)
         {
@@ -2362,7 +2362,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "resistant"))
+    if (!compare(arg2, "resistant"))
     {
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_LESSER)
         {
@@ -2390,7 +2390,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "immune"))
+    if (!compare(arg2, "immune"))
     {
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_LESSER)
         {
@@ -2418,7 +2418,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "susceptible"))
+    if (!compare(arg2, "susceptible"))
     {
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_LESSER)
         {
@@ -2446,7 +2446,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "part"))
+    if (!compare(arg2, "part"))
     {
         if (!IS_NPC(victim) && get_trust(ch) < LEVEL_LESSER)
         {
@@ -2474,7 +2474,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "attack"))
+    if (!compare(arg2, "attack"))
     {
         if (!IS_NPC(victim))
         {
@@ -2504,7 +2504,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "defense"))
+    if (!compare(arg2, "defense"))
     {
         if (!IS_NPC(victim))
         {
@@ -2533,7 +2533,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "pos"))
+    if (!compare(arg2, "pos"))
     {
         if (!IS_NPC(victim))
         {
@@ -2554,7 +2554,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "defpos"))
+    if (!compare(arg2, "defpos"))
     {
         if (!IS_NPC(victim))
         {
@@ -2578,7 +2578,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
     /*
     * save some finger-leather
     */
-    if (!str_cmp(arg2, "hitdie"))
+    if (!compare(arg2, "hitdie"))
     {
         if (!IS_NPC(victim))
         {
@@ -2603,7 +2603,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
     /*
     * save some more finger-leather
     */
-    if (!str_cmp(arg2, "damdie"))
+    if (!compare(arg2, "damdie"))
     {
         if (!IS_NPC(victim))
         {
@@ -2623,7 +2623,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hitnumdie"))
+    if (!compare(arg2, "hitnumdie"))
     {
         if (!IS_NPC(victim))
         {
@@ -2643,7 +2643,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hitsizedie"))
+    if (!compare(arg2, "hitsizedie"))
     {
         if (!IS_NPC(victim))
         {
@@ -2663,7 +2663,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hitplus"))
+    if (!compare(arg2, "hitplus"))
     {
         if (!IS_NPC(victim))
         {
@@ -2683,7 +2683,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "damnumdie"))
+    if (!compare(arg2, "damnumdie"))
     {
         if (!IS_NPC(victim))
         {
@@ -2703,7 +2703,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "damsizedie"))
+    if (!compare(arg2, "damsizedie"))
     {
         if (!IS_NPC(victim))
         {
@@ -2723,7 +2723,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "damplus"))
+    if (!compare(arg2, "damplus"))
     {
         if (!IS_NPC(victim))
         {
@@ -2746,7 +2746,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
     }
 
 
-    if (!str_cmp(arg2, "aloaded"))
+    if (!compare(arg2, "aloaded"))
     {
         if (IS_NPC(victim))
         {
@@ -2784,7 +2784,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (!str_cmp(arg2, "speaks"))
+    if (!compare(arg2, "speaks"))
     {
         if (!can_mmodify(ch, victim))
             return;
@@ -2821,7 +2821,7 @@ void do_mset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "speaking"))
+    if (!compare(arg2, "speaking"))
     {
         if (!IS_NPC(victim))
         {
@@ -2953,7 +2953,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
             send_to_char("Your object was extracted!\r\n", ch);
             argument = "done";
         }
-        if (argument[0] == '\0' || !str_cmp(argument, " ") || !str_cmp(argument, "stat"))
+        if (argument[0] == '\0' || !compare(argument, " ") || !compare(argument, "stat"))
         {
             if (obj)
                 do_ostat(ch, obj->name);
@@ -2961,7 +2961,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
                 send_to_char("No object selected.  Type '?' for help.\r\n", ch);
             return;
         }
-        if (!str_cmp(argument, "done") || !str_cmp(argument, "off"))
+        if (!compare(argument, "done") || !compare(argument, "off"))
         {
             if (ch->dest_buf)
                 RelDestroy(relOSET_ON, ch, ch->dest_buf);
@@ -2989,13 +2989,13 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         mudstrlcpy(arg3, argument, MAX_INPUT_LENGTH);
     }
 
-    if (!str_cmp(arg1, "on"))
+    if (!compare(arg1, "on"))
     {
         send_to_char("Syntax: oset <object|vnum> on.\r\n", ch);
         return;
     }
 
-    if (arg1[0] == '\0' || arg2[0] == '\0' || !str_cmp(arg1, "?"))
+    if (arg1[0] == '\0' || arg2[0] == '\0' || !compare(arg1, "?"))
     {
         if (ch->substate == SUB_REPEATCMD)
         {
@@ -3053,7 +3053,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
     separate_obj(obj);
     value = atoi(arg3);
 
-    if (!str_cmp(arg2, "on"))
+    if (!compare(arg2, "on"))
     {
         CHECK_SUBRESTRICTED(ch);
         ch_printf(ch, "Oset mode on. (Editing '%s' vnum %d).\r\n", obj->name, obj->pIndexData->vnum);
@@ -3070,7 +3070,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "value0") || !str_cmp(arg2, "v0"))
+    if (!compare(arg2, "value0") || !compare(arg2, "v0"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3080,7 +3080,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "value1") || !str_cmp(arg2, "v1"))
+    if (!compare(arg2, "value1") || !compare(arg2, "v1"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3090,7 +3090,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "value2") || !str_cmp(arg2, "v2"))
+    if (!compare(arg2, "value2") || !compare(arg2, "v2"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3104,7 +3104,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "value3") || !str_cmp(arg2, "v3"))
+    if (!compare(arg2, "value3") || !compare(arg2, "v3"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3114,7 +3114,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "value4") || !str_cmp(arg2, "v4"))
+    if (!compare(arg2, "value4") || !compare(arg2, "v4"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3124,7 +3124,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "value5") || !str_cmp(arg2, "v5"))
+    if (!compare(arg2, "value5") || !compare(arg2, "v5"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3134,7 +3134,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "type"))
+    if (!compare(arg2, "type"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3169,7 +3169,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "flags"))
+    if (!compare(arg2, "flags"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3200,7 +3200,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "wear"))
+    if (!compare(arg2, "wear"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3228,7 +3228,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "level"))
+    if (!compare(arg2, "level"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3236,7 +3236,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "weight"))
+    if (!compare(arg2, "weight"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3246,7 +3246,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "cost"))
+    if (!compare(arg2, "cost"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3256,7 +3256,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "rent"))
+    if (!compare(arg2, "rent"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3267,7 +3267,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "layers"))
+    if (!compare(arg2, "layers"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3278,7 +3278,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "timer"))
+    if (!compare(arg2, "timer"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3286,7 +3286,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "name"))
+    if (!compare(arg2, "name"))
     {
         if (!can_omodify(ch, obj))
             return;
@@ -3306,7 +3306,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "short"))
+    if (!compare(arg2, "short"))
     {
         STRFREE(obj->short_descr);
         obj->short_descr = STRALLOC(arg3);
@@ -3332,7 +3332,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "actiondesc"))
+    if (!compare(arg2, "actiondesc"))
     {
         if (strstr(arg3, "%n") || strstr(arg3, "%d") || strstr(arg3, "%l"))
         {
@@ -3349,7 +3349,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "long"))
+    if (!compare(arg2, "long"))
     {
         if (arg3[0])
         {
@@ -3377,7 +3377,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "affect"))
+    if (!compare(arg2, "affect"))
     {
         AFFECT_DATA* paf;
         short      loc;
@@ -3461,7 +3461,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "rmaffect"))
+    if (!compare(arg2, "rmaffect"))
     {
         AFFECT_DATA* paf;
         short      loc, count;
@@ -3533,7 +3533,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (!str_cmp(arg2, "ed"))
+    if (!compare(arg2, "ed"))
     {
         if (arg3[0] == '\0')
         {
@@ -3572,7 +3572,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "desc"))
+    if (!compare(arg2, "desc"))
     {
         CHECK_SUBRESTRICTED(ch);
         if (obj->timer)
@@ -3606,7 +3606,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "rmed"))
+    if (!compare(arg2, "rmed"))
     {
         if (arg3[0] == '\0')
         {
@@ -3630,7 +3630,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
     /*
     * save some finger-leather
     */
-    if (!str_cmp(arg2, "ris"))
+    if (!compare(arg2, "ris"))
     {
         snprintf(outbuf, MAX_STRING_LENGTH, "%s affect resistant %s", arg1, arg3);
         do_oset(ch, outbuf);
@@ -3641,27 +3641,27 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "r"))
+    if (!compare(arg2, "r"))
     {
         snprintf(outbuf, MAX_STRING_LENGTH, "%s affect resistant %s", arg1, arg3);
         do_oset(ch, outbuf);
         return;
     }
 
-    if (!str_cmp(arg2, "i"))
+    if (!compare(arg2, "i"))
     {
         snprintf(outbuf, MAX_STRING_LENGTH, "%s affect immune %s", arg1, arg3);
         do_oset(ch, outbuf);
         return;
     }
-    if (!str_cmp(arg2, "s"))
+    if (!compare(arg2, "s"))
     {
         snprintf(outbuf, MAX_STRING_LENGTH, "%s affect susceptible %s", arg1, arg3);
         do_oset(ch, outbuf);
         return;
     }
 
-    if (!str_cmp(arg2, "ri"))
+    if (!compare(arg2, "ri"))
     {
         snprintf(outbuf, MAX_STRING_LENGTH, "%s affect resistant %s", arg1, arg3);
         do_oset(ch, outbuf);
@@ -3670,7 +3670,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "rs"))
+    if (!compare(arg2, "rs"))
     {
         snprintf(outbuf, MAX_STRING_LENGTH, "%s affect resistant %s", arg1, arg3);
         do_oset(ch, outbuf);
@@ -3679,7 +3679,7 @@ void do_oset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "is"))
+    if (!compare(arg2, "is"))
     {
         snprintf(outbuf, MAX_STRING_LENGTH, "%s affect immune %s", arg1, arg3);
         do_oset(ch, outbuf);
@@ -3696,13 +3696,13 @@ void do_oset(CHAR_DATA* ch, const char* argument)
     switch (obj->item_type)
     {
         case ITEM_WEAPON:
-            if (!str_cmp(arg2, "weapontype"))
+            if (!compare(arg2, "weapontype"))
             {
                 size_t x;
 
                 value  = -1;
                 for (x = 0; x < sizeof(weapon_table) / sizeof(weapon_table[0]); x++)
-                    if (!str_cmp(arg3, weapon_table[x]))
+                    if (!compare(arg3, weapon_table[x]))
                         value = x;
                 if (value < 0)
                 {
@@ -3714,45 +3714,45 @@ void do_oset(CHAR_DATA* ch, const char* argument)
                 tmp = 3;
                 break;
             }
-            if (!str_cmp(arg2, "condition"))
+            if (!compare(arg2, "condition"))
                 tmp = 0;
-            if (!str_cmp(arg2, "numdamdie"))
+            if (!compare(arg2, "numdamdie"))
                 tmp = 1;
-            if (!str_cmp(arg2, "sizedamdie"))
+            if (!compare(arg2, "sizedamdie"))
                 tmp = 2;
-            if (!str_cmp(arg2, "charges"))
+            if (!compare(arg2, "charges"))
                 tmp = 4;
-            if (!str_cmp(arg2, "maxcharges"))
+            if (!compare(arg2, "maxcharges"))
                 tmp = 5;
-            if (!str_cmp(arg2, "charge"))
+            if (!compare(arg2, "charge"))
                 tmp = 4;
-            if (!str_cmp(arg2, "maxcharge"))
+            if (!compare(arg2, "maxcharge"))
                 tmp = 5;
             break;
         case ITEM_BOLT:
         case ITEM_AMMO:
-            if (!str_cmp(arg2, "charges"))
+            if (!compare(arg2, "charges"))
                 tmp = 0;
-            if (!str_cmp(arg2, "charge"))
+            if (!compare(arg2, "charge"))
                 tmp = 0;
             break;
         case ITEM_BATTERY:
-            if (!str_cmp(arg2, "charges"))
+            if (!compare(arg2, "charges"))
                 tmp = 0;
-            if (!str_cmp(arg2, "charge"))
+            if (!compare(arg2, "charge"))
                 tmp = 0;
             break;
         case ITEM_RAWSPICE:
         case ITEM_SPICE:
-            if (!str_cmp(arg2, "grade"))
+            if (!compare(arg2, "grade"))
                 tmp = 1;
-            if (!str_cmp(arg2, "spicetype"))
+            if (!compare(arg2, "spicetype"))
             {
                 size_t x;
 
                 value  = -1;
                 for (x = 0; x < sizeof(spice_table) / sizeof(spice_table[0]); x++)
-                    if (!str_cmp(arg3, spice_table[x]))
+                    if (!compare(arg3, spice_table[x]))
                         value = x;
                 if (value < 0)
                 {
@@ -3766,13 +3766,13 @@ void do_oset(CHAR_DATA* ch, const char* argument)
             }
             break;
         case ITEM_CRYSTAL:
-            if (!str_cmp(arg2, "gemtype"))
+            if (!compare(arg2, "gemtype"))
             {
                 size_t x;
 
                 value  = -1;
                 for (x = 0; x < sizeof(crystal_table) / sizeof(crystal_table[0]); x++)
-                    if (!str_cmp(arg3, crystal_table[x]))
+                    if (!compare(arg3, crystal_table[x]))
                         value = x;
                 if (value < 0)
                 {
@@ -3789,65 +3789,65 @@ void do_oset(CHAR_DATA* ch, const char* argument)
             }
             break;
         case ITEM_ARMOR:
-            if (!str_cmp(arg2, "condition"))
+            if (!compare(arg2, "condition"))
                 tmp = 0;
-            if (!str_cmp(arg2, "ac"))
+            if (!compare(arg2, "ac"))
                 tmp = 1;
             break;
         case ITEM_SALVE:
-            if (!str_cmp(arg2, "slevel"))
+            if (!compare(arg2, "slevel"))
                 tmp   = 0;
-            if (!str_cmp(arg2, "maxdoses"))
+            if (!compare(arg2, "maxdoses"))
                 tmp   = 1;
-            if (!str_cmp(arg2, "doses"))
+            if (!compare(arg2, "doses"))
                 tmp   = 2;
-            if (!str_cmp(arg2, "delay"))
+            if (!compare(arg2, "delay"))
                 tmp   = 3;
-            if (!str_cmp(arg2, "spell1"))
+            if (!compare(arg2, "spell1"))
                 tmp   = 4;
-            if (!str_cmp(arg2, "spell2"))
+            if (!compare(arg2, "spell2"))
                 tmp   = 5;
             if (tmp >= 4 && tmp <= 5)
                 value = skill_lookup(arg3);
             break;
         case ITEM_POTION:
         case ITEM_PILL:
-            if (!str_cmp(arg2, "slevel"))
+            if (!compare(arg2, "slevel"))
                 tmp   = 0;
-            if (!str_cmp(arg2, "spell1"))
+            if (!compare(arg2, "spell1"))
                 tmp   = 1;
-            if (!str_cmp(arg2, "spell2"))
+            if (!compare(arg2, "spell2"))
                 tmp   = 2;
-            if (!str_cmp(arg2, "spell3"))
+            if (!compare(arg2, "spell3"))
                 tmp   = 3;
             if (tmp >= 1 && tmp <= 3)
                 value = skill_lookup(arg3);
             break;
         case ITEM_DEVICE:
-            if (!str_cmp(arg2, "slevel"))
+            if (!compare(arg2, "slevel"))
                 tmp = 0;
-            if (!str_cmp(arg2, "spell"))
+            if (!compare(arg2, "spell"))
             {
                 tmp   = 3;
                 value = skill_lookup(arg3);
             }
-            if (!str_cmp(arg2, "maxcharges"))
+            if (!compare(arg2, "maxcharges"))
                 tmp = 1;
-            if (!str_cmp(arg2, "charges"))
+            if (!compare(arg2, "charges"))
                 tmp = 2;
             break;
         case ITEM_CONTAINER:
-            if (!str_cmp(arg2, "capacity"))
+            if (!compare(arg2, "capacity"))
                 tmp = 0;
-            if (!str_cmp(arg2, "cflags"))
+            if (!compare(arg2, "cflags"))
                 tmp = 1;
-            if (!str_cmp(arg2, "key"))
+            if (!compare(arg2, "key"))
                 tmp = 2;
             break;
         case ITEM_SWITCH:
         case ITEM_LEVER:
         case ITEM_BUTTON:
-            if (!str_cmp(arg2, "tflags"))
+            if (!compare(arg2, "tflags"))
             {
                 tmp   = 0;
                 value = get_trigflag(arg3);
@@ -3923,7 +3923,7 @@ void do_rset(CHAR_DATA* ch, const char* argument)
     /*
     * Set something.
     */
-    if (!str_cmp(arg2, "flags"))
+    if (!compare(arg2, "flags"))
     {
         /*
        * Protect from messing up prototype flag
@@ -3938,7 +3938,7 @@ void do_rset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "sector"))
+    if (!compare(arg2, "sector"))
     {
         location->sector_type = value;
         return;
@@ -3958,15 +3958,15 @@ int get_dir(const char* txt)
     int  edir;
     char c1, c2;
 
-    if (!str_cmp(txt, "northeast"))
+    if (!compare(txt, "northeast"))
         return DIR_NORTHEAST;
-    if (!str_cmp(txt, "northwest"))
+    if (!compare(txt, "northwest"))
         return DIR_NORTHWEST;
-    if (!str_cmp(txt, "southeast"))
+    if (!compare(txt, "southeast"))
         return DIR_SOUTHEAST;
-    if (!str_cmp(txt, "southwest"))
+    if (!compare(txt, "southwest"))
         return DIR_SOUTHWEST;
-    if (!str_cmp(txt, "somewhere"))
+    if (!compare(txt, "somewhere"))
         return 10;
 
     c1 = txt[0];
@@ -4086,7 +4086,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
             do_rstat(ch, "");
             return;
         }
-        if (!str_cmp(arg, "done") || !str_cmp(arg, "off"))
+        if (!compare(arg, "done") || !compare(arg, "off"))
         {
             send_to_char("Redit mode off.\r\n", ch);
             if (ch->pcdata && ch->pcdata->subprompt)
@@ -4095,7 +4095,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
             return;
         }
     }
-    if (arg[0] == '\0' || !str_cmp(arg, "?"))
+    if (arg[0] == '\0' || !compare(arg, "?"))
     {
         if (ch->substate == SUB_REPEATCMD)
             send_to_char("Syntax: <field> value\r\n", ch);
@@ -4113,7 +4113,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
     if (!can_rmodify(ch, location))
         return;
 
-    if (!str_cmp(arg, "on"))
+    if (!compare(arg, "on"))
     {
         CHECK_SUBRESTRICTED(ch);
         send_to_char("Redit mode on.\r\n", ch);
@@ -4127,7 +4127,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "name"))
+    if (!compare(arg, "name"))
     {
         if (argument[0] == '\0')
         {
@@ -4140,7 +4140,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "desc"))
+    if (!compare(arg, "desc"))
     {
         if (ch->substate == SUB_REPEATCMD)
             ch->tempnum = SUB_REPEATCMD;
@@ -4152,7 +4152,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "tunnel"))
+    if (!compare(arg, "tunnel"))
     {
         if (!argument || argument[0] == '\0')
         {
@@ -4165,7 +4165,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "ed"))
+    if (!compare(arg, "ed"))
     {
         if (!argument || argument[0] == '\0')
         {
@@ -4185,7 +4185,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "rmed"))
+    if (!compare(arg, "rmed"))
     {
         if (!argument || argument[0] == '\0')
         {
@@ -4200,7 +4200,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "rlist"))
+    if (!compare(arg, "rlist"))
     {
         RESET_DATA* pReset;
         char      * rbuf;
@@ -4222,7 +4222,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "flags"))
+    if (!compare(arg, "flags"))
     {
         if (!argument || argument[0] == '\0')
         {
@@ -4252,7 +4252,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "teledelay"))
+    if (!compare(arg, "teledelay"))
     {
         if (!argument || argument[0] == '\0')
         {
@@ -4265,7 +4265,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "televnum"))
+    if (!compare(arg, "televnum"))
     {
         if (!argument || argument[0] == '\0')
         {
@@ -4278,7 +4278,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "sector"))
+    if (!compare(arg, "sector"))
     {
         if (!argument || argument[0] == '\0')
         {
@@ -4304,7 +4304,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "exkey"))
+    if (!compare(arg, "exkey"))
     {
         argument = one_argument(argument, arg2);
         argument = one_argument(argument, arg3);
@@ -4334,7 +4334,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "exname"))
+    if (!compare(arg, "exname"))
     {
         argument = one_argument(argument, arg2);
         if (arg2[0] == '\0')
@@ -4364,7 +4364,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "exflags"))
+    if (!compare(arg, "exflags"))
     {
         if (!argument || argument[0] == '\0')
         {
@@ -4427,7 +4427,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "exit"))
+    if (!compare(arg, "exit"))
     {
         bool addexit, numnotdir;
 
@@ -4546,7 +4546,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
     * Twisted and evil, but works           -Thoric
     * Makes an exit, and the reverse in one shot.
     */
-    if (!str_cmp(arg, "bexit"))
+    if (!compare(arg, "bexit"))
     {
         EXIT_DATA      * nxit, * rxit;
         char           tmpcmd[MAX_STRING_LENGTH];
@@ -4620,7 +4620,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "exdistance"))
+    if (!compare(arg, "exdistance"))
     {
         argument = one_argument(argument, arg2);
         if (arg2[0] == '\0')
@@ -4649,7 +4649,7 @@ void do_redit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "exdesc"))
+    if (!compare(arg, "exdesc"))
     {
         argument = one_argument(argument, arg2);
         if (arg2[0] == '\0')
@@ -4906,7 +4906,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
     {
         one_argument(argument, cmd);
 
-        if (!str_cmp(cmd + 1, "?"))
+        if (!compare(cmd + 1, "?"))
         {
             send_to_char("Editing commands\r\n---------------------------------\r\n", ch);
             send_to_char("/l              list buffer\r\n", ch);
@@ -4923,7 +4923,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
             return;
         }
 
-        if (!str_cmp(cmd + 1, "c"))
+        if (!compare(cmd + 1, "c"))
         {
             memset(edit, '\0', sizeof(EDITOR_DATA));
             edit->numlines = 0;
@@ -4932,7 +4932,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
             return;
         }
 
-        if (!str_cmp(cmd + 1, "r"))
+        if (!compare(cmd + 1, "r"))
         {
             char      word1[MAX_INPUT_LENGTH];
             char      word2[MAX_INPUT_LENGTH];
@@ -4981,7 +4981,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
        * start at beginning of buffer, not whatever line you happened
        * to be on, at the time.
        */
-        if (!str_cmp(cmd + 1, "f"))
+        if (!compare(cmd + 1, "f"))
         {
             char temp_buf[MAX_STRING_LENGTH + max_buf_lines];
             int  ep, old_p, end_mark;
@@ -5034,7 +5034,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
             return;
         }
 
-        if (!str_cmp(cmd + 1, "i"))
+        if (!compare(cmd + 1, "i"))
         {
             if (edit->numlines >= max_buf_lines)
                 send_to_char("Buffer is full.\r\n> ", ch);
@@ -5058,7 +5058,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
             }
             return;
         }
-        if (!str_cmp(cmd + 1, "d"))
+        if (!compare(cmd + 1, "d"))
         {
             if (edit->numlines == 0)
                 send_to_char("Buffer is empty.\r\n> ", ch);
@@ -5092,7 +5092,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
             }
             return;
         }
-        if (!str_cmp(cmd + 1, "g"))
+        if (!compare(cmd + 1, "g"))
         {
             if (edit->numlines == 0)
                 send_to_char("Buffer is empty.\r\n> ", ch);
@@ -5117,7 +5117,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
             }
             return;
         }
-        if (!str_cmp(cmd + 1, "l"))
+        if (!compare(cmd + 1, "l"))
         {
             if (edit->numlines == 0)
                 send_to_char("Buffer is empty.\r\n> ", ch);
@@ -5130,13 +5130,13 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
             }
             return;
         }
-        if (!str_cmp(cmd + 1, "a"))
+        if (!compare(cmd + 1, "a"))
         {
             send_to_char("\r\nAborting... ", ch);
             stop_editing(ch);
             return;
         }
-        if (get_trust(ch) > LEVEL_IMMORTAL && !str_cmp(cmd + 1, "!"))
+        if (get_trust(ch) > LEVEL_IMMORTAL && !compare(cmd + 1, "!"))
         {
             DO_FUN* last_cmd;
             int   substate = ch->substate;
@@ -5150,7 +5150,7 @@ void edit_buffer(CHAR_DATA* ch, char* argument)
             send_to_char("\r\n> ", ch);
             return;
         }
-        if (!str_cmp(cmd + 1, "s"))
+        if (!compare(cmd + 1, "s"))
         {
             d->connected = CON_PLAYING;
             if (!ch->last_cmd)
@@ -5211,7 +5211,7 @@ void assign_area(CHAR_DATA* ch)
         if (!tarea)
         {
             for (tmp = first_build; tmp; tmp = tmp->next)
-                if (!str_cmp(taf, tmp->filename))
+                if (!compare(taf, tmp->filename))
                 {
                     tarea = tmp;
                     break;
@@ -5264,7 +5264,7 @@ void do_aassign(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp("none", argument) || !str_cmp("null", argument) || !str_cmp("clear", argument))
+    if (!compare("none", argument) || !compare("null", argument) || !compare("clear", argument))
     {
         ch->pcdata->area = nullptr;
         assign_area(ch);
@@ -5283,7 +5283,7 @@ void do_aassign(CHAR_DATA* ch, const char* argument)
     if (get_trust(ch) >= LEVEL_GREATER
         || (is_name(buf, ch->pcdata->bestowments) && get_trust(ch) >= sysdata.level_modify_proto))
         for (tmp = first_area; tmp; tmp = tmp->next)
-            if (!str_cmp(buf, tmp->filename))
+            if (!compare(buf, tmp->filename))
             {
                 tarea = tmp;
                 break;
@@ -5291,7 +5291,7 @@ void do_aassign(CHAR_DATA* ch, const char* argument)
 
     if (!tarea)
         for (tmp = first_build; tmp; tmp = tmp->next)
-            if (!str_cmp(buf, tmp->filename))
+            if (!compare(buf, tmp->filename))
             {
                 /*		if ( get_trust(ch) >= sysdata.level_modify_proto  */
                 if (get_trust(ch) >= LEVEL_GREATER || is_name(tmp->filename, ch->pcdata->bestowments))
@@ -6461,7 +6461,7 @@ void do_savearea(CHAR_DATA* ch, const char* argument)
             return;
         }
         for (found = FALSE, tarea = first_build; tarea; tarea = tarea->next)
-            if (!str_cmp(tarea->filename, argument))
+            if (!compare(tarea->filename, argument))
             {
                 found = TRUE;
                 break;
@@ -6515,7 +6515,7 @@ void do_loadarea(CHAR_DATA* ch, const char* argument)
             return;
         }
         for (found = FALSE, tarea = first_build; tarea; tarea = tarea->next)
-            if (!str_cmp(tarea->filename, argument))
+            if (!compare(tarea->filename, argument))
             {
                 found = TRUE;
                 break;
@@ -6592,7 +6592,7 @@ void do_foldarea(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "all"))
+    if (!compare(arg, "all"))
     {
         for (tarea = first_area; tarea; tarea = tarea->next)
             fold_area(tarea, tarea->filename, FALSE);
@@ -6604,7 +6604,7 @@ void do_foldarea(CHAR_DATA* ch, const char* argument)
 
     for (tarea = first_area; tarea; tarea = tarea->next)
     {
-        if (!str_cmp(tarea->filename, arg))
+        if (!compare(tarea->filename, arg))
         {
             send_to_char("Folding...\r\n", ch);
             if (!strcmp(argument, "remproto"))
@@ -6658,7 +6658,7 @@ void do_installarea(CHAR_DATA* ch, const char* argument)
 
     for (tarea = first_build; tarea; tarea = tarea->next)
     {
-        if (!str_cmp(tarea->filename, arg))
+        if (!compare(tarea->filename, arg))
         {
             if (argument && argument[0] != '\0')
             {
@@ -6743,7 +6743,7 @@ void do_astat(CHAR_DATA* ch, const char* argument)
     found      = FALSE;
     proto      = FALSE;
     for (tarea = first_area; tarea; tarea = tarea->next)
-        if (!str_cmp(tarea->filename, argument))
+        if (!compare(tarea->filename, argument))
         {
             found = TRUE;
             break;
@@ -6751,7 +6751,7 @@ void do_astat(CHAR_DATA* ch, const char* argument)
 
     if (!found)
         for (tarea = first_build; tarea; tarea = tarea->next)
-            if (!str_cmp(tarea->filename, argument))
+            if (!compare(tarea->filename, argument))
             {
                 found = TRUE;
                 proto = TRUE;
@@ -6843,7 +6843,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
     found      = FALSE;
     proto      = FALSE;
     for (tarea = first_area; tarea; tarea = tarea->next)
-        if (!str_cmp(tarea->filename, arg1))
+        if (!compare(tarea->filename, arg1))
         {
             found = TRUE;
             break;
@@ -6851,7 +6851,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
 
     if (!found)
         for (tarea = first_build; tarea; tarea = tarea->next)
-            if (!str_cmp(tarea->filename, arg1))
+            if (!compare(tarea->filename, arg1))
             {
                 found = TRUE;
                 proto = TRUE;
@@ -6864,7 +6864,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "name"))
+    if (!compare(arg2, "name"))
     {
         AREA_DATA* uarea;
 
@@ -6876,7 +6876,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
 
         for (uarea = first_area; uarea; uarea = uarea->next)
         {
-            if (!str_cmp(uarea->name, argument))
+            if (!compare(uarea->name, argument))
             {
                 send_to_char("There is already an installed area with that name.\r\n", ch);
                 return;
@@ -6885,7 +6885,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
 
         for (uarea = first_build; uarea; uarea = uarea->next)
         {
-            if (!str_cmp(uarea->name, argument))
+            if (!compare(uarea->name, argument))
             {
                 send_to_char("There is already a prototype area with that name.\r\n", ch);
                 return;
@@ -6897,7 +6897,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "planet"))
+    if (!compare(arg2, "planet"))
     {
         PLANET_DATA* planet = get_planet(argument);
         if (planet)
@@ -6916,7 +6916,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "filename"))
+    if (!compare(arg2, "filename"))
     {
         char filename[256];
 
@@ -6938,21 +6938,21 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "low_economy"))
+    if (!compare(arg2, "low_economy"))
     {
         tarea->low_economy = vnum;
         send_to_char("Done.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg2, "high_economy"))
+    if (!compare(arg2, "high_economy"))
     {
         tarea->high_economy = vnum;
         send_to_char("Done.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg2, "low_room"))
+    if (!compare(arg2, "low_room"))
     {
         if (check_for_area_conflicts(tarea, tarea->low_r_vnum, vnum))
         {
@@ -6969,7 +6969,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hi_room"))
+    if (!compare(arg2, "hi_room"))
     {
         if (check_for_area_conflicts(tarea, tarea->hi_r_vnum, vnum))
         {
@@ -6986,7 +6986,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "low_obj"))
+    if (!compare(arg2, "low_obj"))
     {
         if (check_for_area_conflicts(tarea, tarea->low_o_vnum, vnum))
         {
@@ -7003,7 +7003,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hi_obj"))
+    if (!compare(arg2, "hi_obj"))
     {
         if (check_for_area_conflicts(tarea, tarea->hi_o_vnum, vnum))
         {
@@ -7020,7 +7020,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "low_mob"))
+    if (!compare(arg2, "low_mob"))
     {
         if (check_for_area_conflicts(tarea, tarea->low_m_vnum, vnum))
         {
@@ -7037,7 +7037,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hi_mob"))
+    if (!compare(arg2, "hi_mob"))
     {
         if (check_for_area_conflicts(tarea, tarea->hi_m_vnum, vnum))
         {
@@ -7054,7 +7054,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "low_soft"))
+    if (!compare(arg2, "low_soft"))
     {
         if (vnum < 0 || vnum > MAX_LEVEL)
         {
@@ -7067,7 +7067,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hi_soft"))
+    if (!compare(arg2, "hi_soft"))
     {
         if (vnum < 0 || vnum > MAX_LEVEL)
         {
@@ -7080,7 +7080,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "low_hard"))
+    if (!compare(arg2, "low_hard"))
     {
         if (vnum < 0 || vnum > MAX_LEVEL)
         {
@@ -7093,7 +7093,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hi_hard"))
+    if (!compare(arg2, "hi_hard"))
     {
         if (vnum < 0 || vnum > MAX_LEVEL)
         {
@@ -7106,7 +7106,7 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "author"))
+    if (!compare(arg2, "author"))
     {
         STRFREE(tarea->author);
         tarea->author = STRALLOC(argument);
@@ -7114,24 +7114,24 @@ void do_aset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "resetmsg"))
+    if (!compare(arg2, "resetmsg"))
     {
         if (tarea->resetmsg)
             DISPOSE(tarea->resetmsg);
-        if (str_cmp(argument, "clear"))
+        if (compare(argument, "clear"))
             tarea->resetmsg = str_dup(argument);
         send_to_char("Done.\r\n", ch);
         return;
     }  /* Rennard */
 
-    if (!str_cmp(arg2, "resetfreq"))
+    if (!compare(arg2, "resetfreq"))
     {
         tarea->reset_frequency = vnum;
         send_to_char("Done.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg2, "flags"))
+    if (!compare(arg2, "flags"))
     {
         if (!argument || argument[0] == '\0')
         {
@@ -7435,7 +7435,7 @@ void do_mpedit(CHAR_DATA* ch, const char* argument)
 
     set_char_color(AT_GREEN, ch);
 
-    if (!str_cmp(arg2, "list"))
+    if (!compare(arg2, "list"))
     {
         cnt = 0;
         if (!mprog)
@@ -7448,7 +7448,7 @@ void do_mpedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "edit"))
+    if (!compare(arg2, "edit"))
     {
         if (!mprog)
         {
@@ -7488,7 +7488,7 @@ void do_mpedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "delete"))
+    if (!compare(arg2, "delete"))
     {
         int  num;
         bool found;
@@ -7548,7 +7548,7 @@ void do_mpedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "insert"))
+    if (!compare(arg2, "insert"))
     {
         if (!mprog)
         {
@@ -7593,7 +7593,7 @@ void do_mpedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "add"))
+    if (!compare(arg2, "add"))
     {
         mptype = get_mpflag(arg3);
         if (mptype == -1)
@@ -7711,7 +7711,7 @@ void do_opedit(CHAR_DATA* ch, const char* argument)
 
     set_char_color(AT_GREEN, ch);
 
-    if (!str_cmp(arg2, "list"))
+    if (!compare(arg2, "list"))
     {
         cnt = 0;
         if (!mprog)
@@ -7724,7 +7724,7 @@ void do_opedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "edit"))
+    if (!compare(arg2, "edit"))
     {
         if (!mprog)
         {
@@ -7764,7 +7764,7 @@ void do_opedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "delete"))
+    if (!compare(arg2, "delete"))
     {
         int  num;
         bool found;
@@ -7824,7 +7824,7 @@ void do_opedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "insert"))
+    if (!compare(arg2, "insert"))
     {
         if (!mprog)
         {
@@ -7869,7 +7869,7 @@ void do_opedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "add"))
+    if (!compare(arg2, "add"))
     {
         mptype = get_mpflag(arg3);
         if (mptype == -1)
@@ -7985,7 +7985,7 @@ void do_rpedit(CHAR_DATA* ch, const char* argument)
 
     set_char_color(AT_GREEN, ch);
 
-    if (!str_cmp(arg1, "list"))
+    if (!compare(arg1, "list"))
     {
         cnt = 0;
         if (!mprog)
@@ -7998,7 +7998,7 @@ void do_rpedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg1, "edit"))
+    if (!compare(arg1, "edit"))
     {
         if (!mprog)
         {
@@ -8038,7 +8038,7 @@ void do_rpedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg1, "delete"))
+    if (!compare(arg1, "delete"))
     {
         int  num;
         bool found;
@@ -8098,7 +8098,7 @@ void do_rpedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "insert"))
+    if (!compare(arg2, "insert"))
     {
         if (!mprog)
         {
@@ -8143,7 +8143,7 @@ void do_rpedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg1, "add"))
+    if (!compare(arg1, "add"))
     {
         mptype = get_mpflag(arg2);
         if (mptype == -1)

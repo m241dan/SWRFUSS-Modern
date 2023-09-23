@@ -1191,7 +1191,7 @@ void do_cast(CHAR_DATA* ch, const char* argument)
                     auto t = alg::find(tmp->timers, TIMER_DO_FUN, &timer_data::type);
                     return t != tmp->timers.end()
                         && t->count >= 1 && t->do_fun == do_cast
-                        && tmp->tempnum == sn && tmp->dest_buf && !str_cmp((const char*)tmp->dest_buf, staticbuf);
+                        && tmp->tempnum == sn && tmp->dest_buf && !compare((const char*)tmp->dest_buf, staticbuf);
                 });
 
                 if (cnt >= skill->participants)
@@ -1202,7 +1202,7 @@ void do_cast(CHAR_DATA* ch, const char* argument)
 
                         if (t != tmp->timers.end()
                             && t->count >= 1 && t->do_fun == do_cast
-                            && tmp->tempnum == sn && tmp->dest_buf && !str_cmp((const char*)tmp->dest_buf, staticbuf))
+                            && tmp->tempnum == sn && tmp->dest_buf && !compare((const char*)tmp->dest_buf, staticbuf))
                         {
                             tmp->timers.erase(t, sentinel);
                             act(
@@ -1243,7 +1243,7 @@ void do_cast(CHAR_DATA* ch, const char* argument)
             }
     }
 
-    if (str_cmp(skill->name, "ventriloquate"))
+    if (compare(skill->name, "ventriloquate"))
         say_spell(ch, sn);
 
     if (!dont_wait)
@@ -1867,9 +1867,9 @@ ch_ret spell_control_weather(int sn, int level, CHAR_DATA* ch, void* vo)
 {
     SKILLTYPE* skill = get_skilltype(sn);
 
-    if (!str_cmp(target_name, "better"))
+    if (!compare(target_name, "better"))
         weather_info.change += dice(level / 3, 4);
-    else if (!str_cmp(target_name, "worse"))
+    else if (!compare(target_name, "worse"))
         weather_info.change -= dice(level / 3, 4);
     else
     {
@@ -3926,7 +3926,7 @@ ch_ret spell_polymorph(int sn, int level, CHAR_DATA* ch, void* vo)
         return rSPELL_FAILED;
     }
 
-    if (!str_cmp(target_name, "wolf"))
+    if (!compare(target_name, "wolf"))
         poly_vnum = MOB_VNUM_POLY_WOLF;
 
     else
@@ -4746,9 +4746,9 @@ ch_ret spell_create_obj(int sn, int level, CHAR_DATA* ch, void* vo)
     */
     if (vnum == 0)
     {
-        if (!str_cmp(target_name, "sword"))
+        if (!compare(target_name, "sword"))
             vnum = OBJ_VNUM_SCHOOL_SWORD;
-        if (!str_cmp(target_name, "shield"))
+        if (!compare(target_name, "shield"))
             vnum = OBJ_VNUM_SCHOOL_SHIELD;
     }
 

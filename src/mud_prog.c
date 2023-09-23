@@ -195,13 +195,13 @@ char* mprog_next_command(char* clist)
  */
 bool mprog_seval(const char* lhs, const char* opr, const char* rhs, CHAR_DATA* mob)
 {
-    if (!str_cmp(opr, "=="))
-        return (bool)(!str_cmp(lhs, rhs));
-    if (!str_cmp(opr, "!="))
-        return (bool)(str_cmp(lhs, rhs));
-    if (!str_cmp(opr, "/"))
+    if (!compare(opr, "=="))
+        return (bool)(!compare(lhs, rhs));
+    if (!compare(opr, "!="))
+        return (bool)(compare(lhs, rhs));
+    if (!compare(opr, "/"))
         return (bool)(!str_infix(rhs, lhs));
-    if (!str_cmp(opr, "!/"))
+    if (!compare(opr, "!/"))
         return (bool)(str_infix(rhs, lhs));
 
     snprintf(log_buf, MAX_STRING_LENGTH, "Improper MOBprog operator '%s'", opr);
@@ -211,21 +211,21 @@ bool mprog_seval(const char* lhs, const char* opr, const char* rhs, CHAR_DATA* m
 
 bool mprog_veval(int lhs, char* opr, int rhs, CHAR_DATA* mob)
 {
-    if (!str_cmp(opr, "=="))
+    if (!compare(opr, "=="))
         return (lhs == rhs);
-    if (!str_cmp(opr, "!="))
+    if (!compare(opr, "!="))
         return (lhs != rhs);
-    if (!str_cmp(opr, ">"))
+    if (!compare(opr, ">"))
         return (lhs > rhs);
-    if (!str_cmp(opr, "<"))
+    if (!compare(opr, "<"))
         return (lhs < rhs);
-    if (!str_cmp(opr, "<="))
+    if (!compare(opr, "<="))
         return (lhs <= rhs);
-    if (!str_cmp(opr, ">="))
+    if (!compare(opr, ">="))
         return (lhs >= rhs);
-    if (!str_cmp(opr, "&"))
+    if (!compare(opr, "&"))
         return (lhs & rhs);
-    if (!str_cmp(opr, "|"))
+    if (!compare(opr, "|"))
         return (lhs | rhs);
 
     snprintf(log_buf, MAX_STRING_LENGTH, "Improper MOBprog operator '%s'", opr);
@@ -347,11 +347,11 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
         if (!chkchar && !chkobj)
             return BERR;
     }
-    if (!str_cmp(chck, "rand"))
+    if (!compare(chck, "rand"))
     {
         return (number_percent() <= atoi(cvar));
     }
-    if (!str_cmp(chck, "economy"))
+    if (!compare(chck, "economy"))
     {
         int            idx = atoi(cvar);
         ROOM_INDEX_DATA* room;
@@ -376,7 +376,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
                            + room->area->low_economy, opr, atoi(rval), mob
         );
     }
-    if (!str_cmp(chck, "mobinroom"))
+    if (!compare(chck, "mobinroom"))
     {
         int      vnum = atoi(cvar);
         CHAR_DATA* oMob;
@@ -398,7 +398,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             mudstrlcpy(opr, "==", MAX_INPUT_LENGTH);
         return mprog_veval(lhsvl, opr, rhsvl, mob);
     }
-    if (!str_cmp(chck, "timeskilled"))
+    if (!compare(chck, "timeskilled"))
     {
         MOB_INDEX_DATA* pMob;
 
@@ -411,7 +411,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
         }
         return mprog_veval(pMob->killed, opr, atoi(rval), mob);
     }
-    if (!str_cmp(chck, "ovnumhere"))
+    if (!compare(chck, "ovnumhere"))
     {
         OBJ_DATA* pObj;
         int     vnum = atoi(cvar);
@@ -437,7 +437,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             mudstrlcpy(opr, "==", MAX_INPUT_LENGTH);
         return mprog_veval(lhsvl, opr, rhsvl, mob);
     }
-    if (!str_cmp(chck, "otypehere"))
+    if (!compare(chck, "otypehere"))
     {
         OBJ_DATA* pObj;
         int     type;
@@ -467,7 +467,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             mudstrlcpy(opr, "==", MAX_INPUT_LENGTH);
         return mprog_veval(lhsvl, opr, rhsvl, mob);
     }
-    if (!str_cmp(chck, "ovnumroom"))
+    if (!compare(chck, "ovnumroom"))
     {
         OBJ_DATA* pObj;
         int     vnum = atoi(cvar);
@@ -488,7 +488,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             mudstrlcpy(opr, "==", MAX_INPUT_LENGTH);
         return mprog_veval(lhsvl, opr, rhsvl, mob);
     }
-    if (!str_cmp(chck, "otyperoom"))
+    if (!compare(chck, "otyperoom"))
     {
         OBJ_DATA* pObj;
         int     type;
@@ -513,7 +513,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             mudstrlcpy(opr, "==", MAX_INPUT_LENGTH);
         return mprog_veval(lhsvl, opr, rhsvl, mob);
     }
-    if (!str_cmp(chck, "ovnumcarry"))
+    if (!compare(chck, "ovnumcarry"))
     {
         OBJ_DATA* pObj;
         int     vnum = atoi(cvar);
@@ -534,7 +534,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             mudstrlcpy(opr, "==", MAX_INPUT_LENGTH);
         return mprog_veval(lhsvl, opr, rhsvl, mob);
     }
-    if (!str_cmp(chck, "otypecarry"))
+    if (!compare(chck, "otypecarry"))
     {
         OBJ_DATA* pObj;
         int     type;
@@ -559,7 +559,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             mudstrlcpy(opr, "==", MAX_INPUT_LENGTH);
         return mprog_veval(lhsvl, opr, rhsvl, mob);
     }
-    if (!str_cmp(chck, "ovnumwear"))
+    if (!compare(chck, "ovnumwear"))
     {
         OBJ_DATA* pObj;
         int     vnum = atoi(cvar);
@@ -580,7 +580,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             mudstrlcpy(opr, "==", MAX_INPUT_LENGTH);
         return mprog_veval(lhsvl, opr, rhsvl, mob);
     }
-    if (!str_cmp(chck, "otypewear"))
+    if (!compare(chck, "otypewear"))
     {
         OBJ_DATA* pObj;
         int     type;
@@ -605,7 +605,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             mudstrlcpy(opr, "==", MAX_INPUT_LENGTH);
         return mprog_veval(lhsvl, opr, rhsvl, mob);
     }
-    if (!str_cmp(chck, "ovnuminv"))
+    if (!compare(chck, "ovnuminv"))
     {
         OBJ_DATA* pObj;
         int     vnum = atoi(cvar);
@@ -626,7 +626,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             mudstrlcpy(opr, "==", MAX_INPUT_LENGTH);
         return mprog_veval(lhsvl, opr, rhsvl, mob);
     }
-    if (!str_cmp(chck, "otypeinv"))
+    if (!compare(chck, "otypeinv"))
     {
         OBJ_DATA* pObj;
         int     type;
@@ -653,55 +653,55 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
     }
     if (chkchar)
     {
-        if (!str_cmp(chck, "ismobinvis"))
+        if (!compare(chck, "ismobinvis"))
         {
             return (IS_NPC(chkchar) && IS_SET(chkchar->act, ACT_MOBINVIS));
         }
-        if (!str_cmp(chck, "mobinvislevel"))
+        if (!compare(chck, "mobinvislevel"))
         {
             return (IS_NPC(chkchar) ? mprog_veval(chkchar->mobinvis, opr, atoi(rval), mob) : FALSE);
         }
-        if (!str_cmp(chck, "ispc"))
+        if (!compare(chck, "ispc"))
         {
             return IS_NPC(chkchar) ? FALSE : TRUE;
         }
-        if (!str_cmp(chck, "isnpc"))
+        if (!compare(chck, "isnpc"))
         {
             return IS_NPC(chkchar) ? TRUE : FALSE;
         }
-        if (!str_cmp(chck, "ismounted"))
+        if (!compare(chck, "ismounted"))
         {
             return (chkchar->position == POS_MOUNTED);
         }
-        if (!str_cmp(chck, "isgood"))
+        if (!compare(chck, "isgood"))
         {
             return IS_GOOD(chkchar) ? TRUE : FALSE;
         }
-        if (!str_cmp(chck, "isneutral"))
+        if (!compare(chck, "isneutral"))
         {
             return IS_NEUTRAL(chkchar) ? TRUE : FALSE;
         }
-        if (!str_cmp(chck, "isevil"))
+        if (!compare(chck, "isevil"))
         {
             return IS_EVIL(chkchar) ? TRUE : FALSE;
         }
-        if (!str_cmp(chck, "isfight"))
+        if (!compare(chck, "isfight"))
         {
             return who_fighting(chkchar) ? TRUE : FALSE;
         }
-        if (!str_cmp(chck, "isimmort"))
+        if (!compare(chck, "isimmort"))
         {
             return (get_trust(chkchar) >= LEVEL_IMMORTAL);
         }
-        if (!str_cmp(chck, "ischarmed"))
+        if (!compare(chck, "ischarmed"))
         {
             return IS_AFFECTED(chkchar, AFF_CHARM) ? TRUE : FALSE;
         }
-        if (!str_cmp(chck, "isfollow"))
+        if (!compare(chck, "isfollow"))
         {
             return (chkchar->master != nullptr && chkchar->master->in_room == chkchar->in_room);
         }
-        if (!str_cmp(chck, "isaffected"))
+        if (!compare(chck, "isaffected"))
         {
             int value = get_aflag(rval);
 
@@ -712,60 +712,60 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             }
             return IS_AFFECTED(chkchar, 1 << value) ? TRUE : FALSE;
         }
-        if (!str_cmp(chck, "hitprcnt"))
+        if (!compare(chck, "hitprcnt"))
         {
             return mprog_veval((chkchar->hit * 100) / chkchar->max_hit, opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "inroom"))
+        if (!compare(chck, "inroom"))
         {
             return mprog_veval(chkchar->in_room->vnum, opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "wasinroom"))
+        if (!compare(chck, "wasinroom"))
         {
             return mprog_veval(chkchar->was_in_room->vnum, opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "norecall"))
+        if (!compare(chck, "norecall"))
         {
             return IS_SET(chkchar->in_room->room_flags, ROOM_NO_RECALL) ? TRUE : FALSE;
         }
-        if (!str_cmp(chck, "sex"))
+        if (!compare(chck, "sex"))
         {
             return mprog_veval(chkchar->sex, opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "position"))
+        if (!compare(chck, "position"))
         {
             return mprog_veval(chkchar->position, opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "doingquest"))
+        if (!compare(chck, "doingquest"))
         {
             return IS_NPC(actor) ? FALSE : mprog_veval(chkchar->pcdata->quest_number, opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "ishelled"))
+        if (!compare(chck, "ishelled"))
         {
             return IS_NPC(actor) ? FALSE : mprog_veval(chkchar->pcdata->release_date, opr, atoi(rval), mob);
         }
 
-        if (!str_cmp(chck, "level"))
+        if (!compare(chck, "level"))
         {
             return mprog_veval(get_trust(chkchar), opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "goldamt"))
+        if (!compare(chck, "goldamt"))
         {
             return mprog_veval(chkchar->gold, opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "race"))
+        if (!compare(chck, "race"))
         {
             if (IS_NPC(chkchar))
                 return mprog_seval(npc_race[chkchar->race], opr, rval, mob);
             return mprog_seval((char*)race_table[chkchar->race].race_name, opr, rval, mob);
         }
-        if (!str_cmp(chck, "clan"))
+        if (!compare(chck, "clan"))
         {
             if (IS_NPC(chkchar) || !chkchar->pcdata->clan)
                 return FALSE;
             return mprog_seval(chkchar->pcdata->clan->name, opr, rval, mob);
         }
-        if (!str_cmp(chck, "council") || !str_cmp(chck, "senator"))
+        if (!compare(chck, "council") || !compare(chck, "senator"))
         {
             SENATE_DATA* senator;
 
@@ -774,72 +774,72 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
             if (IS_IMMORTAL(chkchar))
                 return TRUE;
             for (senator = first_senator; senator; senator = senator->next)
-                if (!str_cmp(chkchar->name, senator->name))
+                if (!compare(chkchar->name, senator->name))
                     return TRUE;
             return FALSE;
         }
-        if (!str_cmp(chck, "clantype"))
+        if (!compare(chck, "clantype"))
         {
             if (IS_NPC(chkchar) || !chkchar->pcdata->clan)
                 return FALSE;
             return mprog_veval(chkchar->pcdata->clan->clan_type, opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "str"))
+        if (!compare(chck, "str"))
         {
             return mprog_veval(get_curr_str(chkchar), opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "wis"))
+        if (!compare(chck, "wis"))
         {
             return mprog_veval(get_curr_wis(chkchar), opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "int"))
+        if (!compare(chck, "int"))
         {
             return mprog_veval(get_curr_int(chkchar), opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "dex"))
+        if (!compare(chck, "dex"))
         {
             return mprog_veval(get_curr_dex(chkchar), opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "con"))
+        if (!compare(chck, "con"))
         {
             return mprog_veval(get_curr_con(chkchar), opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "cha"))
+        if (!compare(chck, "cha"))
         {
             return mprog_veval(get_curr_cha(chkchar), opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "lck"))
+        if (!compare(chck, "lck"))
         {
             return mprog_veval(get_curr_lck(chkchar), opr, atoi(rval), mob);
         }
     }
     if (chkobj)
     {
-        if (!str_cmp(chck, "objtype"))
+        if (!compare(chck, "objtype"))
         {
             return mprog_veval(chkobj->item_type, opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "objval0"))
+        if (!compare(chck, "objval0"))
         {
             return mprog_veval(chkobj->value[0], opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "objval1"))
+        if (!compare(chck, "objval1"))
         {
             return mprog_veval(chkobj->value[1], opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "objval2"))
+        if (!compare(chck, "objval2"))
         {
             return mprog_veval(chkobj->value[2], opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "objval3"))
+        if (!compare(chck, "objval3"))
         {
             return mprog_veval(chkobj->value[3], opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "objval4"))
+        if (!compare(chck, "objval4"))
         {
             return mprog_veval(chkobj->value[4], opr, atoi(rval), mob);
         }
-        if (!str_cmp(chck, "objval5"))
+        if (!compare(chck, "objval5"))
         {
             return mprog_veval(chkobj->value[5], opr, atoi(rval), mob);
         }
@@ -848,7 +848,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
     * The following checks depend on the fact that cval[1] can only contain
     * one character, and that nullptr checks were made previously.
     */
-    if (!str_cmp(chck, "number"))
+    if (!compare(chck, "number"))
     {
         if (chkchar)
         {
@@ -859,7 +859,7 @@ int mprog_do_ifcheck(const char* ifcheck, CHAR_DATA* mob, CHAR_DATA* actor, OBJ_
         }
         return mprog_veval(chkobj->pIndexData->vnum, opr, atoi(rval), mob);
     }
-    if (!str_cmp(chck, "name"))
+    if (!compare(chck, "name"))
     {
         if (chkchar)
             return mprog_seval(chkchar->name, opr, rval, mob);
@@ -1602,7 +1602,7 @@ int mprog_do_command(
     */
     ifcheck = one_argument(cmnd, firstword);
 
-    if (!str_cmp(firstword, "if"))
+    if (!compare(firstword, "if"))
     {
         /*
        * Ok, we found an if.  According to the boolean 'ignore', either
@@ -1623,7 +1623,7 @@ int mprog_do_command(
         return BERR;
     }
 
-    if (!str_cmp(firstword, "or"))
+    if (!compare(firstword, "or"))
     {
         /*
        * Same behavior as with ifs, but use the boolean 'ignore_ors' to
@@ -1647,12 +1647,12 @@ int mprog_do_command(
     * For else and endif, just report back what we found.  Mprog_driver
     * keeps track of logiclevels.
     */
-    if (!str_cmp(firstword, "else"))
+    if (!compare(firstword, "else"))
     {
         return FOUNDELSE;
     }
 
-    if (!str_cmp(firstword, "endif"))
+    if (!compare(firstword, "endif"))
     {
         return FOUNDENDIF;
     }
@@ -1670,7 +1670,7 @@ int mprog_do_command(
     /*
     * If the command is 'break', that's all folks.
     */
-    if (!str_cmp(firstword, "break"))
+    if (!compare(firstword, "break"))
         return BERR;
 
     vnum   = mob->pIndexData->vnum;
@@ -2017,7 +2017,7 @@ void mprog_give_trigger(CHAR_DATA* mob, CHAR_DATA* ch, OBJ_DATA* obj)
         {
             one_argument(mprg->arglist, buf);
 
-            if ((mprg->type & GIVE_PROG) && ((!str_cmp(obj->name, mprg->arglist)) || (!str_cmp("all", buf))))
+            if ((mprg->type & GIVE_PROG) && ((!compare(obj->name, mprg->arglist)) || (!compare("all", buf))))
             {
 
                 mprog_driver(mprg->comlist, mob, ch, obj, nullptr, FALSE);

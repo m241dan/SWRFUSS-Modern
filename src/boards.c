@@ -72,11 +72,11 @@ bool can_read(CHAR_DATA* ch, BOARD_DATA* board)
     */
     if (board->read_group[0] != '\0')
     {
-        if (ch->pcdata->clan && !str_cmp(ch->pcdata->clan->name, board->read_group))
+        if (ch->pcdata->clan && !compare(ch->pcdata->clan->name, board->read_group))
             return TRUE;
         if (ch->pcdata->clan &&
             ch->pcdata->clan->mainclan &&
-            !str_cmp(ch->pcdata->clan->mainclan->name, board->read_group))
+            !compare(ch->pcdata->clan->mainclan->name, board->read_group))
             return TRUE;
 
     }
@@ -101,11 +101,11 @@ bool can_post(CHAR_DATA* ch, BOARD_DATA* board)
     */
     if (board->post_group[0] != '\0')
     {
-        if (ch->pcdata->clan && !str_cmp(ch->pcdata->clan->name, board->post_group))
+        if (ch->pcdata->clan && !compare(ch->pcdata->clan->name, board->post_group))
             return TRUE;
         if (ch->pcdata->clan &&
             ch->pcdata->clan->mainclan &&
-            !str_cmp(ch->pcdata->clan->mainclan->name, board->post_group))
+            !compare(ch->pcdata->clan->mainclan->name, board->post_group))
             return TRUE;
     }
     return FALSE;
@@ -172,7 +172,7 @@ BOARD_DATA* find_board(CHAR_DATA* ch)
 
 bool is_note_to(CHAR_DATA* ch, NOTE_DATA* pnote)
 {
-    if (!str_cmp(ch->name, pnote->sender))
+    if (!compare(ch->name, pnote->sender))
         return TRUE;
 
     if (is_name("all", pnote->to_list))
@@ -309,7 +309,7 @@ void do_noteroom(CHAR_DATA* ch, const char* argument)
 
             argument = one_argument(argument, arg);
             argument = smash_tilde_static(argument);
-            if (!str_cmp(arg, "write") || !str_cmp(arg, "to") || !str_cmp(arg, "subject") || !str_cmp(arg, "show"))
+            if (!compare(arg, "write") || !compare(arg, "to") || !compare(arg, "subject") || !compare(arg, "show"))
             {
                 do_note(ch, arg_passed, FALSE);
                 return;
@@ -352,7 +352,7 @@ void do_mailroom(CHAR_DATA* ch, const char* argument)
 
             argument = one_argument(argument, arg);
             argument = smash_tilde_static(argument);
-            if (!str_cmp(arg, "write") || !str_cmp(arg, "to") || !str_cmp(arg, "subject") || !str_cmp(arg, "show"))
+            if (!compare(arg, "write") || !compare(arg, "to") || !compare(arg, "subject") || !compare(arg, "show"))
             {
                 do_note(ch, arg_passed, TRUE);
                 return;
@@ -426,7 +426,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
     arg_passed = one_argument(arg_passed, arg);
     arg_passed = smash_tilde_static(arg_passed);
 
-    if (!str_cmp(arg, "list"))
+    if (!compare(arg, "list"))
     {
         board = find_board(ch);
         if (!board)
@@ -505,7 +505,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
         }
     }
 
-    if (!str_cmp(arg, "read"))
+    if (!compare(arg, "read"))
     {
         bool fAll;
 
@@ -521,7 +521,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
             return;
         }
 
-        if (!str_cmp(arg_passed, "all"))
+        if (!compare(arg_passed, "all"))
         {
             fAll = TRUE;
             anum = 0;
@@ -601,7 +601,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
     /*
     * Voting added by Narn, June '96
     */
-    if (!str_cmp(arg, "vote"))
+    if (!compare(arg, "vote"))
     {
         char arg2[MAX_INPUT_LENGTH];
         arg_passed = one_argument(arg_passed, arg2);
@@ -642,9 +642,9 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
        * If you're the author of the note and can read the board you can open
        * and close voting, if you can read it and voting is open you can vote.
        */
-        if (!str_cmp(arg_passed, "open"))
+        if (!compare(arg_passed, "open"))
         {
-            if (str_cmp(ch->name, pnote->sender))
+            if (compare(ch->name, pnote->sender))
             {
                 send_to_char("You are not the author of this message.\r\n", ch);
                 return;
@@ -655,9 +655,9 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
             write_board(board);
             return;
         }
-        if (!str_cmp(arg_passed, "close"))
+        if (!compare(arg_passed, "close"))
         {
-            if (str_cmp(ch->name, pnote->sender))
+            if (compare(ch->name, pnote->sender))
             {
                 send_to_char("You are not the author of this message.\r\n", ch);
                 return;
@@ -687,7 +687,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
             send_to_char("You have already voted on this note.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg_passed, "yes"))
+        if (!compare(arg_passed, "yes"))
         {
             snprintf(buf, MAX_STRING_LENGTH, "%s %s", pnote->yesvotes, ch->name);
             DISPOSE(pnote->yesvotes);
@@ -697,7 +697,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
             write_board(board);
             return;
         }
-        if (!str_cmp(arg_passed, "no"))
+        if (!compare(arg_passed, "no"))
         {
             snprintf(buf, MAX_STRING_LENGTH, "%s %s", pnote->novotes, ch->name);
             DISPOSE(pnote->novotes);
@@ -707,7 +707,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
             write_board(board);
             return;
         }
-        if (!str_cmp(arg_passed, "abstain"))
+        if (!compare(arg_passed, "abstain"))
         {
             snprintf(buf, MAX_STRING_LENGTH, "%s %s", pnote->abstentions, ch->name);
             DISPOSE(pnote->abstentions);
@@ -720,7 +720,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
         do_note(ch, "", FALSE);
     }
 
-    if (!str_cmp(arg, "write"))
+    if (!compare(arg, "write"))
     {
         if (ch->substate == SUB_RESTRICTED)
         {
@@ -774,7 +774,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
         }
     }
 
-    if (!str_cmp(arg, "subject"))
+    if (!compare(arg, "subject"))
     {
         if (get_trust(ch) < sysdata.write_mail_free)
         {
@@ -826,7 +826,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
         }
     }
 
-    if (!str_cmp(arg, "to"))
+    if (!compare(arg, "to"))
     {
         struct stat fst;
         char        fname[256];
@@ -877,7 +877,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
 
         snprintf(fname, 256, "%s%c/%s", PLAYER_DIR, tolower(ucase_arg_passed[0]), capitalize(ucase_arg_passed));
 
-        if (!IS_MAIL || stat(fname, &fst) != -1 || !str_cmp(ucase_arg_passed, "all"))
+        if (!IS_MAIL || stat(fname, &fst) != -1 || !compare(ucase_arg_passed, "all"))
         {
             paper->value[2] = 1;
             ed = SetOExtra(paper, "_to_");
@@ -893,7 +893,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
         }
     }
 
-    if (!str_cmp(arg, "show"))
+    if (!compare(arg, "show"))
     {
         const char* subject, * to_list, * text;
 
@@ -914,7 +914,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
         return;
     }
 
-    if (!str_cmp(arg, "post"))
+    if (!compare(arg, "post"))
     {
         char      * strtime;
         const char* text;
@@ -1002,7 +1002,7 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
         return;
     }
 
-    if (!str_cmp(arg, "remove") || !str_cmp(arg, "take") || !str_cmp(arg, "copy"))
+    if (!compare(arg, "remove") || !compare(arg, "take") || !compare(arg, "copy"))
     {
         char take;
 
@@ -1012,9 +1012,9 @@ void do_note(CHAR_DATA* ch, const char* arg_passed, bool IS_MAIL)
             send_to_char("There is no terminal here to download a note from!\r\n", ch);
             return;
         }
-        if (!str_cmp(arg, "take"))
+        if (!compare(arg, "take"))
             take = 1;
-        else if (!str_cmp(arg, "copy"))
+        else if (!compare(arg, "copy"))
         {
             if (!IS_IMMORTAL(ch))
             {
@@ -1171,7 +1171,7 @@ BOARD_DATA* read_board(const char* boardfile, FILE* fp)
                 break;
             case 'E':KEY("Extra_readers", board->extra_readers, fread_string_nohash(fp));
                 KEY("Extra_removers", board->extra_removers, fread_string_nohash(fp));
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                 {
                     board->num_posts          = 0;
                     board->first_note         = nullptr;
@@ -1228,43 +1228,43 @@ NOTE_DATA* read_note(char* notefile, FILE* fp)
 
         CREATE(pnote, NOTE_DATA, 1);
 
-        if (str_cmp(fread_word(fp), "sender"))
+        if (compare(fread_word(fp), "sender"))
             break;
         pnote->sender = fread_string(fp);
 
-        if (str_cmp(fread_word(fp), "date"))
+        if (compare(fread_word(fp), "date"))
             break;
         pnote->date = fread_string(fp);
 
-        if (str_cmp(fread_word(fp), "to"))
+        if (compare(fread_word(fp), "to"))
             break;
         pnote->to_list = fread_string(fp);
 
-        if (str_cmp(fread_word(fp), "subject"))
+        if (compare(fread_word(fp), "subject"))
             break;
         pnote->subject = fread_string(fp);
 
         word = fread_word(fp);
-        if (!str_cmp(word, "voting"))
+        if (!compare(word, "voting"))
         {
             pnote->voting = fread_number(fp);
 
-            if (str_cmp(fread_word(fp), "yesvotes"))
+            if (compare(fread_word(fp), "yesvotes"))
                 break;
             pnote->yesvotes = fread_string_nohash(fp);
 
-            if (str_cmp(fread_word(fp), "novotes"))
+            if (compare(fread_word(fp), "novotes"))
                 break;
             pnote->novotes = fread_string_nohash(fp);
 
-            if (str_cmp(fread_word(fp), "abstentions"))
+            if (compare(fread_word(fp), "abstentions"))
                 break;
             pnote->abstentions = fread_string_nohash(fp);
 
             word = fread_word(fp);
         }
 
-        if (str_cmp(word, "text"))
+        if (compare(word, "text"))
             break;
         pnote->text = fread_string(fp);
 
@@ -1364,7 +1364,7 @@ void do_bset(CHAR_DATA* ch, const char* argument)
     value      = atoi(argument);
     found      = FALSE;
     for (board = first_board; board; board = board->next)
-        if (!str_cmp(arg1, board->note_file))
+        if (!compare(arg1, board->note_file))
         {
             found = TRUE;
             break;
@@ -1375,7 +1375,7 @@ void do_bset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "vnum"))
+    if (!compare(arg2, "vnum"))
     {
         if (!get_obj_index(value))
         {
@@ -1388,7 +1388,7 @@ void do_bset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "read"))
+    if (!compare(arg2, "read"))
     {
         if (value < 0 || value > MAX_LEVEL)
         {
@@ -1401,7 +1401,7 @@ void do_bset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "read_group"))
+    if (!compare(arg2, "read_group"))
     {
         if (!argument || argument[0] == '\0')
         {
@@ -1409,7 +1409,7 @@ void do_bset(CHAR_DATA* ch, const char* argument)
             return;
         }
         DISPOSE(board->read_group);
-        if (!str_cmp(argument, "none"))
+        if (!compare(argument, "none"))
             board->read_group = str_dup("");
         else
             board->read_group = str_dup(argument);
@@ -1418,7 +1418,7 @@ void do_bset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "post_group"))
+    if (!compare(arg2, "post_group"))
     {
         if (!argument || argument[0] == '\0')
         {
@@ -1426,7 +1426,7 @@ void do_bset(CHAR_DATA* ch, const char* argument)
             return;
         }
         DISPOSE(board->post_group);
-        if (!str_cmp(argument, "none"))
+        if (!compare(argument, "none"))
             board->post_group = str_dup("");
         else
             board->post_group = str_dup(argument);
@@ -1435,14 +1435,14 @@ void do_bset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "extra_removers"))
+    if (!compare(arg2, "extra_removers"))
     {
         if (!argument || argument[0] == '\0')
         {
             send_to_char("No names specified.\r\n", ch);
             return;
         }
-        if (!str_cmp(argument, "none"))
+        if (!compare(argument, "none"))
             buf[0] = '\0';
         else
             snprintf(buf, MAX_STRING_LENGTH, "%s %s", board->extra_removers, argument);
@@ -1453,14 +1453,14 @@ void do_bset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "extra_readers"))
+    if (!compare(arg2, "extra_readers"))
     {
         if (!argument || argument[0] == '\0')
         {
             send_to_char("No names specified.\r\n", ch);
             return;
         }
-        if (!str_cmp(argument, "none"))
+        if (!compare(argument, "none"))
             buf[0] = '\0';
         else
             snprintf(buf, MAX_STRING_LENGTH, "%s %s", board->extra_readers, argument);
@@ -1471,7 +1471,7 @@ void do_bset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "filename"))
+    if (!compare(arg2, "filename"))
     {
         char filename[256];
 
@@ -1489,7 +1489,7 @@ void do_bset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "post"))
+    if (!compare(arg2, "post"))
     {
         if (value < 0 || value > MAX_LEVEL)
         {
@@ -1502,7 +1502,7 @@ void do_bset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "remove"))
+    if (!compare(arg2, "remove"))
     {
         if (value < 0 || value > MAX_LEVEL)
         {
@@ -1515,7 +1515,7 @@ void do_bset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "maxpost"))
+    if (!compare(arg2, "maxpost"))
     {
         if (value < 1 || value > 1000)
         {
@@ -1527,7 +1527,7 @@ void do_bset(CHAR_DATA* ch, const char* argument)
         send_to_char("Done.\r\n", ch);
         return;
     }
-    if (!str_cmp(arg2, "type"))
+    if (!compare(arg2, "type"))
     {
         if (value < 0 || value > 1)
         {
@@ -1559,7 +1559,7 @@ void do_bstat(CHAR_DATA* ch, const char* argument)
 
     found      = FALSE;
     for (board = first_board; board; board = board->next)
-        if (!str_cmp(arg, board->note_file))
+        if (!compare(arg, board->note_file))
         {
             found = TRUE;
             break;

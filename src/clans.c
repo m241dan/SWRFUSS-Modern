@@ -61,7 +61,7 @@ CLAN_DATA* get_clan(const char* name)
     CLAN_DATA* clan;
 
     for (clan = first_clan; clan; clan = clan->next)
-        if (!str_cmp(name, clan->name))
+        if (!compare(name, clan->name))
             return clan;
     return nullptr;
 }
@@ -71,7 +71,7 @@ PLANET_DATA* get_planet(const char* name)
     PLANET_DATA* planet;
 
     for (planet = first_planet; planet; planet = planet->next)
-        if (!str_cmp(name, planet->name))
+        if (!compare(name, planet->name))
             return planet;
     return nullptr;
 }
@@ -247,7 +247,7 @@ void fread_clan(CLAN_DATA* clan, FILE* fp)
                 break;
 
             case 'E':
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                 {
                     if (!clan->name)
                         clan->name        = STRALLOC("");
@@ -329,14 +329,14 @@ void fread_planet(PLANET_DATA* planet, FILE* fp)
                 break;
 
             case 'A':
-                if (!str_cmp(word, "Area"))
+                if (!compare(word, "Area"))
                 {
                     const char* aName;
                     AREA_DATA * pArea;
 
                     aName      = fread_string(fp);
                     for (pArea = first_area; pArea; pArea = pArea->next)
-                        if (pArea->filename && !str_cmp(pArea->filename, aName))
+                        if (pArea->filename && !compare(pArea->filename, aName))
                         {
                             pArea->planet = planet;
                             LINK(pArea, planet->first_area, planet->last_area, next_on_planet, prev_on_planet);
@@ -350,7 +350,7 @@ void fread_planet(PLANET_DATA* planet, FILE* fp)
                 break;
 
             case 'E':
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                 {
                     if (!planet->name)
                         planet->name = STRALLOC("");
@@ -363,7 +363,7 @@ void fread_planet(PLANET_DATA* planet, FILE* fp)
                 break;
 
             case 'G':
-                if (!str_cmp(word, "GovernedBy"))
+                if (!compare(word, "GovernedBy"))
                 {
                     const char* clan_name = fread_string(fp);
                     planet->governed_by = get_clan(clan_name);
@@ -380,7 +380,7 @@ void fread_planet(PLANET_DATA* planet, FILE* fp)
                 break;
 
             case 'S':
-                if (!str_cmp(word, "Starsystem"))
+                if (!compare(word, "Starsystem"))
                 {
                     const char* starsystem_name = fread_string(fp);
                     planet->starsystem = starsystem_from_name(starsystem_name);
@@ -449,12 +449,12 @@ bool load_clan_file(const char* clanfile)
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "CLAN"))
+            if (!compare(word, "CLAN"))
             {
                 fread_clan(clan, fp);
                 break;
             }
-            else if (!str_cmp(word, "END"))
+            else if (!compare(word, "END"))
                 break;
             else
             {
@@ -507,9 +507,9 @@ bool load_clan_file(const char* clanfile)
                 }
 
                 word = fread_word(fp);
-                if (!str_cmp(word, "OBJECT")) /* Objects  */
+                if (!compare(word, "OBJECT")) /* Objects  */
                     fread_obj(supermob, fp, OS_CARRY);
-                else if (!str_cmp(word, "END"))  /* Done     */
+                else if (!compare(word, "END"))  /* Done     */
                     break;
                 else
                 {
@@ -579,12 +579,12 @@ bool load_planet_file(const char* planetfile)
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "PLANET"))
+            if (!compare(word, "PLANET"))
             {
                 fread_planet(planet, fp);
                 break;
             }
-            else if (!str_cmp(word, "END"))
+            else if (!compare(word, "END"))
                 break;
             else
             {
@@ -713,7 +713,7 @@ void do_induct(CHAR_DATA* ch, const char* argument)
     if ((
             ch->pcdata && ch->pcdata->bestowments
             && is_name("induct", ch->pcdata->bestowments))
-        || !str_cmp(ch->name, clan->leader) || !str_cmp(ch->name, clan->number1) || !str_cmp(ch->name, clan->number2));
+        || !compare(ch->name, clan->leader) || !compare(ch->name, clan->number1) || !compare(ch->name, clan->number2));
     else
     {
         send_to_char("Huh?\r\n", ch);
@@ -785,17 +785,17 @@ bool can_outcast(CLAN_DATA* clan, CHAR_DATA* ch, CHAR_DATA* victim)
 {
     if (!clan || !ch || !victim)
         return FALSE;
-    if (!str_cmp(ch->name, clan->leader))
+    if (!compare(ch->name, clan->leader))
         return TRUE;
-    if (!str_cmp(victim->name, clan->leader))
+    if (!compare(victim->name, clan->leader))
         return FALSE;
-    if (!str_cmp(ch->name, clan->number1))
+    if (!compare(ch->name, clan->number1))
         return TRUE;
-    if (!str_cmp(victim->name, clan->number1))
+    if (!compare(victim->name, clan->number1))
         return FALSE;
-    if (!str_cmp(ch->name, clan->number2))
+    if (!compare(ch->name, clan->number2))
         return TRUE;
-    if (!str_cmp(victim->name, clan->number2))
+    if (!compare(victim->name, clan->number2))
         return FALSE;
     return TRUE;
 }
@@ -818,7 +818,7 @@ void do_outcast(CHAR_DATA* ch, const char* argument)
     if ((
             ch->pcdata && ch->pcdata->bestowments
             && is_name("outcast", ch->pcdata->bestowments))
-        || !str_cmp(ch->name, clan->leader) || !str_cmp(ch->name, clan->number1) || !str_cmp(ch->name, clan->number2));
+        || !compare(ch->name, clan->leader) || !compare(ch->name, clan->number1) || !compare(ch->name, clan->number2));
     else
     {
         send_to_char("Huh?\r\n", ch);
@@ -869,12 +869,12 @@ void do_outcast(CHAR_DATA* ch, const char* argument)
     --clan->members;
     if (clan->members < 0)
         clan->members    = 0;
-    if (!str_cmp(victim->name, ch->pcdata->clan->number1))
+    if (!compare(victim->name, ch->pcdata->clan->number1))
     {
         STRFREE(ch->pcdata->clan->number1);
         ch->pcdata->clan->number1 = STRALLOC("");
     }
-    if (!str_cmp(victim->name, ch->pcdata->clan->number2))
+    if (!compare(victim->name, ch->pcdata->clan->number2))
     {
         STRFREE(ch->pcdata->clan->number2);
         ch->pcdata->clan->number2 = STRALLOC("");
@@ -1085,11 +1085,11 @@ void do_setclan(CHAR_DATA* ch, const char* argument)
             UNLINK(clan, clan->mainclan->first_subclan, clan->mainclan->last_subclan, next_subclan, prev_subclan);
             clan->mainclan = nullptr;
         }
-        if (!str_cmp(argument, "crime"))
+        if (!compare(argument, "crime"))
             clan->clan_type = CLAN_CRIME;
-        else if (!str_cmp(argument, "crime family"))
+        else if (!compare(argument, "crime family"))
             clan->clan_type = CLAN_CRIME;
-        else if (!str_cmp(argument, "guild"))
+        else if (!compare(argument, "guild"))
             clan->clan_type = CLAN_GUILD;
         else
             clan->clan_type = 0;
@@ -1098,7 +1098,7 @@ void do_setclan(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "name"))
+    if (!compare(arg2, "name"))
     {
         CLAN_DATA* uclan = nullptr;
 
@@ -1119,7 +1119,7 @@ void do_setclan(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "filename"))
+    if (!compare(arg2, "filename"))
     {
         char filename[256];
 
@@ -1246,7 +1246,7 @@ void do_setplanet(CHAR_DATA* ch, const char* argument)
         }
         for (tplanet = first_planet; tplanet; tplanet = tplanet->next)
         {
-            if (!str_cmp(tplanet->filename, argument))
+            if (!compare(tplanet->filename, argument))
             {
                 send_to_char("A planet with that filename already exists!\r\n", ch);
                 return;
@@ -1284,7 +1284,7 @@ void do_setplanet(CHAR_DATA* ch, const char* argument)
 
         for (; farg[0] != '\0'; argument = one_argument(argument, farg))
         {
-            if (!str_cmp(farg, "nocapture"))
+            if (!compare(farg, "nocapture"))
                 TOGGLE_BIT(planet->flags, PLANET_NOCAPTURE);
             else
                 ch_printf(ch, "No such flag: %s\r\n", farg);
@@ -1840,7 +1840,7 @@ void do_resign(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(ch->name, ch->pcdata->clan->leader))
+    if (!compare(ch->name, ch->pcdata->clan->leader))
     {
         ch_printf(ch, "You can't resign from %s ... you are the leader!\r\n", clan->name);
         return;
@@ -1850,12 +1850,12 @@ void do_resign(CHAR_DATA* ch, const char* argument)
         ch->speaking = LANG_COMMON;
     REMOVE_BIT(ch->speaks, LANG_CLAN);
     --clan->members;
-    if (!str_cmp(ch->name, ch->pcdata->clan->number1))
+    if (!compare(ch->name, ch->pcdata->clan->number1))
     {
         STRFREE(ch->pcdata->clan->number1);
         ch->pcdata->clan->number1 = STRALLOC("");
     }
-    if (!str_cmp(ch->name, ch->pcdata->clan->number2))
+    if (!compare(ch->name, ch->pcdata->clan->number2))
     {
         STRFREE(ch->pcdata->clan->number2);
         ch->pcdata->clan->number2 = STRALLOC("");
@@ -1896,7 +1896,7 @@ void do_clan_withdraw(CHAR_DATA* ch, const char* argument)
 
     if ((
             ch->pcdata && ch->pcdata->bestowments
-            && is_name("withdraw", ch->pcdata->bestowments)) || !str_cmp(ch->name, ch->pcdata->clan->leader));
+            && is_name("withdraw", ch->pcdata->bestowments)) || !compare(ch->name, ch->pcdata->clan->leader));
     else
     {
         send_to_char("&RYour organization hasn't seen fit to bestow you with that ability.", ch);
@@ -1998,7 +1998,7 @@ void do_appoint(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (str_cmp(ch->name, ch->pcdata->clan->leader))
+    if (compare(ch->name, ch->pcdata->clan->leader))
     {
         send_to_char("Only your leader can do that!\r\n", ch);
         return;
@@ -2010,9 +2010,9 @@ void do_appoint(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(argument, "first"))
+    if (!compare(argument, "first"))
     {
-        if (ch->pcdata->clan->number1 && str_cmp(ch->pcdata->clan->number1, ""))
+        if (ch->pcdata->clan->number1 && compare(ch->pcdata->clan->number1, ""))
         {
             send_to_char("You already have someone in that position ... demote them first.\r\n", ch);
             return;
@@ -2021,9 +2021,9 @@ void do_appoint(CHAR_DATA* ch, const char* argument)
         STRFREE(ch->pcdata->clan->number1);
         ch->pcdata->clan->number1 = STRALLOC(arg);
     }
-    else if (!str_cmp(argument, "second"))
+    else if (!compare(argument, "second"))
     {
-        if (ch->pcdata->clan->number2 && str_cmp(ch->pcdata->clan->number2, ""))
+        if (ch->pcdata->clan->number2 && compare(ch->pcdata->clan->number2, ""))
         {
             send_to_char("You already have someone in that position ... demote them first.\r\n", ch);
             return;
@@ -2049,7 +2049,7 @@ void do_demote(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (str_cmp(ch->name, ch->pcdata->clan->leader))
+    if (compare(ch->name, ch->pcdata->clan->leader))
     {
         send_to_char("Only your leader can do that!\r\n", ch);
         return;
@@ -2061,14 +2061,14 @@ void do_demote(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(argument, ch->pcdata->clan->number1))
+    if (!compare(argument, ch->pcdata->clan->number1))
     {
         send_to_char("Player Demoted!", ch);
 
         STRFREE(ch->pcdata->clan->number1);
         ch->pcdata->clan->number1 = STRALLOC("");
     }
-    else if (!str_cmp(argument, ch->pcdata->clan->number2))
+    else if (!compare(argument, ch->pcdata->clan->number2))
     {
         send_to_char("Player Demoted!", ch);
 
@@ -2212,7 +2212,7 @@ void do_empower(CHAR_DATA* ch, const char* argument)
 
     if ((
             ch->pcdata && ch->pcdata->bestowments
-            && is_name("withdraw", ch->pcdata->bestowments)) || !str_cmp(ch->name, clan->leader));
+            && is_name("withdraw", ch->pcdata->bestowments)) || !compare(ch->name, clan->leader));
     else
     {
         send_to_char("You clan hasn't seen fit to bestow that ability to you!\r\n", ch);
@@ -2255,13 +2255,13 @@ void do_empower(CHAR_DATA* ch, const char* argument)
     if (!victim->pcdata->bestowments)
         victim->pcdata->bestowments = str_dup("");
 
-    if (arg2[0] == '\0' || !str_cmp(arg2, "list"))
+    if (arg2[0] == '\0' || !compare(arg2, "list"))
     {
         ch_printf(ch, "Current bestowed commands on %s: %s.\r\n", victim->name, victim->pcdata->bestowments);
         return;
     }
 
-    if (str_cmp(ch->name, clan->leader) && !str_cmp(ch->name, clan->number1))
+    if (compare(ch->name, clan->leader) && !compare(ch->name, clan->number1))
     {
         if (!is_name(arg2, ch->pcdata->bestowments))
         {
@@ -2270,7 +2270,7 @@ void do_empower(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (!str_cmp(arg2, "none"))
+    if (!compare(arg2, "none"))
     {
         DISPOSE(victim->pcdata->bestowments);
         victim->pcdata->bestowments = str_dup("");
@@ -2278,7 +2278,7 @@ void do_empower(CHAR_DATA* ch, const char* argument)
         ch_printf(victim, "%s has removed your bestowed clan abilities.\r\n", ch->name);
         return;
     }
-    else if (!str_cmp(arg2, "pilot"))
+    else if (!compare(arg2, "pilot"))
     {
         snprintf(buf, MAX_STRING_LENGTH, "%s %s", victim->pcdata->bestowments, arg2);
         DISPOSE(victim->pcdata->bestowments);
@@ -2286,7 +2286,7 @@ void do_empower(CHAR_DATA* ch, const char* argument)
         ch_printf(victim, "%s has given you permission to fly clan ships.\r\n", ch->name);
         send_to_char("Ok, they now have the ability to fly clan ships.\r\n", ch);
     }
-    else if (!str_cmp(arg2, "withdraw"))
+    else if (!compare(arg2, "withdraw"))
     {
         snprintf(buf, MAX_STRING_LENGTH, "%s %s", victim->pcdata->bestowments, arg2);
         DISPOSE(victim->pcdata->bestowments);
@@ -2294,7 +2294,7 @@ void do_empower(CHAR_DATA* ch, const char* argument)
         ch_printf(victim, "%s has given you permission to withdraw clan funds.\r\n", ch->name);
         send_to_char("Ok, they now have the ablitity to withdraw clan funds.\r\n", ch);
     }
-    else if (!str_cmp(arg2, "clanbuyship"))
+    else if (!compare(arg2, "clanbuyship"))
     {
         snprintf(buf, MAX_STRING_LENGTH, "%s %s", victim->pcdata->bestowments, arg2);
         DISPOSE(victim->pcdata->bestowments);
@@ -2302,7 +2302,7 @@ void do_empower(CHAR_DATA* ch, const char* argument)
         ch_printf(victim, "%s has given you permission to buy clan ships.\r\n", ch->name);
         send_to_char("Ok, they now have the ablitity to use clanbuyship.\r\n", ch);
     }
-    else if (!str_cmp(arg2, "induct"))
+    else if (!compare(arg2, "induct"))
     {
         snprintf(buf, MAX_STRING_LENGTH, "%s %s", victim->pcdata->bestowments, arg2);
         DISPOSE(victim->pcdata->bestowments);

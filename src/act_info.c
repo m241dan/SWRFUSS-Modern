@@ -708,25 +708,25 @@ int get_door(const char* arg)
 {
     int door;
 
-    if (!str_cmp(arg, "n") || !str_cmp(arg, "north"))
+    if (!compare(arg, "n") || !compare(arg, "north"))
         door = 0;
-    else if (!str_cmp(arg, "e") || !str_cmp(arg, "east"))
+    else if (!compare(arg, "e") || !compare(arg, "east"))
         door = 1;
-    else if (!str_cmp(arg, "s") || !str_cmp(arg, "south"))
+    else if (!compare(arg, "s") || !compare(arg, "south"))
         door = 2;
-    else if (!str_cmp(arg, "w") || !str_cmp(arg, "west"))
+    else if (!compare(arg, "w") || !compare(arg, "west"))
         door = 3;
-    else if (!str_cmp(arg, "u") || !str_cmp(arg, "up"))
+    else if (!compare(arg, "u") || !compare(arg, "up"))
         door = 4;
-    else if (!str_cmp(arg, "d") || !str_cmp(arg, "down"))
+    else if (!compare(arg, "d") || !compare(arg, "down"))
         door = 5;
-    else if (!str_cmp(arg, "ne") || !str_cmp(arg, "northeast"))
+    else if (!compare(arg, "ne") || !compare(arg, "northeast"))
         door = 6;
-    else if (!str_cmp(arg, "nw") || !str_cmp(arg, "northwest"))
+    else if (!compare(arg, "nw") || !compare(arg, "northwest"))
         door = 7;
-    else if (!str_cmp(arg, "se") || !str_cmp(arg, "southeast"))
+    else if (!compare(arg, "se") || !compare(arg, "southeast"))
         door = 8;
-    else if (!str_cmp(arg, "sw") || !str_cmp(arg, "southwest"))
+    else if (!compare(arg, "sw") || !compare(arg, "southwest"))
         door = 9;
     else
         door = -1;
@@ -767,7 +767,7 @@ void do_look(CHAR_DATA* ch, const char* argument)
     {
         set_char_color(AT_DGREY, ch);
         send_to_char("It is pitch black ... \r\n", ch);
-        if (!*argument || !str_cmp(argument, "auto"))
+        if (!*argument || !compare(argument, "auto"))
             show_char_to_char(ch->in_room->persons, ch);
         return;
     }
@@ -776,7 +776,7 @@ void do_look(CHAR_DATA* ch, const char* argument)
     argument = one_argument(argument, arg2);
     argument = one_argument(argument, arg3);
 
-    if (arg1[0] == '\0' || !str_cmp(arg1, "auto"))
+    if (arg1[0] == '\0' || !compare(arg1, "auto"))
     {
         SHIP_DATA* ship;
 
@@ -822,7 +822,7 @@ void do_look(CHAR_DATA* ch, const char* argument)
         show_list_to_char(ch->in_room->first_content, ch, FALSE, FALSE);
         show_char_to_char(ch->in_room->persons, ch);
 
-        if (str_cmp(arg1, "auto"))
+        if (compare(arg1, "auto"))
             if ((ship = ship_from_cockpit(ch->in_room->vnum)) != nullptr)
             {
                 set_char_color(AT_WHITE, ch);
@@ -834,15 +834,15 @@ void do_look(CHAR_DATA* ch, const char* argument)
                     SHIP_DATA   * target;
 
                     set_char_color(AT_GREEN, ch);
-                    if (ship->starsystem->star1 && str_cmp(ship->starsystem->star1, ""))
+                    if (ship->starsystem->star1 && compare(ship->starsystem->star1, ""))
                         ch_printf(ch, "%s\r\n", ship->starsystem->star1);
-                    if (ship->starsystem->star2 && str_cmp(ship->starsystem->star2, ""))
+                    if (ship->starsystem->star2 && compare(ship->starsystem->star2, ""))
                         ch_printf(ch, "%s\r\n", ship->starsystem->star2);
-                    if (ship->starsystem->planet1 && str_cmp(ship->starsystem->planet1, ""))
+                    if (ship->starsystem->planet1 && compare(ship->starsystem->planet1, ""))
                         ch_printf(ch, "%s\r\n", ship->starsystem->planet1);
-                    if (ship->starsystem->planet2 && str_cmp(ship->starsystem->planet2, ""))
+                    if (ship->starsystem->planet2 && compare(ship->starsystem->planet2, ""))
                         ch_printf(ch, "%s\r\n", ship->starsystem->planet2);
-                    if (ship->starsystem->planet3 && str_cmp(ship->starsystem->planet3, ""))
+                    if (ship->starsystem->planet3 && compare(ship->starsystem->planet3, ""))
                         ch_printf(ch, "%s\r\n", ship->starsystem->planet3);
                     for (target = ship->starsystem->first_ship; target; target = target->next_in_starsystem)
                     {
@@ -880,7 +880,7 @@ void do_look(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg1, "under"))
+    if (!compare(arg1, "under"))
     {
         int count;
 
@@ -917,7 +917,7 @@ void do_look(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg1, "i") || !str_cmp(arg1, "in"))
+    if (!compare(arg1, "i") || !compare(arg1, "in"))
     {
         int count;
 
@@ -1596,7 +1596,7 @@ void do_exits(CHAR_DATA* ch, const char* argument)
 
     set_char_color(AT_EXITS, ch);
     buf[0] = '\0';
-    fAuto = !str_cmp(argument, "auto");
+    fAuto = !compare(argument, "auto");
 
     if (!check_blind(ch))
         return;
@@ -1799,7 +1799,7 @@ void do_help(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (pHelp->level >= 0 && str_cmp(argument, "imotd"))
+    if (pHelp->level >= 0 && compare(argument, "imotd"))
     {
         send_to_pager(pHelp->keyword, ch);
         send_to_pager("\r\n", ch);
@@ -1853,7 +1853,7 @@ void do_hedit(CHAR_DATA* ch, const char* argument)
         bool     new_help = TRUE;
 
         for (tHelp = first_help; tHelp; tHelp = tHelp->next)
-            if (!str_cmp(argument, tHelp->keyword))
+            if (!compare(argument, tHelp->keyword))
             {
                 pHelp    = tHelp;
                 new_help = FALSE;
@@ -1915,7 +1915,7 @@ void do_hset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg1, "save"))
+    if (!compare(arg1, "save"))
     {
         FILE* fpout;
 
@@ -1938,7 +1938,7 @@ void do_hset(CHAR_DATA* ch, const char* argument)
         send_to_char("Saved.\r\n", ch);
         return;
     }
-    if (str_cmp(arg1, "remove"))
+    if (compare(arg1, "remove"))
         argument = one_argument(argument, arg2);
 
     if ((pHelp = get_help(ch, argument)) == nullptr)
@@ -1947,7 +1947,7 @@ void do_hset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg1, "remove"))
+    if (!compare(arg1, "remove"))
     {
         UNLINK(pHelp, first_help, last_help, next, prev);
         STRFREE(pHelp->text);
@@ -1957,7 +1957,7 @@ void do_hset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg1, "level"))
+    if (!compare(arg1, "level"))
     {
         int lev;
 
@@ -1978,7 +1978,7 @@ void do_hset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg1, "keyword"))
+    if (!compare(arg1, "keyword"))
     {
         STRFREE(pHelp->keyword);
         pHelp->keyword = STRALLOC(strupper(arg2));
@@ -2115,9 +2115,9 @@ void do_who(CHAR_DATA* ch, const char* argument)
             /*
           * Look for classes to turn on.
           */
-            if (!str_cmp(arg, "imm") || !str_cmp(arg, "gods"))
+            if (!compare(arg, "imm") || !compare(arg, "gods"))
                 fImmortalOnly = TRUE;
-            else if (!str_cmp(arg, "www"))
+            else if (!compare(arg, "www"))
                 fShowHomepage = TRUE;
             else /* SB who clan (order), guild */ if ((pClan = get_clan(arg)))
                 fClanMatch = TRUE;
@@ -2125,7 +2125,7 @@ void do_who(CHAR_DATA* ch, const char* argument)
             {
                 for (iRace = 0; iRace < MAX_RACE; iRace++)
                 {
-                    if (!str_cmp(arg, race_table[iRace].race_name))
+                    if (!compare(arg, race_table[iRace].race_name))
                     {
                         rgfRace[iRace] = TRUE;
                         break;
@@ -2229,11 +2229,11 @@ void do_who(CHAR_DATA* ch, const char* argument)
 
             mudstrlcpy(clan_name, " (", MAX_INPUT_LENGTH);
 
-            if (!str_cmp(wch->name, pclan->leader))
+            if (!compare(wch->name, pclan->leader))
                 mudstrlcat(clan_name, "Leader, ", MAX_INPUT_LENGTH);
-            if (!str_cmp(wch->name, pclan->number1))
+            if (!compare(wch->name, pclan->number1))
                 mudstrlcat(clan_name, "First, ", MAX_INPUT_LENGTH);
-            if (!str_cmp(wch->name, pclan->number2))
+            if (!compare(wch->name, pclan->number2))
                 mudstrlcat(clan_name, "Second, ", MAX_INPUT_LENGTH);
 
             mudstrlcat(clan_name, pclan->name, MAX_INPUT_LENGTH);
@@ -3120,51 +3120,51 @@ void do_channels(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        if (!str_cmp(arg + 1, "auction") && get_trust(ch) > 2 && !NOT_AUTHED(ch))
+        if (!compare(arg + 1, "auction") && get_trust(ch) > 2 && !NOT_AUTHED(ch))
             bit = CHANNEL_AUCTION;
-        else if (!str_cmp(arg + 1, "chat"))
+        else if (!compare(arg + 1, "chat"))
             bit = CHANNEL_CHAT;
-        else if (!str_cmp(arg + 1, "ooc"))
+        else if (!compare(arg + 1, "ooc"))
             bit = CHANNEL_OOC;
-        else if (!str_cmp(arg + 1, "clan") && !IS_NPC(ch) && ch->pcdata->clan
+        else if (!compare(arg + 1, "clan") && !IS_NPC(ch) && ch->pcdata->clan
                  && ch->pcdata->clan->clan_type != CLAN_GUILD)
             bit = CHANNEL_CLAN;
-        else if (!str_cmp(arg + 1, "guild") && !IS_NPC(ch) && ch->pcdata->clan
+        else if (!compare(arg + 1, "guild") && !IS_NPC(ch) && ch->pcdata->clan
                  && ch->pcdata->clan->clan_type == CLAN_GUILD)
             bit = CHANNEL_GUILD;
-        else if (!str_cmp(arg + 1, "quest"))
+        else if (!compare(arg + 1, "quest"))
             bit = CHANNEL_QUEST;
-        else if (!str_cmp(arg + 1, "tells"))
+        else if (!compare(arg + 1, "tells"))
             bit = CHANNEL_TELLS;
-        else if (!str_cmp(arg + 1, "immtalk") && IS_IMMORTAL(ch))
+        else if (!compare(arg + 1, "immtalk") && IS_IMMORTAL(ch))
             bit = CHANNEL_IMMTALK;
-        else if (!str_cmp(arg + 1, "log") && get_trust(ch) >= sysdata.log_level)
+        else if (!compare(arg + 1, "log") && get_trust(ch) >= sysdata.log_level)
             bit = CHANNEL_LOG;
-        else if (!str_cmp(arg + 1, "build") && get_trust(ch) >= sysdata.log_level)
+        else if (!compare(arg + 1, "build") && get_trust(ch) >= sysdata.log_level)
             bit = CHANNEL_BUILD;
-        else if (!str_cmp(arg + 1, "pray") && IS_IMMORTAL(ch))
+        else if (!compare(arg + 1, "pray") && IS_IMMORTAL(ch))
             bit = CHANNEL_PRAY;
-        else if (!str_cmp(arg + 1, "avatar") && IS_HERO(ch))
+        else if (!compare(arg + 1, "avatar") && IS_HERO(ch))
             bit = CHANNEL_AVTALK;
-        else if (!str_cmp(arg + 1, "monitor") && IS_IMMORTAL(ch))
+        else if (!compare(arg + 1, "monitor") && IS_IMMORTAL(ch))
             bit = CHANNEL_MONITOR;
-        else if (!str_cmp(arg + 1, "newbie") && (IS_IMMORTAL(ch) || ch->top_level < 3))
+        else if (!compare(arg + 1, "newbie") && (IS_IMMORTAL(ch) || ch->top_level < 3))
             bit = CHANNEL_NEWBIE;
-        else if (!str_cmp(arg + 1, "music"))
+        else if (!compare(arg + 1, "music"))
             bit = CHANNEL_MUSIC;
-        else if (!str_cmp(arg + 1, "ask"))
+        else if (!compare(arg + 1, "ask"))
             bit = CHANNEL_ASK;
-        else if (!str_cmp(arg + 1, "shout"))
+        else if (!compare(arg + 1, "shout"))
             bit = CHANNEL_SHOUT;
-        else if (!str_cmp(arg + 1, "yell"))
+        else if (!compare(arg + 1, "yell"))
             bit = CHANNEL_YELL;
-        else if (!str_cmp(arg + 1, "comm") && get_trust(ch) >= sysdata.log_level)
+        else if (!compare(arg + 1, "comm") && get_trust(ch) >= sysdata.log_level)
             bit = CHANNEL_COMM;
-        else if (!str_cmp(arg + 1, "order") && !IS_NPC(ch) && ch->pcdata->clan)
+        else if (!compare(arg + 1, "order") && !IS_NPC(ch) && ch->pcdata->clan)
             bit = CHANNEL_ORDER;
-        else if (!str_cmp(arg + 1, "wartalk"))
+        else if (!compare(arg + 1, "wartalk"))
             bit = CHANNEL_WARTALK;
-        else if (!str_cmp(arg + 1, "all"))
+        else if (!compare(arg + 1, "all"))
             ClearAll = TRUE;
         else
         {

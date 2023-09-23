@@ -35,7 +35,7 @@
  * save.c:411:    ch->comments                        = nullptr;                   (* nulls ch->comments *)
  *
  *
- * save.c:457:         else if ( !str_cmp( word, "COMMENT") ) fread_comment(ch, fp ); (*snags #COMMENT*)
+ * save.c:457:         else if ( !compare( word, "COMMENT") ) fread_comment(ch, fp ); (*snags #COMMENT*)
  *
  *                4) That looks like it to these eyes.  Lemme know if i forgot anything.
  *
@@ -143,7 +143,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
     argument = one_argument(argument, arg);
     argument = smash_tilde_static(argument);
 
-    if (!str_cmp(arg, "about"))
+    if (!compare(arg, "about"))
     {
         victim = get_char_world(ch, argument);
         if (!victim)
@@ -159,7 +159,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (!str_cmp(arg, "list"))
+    if (!compare(arg, "list"))
     {
         victim = get_char_world(ch, argument);
         if (!victim)
@@ -209,7 +209,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "read"))
+    if (!compare(arg, "read"))
     {
         bool fAll;
 
@@ -239,7 +239,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        if (!str_cmp(argument, "all"))
+        if (!compare(argument, "all"))
         {
             fAll = TRUE;
             anum = 0;
@@ -278,7 +278,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "write"))
+    if (!compare(arg, "write"))
     {
         note_attach(ch);
         ch->substate = SUB_WRITING_NOTE;
@@ -287,7 +287,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "subject"))
+    if (!compare(arg, "subject"))
     {
         note_attach(ch);
         STRFREE(ch->pnote->subject);
@@ -296,7 +296,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "to"))
+    if (!compare(arg, "to"))
     {
         note_attach(ch);
         STRFREE(ch->pnote->to_list);
@@ -305,7 +305,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "clear"))
+    if (!compare(arg, "clear"))
     {
         if (ch->pnote)
         {
@@ -322,7 +322,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "show"))
+    if (!compare(arg, "show"))
     {
         if (!ch->pnote)
         {
@@ -335,7 +335,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "post"))
+    if (!compare(arg, "post"))
     {
         char* strtime;
 
@@ -390,7 +390,7 @@ void do_comment(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "remove"))
+    if (!compare(arg, "remove"))
     {
         argument = one_argument(argument, arg1);
         victim   = get_char_world(ch, arg1);
@@ -484,23 +484,23 @@ void fread_comment(CHAR_DATA* ch, FILE* fp)
 
         CREATE(pnote, NOTE_DATA, 1);
 
-        if (str_cmp(fread_word(fp), "sender"))
+        if (compare(fread_word(fp), "sender"))
             break;
         pnote->sender = fread_string(fp);
 
-        if (str_cmp(fread_word(fp), "date"))
+        if (compare(fread_word(fp), "date"))
             break;
         pnote->date = fread_string(fp);
 
-        if (str_cmp(fread_word(fp), "to"))
+        if (compare(fread_word(fp), "to"))
             break;
         pnote->to_list = fread_string(fp);
 
-        if (str_cmp(fread_word(fp), "subject"))
+        if (compare(fread_word(fp), "subject"))
             break;
         pnote->subject = fread_string(fp);
 
-        if (str_cmp(fread_word(fp), "text"))
+        if (compare(fread_word(fp), "text"))
             break;
         pnote->text = fread_string(fp);
 

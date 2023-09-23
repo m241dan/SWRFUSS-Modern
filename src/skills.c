@@ -68,7 +68,7 @@ int get_ssave(const char* name)
     size_t x;
 
     for (x = 0; x < sizeof(spell_saves) / sizeof(spell_saves[0]); x++)
-        if (!str_cmp(name, spell_saves[x]))
+        if (!compare(name, spell_saves[x]))
             return x;
     return -1;
 }
@@ -78,7 +78,7 @@ int get_starget(const char* name)
     size_t x;
 
     for (x = 0; x < sizeof(target_type) / sizeof(target_type[0]); x++)
-        if (!str_cmp(name, target_type[x]))
+        if (!compare(name, target_type[x]))
             return x;
     return -1;
 }
@@ -88,7 +88,7 @@ int get_sflag(const char* name)
     size_t x;
 
     for (x = 0; x < sizeof(spell_flag) / sizeof(spell_flag[0]); x++)
-        if (!str_cmp(name, spell_flag[x]))
+        if (!compare(name, spell_flag[x]))
             return x;
     return -1;
 }
@@ -98,7 +98,7 @@ int get_sdamage(const char* name)
     size_t x;
 
     for (x = 0; x < sizeof(spell_damage) / sizeof(spell_damage[0]); x++)
-        if (!str_cmp(name, spell_damage[x]))
+        if (!compare(name, spell_damage[x]))
             return x;
     return -1;
 }
@@ -108,7 +108,7 @@ int get_saction(const char* name)
     size_t x;
 
     for (x = 0; x < sizeof(spell_action) / sizeof(spell_action[0]); x++)
-        if (!str_cmp(name, spell_action[x]))
+        if (!compare(name, spell_action[x]))
             return x;
     return -1;
 }
@@ -118,7 +118,7 @@ int get_spower(const char* name)
     size_t x;
 
     for (x = 0; x < sizeof(spell_power) / sizeof(spell_power[0]); x++)
-        if (!str_cmp(name, spell_power[x]))
+        if (!compare(name, spell_power[x]))
             return x;
     return -1;
 }
@@ -128,7 +128,7 @@ int get_sclass(const char* name)
     size_t x;
 
     for (x = 0; x < sizeof(spell_class) / sizeof(spell_class[0]); x++)
-        if (!str_cmp(name, spell_class[x]))
+        if (!compare(name, spell_class[x]))
             return x;
     return -1;
 }
@@ -359,7 +359,7 @@ void do_slookup(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "all"))
+    if (!compare(arg, "all"))
     {
         for (sn = 0; sn < top_sn && skill_table[sn] && skill_table[sn]->name; sn++)
             pager_printf(
@@ -367,7 +367,7 @@ void do_slookup(CHAR_DATA* ch, const char* argument)
                 sn, skill_table[sn]->slot, skill_table[sn]->name, spell_damage[SPELL_DAMAGE(skill_table[sn])]
             );
     }
-    else if (!str_cmp(arg, "herbs"))
+    else if (!compare(arg, "herbs"))
     {
         for (sn = 0; sn < top_herb && herb_table[sn] && herb_table[sn]->name; sn++)
             pager_printf(ch, "%d) %s\r\n", sn, herb_table[sn]->name);
@@ -583,15 +583,15 @@ void do_sset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (get_trust(ch) > LEVEL_SUB_IMPLEM && !str_cmp(arg1, "save") && !str_cmp(argument, "table"))
+    if (get_trust(ch) > LEVEL_SUB_IMPLEM && !compare(arg1, "save") && !compare(argument, "table"))
     {
-        if (!str_cmp(arg2, "skill"))
+        if (!compare(arg2, "skill"))
         {
             send_to_char("Saving skill table...\r\n", ch);
             save_skill_table();
             return;
         }
-        if (!str_cmp(arg2, "herb"))
+        if (!compare(arg2, "herb"))
         {
             send_to_char("Saving herb table...\r\n", ch);
             save_herb_table();
@@ -599,12 +599,12 @@ void do_sset(CHAR_DATA* ch, const char* argument)
         }
     }
     if (get_trust(ch) > LEVEL_SUB_IMPLEM
-        && !str_cmp(arg1, "create") && (!str_cmp(arg2, "skill") || !str_cmp(arg2, "herb")))
+        && !compare(arg1, "create") && (!compare(arg2, "skill") || !compare(arg2, "herb")))
     {
         struct skill_type* skill;
         short            type = SKILL_UNKNOWN;
 
-        if (!str_cmp(arg2, "herb"))
+        if (!compare(arg2, "herb"))
         {
             type = SKILL_HERB;
             if (top_herb >= MAX_HERB)
@@ -677,25 +677,25 @@ void do_sset(CHAR_DATA* ch, const char* argument)
             sn %= 1000;
         }
 
-        if (!str_cmp(arg2, "difficulty"))
+        if (!compare(arg2, "difficulty"))
         {
             skill->difficulty = atoi(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "participants"))
+        if (!compare(arg2, "participants"))
         {
             skill->participants = atoi(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "alignment"))
+        if (!compare(arg2, "alignment"))
         {
             skill->alignment = atoi(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "damtype"))
+        if (!compare(arg2, "damtype"))
         {
             int x = get_sdamage(argument);
 
@@ -708,7 +708,7 @@ void do_sset(CHAR_DATA* ch, const char* argument)
             }
             return;
         }
-        if (!str_cmp(arg2, "acttype"))
+        if (!compare(arg2, "acttype"))
         {
             int x = get_saction(argument);
 
@@ -721,7 +721,7 @@ void do_sset(CHAR_DATA* ch, const char* argument)
             }
             return;
         }
-        if (!str_cmp(arg2, "classtype"))
+        if (!compare(arg2, "classtype"))
         {
             int x = get_sclass(argument);
 
@@ -734,7 +734,7 @@ void do_sset(CHAR_DATA* ch, const char* argument)
             }
             return;
         }
-        if (!str_cmp(arg2, "powertype"))
+        if (!compare(arg2, "powertype"))
         {
             int x = get_spower(argument);
 
@@ -747,7 +747,7 @@ void do_sset(CHAR_DATA* ch, const char* argument)
             }
             return;
         }
-        if (!str_cmp(arg2, "flag"))
+        if (!compare(arg2, "flag"))
         {
             int x = get_sflag(argument);
 
@@ -760,7 +760,7 @@ void do_sset(CHAR_DATA* ch, const char* argument)
             }
             return;
         }
-        if (!str_cmp(arg2, "saves"))
+        if (!compare(arg2, "saves"))
         {
             int x = get_ssave(argument);
 
@@ -774,7 +774,7 @@ void do_sset(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        if (!str_cmp(arg2, "code"))
+        if (!compare(arg2, "code"))
         {
             SPELL_FUN* spellfun;
             DO_FUN   * dofun;
@@ -807,7 +807,7 @@ void do_sset(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        if (!str_cmp(arg2, "target"))
+        if (!compare(arg2, "target"))
         {
             int x = get_starget(argument);
 
@@ -820,55 +820,55 @@ void do_sset(CHAR_DATA* ch, const char* argument)
             }
             return;
         }
-        if (!str_cmp(arg2, "minpos"))
+        if (!compare(arg2, "minpos"))
         {
             skill->minimum_position = URANGE(POS_DEAD, atoi(argument), POS_DRAG);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "minlevel"))
+        if (!compare(arg2, "minlevel"))
         {
             skill->min_level = URANGE(1, atoi(argument), MAX_LEVEL);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "slot"))
+        if (!compare(arg2, "slot"))
         {
             skill->slot = URANGE(0, atoi(argument), 30000);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "mana"))
+        if (!compare(arg2, "mana"))
         {
             skill->min_mana = URANGE(0, atoi(argument), 2000);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "beats"))
+        if (!compare(arg2, "beats"))
         {
             skill->beats = URANGE(0, atoi(argument), 120);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "guild"))
+        if (!compare(arg2, "guild"))
         {
             skill->guild = atoi(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "value"))
+        if (!compare(arg2, "value"))
         {
             skill->value = atoi(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "type"))
+        if (!compare(arg2, "type"))
         {
             skill->type = get_skill(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "rmaffect"))
+        if (!compare(arg2, "rmaffect"))
         {
             SMAUG_AFF* aff, * aff_next;
             int      num = atoi(argument);
@@ -900,7 +900,7 @@ void do_sset(CHAR_DATA* ch, const char* argument)
         /*
        * affect <location> <modifier> <duration> <bitvector>
        */
-        if (!str_cmp(arg2, "affect"))
+        if (!compare(arg2, "affect"))
         {
             char     location[MAX_INPUT_LENGTH];
             char     modifier[MAX_INPUT_LENGTH];
@@ -932,9 +932,9 @@ void do_sset(CHAR_DATA* ch, const char* argument)
                     bit |= (1 << tmpbit);
             }
             CREATE(aff, SMAUG_AFF, 1);
-            if (!str_cmp(duration, "0"))
+            if (!compare(duration, "0"))
                 duration[0] = '\0';
-            if (!str_cmp(modifier, "0"))
+            if (!compare(modifier, "0"))
                 modifier[0] = '\0';
             aff->duration = str_dup(duration);
             aff->location = loc;
@@ -953,172 +953,172 @@ void do_sset(CHAR_DATA* ch, const char* argument)
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "level"))
+        if (!compare(arg2, "level"))
         {
             skill->min_level = URANGE(1, atoi(argument), MAX_LEVEL);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "adept"))
+        if (!compare(arg2, "adept"))
         {
             return;
         }
-        if (!str_cmp(arg2, "name"))
+        if (!compare(arg2, "name"))
         {
             DISPOSE(skill->name);
             skill->name = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "dammsg"))
+        if (!compare(arg2, "dammsg"))
         {
             DISPOSE(skill->noun_damage);
-            if (!str_cmp(argument, "clear"))
+            if (!compare(argument, "clear"))
                 skill->noun_damage = str_dup("");
             else
                 skill->noun_damage = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "wearoff"))
+        if (!compare(arg2, "wearoff"))
         {
             DISPOSE(skill->msg_off);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->msg_off = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "hitchar"))
+        if (!compare(arg2, "hitchar"))
         {
             if (skill->hit_char)
                 DISPOSE(skill->hit_char);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->hit_char = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "hitvict"))
+        if (!compare(arg2, "hitvict"))
         {
             if (skill->hit_vict)
                 DISPOSE(skill->hit_vict);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->hit_vict = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "hitroom"))
+        if (!compare(arg2, "hitroom"))
         {
             if (skill->hit_room)
                 DISPOSE(skill->hit_room);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->hit_room = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "misschar"))
+        if (!compare(arg2, "misschar"))
         {
             if (skill->miss_char)
                 DISPOSE(skill->miss_char);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->miss_char = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "missvict"))
+        if (!compare(arg2, "missvict"))
         {
             if (skill->miss_vict)
                 DISPOSE(skill->miss_vict);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->miss_vict = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "missroom"))
+        if (!compare(arg2, "missroom"))
         {
             if (skill->miss_room)
                 DISPOSE(skill->miss_room);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->miss_room = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "diechar"))
+        if (!compare(arg2, "diechar"))
         {
             if (skill->die_char)
                 DISPOSE(skill->die_char);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->die_char = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "dievict"))
+        if (!compare(arg2, "dievict"))
         {
             if (skill->die_vict)
                 DISPOSE(skill->die_vict);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->die_vict = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "dieroom"))
+        if (!compare(arg2, "dieroom"))
         {
             if (skill->die_room)
                 DISPOSE(skill->die_room);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->die_room = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "immchar"))
+        if (!compare(arg2, "immchar"))
         {
             if (skill->imm_char)
                 DISPOSE(skill->imm_char);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->imm_char = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "immvict"))
+        if (!compare(arg2, "immvict"))
         {
             if (skill->imm_vict)
                 DISPOSE(skill->imm_vict);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->imm_vict = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "immroom"))
+        if (!compare(arg2, "immroom"))
         {
             if (skill->imm_room)
                 DISPOSE(skill->imm_room);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->imm_room = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "dice"))
+        if (!compare(arg2, "dice"))
         {
             if (skill->dice)
                 DISPOSE(skill->dice);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->dice = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "components"))
+        if (!compare(arg2, "components"))
         {
             if (skill->components)
                 DISPOSE(skill->components);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->components = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
         }
-        if (!str_cmp(arg2, "teachers"))
+        if (!compare(arg2, "teachers"))
         {
             if (skill->teachers)
                 DISPOSE(skill->teachers);
-            if (str_cmp(argument, "clear"))
+            if (compare(argument, "clear"))
                 skill->teachers = str_dup(argument);
             send_to_char("Ok.\r\n", ch);
             return;
@@ -1147,7 +1147,7 @@ void do_sset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    fAll = !str_cmp(arg2, "all");
+    fAll = !compare(arg2, "all");
     sn   = 0;
     if (!fAll && (sn = skill_lookup(arg2)) < 0)
     {
@@ -1830,7 +1830,7 @@ void do_steal(CHAR_DATA* ch, const char* argument)
     if (IS_NPC(victim))
         add_kill(ch, victim); /* makes it harder to steal from same char */
 
-    if (!str_cmp(arg1, "credits") || !str_cmp(arg1, "credit") || !str_cmp(arg1, "money"))
+    if (!compare(arg1, "credits") || !compare(arg1, "credit") || !compare(arg1, "money"))
     {
         int amount;
 

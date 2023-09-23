@@ -212,7 +212,7 @@ void interpret(CHAR_DATA* ch, const char* argument)
         /*
          * Turn off afk bit when any command performed.
          */
-        if (!IS_NPC(ch) && IS_SET(ch->act, PLR_AFK) && (str_cmp(command, "AFK")))
+        if (!IS_NPC(ch) && IS_SET(ch->act, PLR_AFK) && (compare(command, "AFK")))
         {
             REMOVE_BIT(ch->act, PLR_AFK);
             act(AT_GREY, "$n is no longer afk.", ch, nullptr, nullptr, TO_ROOM);
@@ -333,7 +333,7 @@ void interpret(CHAR_DATA* ch, const char* argument)
      * Berserk check for flee.. maybe add drunk to this?.. but too much
      * hardcoding is annoying.. -- Altrag
      */
-    if (!str_cmp(cmd->name, "flee") && IS_AFFECTED(ch, AFF_BERSERK))
+    if (!compare(cmd->name, "flee") && IS_AFFECTED(ch, AFF_BERSERK))
     {
         send_to_char("You aren't thinking very clearly..\r\n", ch);
         return;
@@ -433,7 +433,7 @@ bool check_social(CHAR_DATA* ch, const char* command, const char* argument)
              * I just know this is the path to a 12" 'if' statement.  :(
              * But two players asked for it already!  -- Furey
              */
-            if (!str_cmp(social->name, "snore"))
+            if (!compare(social->name, "snore"))
                 break;
             send_to_char("In your dreams, or what?\r\n", ch);
             return TRUE;
@@ -658,7 +658,7 @@ void do_timecmd(CHAR_DATA* ch, const char* argument)
         send_to_char("No command to time.\r\n", ch);
         return;
     }
-    if (!str_cmp(arg, "update"))
+    if (!compare(arg, "update"))
     {
         if (timechar)
             send_to_char("Another person is already timing updates.\r\n", ch);

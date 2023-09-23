@@ -65,7 +65,7 @@ bool is_disintigration(CHAR_DATA* victim)
     BOUNTY_DATA* bounty;
 
     for (bounty = first_disintigration; bounty; bounty = bounty->next)
-        if (!str_cmp(victim->name, bounty->target))
+        if (!compare(victim->name, bounty->target))
             return TRUE;
     return FALSE;
 }
@@ -75,7 +75,7 @@ BOUNTY_DATA* get_disintigration(const char* target)
     BOUNTY_DATA* bounty;
 
     for (bounty = first_disintigration; bounty; bounty = bounty->next)
-        if (!str_cmp(target, bounty->target))
+        if (!compare(target, bounty->target))
             return bounty;
     return nullptr;
 }
@@ -147,7 +147,7 @@ void disintigration(CHAR_DATA* ch, CHAR_DATA* victim, long amount)
 
     for (bounty = first_disintigration; bounty; bounty = bounty->next)
     {
-        if (!str_cmp(bounty->target, victim->name))
+        if (!compare(bounty->target, victim->name))
         {
             found = TRUE;
             break;
@@ -190,7 +190,7 @@ void do_addbounty(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (ch->pcdata && ch->pcdata->clan && !str_cmp(ch->pcdata->clan->name, "the hunters guild"))
+    if (ch->pcdata && ch->pcdata->clan && !compare(ch->pcdata->clan->name, "the hunters guild"))
     {
         send_to_char("Your job is to collect bounties not post them.", ch);
         return;
@@ -269,7 +269,7 @@ void claim_disintigration(CHAR_DATA* ch, CHAR_DATA* victim)
         return;
     }
 
-    if (bounty && (!ch->pcdata || !ch->pcdata->clan || str_cmp(ch->pcdata->clan->name, "the hunters guild")))
+    if (bounty && (!ch->pcdata || !ch->pcdata->clan || compare(ch->pcdata->clan->name, "the hunters guild")))
     {
         remove_disintigration(bounty);
         bounty = nullptr;

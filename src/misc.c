@@ -454,7 +454,7 @@ void do_setblaster(CHAR_DATA* ch, const char* argument)
     if (wield2)
         act(AT_PLAIN, "$n adjusts the settings on $p.", ch, wield2, nullptr, TO_ROOM);
 
-    if (!str_cmp(argument, "full"))
+    if (!compare(argument, "full"))
     {
         if (wield)
         {
@@ -468,7 +468,7 @@ void do_setblaster(CHAR_DATA* ch, const char* argument)
         }
         return;
     }
-    if (!str_cmp(argument, "high"))
+    if (!compare(argument, "high"))
     {
         if (wield)
         {
@@ -482,7 +482,7 @@ void do_setblaster(CHAR_DATA* ch, const char* argument)
         }
         return;
     }
-    if (!str_cmp(argument, "normal"))
+    if (!compare(argument, "normal"))
     {
         if (wield)
         {
@@ -496,7 +496,7 @@ void do_setblaster(CHAR_DATA* ch, const char* argument)
         }
         return;
     }
-    if (!str_cmp(argument, "half"))
+    if (!compare(argument, "half"))
     {
         if (wield)
         {
@@ -510,7 +510,7 @@ void do_setblaster(CHAR_DATA* ch, const char* argument)
         }
         return;
     }
-    if (!str_cmp(argument, "low"))
+    if (!compare(argument, "low"))
     {
         if (wield)
         {
@@ -524,7 +524,7 @@ void do_setblaster(CHAR_DATA* ch, const char* argument)
         }
         return;
     }
-    if (!str_cmp(argument, "stun"))
+    if (!compare(argument, "stun"))
     {
         if (wield)
         {
@@ -554,7 +554,7 @@ void do_use(CHAR_DATA* ch, const char* argument)
     argument = one_argument(argument, argd);
     argument = one_argument(argument, arg);
 
-    if (!str_cmp(arg, "on"))
+    if (!compare(arg, "on"))
         argument = one_argument(argument, arg);
 
     if (argd[0] == '\0')
@@ -647,7 +647,7 @@ void do_takedrug(CHAR_DATA* ch, const char* argument)
     int         drug;
     int         sn = 0;
 
-    if (argument[0] == '\0' || !str_cmp(argument, ""))
+    if (argument[0] == '\0' || !compare(argument, ""))
     {
         send_to_char("Use what?\r\n", ch);
         return;
@@ -848,7 +848,7 @@ void do_fill(CHAR_DATA* ch, const char* argument)
     /*
     * munch optional words
     */
-    if ((!str_cmp(arg2, "from") || !str_cmp(arg2, "with")) && argument[0] != '\0')
+    if ((!compare(arg2, "from") || !compare(arg2, "with")) && argument[0] != '\0')
         argument = one_argument(argument, arg2);
 
     if (arg1[0] == '\0')
@@ -924,7 +924,7 @@ void do_fill(CHAR_DATA* ch, const char* argument)
 
     if (arg2[0] != '\0')
     {
-        if (dest_item == ITEM_CONTAINER && (!str_cmp(arg2, "all") || !str_prefix("all.", arg2)))
+        if (dest_item == ITEM_CONTAINER && (!compare(arg2, "all") || !str_prefix("all.", arg2)))
         {
             all    = TRUE;
             source = nullptr;
@@ -1077,14 +1077,14 @@ void do_fill(CHAR_DATA* ch, const char* argument)
                 pd = one_argument(pd, name);
                 pd = one_argument(pd, name);
 
-                if (str_cmp(name, ch->name) && !IS_IMMORTAL(ch))
+                if (compare(name, ch->name) && !IS_IMMORTAL(ch))
                 {
                     bool fGroup;
 
                     fGroup   = FALSE;
                     for (auto* gch : characters)
                     {
-                        if (!IS_NPC(gch) && is_same_group(ch, gch) && !str_cmp(name, gch->name))
+                        if (!IS_NPC(gch) && is_same_group(ch, gch) && !compare(name, gch->name))
                         {
                             fGroup = TRUE;
                             break;
@@ -1238,7 +1238,7 @@ void do_drink(CHAR_DATA* ch, const char* argument)
     /*
     * munch optional words
     */
-    if (!str_cmp(arg, "from") && argument[0] != '\0')
+    if (!compare(arg, "from") && argument[0] != '\0')
         argument = one_argument(argument, arg);
 
     if (arg[0] == '\0')
@@ -1529,7 +1529,7 @@ void do_quaff(CHAR_DATA* ch, const char* argument)
     OBJ_DATA* obj;
     ch_ret  retcode;
 
-    if (argument[0] == '\0' || !str_cmp(argument, ""))
+    if (argument[0] == '\0' || !compare(argument, ""))
     {
         send_to_char("Quaff what?\r\n", ch);
         return;
@@ -2270,7 +2270,7 @@ void do_empty(CHAR_DATA* ch, const char* argument)
 
     argument     = one_argument(argument, arg1);
     argument     = one_argument(argument, arg2);
-    if (!str_cmp(arg2, "into") && argument[0] != '\0')
+    if (!compare(arg2, "into") && argument[0] != '\0')
         argument = one_argument(argument, arg2);
 
     if (arg1[0] == '\0')
@@ -2671,18 +2671,18 @@ void do_train(CHAR_DATA* ch, const char* argument)
 
             CHAR_DATA* mob = *mob_iter;
 
-            if (str_cmp(arg, "str") && str_cmp(arg, "strength")
-                && str_cmp(arg, "dex") && str_cmp(arg, "dexterity")
-                && str_cmp(arg, "con") && str_cmp(arg, "constitution")
-                && str_cmp(arg, "cha") && str_cmp(arg, "charisma")
-                && str_cmp(arg, "wis") && str_cmp(arg, "wisdom")
-                && str_cmp(arg, "int") && str_cmp(arg, "intelligence"))
+            if (compare(arg, "str") && compare(arg, "strength")
+                && compare(arg, "dex") && compare(arg, "dexterity")
+                && compare(arg, "con") && compare(arg, "constitution")
+                && compare(arg, "cha") && compare(arg, "charisma")
+                && compare(arg, "wis") && compare(arg, "wisdom")
+                && compare(arg, "int") && compare(arg, "intelligence"))
             {
                 do_train(ch, "");
                 return;
             }
 
-            if (!str_cmp(arg, "str") || !str_cmp(arg, "strength"))
+            if (!compare(arg, "str") || !compare(arg, "strength"))
             {
                 if (mob->perm_str <= ch->perm_str ||
                     ch->perm_str >= 20 + race_table[ch->race].str_plus ||
@@ -2696,7 +2696,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
                 }
                 send_to_char("&GYou begin your weight training.\r\n", ch);
             }
-            if (!str_cmp(arg, "dex") || !str_cmp(arg, "dexterity"))
+            if (!compare(arg, "dex") || !compare(arg, "dexterity"))
             {
                 if (mob->perm_dex <= ch->perm_dex ||
                     ch->perm_dex >= 20 + race_table[ch->race].dex_plus ||
@@ -2710,7 +2710,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
                 }
                 send_to_char("&GYou begin to work at some challenging tests of coordination.\r\n", ch);
             }
-            if (!str_cmp(arg, "int") || !str_cmp(arg, "intelligence"))
+            if (!compare(arg, "int") || !compare(arg, "intelligence"))
             {
                 if (mob->perm_int <= ch->perm_int ||
                     ch->perm_int >= 20 + race_table[ch->race].int_plus ||
@@ -2724,7 +2724,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
                 }
                 send_to_char("&GYou begin your studies.\r\n", ch);
             }
-            if (!str_cmp(arg, "wis") || !str_cmp(arg, "wisdom"))
+            if (!compare(arg, "wis") || !compare(arg, "wisdom"))
             {
                 if (mob->perm_wis <= ch->perm_wis ||
                     ch->perm_wis >= 20 + race_table[ch->race].wis_plus ||
@@ -2738,7 +2738,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
                 }
                 send_to_char("&GYou begin contemplating several ancient texts in an effort to gain wisdom.\r\n", ch);
             }
-            if (!str_cmp(arg, "con") || !str_cmp(arg, "constitution"))
+            if (!compare(arg, "con") || !compare(arg, "constitution"))
             {
                 if (mob->perm_con <= ch->perm_con ||
                     ch->perm_con >= 20 + race_table[ch->race].con_plus ||
@@ -2752,7 +2752,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
                 }
                 send_to_char("&GYou begin your endurance training.\r\n", ch);
             }
-            if (!str_cmp(arg, "cha") || !str_cmp(arg, "charisma"))
+            if (!compare(arg, "cha") || !compare(arg, "charisma"))
             {
                 if (mob->perm_cha <= ch->perm_cha ||
                     ch->perm_cha >= 20 + race_table[ch->race].cha_plus ||
@@ -2790,7 +2790,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
         successful = TRUE;
     }
 
-    if (!str_cmp(arg, "str") || !str_cmp(arg, "strength"))
+    if (!compare(arg, "str") || !compare(arg, "strength"))
     {
         if (!successful)
         {
@@ -2802,7 +2802,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "dex") || !str_cmp(arg, "dexterity"))
+    if (!compare(arg, "dex") || !compare(arg, "dexterity"))
     {
         if (!successful)
         {
@@ -2814,7 +2814,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "int") || !str_cmp(arg, "intelligence"))
+    if (!compare(arg, "int") || !compare(arg, "intelligence"))
     {
         if (!successful)
         {
@@ -2826,7 +2826,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "wis") || !str_cmp(arg, "wisdom"))
+    if (!compare(arg, "wis") || !compare(arg, "wisdom"))
     {
         if (!successful)
         {
@@ -2842,7 +2842,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "con") || !str_cmp(arg, "constitution"))
+    if (!compare(arg, "con") || !compare(arg, "constitution"))
     {
         if (!successful)
         {
@@ -2859,7 +2859,7 @@ void do_train(CHAR_DATA* ch, const char* argument)
     }
 
 
-    if (!str_cmp(arg, "cha") || !str_cmp(arg, "charisma"))
+    if (!compare(arg, "cha") || !compare(arg, "charisma"))
     {
         if (!successful)
         {

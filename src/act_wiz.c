@@ -66,7 +66,7 @@ int get_saveflag(const char* name)
     size_t x;
 
     for (x = 0; x < sizeof(save_flag) / sizeof(save_flag[0]); x++)
-        if (!str_cmp(name, save_flag[x]))
+        if (!compare(name, save_flag[x]))
             return x;
     return -1;
 }
@@ -209,7 +209,7 @@ void do_authorize(CHAR_DATA* ch, const char* argument)
     if (victim == nullptr)
         return;
 
-    if (arg2[0] == '\0' || !str_cmp(arg2, "accept") || !str_cmp(arg2, "yes"))
+    if (arg2[0] == '\0' || !compare(arg2, "accept") || !compare(arg2, "yes"))
     {
         victim->pcdata->auth_state = 3;
         REMOVE_BIT(victim->pcdata->flags, PCFLAG_UNAUTHED);
@@ -231,7 +231,7 @@ void do_authorize(CHAR_DATA* ch, const char* argument)
         ); /* B */
         return;
     }
-    else if (!str_cmp(arg2, "no") || !str_cmp(arg2, "deny"))
+    else if (!compare(arg2, "no") || !compare(arg2, "deny"))
     {
         send_to_char("You have been denied access.\r\n", victim);
         snprintf(buf, MAX_STRING_LENGTH, "%s denied authorization to %s", ch->name, victim->name);
@@ -240,7 +240,7 @@ void do_authorize(CHAR_DATA* ch, const char* argument)
         do_quit(victim, "");
     }
 
-    else if (!str_cmp(arg2, "name") || !str_cmp(arg2, "n"))
+    else if (!compare(arg2, "name") || !compare(arg2, "n"))
     {
         snprintf(buf, MAX_STRING_LENGTH, "%s has denied %s's name", ch->name, victim->name);
         to_channel(buf, CHANNEL_MONITOR, "Monitor", ch->top_level);
@@ -297,7 +297,7 @@ void do_rank(CHAR_DATA* ch, const char* argument)
 
     argument = smash_tilde_static(argument);
     DISPOSE(ch->pcdata->rank);
-    if (!str_cmp(argument, "none"))
+    if (!compare(argument, "none"))
         ch->pcdata->rank = str_dup("");
     else
         ch->pcdata->rank = str_dup(argument);
@@ -573,9 +573,9 @@ void do_echo(CHAR_DATA* ch, const char* argument)
         argument = one_argument(argument, arg);
     parg         = argument;
     argument     = one_argument(argument, arg);
-    if (!str_cmp(arg, "PC") || !str_cmp(arg, "player"))
+    if (!compare(arg, "PC") || !compare(arg, "player"))
         target   = ECHOTAR_PC;
-    else if (!str_cmp(arg, "imm"))
+    else if (!compare(arg, "imm"))
         target = ECHOTAR_IMM;
     else
     {
@@ -587,7 +587,7 @@ void do_echo(CHAR_DATA* ch, const char* argument)
     if (!color)
         color    = AT_IMMORT;
     one_argument(argument, arg);
-    if (!str_cmp(arg, "Merth") || !str_cmp(arg, "Durga"))
+    if (!compare(arg, "Merth") || !compare(arg, "Durga"))
     {
         ch_printf(ch, "I don't think %s would like that!\r\n", arg);
         return;
@@ -632,11 +632,11 @@ void do_recho(CHAR_DATA* ch, const char* argument)
     }
 
     one_argument(argument, arg);
-    if (!str_cmp(arg, "Thoric")
-        || !str_cmp(arg, "Dominus")
-        || !str_cmp(arg, "Circe")
-        || !str_cmp(arg, "Haus")
-        || !str_cmp(arg, "Narn") || !str_cmp(arg, "Scryn") || !str_cmp(arg, "Blodkai") || !str_cmp(arg, "Damian"))
+    if (!compare(arg, "Thoric")
+        || !compare(arg, "Dominus")
+        || !compare(arg, "Circe")
+        || !compare(arg, "Haus")
+        || !compare(arg, "Narn") || !compare(arg, "Scryn") || !compare(arg, "Blodkai") || !compare(arg, "Damian"))
     {
         ch_printf(ch, "I don't think %s would like that!\r\n", arg);
         return;
@@ -762,7 +762,7 @@ void do_transfer(CHAR_DATA* ch, const char* argument)
     else
         location = ch->in_room;
 
-    if (!str_cmp(arg1, "all") && get_trust(ch) >= LEVEL_GREATER)
+    if (!compare(arg1, "all") && get_trust(ch) >= LEVEL_GREATER)
     {
         alg::for_each(descriptors, [&](auto* d)
         {
@@ -889,7 +889,7 @@ void do_rat(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(argument, "quit"))
+    if (!compare(argument, "quit"))
     {
         send_to_char("I don't think so!\r\n", ch);
         return;
@@ -942,7 +942,7 @@ void do_rstat(CHAR_DATA* ch, const char* argument)
     }
 
 
-    if (!str_cmp(arg, "exits"))
+    if (!compare(arg, "exits"))
     {
         location = ch->in_room;
 
@@ -1365,7 +1365,7 @@ void do_mfind(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    fAll   = !str_cmp(arg, "all");
+    fAll   = !compare(arg, "all");
     nMatch = 0;
     set_pager_color(AT_PLAIN, ch);
 
@@ -1410,7 +1410,7 @@ void do_ofind(CHAR_DATA* ch, const char* argument)
     }
 
     set_pager_color(AT_PLAIN, ch);
-    fAll   = !str_cmp(arg, "all");
+    fAll   = !compare(arg, "all");
     nMatch = 0;
 
     /*
@@ -1494,7 +1494,7 @@ void do_bodybag(CHAR_DATA* ch, const char* argument)
     found    = FALSE;
     for (obj = first_object; obj; obj = obj->next)
     {
-        if (obj->in_room && obj->pIndexData->vnum == OBJ_VNUM_CORPSE_PC && !str_cmp(buf2, obj->short_descr))
+        if (obj->in_room && obj->pIndexData->vnum == OBJ_VNUM_CORPSE_PC && !compare(buf2, obj->short_descr))
         {
             found = TRUE;
             ch_printf(
@@ -1626,7 +1626,7 @@ void do_reboot(CHAR_DATA* ch, const char* argument)
     char     buf[MAX_STRING_LENGTH];
     CHAR_DATA* vch;
 
-    if (str_cmp(argument, "mud now") && str_cmp(argument, "nosave") && str_cmp(argument, "and sort skill table"))
+    if (compare(argument, "mud now") && compare(argument, "nosave") && compare(argument, "and sort skill table"))
     {
         send_to_char("Syntax: 'reboot mud now' or 'reboot nosave'\r\n", ch);
         return;
@@ -1638,7 +1638,7 @@ void do_reboot(CHAR_DATA* ch, const char* argument)
     snprintf(buf, MAX_STRING_LENGTH, "Reboot by %s.", ch->name);
     do_echo(ch, buf);
 
-    if (!str_cmp(argument, "and sort skill table"))
+    if (!compare(argument, "and sort skill table"))
     {
         sort_skill_table();
         save_skill_table();
@@ -1647,7 +1647,7 @@ void do_reboot(CHAR_DATA* ch, const char* argument)
     /*
     * Save all characters before booting.
     */
-    if (str_cmp(argument, "nosave"))
+    if (compare(argument, "nosave"))
         alg::for_each(characters, [](auto* vch)
         {
             if (!IS_NPC(vch))
@@ -1667,7 +1667,7 @@ void do_shutdown(CHAR_DATA* ch, const char* argument)
     char     buf[MAX_STRING_LENGTH];
     CHAR_DATA* vch;
 
-    if (str_cmp(argument, "mud now") && str_cmp(argument, "nosave"))
+    if (compare(argument, "mud now") && compare(argument, "nosave"))
     {
         send_to_char("Syntax: 'shutdown mud now' or 'shutdown nosave'\r\n", ch);
         return;
@@ -1684,7 +1684,7 @@ void do_shutdown(CHAR_DATA* ch, const char* argument)
     /*
     * Save all characters before booting.
     */
-    if (str_cmp(argument, "nosave"))
+    if (compare(argument, "nosave"))
         alg::for_each(characters, [](auto* vch)
         {
             if (!IS_NPC(vch))
@@ -2230,7 +2230,7 @@ void do_balzhur(CHAR_DATA* ch, const char* argument)
     snprintf(areafile, 256, "%s.are", name);
     for (pArea = first_build; pArea; pArea = pArea->next)
     {
-        if (!str_cmp(pArea->filename, areafile))
+        if (!compare(pArea->filename, areafile))
         {
             char buildfile[256];
             char buildbackup[256];
@@ -2467,7 +2467,7 @@ void do_restore(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "all"))
+    if (!compare(arg, "all"))
     {
         CHAR_DATA* vch;
         CHAR_DATA* vch_next;
@@ -2645,7 +2645,7 @@ void do_log(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "all"))
+    if (!compare(arg, "all"))
     {
         if (fLogAll)
         {
@@ -3042,7 +3042,7 @@ void do_ban(CHAR_DATA* ch, const char* argument)
             do_ban(ch, "help");
             return;
         }
-        if (!str_cmp(arg, "level"))
+        if (!compare(arg, "level"))
         {
             argument = one_argument(argument, arg);
             if (arg[0] == '\0' || !is_number(arg))
@@ -3058,17 +3058,17 @@ void do_ban(CHAR_DATA* ch, const char* argument)
             pban->level = atoi(arg);
             send_to_char("Ban level set.\r\n", ch);
         }
-        else if (!str_cmp(arg, "newban"))
+        else if (!compare(arg, "newban"))
         {
             pban->level = 1;
             send_to_char("New characters banned.\r\n", ch);
         }
-        else if (!str_cmp(arg, "mortal"))
+        else if (!compare(arg, "mortal"))
         {
             pban->level = LEVEL_AVATAR;
             send_to_char("All mortals banned.\r\n", ch);
         }
-        else if (!str_cmp(arg, "total"))
+        else if (!compare(arg, "total"))
         {
             pban->level = LEVEL_SUPREME;
             send_to_char("Everyone banned.\r\n", ch);
@@ -3082,7 +3082,7 @@ void do_ban(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "help"))
+    if (!compare(arg, "help"))
     {
         send_to_char("Syntax: ban <site address>\r\n", ch);
         send_to_char("Syntax: ban <ban number> <level <lev>|newban|mortal|" "total>\r\n", ch);
@@ -3091,7 +3091,7 @@ void do_ban(CHAR_DATA* ch, const char* argument)
 
     for (pban = first_ban; pban; pban = pban->next)
     {
-        if (!str_cmp(arg, pban->name))
+        if (!compare(arg, pban->name))
         {
             send_to_char("That site is already banned!\r\n", ch);
             return;
@@ -3123,7 +3123,7 @@ void do_allow(CHAR_DATA* ch, const char* argument)
 
     for (pban = first_ban; pban; pban = pban->next)
     {
-        if (!str_cmp(arg, pban->name))
+        if (!compare(arg, pban->name))
         {
             UNLINK(pban, first_ban, last_ban, next, prev);
             if (pban->ban_time)
@@ -3231,7 +3231,7 @@ void do_force(CHAR_DATA* ch, const char* argument)
 
     mobsonly = get_trust(ch) < sysdata.level_forcepc;
 
-    if (!str_cmp(arg, "all"))
+    if (!compare(arg, "all"))
     {
         if (mobsonly)
         {
@@ -3842,14 +3842,14 @@ void do_bestowarea(CHAR_DATA* ch, const char* argument)
     if (!victim->pcdata->bestowments)
         victim->pcdata->bestowments = str_dup("");
 
-    if (!*argument || !str_cmp(argument, "list"))
+    if (!*argument || !compare(argument, "list"))
     {
         extract_area_names(victim->pcdata->bestowments, buf);
         ch_printf(ch, "Bestowed areas: %s\r\n", buf);
         return;
     }
 
-    if (!str_cmp(argument, "none"))
+    if (!compare(argument, "none"))
     {
         remove_area_names(victim->pcdata->bestowments, buf);
         DISPOSE(victim->pcdata->bestowments);
@@ -3911,13 +3911,13 @@ void do_bestow(CHAR_DATA* ch, const char* argument)
     if (!victim->pcdata->bestowments)
         victim->pcdata->bestowments = str_dup("");
 
-    if (argument[0] == '\0' || !str_cmp(argument, "show list"))
+    if (argument[0] == '\0' || !compare(argument, "show list"))
     {
         ch_printf(ch, "Current bestowed commands on %s: %s.\r\n", victim->name, victim->pcdata->bestowments);
         return;
     }
 
-    if (!str_cmp(argument, "none"))
+    if (!compare(argument, "none"))
     {
         DISPOSE(victim->pcdata->bestowments);
         victim->pcdata->bestowments = str_dup("");
@@ -3954,7 +3954,7 @@ void do_bestow(CHAR_DATA* ch, const char* argument)
         cmd_buf = one_argument(cmd_buf, cmd_tmp);
         while (cmd_tmp[0] != '\0')
         {
-            if (!str_cmp(cmd_tmp, arg))
+            if (!compare(cmd_tmp, arg))
             {
                 cFound = TRUE;
                 break;
@@ -4139,7 +4139,7 @@ void do_set_boot_time(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "time"))
+    if (!compare(arg, "time"))
     {
         struct tm* now_time;
 
@@ -4206,7 +4206,7 @@ void do_set_boot_time(CHAR_DATA* ch, const char* argument)
         ch_printf(ch, "Boot time set to %s\r\n", reboot_time);
         check = TRUE;
     }
-    else if (!str_cmp(arg, "manual"))
+    else if (!compare(arg, "manual"))
     {
         argument = one_argument(argument, arg1);
         if (arg1[0] == '\0')
@@ -4234,7 +4234,7 @@ void do_set_boot_time(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    else if (!str_cmp(arg, "default"))
+    else if (!compare(arg, "default"))
     {
         set_boot_time->manual = 0;
         /*
@@ -4445,7 +4445,7 @@ void do_destroy(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    const auto valid_victim = [&](auto* victim) {return !IS_NPC(victim) && !str_cmp(victim->name, arg);};
+    const auto valid_victim = [&](auto* victim) {return !IS_NPC(victim) && !compare(victim->name, arg);};
 
     const auto victim_iter = alg::find_if(characters, valid_victim);
 
@@ -4507,7 +4507,7 @@ void do_destroy(CHAR_DATA* ch, const char* argument)
         snprintf(areafile, 256, "%s.are", name);
         for (pArea = first_build; pArea; pArea = pArea->next)
         {
-            if (!str_cmp(pArea->filename, areafile))
+            if (!compare(pArea->filename, areafile))
             {
                 int bc = snprintf(buildfile, 256, "%s%s", BUILD_DIR, areafile);
                 if (bc < 0)
@@ -4639,18 +4639,18 @@ void do_for(CHAR_DATA* ch, const char* argument)
     }
 
 
-    if (!str_cmp(range, "all"))
+    if (!compare(range, "all"))
     {
         fMortals = TRUE;
         fGods    = TRUE;
     }
-    else if (!str_cmp(range, "gods"))
+    else if (!compare(range, "gods"))
         fGods = TRUE;
-    else if (!str_cmp(range, "mortals"))
+    else if (!compare(range, "mortals"))
         fMortals = TRUE;
-    else if (!str_cmp(range, "mobs"))
+    else if (!compare(range, "mobs"))
         fMobs = TRUE;
-    else if (!str_cmp(range, "everywhere"))
+    else if (!compare(range, "everywhere"))
         fEverywhere = TRUE;
     else
         do_help(ch, "for");   /* show syntax */
@@ -4820,19 +4820,19 @@ void do_cset(CHAR_DATA* ch, const char* argument)
 
     argument = one_argument(argument, arg);
 
-    if (!str_cmp(arg, "help"))
+    if (!compare(arg, "help"))
     {
         do_help(ch, "controls");
         return;
     }
 
-    if (!str_cmp(arg, "save"))
+    if (!compare(arg, "save"))
     {
         save_sysdata(sysdata);
         return;
     }
 
-    if (!str_cmp(arg, "saveflag"))
+    if (!compare(arg, "saveflag"))
     {
         int x = get_saveflag(argument);
 
@@ -4870,49 +4870,49 @@ void do_cset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "stun"))
+    if (!compare(arg, "stun"))
     {
         sysdata.stun_regular = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg, "stun_pvp"))
+    if (!compare(arg, "stun_pvp"))
     {
         sysdata.stun_plr_vs_plr = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg, "dam_pvp"))
+    if (!compare(arg, "dam_pvp"))
     {
         sysdata.dam_plr_vs_plr = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg, "get_notake"))
+    if (!compare(arg, "get_notake"))
     {
         sysdata.level_getobjnotake = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg, "dam_pvm"))
+    if (!compare(arg, "dam_pvm"))
     {
         sysdata.dam_plr_vs_mob = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg, "dam_mvp"))
+    if (!compare(arg, "dam_mvp"))
     {
         sysdata.dam_mob_vs_plr = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg, "dam_mvm"))
+    if (!compare(arg, "dam_mvm"))
     {
         sysdata.dam_mob_vs_mob = level;
         send_to_char("Ok.\r\n", ch);
@@ -4925,74 +4925,74 @@ void do_cset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "read_all"))
+    if (!compare(arg, "read_all"))
     {
         sysdata.read_all_mail = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg, "read_free"))
+    if (!compare(arg, "read_free"))
     {
         sysdata.read_mail_free = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
-    if (!str_cmp(arg, "write_free"))
+    if (!compare(arg, "write_free"))
     {
         sysdata.write_mail_free = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
-    if (!str_cmp(arg, "take_all"))
+    if (!compare(arg, "take_all"))
     {
         sysdata.take_others_mail = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
-    if (!str_cmp(arg, "muse"))
+    if (!compare(arg, "muse"))
     {
         sysdata.muse_level = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
-    if (!str_cmp(arg, "think"))
+    if (!compare(arg, "think"))
     {
         sysdata.think_level = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
-    if (!str_cmp(arg, "log"))
+    if (!compare(arg, "log"))
     {
         sysdata.log_level = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
-    if (!str_cmp(arg, "build"))
+    if (!compare(arg, "build"))
     {
         sysdata.build_level = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
-    if (!str_cmp(arg, "proto_modify"))
+    if (!compare(arg, "proto_modify"))
     {
         sysdata.level_modify_proto = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
-    if (!str_cmp(arg, "override_private"))
+    if (!compare(arg, "override_private"))
     {
         sysdata.level_override_private = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
-    if (!str_cmp(arg, "forcepc"))
+    if (!compare(arg, "forcepc"))
     {
         sysdata.level_forcepc = level;
         send_to_char("Ok.\r\n", ch);
         return;
     }
-    if (!str_cmp(arg, "mset_player"))
+    if (!compare(arg, "mset_player"))
     {
         sysdata.level_mset_player = level;
         send_to_char("Ok.\r\n", ch);
@@ -5130,7 +5130,7 @@ void do_unhell(CHAR_DATA* ch, const char* argument)
 
     if (victim->pcdata->helled_by)
     {
-        if (str_cmp(ch->name, victim->pcdata->helled_by))
+        if (compare(ch->name, victim->pcdata->helled_by))
             ch_printf(
                 ch, "(You should probably write a note to %s, explaining the early release.)\r\n",
                 victim->pcdata->helled_by
@@ -5390,7 +5390,7 @@ void do_sedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (get_trust(ch) > LEVEL_LESSER && !str_cmp(arg1, "save"))
+    if (get_trust(ch) > LEVEL_LESSER && !compare(arg1, "save"))
     {
         save_socials();
         send_to_char("Saved.\r\n", ch);
@@ -5399,7 +5399,7 @@ void do_sedit(CHAR_DATA* ch, const char* argument)
 
     social = find_social(arg1);
 
-    if (!str_cmp(arg2, "create"))
+    if (!compare(arg2, "create"))
     {
         if (social)
         {
@@ -5421,7 +5421,7 @@ void do_sedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (arg2[0] == '\0' || !str_cmp(arg2, "show"))
+    if (arg2[0] == '\0' || !compare(arg2, "show"))
     {
         ch_printf(ch, "Social: %s\r\n\r\nCNoArg: %s\r\n", social->name, social->char_no_arg);
         ch_printf(
@@ -5439,7 +5439,7 @@ void do_sedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (get_trust(ch) > LEVEL_GOD && !str_cmp(arg2, "delete"))
+    if (get_trust(ch) > LEVEL_GOD && !compare(arg2, "delete"))
     {
         unlink_social(social);
         free_social(social);
@@ -5447,9 +5447,9 @@ void do_sedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "cnoarg"))
+    if (!compare(arg2, "cnoarg"))
     {
-        if (argument[0] == '\0' || !str_cmp(argument, "clear"))
+        if (argument[0] == '\0' || !compare(argument, "clear"))
         {
             send_to_char("You cannot clear this field.  It must have a message.\r\n", ch);
             return;
@@ -5461,67 +5461,67 @@ void do_sedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "onoarg"))
+    if (!compare(arg2, "onoarg"))
     {
         if (social->others_no_arg)
             DISPOSE(social->others_no_arg);
-        if (argument[0] != '\0' && str_cmp(argument, "clear"))
+        if (argument[0] != '\0' && compare(argument, "clear"))
             social->others_no_arg = str_dup(argument);
         send_to_char("Done.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg2, "cfound"))
+    if (!compare(arg2, "cfound"))
     {
         if (social->char_found)
             DISPOSE(social->char_found);
-        if (argument[0] != '\0' && str_cmp(argument, "clear"))
+        if (argument[0] != '\0' && compare(argument, "clear"))
             social->char_found = str_dup(argument);
         send_to_char("Done.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg2, "ofound"))
+    if (!compare(arg2, "ofound"))
     {
         if (social->others_found)
             DISPOSE(social->others_found);
-        if (argument[0] != '\0' && str_cmp(argument, "clear"))
+        if (argument[0] != '\0' && compare(argument, "clear"))
             social->others_found = str_dup(argument);
         send_to_char("Done.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg2, "vfound"))
+    if (!compare(arg2, "vfound"))
     {
         if (social->vict_found)
             DISPOSE(social->vict_found);
-        if (argument[0] != '\0' && str_cmp(argument, "clear"))
+        if (argument[0] != '\0' && compare(argument, "clear"))
             social->vict_found = str_dup(argument);
         send_to_char("Done.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg2, "cauto"))
+    if (!compare(arg2, "cauto"))
     {
         if (social->char_auto)
             DISPOSE(social->char_auto);
-        if (argument[0] != '\0' && str_cmp(argument, "clear"))
+        if (argument[0] != '\0' && compare(argument, "clear"))
             social->char_auto = str_dup(argument);
         send_to_char("Done.\r\n", ch);
         return;
     }
 
-    if (!str_cmp(arg2, "oauto"))
+    if (!compare(arg2, "oauto"))
     {
         if (social->others_auto)
             DISPOSE(social->others_auto);
-        if (argument[0] != '\0' && str_cmp(argument, "clear"))
+        if (argument[0] != '\0' && compare(argument, "clear"))
             social->others_auto = str_dup(argument);
         send_to_char("Done.\r\n", ch);
         return;
     }
 
-    if (get_trust(ch) > LEVEL_GREATER && !str_cmp(arg2, "name"))
+    if (get_trust(ch) > LEVEL_GREATER && !compare(arg2, "name"))
     {
         bool      relocate;
         SOCIALTYPE* checksocial;
@@ -5688,7 +5688,7 @@ void do_cedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (get_trust(ch) > LEVEL_GREATER && !str_cmp(arg1, "save"))
+    if (get_trust(ch) > LEVEL_GREATER && !compare(arg1, "save"))
     {
         save_commands();
         send_to_char("Saved.\r\n", ch);
@@ -5697,7 +5697,7 @@ void do_cedit(CHAR_DATA* ch, const char* argument)
 
     command = find_command(arg1);
 
-    if (get_trust(ch) > LEVEL_SUB_IMPLEM && !str_cmp(arg2, "create"))
+    if (get_trust(ch) > LEVEL_SUB_IMPLEM && !compare(arg2, "create"))
     {
         if (command)
         {
@@ -5731,7 +5731,7 @@ void do_cedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (arg2[0] == '\0' || !str_cmp(arg2, "show"))
+    if (arg2[0] == '\0' || !compare(arg2, "show"))
     {
         ch_printf(
             ch, "Command:  %s\r\nLevel:    %d\r\nPosition: %d\r\nLog:      %d\r\nCode:     %s\r\n",
@@ -5748,7 +5748,7 @@ void do_cedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "delete"))
+    if (!compare(arg2, "delete"))
     {
         unlink_command(command);
         free_command(command);
@@ -5756,7 +5756,7 @@ void do_cedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "code"))
+    if (!compare(arg2, "code"))
     {
         DO_FUN* fun = skill_function(argument);
 
@@ -5772,7 +5772,7 @@ void do_cedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "level"))
+    if (!compare(arg2, "level"))
     {
         int level = atoi(argument);
 
@@ -5793,7 +5793,7 @@ void do_cedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "log"))
+    if (!compare(arg2, "log"))
     {
         int clog = atoi(argument);
 
@@ -5807,7 +5807,7 @@ void do_cedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "position"))
+    if (!compare(arg2, "position"))
     {
         int position = atoi(argument);
 
@@ -5821,7 +5821,7 @@ void do_cedit(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "name"))
+    if (!compare(arg2, "name"))
     {
         bool   relocate;
         CMDTYPE* checkcmd;

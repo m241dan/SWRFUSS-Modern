@@ -107,7 +107,7 @@ void load_specfuns(void)
                 return;
             }
             word = fread_word(fp);
-            if (!str_cmp(word, "$"))
+            if (!compare(word, "$"))
                 break;
 
             CREATE(specfun, SPEC_LIST, 1);
@@ -125,7 +125,7 @@ bool validate_spec_fun(const char* name)
 
     for (specfun = first_specfun; specfun; specfun = specfun->next)
     {
-        if (!str_cmp(specfun->name, name))
+        if (!compare(specfun->name, name))
             return TRUE;
     }
     return FALSE;
@@ -254,7 +254,7 @@ bool spec_clan_guard(CHAR_DATA* ch)
         if (get_timer(victim, TIMER_RECENTFIGHT) > 0)
             continue;
         if (!IS_NPC(victim) && victim->pcdata && victim->pcdata->clan && IS_AWAKE(victim)
-            && str_cmp(ch->name, victim->pcdata->clan->name))
+            && compare(ch->name, victim->pcdata->clan->name))
         {
             do_yell(ch, "Hey your not allowed in here!");
             multi_hit(ch, victim, TYPE_UNDEFINED);
@@ -383,7 +383,7 @@ bool spec_customs_weapons(CHAR_DATA* ch)
         if (IS_NPC(victim) || victim->position == POS_FIGHTING)
             continue;
 
-        if (victim->pcdata && victim->pcdata->clan && !str_cmp(victim->pcdata->clan->name, ch->mob_clan))
+        if (victim->pcdata && victim->pcdata->clan && !compare(victim->pcdata->clan->name, ch->mob_clan))
             continue;
 
         for (obj = victim->last_carrying; obj; obj = obj->prev_content)

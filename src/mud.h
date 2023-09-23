@@ -64,7 +64,7 @@ typedef int obj_ret;
 #endif
 
 #define KEY(literal, field, value)   \
-   if ( !str_cmp( word, (literal) ) )     \
+   if ( !compare( word, (literal) ) )     \
 {                                      \
    (field) = (value);                  \
    fMatch = TRUE;                      \
@@ -4484,7 +4484,7 @@ void hide_tilde args((char * str));
 
 const char* show_tilde(const char* str);
 
-bool str_cmp(std::string_view astr, std::string_view bstr);
+bool compare(std::string_view astr, std::string_view bstr);
 
 bool str_prefix(std::string_view astr, std::string_view bstr);
 

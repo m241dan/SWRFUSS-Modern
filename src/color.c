@@ -168,7 +168,7 @@ void show_colorthemes(CHAR_DATA* ch)
         /*
          * Added by Tarl 3 Dec 02 because we are now using CVS
          */
-        if (!str_cmp(dentry->d_name, "CVS"))
+        if (!compare(dentry->d_name, "CVS"))
         {
             dentry = readdir(dp);
             continue;
@@ -254,20 +254,20 @@ void reset_colors(CHAR_DATA* ch)
         while (!feof(fp))
         {
             char* word = fread_word(fp);
-            if (!str_cmp(word, "MaxColors"))
+            if (!compare(word, "MaxColors"))
             {
                 int temp   = fread_number(fp);
                 max_colors = UMIN(temp, MAX_COLORS);
                 continue;
             }
-            if (!str_cmp(word, "Colors"))
+            if (!compare(word, "Colors"))
             {
                 for (x = 0; x < max_colors; ++x)
                     ch->colors[x] = fread_number(fp);
                 fread_to_eol(fp);
                 continue;
             }
-            if (!str_cmp(word, "End"))
+            if (!compare(word, "End"))
             {
                 FCLOSE(fp);
                 return;
@@ -304,7 +304,7 @@ void do_color(CHAR_DATA* ch, const char* argument)
 
     argument = one_argument(argument, arg);
 
-    if (!str_cmp(arg, "savetheme") && IS_IMMORTAL(ch))
+    if (!compare(arg, "savetheme") && IS_IMMORTAL(ch))
     {
         FILE * fp;
         char filename[256];
@@ -339,7 +339,7 @@ void do_color(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "theme"))
+    if (!compare(arg, "theme"))
     {
         FILE * fp;
         char filename[256];
@@ -367,20 +367,20 @@ void do_color(CHAR_DATA* ch, const char* argument)
         while (!feof(fp))
         {
             char* word = fread_word(fp);
-            if (!str_cmp(word, "MaxColors"))
+            if (!compare(word, "MaxColors"))
             {
                 int temp = fread_number(fp);
                 max_colors = UMIN(temp, MAX_COLORS);
                 continue;
             }
-            if (!str_cmp(word, "Colors"))
+            if (!compare(word, "Colors"))
             {
                 for (x = 0; x < max_colors; ++x)
                     ch->colors[x] = fread_number(fp);
                 fread_to_eol(fp);
                 continue;
             }
-            if (!str_cmp(word, "End"))
+            if (!compare(word, "End"))
             {
                 FCLOSE(fp);
                 ch_printf(ch, "Color theme has been changed to %s.\r\n", argument);
@@ -393,7 +393,7 @@ void do_color(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "ansitest"))
+    if (!compare(arg, "ansitest"))
     {
         buffer_printf(ch->desc, "%sBlack\r\n", ANSI_BLACK);
         buffer_printf(ch->desc, "%sDark Red\r\n", ANSI_DRED);
@@ -477,7 +477,7 @@ void do_color(CHAR_DATA* ch, const char* argument)
          */
         for (y = 0; y < 16; y++)
         {
-            if (!str_cmp(arg2, valid_color[y]))
+            if (!compare(arg2, valid_color[y]))
             {
                 cMatch = TRUE;
                 break;
@@ -489,7 +489,7 @@ void do_color(CHAR_DATA* ch, const char* argument)
     else
     {
         /*
-         * search for the display type and str_cmp
+         * search for the display type and compare
          */
         for (count = 0; count < MAX_COLORS; count++)
         {
@@ -507,7 +507,7 @@ void do_color(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        if (!str_cmp(arg2, "default"))
+        if (!compare(arg2, "default"))
         {
             ch->colors[count] = default_set[count];
             ch_printf(ch, "Display %s set back to default.\r\n", pc_displays[count]);
@@ -519,7 +519,7 @@ void do_color(CHAR_DATA* ch, const char* argument)
          */
         for (y = 0; y < 16; y++)
         {
-            if (!str_cmp(arg2, valid_color[y]))
+            if (!compare(arg2, valid_color[y]))
             {
                 cMatch = TRUE;
                 break;
@@ -554,7 +554,7 @@ void do_color(CHAR_DATA* ch, const char* argument)
             valid_color[y]
         );
 
-    if (!str_cmp(argument, "blink"))
+    if (!compare(argument, "blink"))
         y += AT_BLINK;
 
     if (count == -1)
@@ -577,7 +577,7 @@ void do_color(CHAR_DATA* ch, const char* argument)
 
         set_pager_color(count, ch);
 
-        if (!str_cmp(argument, "blink"))
+        if (!compare(argument, "blink"))
             ch_printf(
                 ch, "Display %s set to color %s [BLINKING]%s\r\n",
                 pc_displays[count], valid_color[y - AT_BLINK], ANSI_RESET

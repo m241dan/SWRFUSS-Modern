@@ -1615,25 +1615,25 @@ void do_makejewelry(CHAR_DATA* ch, const char* argument)
     argument = one_argument(argument, arg);
     mudstrlcpy(arg2, argument, MAX_INPUT_LENGTH);
 
-    if (!str_cmp(arg, "body")
-        || !str_cmp(arg, "head")
-        || !str_cmp(arg, "legs")
-        || !str_cmp(arg, "arms")
-        || !str_cmp(arg, "about")
-        || !str_cmp(arg, "eyes")
-        || !str_cmp(arg, "waist") || !str_cmp(arg, "hold") || !str_cmp(arg, "feet") || !str_cmp(arg, "hands"))
+    if (!compare(arg, "body")
+        || !compare(arg, "head")
+        || !compare(arg, "legs")
+        || !compare(arg, "arms")
+        || !compare(arg, "about")
+        || !compare(arg, "eyes")
+        || !compare(arg, "waist") || !compare(arg, "hold") || !compare(arg, "feet") || !compare(arg, "hands"))
     {
         send_to_char("&RYou cannot make jewelry for that body part.\r\n&w", ch);
         send_to_char("&RTry MAKEARMOR.\r\n&w", ch);
         return;
     }
-    if (!str_cmp(arg, "shield"))
+    if (!compare(arg, "shield"))
     {
         send_to_char("&RYou cannot make jewelry worn as a shield.\r\n&w", ch);
         send_to_char("&RTry MAKESHIELD.\r\n&w", ch);
         return;
     }
-    if (!str_cmp(arg, "wield"))
+    if (!compare(arg, "wield"))
     {
         send_to_char("&RAre you going to fight with your jewelry?\r\n&w", ch);
         send_to_char("&RTry MAKEBLADE...\r\n&w", ch);
@@ -1819,20 +1819,20 @@ void do_makearmor(CHAR_DATA* ch, const char* argument)
     argument = one_argument(argument, arg);
     mudstrlcpy(arg2, argument, MAX_INPUT_LENGTH);
 
-    if (!str_cmp(arg, "eyes")
-        || !str_cmp(arg, "ears") || !str_cmp(arg, "finger") || !str_cmp(arg, "neck") || !str_cmp(arg, "wrist"))
+    if (!compare(arg, "eyes")
+        || !compare(arg, "ears") || !compare(arg, "finger") || !compare(arg, "neck") || !compare(arg, "wrist"))
     {
         send_to_char("&RYou cannot make clothing for that body part.\r\n&w", ch);
         send_to_char("&RTry MAKEJEWELRY.\r\n&w", ch);
         return;
     }
-    if (!str_cmp(arg, "shield"))
+    if (!compare(arg, "shield"))
     {
         send_to_char("&RYou cannot make clothing worn as a shield.\r\n&w", ch);
         send_to_char("&RTry MAKESHIELD.\r\n&w", ch);
         return;
     }
-    if (!str_cmp(arg, "wield"))
+    if (!compare(arg, "wield"))
     {
         send_to_char("&RAre you going to fight with your clothing?\r\n&w", ch);
         send_to_char("&RTry MAKEBLADE...\r\n&w", ch);
@@ -2405,26 +2405,26 @@ void do_makecontainer(CHAR_DATA* ch, const char* argument)
     argument = one_argument(argument, arg);
     mudstrlcpy(arg2, argument, MAX_INPUT_LENGTH);
 
-    if (!str_cmp(arg, "eyes")
-        || !str_cmp(arg, "ears") || !str_cmp(arg, "finger") || !str_cmp(arg, "neck") || !str_cmp(arg, "wrist"))
+    if (!compare(arg, "eyes")
+        || !compare(arg, "ears") || !compare(arg, "finger") || !compare(arg, "neck") || !compare(arg, "wrist"))
     {
         send_to_char("&RYou cannot make a container for that body part.\r\n&w", ch);
         send_to_char("&RTry MAKEJEWELRY.\r\n&w", ch);
         return;
     }
-    if (!str_cmp(arg, "feet") || !str_cmp(arg, "hands"))
+    if (!compare(arg, "feet") || !compare(arg, "hands"))
     {
         send_to_char("&RYou cannot make a container for that body part.\r\n&w", ch);
         send_to_char("&RTry MAKEARMOR.\r\n&w", ch);
         return;
     }
-    if (!str_cmp(arg, "shield"))
+    if (!compare(arg, "shield"))
     {
         send_to_char("&RYou cannot make a container a shield.\r\n&w", ch);
         send_to_char("&RTry MAKESHIELD.\r\n&w", ch);
         return;
     }
-    if (!str_cmp(arg, "wield"))
+    if (!compare(arg, "wield"))
     {
         send_to_char("&RAre you going to fight with a container?\r\n&w", ch);
         send_to_char("&RTry MAKEBLADE...\r\n&w", ch);

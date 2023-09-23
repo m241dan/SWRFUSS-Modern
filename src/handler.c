@@ -489,7 +489,7 @@ bool is_name(const char* str, const char* namelist)
         namelist = one_argument(namelist, name);
         if (name[0] == '\0')
             return FALSE;
-        if (!str_cmp(str, name))
+        if (!compare(str, name))
             return TRUE;
     }
 }
@@ -521,7 +521,7 @@ bool is_name2(const char* str, const char* namelist)
         namelist = one_argument2(namelist, name);
         if (name[0] == '\0')
             return FALSE;
-        if (!str_cmp(str, name))
+        if (!compare(str, name))
             return TRUE;
     }
 }
@@ -1622,7 +1622,7 @@ CHAR_DATA* get_char_room(CHAR_DATA* ch, const char* argument)
     int      number, count, vnum;
 
     number = number_argument(argument, arg);
-    if (!str_cmp(arg, "self"))
+    if (!compare(arg, "self"))
         return ch;
 
     if (get_trust(ch) >= LEVEL_SAVIOR && is_number(arg))
@@ -1686,7 +1686,7 @@ CHAR_DATA* get_char_world(CHAR_DATA* ch, const char* argument)
 
     number = number_argument(argument, arg);
     count  = 0;
-    if (!str_cmp(arg, "self"))
+    if (!compare(arg, "self"))
         return ch;
 
     /*
@@ -2089,7 +2089,7 @@ OBJ_DATA* find_obj(CHAR_DATA* ch, const char* argument, bool carryonly)
     argument = one_argument(argument, arg1);
     argument = one_argument(argument, arg2);
 
-    if (!str_cmp(arg2, "from") && argument[0] != '\0')
+    if (!compare(arg2, "from") && argument[0] != '\0')
         argument = one_argument(argument, arg2);
 
     if (arg2[0] == '\0')
@@ -3418,10 +3418,10 @@ OBJ_DATA* group_object(OBJ_DATA* obj1, OBJ_DATA* obj2)
     &&	!obj1->pIndexData->mudprogs
     &&  !obj2->pIndexData->mudprogs
 */
-        && !str_cmp(obj1->name, obj2->name)
-        && !str_cmp(obj1->short_descr, obj2->short_descr)
-        && !str_cmp(obj1->description, obj2->description)
-        && !str_cmp(obj1->action_desc, obj2->action_desc)
+        && !compare(obj1->name, obj2->name)
+        && !compare(obj1->short_descr, obj2->short_descr)
+        && !compare(obj1->description, obj2->description)
+        && !compare(obj1->action_desc, obj2->action_desc)
         && obj1->item_type == obj2->item_type
         && obj1->extra_flags == obj2->extra_flags
         && obj1->magic_flags == obj2->magic_flags

@@ -446,7 +446,7 @@ void do_instaroom(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(argument, "nodoors"))
+    if (!compare(argument, "nodoors"))
         dodoors = FALSE;
     else
         dodoors = TRUE;
@@ -476,7 +476,7 @@ void do_instazone(CHAR_DATA* ch, const char* argument)
         send_to_char("You don't have an assigned area to create resets for.\r\n", ch);
         return;
     }
-    if (!str_cmp(argument, "nodoors"))
+    if (!compare(argument, "nodoors"))
         dodoors = FALSE;
     else
         dodoors = TRUE;
@@ -1123,7 +1123,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
     }
 
     argument = one_argument(argument, arg);
-    if (!str_cmp(arg, "area"))
+    if (!compare(arg, "area"))
     {
         reset_area(ch->in_room->area);
         send_to_char("Area has been reset.\r\n", ch);
@@ -1131,7 +1131,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
     }
 
     // Yeah, I know, this function is mucho ugly... but...
-    if (!str_cmp(arg, "delete"))
+    if (!compare(arg, "delete"))
     {
         RESET_DATA* pReset, * tReset, * pReset_next, * tReset_next, * gReset, * gReset_next;
         int       num, nfind = 0;
@@ -1194,7 +1194,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "random"))
+    if (!compare(arg, "random"))
     {
         RESET_DATA* pReset;
         int       door;
@@ -1229,7 +1229,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "trap"))
+    if (!compare(arg, "trap"))
     {
         RESET_DATA* pReset                = nullptr, * tReset;
         char      oname[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
@@ -1237,7 +1237,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
 
         argument = one_argument(argument, arg2);
 
-        if (!str_cmp(arg2, "room"))
+        if (!compare(arg2, "room"))
         {
             vnum  = ch->in_room->vnum;
             extra = TRAP_ROOM;
@@ -1247,7 +1247,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
             argument = one_argument(argument, arg);
             chrg     = is_number(arg) ? atoi(arg) : -1;
         }
-        else if (!str_cmp(arg2, "obj"))
+        else if (!compare(arg2, "obj"))
         {
             argument     = one_argument(argument, oname);
             if (!(pReset = find_oreset(ch->in_room, oname)))
@@ -1317,7 +1317,7 @@ void do_reset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "hide"))
+    if (!compare(arg, "hide"))
     {
         RESET_DATA* pReset = nullptr, * tReset;
 

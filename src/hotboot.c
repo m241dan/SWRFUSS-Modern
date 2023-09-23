@@ -165,17 +165,17 @@ SHIP_DATA* load_ship(FILE* fp)
     bool      fMatch;
 
     word = feof(fp) ? "EndShip" : fread_word(fp);
-    if (!str_cmp(word, "EndShip"))
+    if (!compare(word, "EndShip"))
         return nullptr;
 
-    if (!str_cmp(word, "SHIPFNAME"))
+    if (!compare(word, "SHIPFNAME"))
     {
         const char* name      = fread_string_nohash(fp); /* is this right? - Gavin */
         SHIP_DATA * temp_ship = nullptr;
 
         for (temp_ship = first_ship; temp_ship; temp_ship = temp_ship->next)
         {
-            if (!str_cmp(name, temp_ship->filename))
+            if (!compare(name, temp_ship->filename))
             {
                 ship = temp_ship;
                 break;
@@ -191,7 +191,7 @@ SHIP_DATA* load_ship(FILE* fp)
             for (;;)
             {
                 word = feof(fp) ? "EndShip" : fread_word(fp);
-                if (!str_cmp(word, "EndShip"))
+                if (!compare(word, "EndShip"))
                     break;
             }
         }
@@ -202,7 +202,7 @@ SHIP_DATA* load_ship(FILE* fp)
         for (;;)
         {
             word = feof(fp) ? "EndShip" : fread_word(fp);
-            if (!str_cmp(word, "EndShip"))
+            if (!compare(word, "EndShip"))
                 break;
         }
         bug("%s: shipfname not found", __func__);
@@ -221,7 +221,7 @@ SHIP_DATA* load_ship(FILE* fp)
 
                 /*
                  * case '#':
-                 * if ( !str_cmp( word, "#TORPEDO" ) )
+                 * if ( !compare( word, "#TORPEDO" ) )
                  * {
                  * mob->tempnum = -9999;
                  * fread_obj( mob, fp, OS_CARRY );
@@ -236,7 +236,7 @@ SHIP_DATA* load_ship(FILE* fp)
                 break;
 
             case 'C':KEY("Currspeed", ship->currspeed, fread_number(fp));
-                if (!str_cmp(word, "Currjump"))
+                if (!compare(word, "Currjump"))
                 {
                     const char* temp = fread_string_nohash(fp);
 
@@ -251,11 +251,11 @@ SHIP_DATA* load_ship(FILE* fp)
                 break;
 
             case 'E':KEY("Energy", ship->energy, fread_number(fp));
-                if (!str_cmp(word, "EndShip"))
+                if (!compare(word, "EndShip"))
                 {
                     return ship;
                 }
-                if (!str_cmp(
+                if (!compare(
                     word,
                     "End"
                 )) /* End of object, need to ignore this. sometimes they creep in there somehow -- Scion */
@@ -275,7 +275,7 @@ SHIP_DATA* load_ship(FILE* fp)
                 break;
 
             case 'L':
-                if (!str_cmp(word, "Landdest"))
+                if (!compare(word, "Landdest"))
                 {
                     STRFREE(ship->dest);
                     ship->dest = fread_string(fp);
@@ -293,7 +293,7 @@ SHIP_DATA* load_ship(FILE* fp)
             case 'S':KEY("Shield", ship->shield, fread_number(fp));
                 KEY("Shipstate", ship->shipstate, fread_number(fp));
 
-                if (!str_cmp(word, "Starsystem"))
+                if (!compare(word, "Starsystem"))
                 {
                     const char* star_name  = fread_string_nohash(fp);
                     SPACE_DATA* starsystem = starsystem_from_name(star_name);
@@ -310,7 +310,7 @@ SHIP_DATA* load_ship(FILE* fp)
                 break;
 
             case 'T':KEY("Torpedos", ship->torpedos, fread_number(fp));
-                if (!str_cmp(word, "target0"))
+                if (!compare(word, "target0"))
                 {
                     const char* temp   = fread_string(fp);
                     SHIP_DATA * target = get_ship(temp);
@@ -321,7 +321,7 @@ SHIP_DATA* load_ship(FILE* fp)
                     break;
                 }
 
-                if (!str_cmp(word, "target1"))
+                if (!compare(word, "target1"))
                 {
                     const char* temp   = fread_string(fp);
                     SHIP_DATA * target = get_ship(temp);
@@ -332,7 +332,7 @@ SHIP_DATA* load_ship(FILE* fp)
                     break;
                 }
 
-                if (!str_cmp(word, "target2"))
+                if (!compare(word, "target2"))
                 {
                     const char* temp   = fread_string(fp);
                     SHIP_DATA * target = get_ship(temp);
@@ -350,7 +350,7 @@ SHIP_DATA* load_ship(FILE* fp)
                 break;
 
         }
-        if (!fMatch && str_cmp(word, "End"))
+        if (!fMatch && compare(word, "End"))
             bug("%s: no match: %s", __func__, word);
     }
     return nullptr;
@@ -391,13 +391,13 @@ void save_mobile(FILE* fp, CHAR_DATA* mob)
 #ifdef OVERLANDCODE
     fprintf( fp, "Coordinates  %d %d %d\n", mob->x, mob->y, mob->map );
 #endif
-    if (mob->name && mob->pIndexData->player_name && str_cmp(mob->name, mob->pIndexData->player_name))
+    if (mob->name && mob->pIndexData->player_name && compare(mob->name, mob->pIndexData->player_name))
         fprintf(fp, "Name     %s~\n", mob->name);
-    if (mob->short_descr && mob->pIndexData->short_descr && str_cmp(mob->short_descr, mob->pIndexData->short_descr))
+    if (mob->short_descr && mob->pIndexData->short_descr && compare(mob->short_descr, mob->pIndexData->short_descr))
         fprintf(fp, "Short	%s~\n", mob->short_descr);
-    if (mob->long_descr && mob->pIndexData->long_descr && str_cmp(mob->long_descr, mob->pIndexData->long_descr))
+    if (mob->long_descr && mob->pIndexData->long_descr && compare(mob->long_descr, mob->pIndexData->long_descr))
         fprintf(fp, "Long	%s~\n", mob->long_descr);
-    if (mob->description && mob->pIndexData->description && str_cmp(mob->description, mob->pIndexData->description))
+    if (mob->description && mob->pIndexData->description && compare(mob->description, mob->pIndexData->description))
         fprintf(fp, "Description %s~\n", mob->description);
     fprintf(
         fp, "HpManaMove   %d %d %d %d %d %d\n",
@@ -526,7 +526,7 @@ CHAR_DATA* load_mobile(FILE* fp)
     ROOM_INDEX_DATA* pRoomIndex = nullptr;
 
     word = feof(fp) ? "EndMobile" : fread_word(fp);
-    if (!str_cmp(word, "Vnum"))
+    if (!compare(word, "Vnum"))
     {
         int vnum;
 
@@ -546,7 +546,7 @@ CHAR_DATA* load_mobile(FILE* fp)
                  * So we don't get so many bug messages when something messes up
                  * * --Shaddai
                  */
-                if (!str_cmp(word, "EndMobile"))
+                if (!compare(word, "EndMobile"))
                     break;
             }
             bug("%s: Unable to create mobile for vnum %d", __func__, vnum);
@@ -562,7 +562,7 @@ CHAR_DATA* load_mobile(FILE* fp)
              * So we don't get so many bug messages when something messes up
              * * --Shaddai
              */
-            if (!str_cmp(word, "EndMobile"))
+            if (!compare(word, "EndMobile"))
                 break;
         }
 
@@ -581,7 +581,7 @@ CHAR_DATA* load_mobile(FILE* fp)
                 break;
 
             case '#':
-                if (!str_cmp(word, "#OBJECT"))
+                if (!compare(word, "#OBJECT"))
                 {
                     mob->tempnum = -9999;   /* Hackish, yes. Works though doesn't it? */
                     fread_obj(mob, fp, OS_CARRY);
@@ -589,12 +589,12 @@ CHAR_DATA* load_mobile(FILE* fp)
                 break;
 
             case 'A':
-                if (!str_cmp(word, "Affect") || !str_cmp(word, "AffectData"))
+                if (!compare(word, "Affect") || !compare(word, "AffectData"))
                 {
                     AFFECT_DATA* paf;
 
                     CREATE(paf, AFFECT_DATA, 1);
-                    if (!str_cmp(word, "Affect"))
+                    if (!compare(word, "Affect"))
                     {
                         paf->type = fread_number(fp);
                     }
@@ -630,7 +630,7 @@ CHAR_DATA* load_mobile(FILE* fp)
 
 #ifdef OVERLANDCODE
                 case 'C':
-                   if( !str_cmp( word, "Coordinates" ) )
+                   if( !compare( word, "Coordinates" ) )
                    {
                       mob->x = fread_number( fp );
                       mob->y = fread_number( fp );
@@ -643,7 +643,7 @@ CHAR_DATA* load_mobile(FILE* fp)
 #endif
 
             case 'D':
-                if (!str_cmp(word, "Description"))
+                if (!compare(word, "Description"))
                 {
                     STRFREE(mob->description);
                     mob->description = fread_string(fp);
@@ -653,7 +653,7 @@ CHAR_DATA* load_mobile(FILE* fp)
                 break;
 
             case 'E':
-                if (!str_cmp(word, "EndMobile"))
+                if (!compare(word, "EndMobile"))
                 {
                     if (inroom == 0)
                         inroom     = ROOM_VNUM_LIMBO;
@@ -665,7 +665,7 @@ CHAR_DATA* load_mobile(FILE* fp)
                     update_room_reset(mob, FALSE);
                     return mob;
                 }
-                if (!str_cmp(
+                if (!compare(
                     word,
                     "End"
                 )) /* End of object, need to ignore this. sometimes they creep in there somehow -- Scion */
@@ -679,7 +679,7 @@ CHAR_DATA* load_mobile(FILE* fp)
                 break;
 
             case 'H':
-                if (!str_cmp(word, "HpManaMove"))
+                if (!compare(word, "HpManaMove"))
                 {
                     mob->hit      = fread_number(fp);
                     mob->max_hit  = fread_number(fp);
@@ -697,7 +697,7 @@ CHAR_DATA* load_mobile(FILE* fp)
                 break;
 
             case 'L':
-                if (!str_cmp(word, "Long"))
+                if (!compare(word, "Long"))
                 {
                     STRFREE(mob->long_descr);
                     mob->long_descr = fread_string(fp);
@@ -708,7 +708,7 @@ CHAR_DATA* load_mobile(FILE* fp)
                 break;
 
             case 'M':
-                if (!str_cmp(word, "Mobclan"))
+                if (!compare(word, "Mobclan"))
                 {
                     STRFREE(mob->mob_clan);
                     mob->mob_clan = fread_string(fp);
@@ -718,7 +718,7 @@ CHAR_DATA* load_mobile(FILE* fp)
                 break;
 
             case 'N':
-                if (!str_cmp(word, "Name"))
+                if (!compare(word, "Name"))
                 {
                     STRFREE(mob->name);
                     mob->name = fread_string(fp);
@@ -736,7 +736,7 @@ CHAR_DATA* load_mobile(FILE* fp)
                 break;
 
             case 'S':
-                if (!str_cmp(word, "Short"))
+                if (!compare(word, "Short"))
                 {
                     STRFREE(mob->short_descr);
                     mob->short_descr = fread_string(fp);
@@ -745,7 +745,7 @@ CHAR_DATA* load_mobile(FILE* fp)
                 }
                 break;
         }
-        if (!fMatch && str_cmp(word, "End"))
+        if (!fMatch && compare(word, "End"))
             bug("%s: no match: %s", __func__, word);
     }
     return nullptr;
@@ -795,9 +795,9 @@ void read_obj_file(char* dirname, char* filename)
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "OBJECT")) /* Objects  */
+            if (!compare(word, "OBJECT")) /* Objects  */
                 fread_obj(supermob, fp, OS_CARRY);
-            else if (!str_cmp(word, "END"))  /* Done     */
+            else if (!compare(word, "END"))  /* Done     */
                 break;
             else
             {
@@ -851,7 +851,7 @@ void load_obj_files(void)
         /*
          * Added by Tarl 3 Dec 02 because we are now using CVS
          */
-        if (!str_cmp(dentry->d_name, "CVS"))
+        if (!compare(dentry->d_name, "CVS"))
         {
             dentry = readdir(dp);
             continue;
@@ -902,7 +902,7 @@ void load_world(CHAR_DATA* ch)
             else
             {
                 word = fread_word(mobfp);
-                if (str_cmp(word, "#END"))
+                if (compare(word, "#END"))
                     load_mobile(mobfp);
                 else
                     done++;
@@ -924,7 +924,7 @@ void load_world(CHAR_DATA* ch)
             else
             {
                 word = fread_word(shipfp);
-                if (str_cmp(word, "#END"))
+                if (compare(word, "#END"))
                     load_ship(shipfp);
                 else
                     done++;
@@ -1066,7 +1066,7 @@ void do_hotboot(CHAR_DATA* ch, const char* argument)
     /*
      * added this in case there's a need to debug the contents of the various files
      */
-    if (argument && !str_cmp(argument, "debug"))
+    if (argument && !compare(argument, "debug"))
     {
         log_string("Hotboot debug - Aborting before execl");
         return;
@@ -1127,7 +1127,7 @@ void hotboot_recover(void)
         if (desc == -1 || feof(fp))
             break;
 
-        if (!str_cmp(name, "maxp") || !str_cmp(host, "maxp"))
+        if (!compare(name, "maxp") || !compare(host, "maxp"))
         {
             maxp = idle;
             continue;

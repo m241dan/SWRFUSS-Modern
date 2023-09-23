@@ -598,13 +598,13 @@ void fwrite_obj(CHAR_DATA* ch, OBJ_DATA* obj, FILE* fp, int iNest, short os_type
         fprintf(fp, "Nest         %d\n", iNest);
     if (obj->count > 1)
         fprintf(fp, "Count        %d\n", obj->count);
-    if (obj->name && (!obj->pIndexData->name || str_cmp(obj->name, obj->pIndexData->name)))
+    if (obj->name && (!obj->pIndexData->name || compare(obj->name, obj->pIndexData->name)))
         fprintf(fp, "Name         %s~\n", obj->name);
-    if (obj->short_descr && (!obj->pIndexData->short_descr || str_cmp(obj->short_descr, obj->pIndexData->short_descr)))
+    if (obj->short_descr && (!obj->pIndexData->short_descr || compare(obj->short_descr, obj->pIndexData->short_descr)))
         fprintf(fp, "ShortDescr   %s~\n", obj->short_descr);
-    if (obj->description && (!obj->pIndexData->description || str_cmp(obj->description, obj->pIndexData->description)))
+    if (obj->description && (!obj->pIndexData->description || compare(obj->description, obj->pIndexData->description)))
         fprintf(fp, "Description  %s~\n", obj->description);
-    if (obj->action_desc && (!obj->pIndexData->action_desc || str_cmp(obj->action_desc, obj->pIndexData->action_desc)))
+    if (obj->action_desc && (!obj->pIndexData->action_desc || compare(obj->action_desc, obj->pIndexData->action_desc)))
         fprintf(fp, "ActionDesc   %s~\n", obj->action_desc);
     fprintf(fp, "Vnum         %d\n", obj->pIndexData->vnum);
     if ((os_type == OS_CORPSE || hotboot) && obj->in_room)
@@ -826,17 +826,17 @@ bool load_char_obj(DESCRIPTOR_DATA* d, char* name, bool preload, bool copyover)
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "PLAYER"))
+            if (!compare(word, "PLAYER"))
             {
                 fread_char(ch, fp, preload, copyover);
                 if (preload)
                     break;
             }
-            else if (!str_cmp(word, "OBJECT"))  /* Objects  */
+            else if (!compare(word, "OBJECT"))  /* Objects  */
                 fread_obj(ch, fp, OS_CARRY);
-            else if (!str_cmp(word, "COMMENT"))
+            else if (!compare(word, "COMMENT"))
                 fread_comment(ch, fp);   /* Comments */
-            else if (!str_cmp(word, "END"))  /* Done     */
+            else if (!compare(word, "END"))  /* Done     */
                 break;
             else
             {
@@ -965,7 +965,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 KEY("Alignment", ch->alignment, fread_number(fp));
                 KEY("Armor", ch->armor, fread_number(fp));
 
-                if (!str_cmp(word, "Addiction"))
+                if (!compare(word, "Addiction"))
                 {
                     line = fread_line(fp);
                     x0   = x1 = x2 = x3 = x4 = x5 = x6 = x7 = x8 = x9 = 0;
@@ -984,7 +984,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     break;
                 }
 
-                if (!str_cmp(word, "Ability"))
+                if (!compare(word, "Ability"))
                 {
                     line = fread_line(fp);
                     x0   = x1 = x2 = 0;
@@ -998,7 +998,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     break;
                 }
 
-                if (!str_cmp(word, "Affect") || !str_cmp(word, "AffectData"))
+                if (!compare(word, "Affect") || !compare(word, "AffectData"))
                 {
                     AFFECT_DATA* paf;
 
@@ -1009,7 +1009,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                         break;
                     }
                     CREATE(paf, AFFECT_DATA, 1);
-                    if (!str_cmp(word, "Affect"))
+                    if (!compare(word, "Affect"))
                     {
                         paf->type = fread_number(fp);
                     }
@@ -1036,7 +1036,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     break;
                 }
 
-                if (!str_cmp(word, "AttrMod"))
+                if (!compare(word, "AttrMod"))
                 {
                     line = fread_line(fp);
                     x1   = x2 = x3 = x4 = x5 = x6 = x7 = 13;
@@ -1054,7 +1054,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     break;
                 }
 
-                if (!str_cmp(word, "AttrPerm"))
+                if (!compare(word, "AttrPerm"))
                 {
                     line = fread_line(fp);
                     x1   = x2 = x3 = x4 = x5 = x6 = x7 = 0;
@@ -1082,7 +1082,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 break;
 
             case 'C':
-                if (!str_cmp(word, "Clan"))
+                if (!compare(word, "Clan"))
                 {
                     ch->pcdata->clan_name = fread_string(fp);
 
@@ -1103,7 +1103,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     break;
                 }
 
-                if (!str_cmp(word, "Colors"))
+                if (!compare(word, "Colors"))
                 {
                     int x;
 
@@ -1114,7 +1114,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     break;
                 }
 
-                if (!str_cmp(word, "Condition"))
+                if (!compare(word, "Condition"))
                 {
                     line = fread_line(fp);
                     sscanf(line, "%d %d %d %d", &x1, &x2, &x3, &x4);
@@ -1130,7 +1130,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
             case 'D':KEY("Damroll", ch->damroll, fread_number(fp));
                 KEY("Deaf", ch->deaf, fread_number(fp));
                 KEY("Description", ch->description, fread_string(fp));
-                if (!str_cmp(word, "Druglevel"))
+                if (!compare(word, "Druglevel"))
                 {
                     line = fread_line(fp);
                     x0   = x1 = x2 = x3 = x4 = x5 = x6 = x7 = x8 = x9 = 0;
@@ -1154,7 +1154,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
              * 'E' was moved to after 'S'
              */
             case 'F':KEY("Flags", ch->pcdata->flags, fread_number(fp));
-                if (!str_cmp(word, "Force"))
+                if (!compare(word, "Force"))
                 {
                     line = fread_line(fp);
                     x1   = x2 = x3 = x4 = x5 = x6 = 0;
@@ -1173,7 +1173,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 /*
              * temporary measure
              */
-                if (!str_cmp(word, "Guild"))
+                if (!compare(word, "Guild"))
                 {
                     ch->pcdata->clan_name = fread_string(fp);
 
@@ -1196,7 +1196,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 break;
 
             case 'H':
-                if (!str_cmp(word, "Helled"))
+                if (!compare(word, "Helled"))
                 {
                     ch->pcdata->release_date = fread_number(fp);
                     ch->pcdata->helled_by    = fread_string(fp);
@@ -1213,7 +1213,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 KEY("Hitroll", ch->hitroll, fread_number(fp));
                 KEY("Homepage", ch->pcdata->homepage, fread_string_nohash(fp));
 
-                if (!str_cmp(word, "HpManaMove"))
+                if (!compare(word, "HpManaMove"))
                 {
                     line = fread_line(fp);
                     x1   = x2 = x3 = x4 = x5 = x6 = 0;
@@ -1244,7 +1244,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 break;
 
             case 'K':
-                if (!str_cmp(word, "Killed"))
+                if (!compare(word, "Killed"))
                 {
                     fMatch = TRUE;
                     if (killcnt >= MAX_KILLTRACK)
@@ -1258,14 +1258,14 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 break;
 
             case 'L':
-                if (!str_cmp(word, "Lastplayed"))
+                if (!compare(word, "Lastplayed"))
                 {
                     lastplayed = fread_number(fp);
                     fMatch     = TRUE;
                     break;
                 }
                 KEY("LongDescr", ch->long_descr, fread_string(fp));
-                if (!str_cmp(word, "Languages"))
+                if (!compare(word, "Languages"))
                 {
                     ch->speaks   = fread_number(fp);
                     ch->speaking = fread_number(fp);
@@ -1275,7 +1275,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
 
             case 'M':KEY("MainAbility", ch->main_ability, fread_number(fp));
                 KEY("MDeaths", ch->pcdata->mdeaths, fread_number(fp));
-                if (!str_cmp(word, "MaxColors"))
+                if (!compare(word, "MaxColors"))
                 {
                     int temp = fread_number(fp);
 
@@ -1289,7 +1289,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 KEY("Minsnoop", ch->pcdata->min_snoop, fread_number(fp));
                 KEY("MKills", ch->pcdata->mkills, fread_number(fp));
                 KEY("Mobinvis", ch->mobinvis, fread_number(fp));
-                if (!str_cmp(word, "MobRange"))
+                if (!compare(word, "MobRange"))
                 {
                     ch->pcdata->m_range_lo = fread_number(fp);
                     ch->pcdata->m_range_hi = fread_number(fp);
@@ -1298,7 +1298,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 break;
 
             case 'N':
-                if (!str_cmp(word, "Name"))
+                if (!compare(word, "Name"))
                 {
                     /*
                 * Name already set externally.
@@ -1310,7 +1310,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 break;
 
             case 'O':KEY("Outcast_time", ch->pcdata->outcast_time, fread_number(fp));
-                if (!str_cmp(word, "ObjRange"))
+                if (!compare(word, "ObjRange"))
                 {
                     ch->pcdata->o_range_lo = fread_number(fp);
                     ch->pcdata->o_range_hi = fread_number(fp);
@@ -1326,13 +1326,13 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 KEY("Position", ch->position, fread_number(fp));
                 KEY("Practice", extra, fread_number(fp));
                 KEY("Prompt", ch->pcdata->prompt, fread_string(fp));
-                if (!str_cmp(word, "PTimer"))
+                if (!compare(word, "PTimer"))
                 {
                     add_timer(ch, TIMER_PKILLED, fread_number(fp), nullptr, 0);
                     fMatch = TRUE;
                     break;
                 }
-                if (!str_cmp(word, "PlrHome"))
+                if (!compare(word, "PlrHome"))
                 {
                     ch->plr_home     = get_room_index(fread_number(fp));
                     if (!ch->plr_home)
@@ -1347,7 +1347,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 KEY("Resistant", ch->resistant, fread_number(fp));
                 KEY("Restore_time", ch->pcdata->restore_time, fread_number(fp));
 
-                if (!str_cmp(word, "Room"))
+                if (!compare(word, "Room"))
                 {
                     ch->in_room     = get_room_index(fread_number(fp));
                     if (!ch->in_room)
@@ -1355,7 +1355,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     fMatch = TRUE;
                     break;
                 }
-                if (!str_cmp(word, "RoomRange"))
+                if (!compare(word, "RoomRange"))
                 {
                     ch->pcdata->r_range_lo = fread_number(fp);
                     ch->pcdata->r_range_hi = fread_number(fp);
@@ -1366,7 +1366,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
             case 'S':KEY("Sex", ch->sex, fread_number(fp));
                 KEY("ShortDescr", ch->short_descr, fread_string(fp));
                 KEY("Susceptible", ch->susceptible, fread_number(fp));
-                if (!str_cmp(word, "SavingThrow"))
+                if (!compare(word, "SavingThrow"))
                 {
                     ch->saving_wand         = fread_number(fp);
                     ch->saving_poison_death = ch->saving_wand;
@@ -1377,7 +1377,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     break;
                 }
 
-                if (!str_cmp(word, "SavingThrows"))
+                if (!compare(word, "SavingThrows"))
                 {
                     ch->saving_poison_death = fread_number(fp);
                     ch->saving_wand         = fread_number(fp);
@@ -1388,7 +1388,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     break;
                 }
 
-                if (!str_cmp(word, "Site"))
+                if (!compare(word, "Site"))
                 {
                     if (!preload && !copyover)
                     {
@@ -1403,7 +1403,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                         break;
                 }
 
-                if (!str_cmp(word, "Skill"))
+                if (!compare(word, "Skill"))
                 {
                     int value;
 
@@ -1428,7 +1428,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                     }
                 }
 
-                if (!str_cmp(word, "Spell"))
+                if (!compare(word, "Spell"))
                 {
                     int value;
 
@@ -1450,11 +1450,11 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                         break;
                     }
                 }
-                if (str_cmp(word, "End"))
+                if (compare(word, "End"))
                     break;
 
             case 'E':
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                 {
                     if (!ch->short_descr)
                         ch->short_descr         = STRALLOC("");
@@ -1538,7 +1538,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 break;
 
             case 'T':KEY("Toplevel", ch->top_level, fread_number(fp));
-                if (!str_cmp(word, "Tongue"))
+                if (!compare(word, "Tongue"))
                 {
                     int value;
 
@@ -1565,7 +1565,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
              */
                 ch->trust = UMIN(ch->trust, MAX_LEVEL - 1);
 
-                if (!str_cmp(word, "Title"))
+                if (!compare(word, "Title"))
                 {
                     ch->pcdata->title = fread_string(fp);
                     if (isalpha(ch->pcdata->title[0]) || isdigit(ch->pcdata->title[0]))
@@ -1585,7 +1585,7 @@ void fread_char(CHAR_DATA* ch, FILE* fp, bool preload, bool copyover)
                 break;
 
             case 'W':
-                if (!str_cmp(word, "Weapon"))
+                if (!compare(word, "Weapon"))
                 {
                     int value;
 
@@ -1664,13 +1664,13 @@ void fread_obj(CHAR_DATA* ch, FILE* fp, short os_type)
                 break;
 
             case 'A':
-                if (!str_cmp(word, "Affect") || !str_cmp(word, "AffectData"))
+                if (!compare(word, "Affect") || !compare(word, "AffectData"))
                 {
                     AFFECT_DATA* paf;
                     int        pafmod;
 
                     CREATE(paf, AFFECT_DATA, 1);
-                    if (!str_cmp(word, "Affect"))
+                    if (!compare(word, "Affect"))
                     {
                         paf->type = fread_number(fp);
                     }
@@ -1709,7 +1709,7 @@ void fread_obj(CHAR_DATA* ch, FILE* fp, short os_type)
 
             case 'E':KEY("ExtraFlags", obj->extra_flags, fread_number(fp));
 
-                if (!str_cmp(word, "ExtraDescr"))
+                if (!compare(word, "ExtraDescr"))
                 {
                     EXTRA_DESCR_DATA* ed;
 
@@ -1720,7 +1720,7 @@ void fread_obj(CHAR_DATA* ch, FILE* fp, short os_type)
                     fMatch = TRUE;
                 }
 
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                 {
                     if (!fNest || !fVnum)
                     {
@@ -1817,7 +1817,7 @@ void fread_obj(CHAR_DATA* ch, FILE* fp, short os_type)
 
             case 'N':KEY("Name", obj->name, fread_string(fp));
 
-                if (!str_cmp(word, "Nest"))
+                if (!compare(word, "Nest"))
                 {
                     iNest  = fread_number(fp);
                     if (iNest < 0 || iNest >= MAX_NEST)
@@ -1835,7 +1835,7 @@ void fread_obj(CHAR_DATA* ch, FILE* fp, short os_type)
 
             case 'S':KEY("ShortDescr", obj->short_descr, fread_string(fp));
 
-                if (!str_cmp(word, "Spell"))
+                if (!compare(word, "Spell"))
                 {
                     int iValue;
                     int sn;
@@ -1858,7 +1858,7 @@ void fread_obj(CHAR_DATA* ch, FILE* fp, short os_type)
                 break;
 
             case 'V':
-                if (!str_cmp(word, "Values"))
+                if (!compare(word, "Values"))
                 {
                     int       x1, x2, x3, x4, x5, x6;
                     const char* ln = fread_line(fp);
@@ -1876,7 +1876,7 @@ void fread_obj(CHAR_DATA* ch, FILE* fp, short os_type)
                     break;
                 }
 
-                if (!str_cmp(word, "Vnum"))
+                if (!compare(word, "Vnum"))
                 {
                     int vnum;
 
@@ -1986,7 +1986,7 @@ void write_corpses(CHAR_DATA* ch, const char* name)
     */
     for (corpse = first_object; corpse; corpse = corpse->next)
         if (corpse->pIndexData->vnum == OBJ_VNUM_CORPSE_PC &&
-            corpse->in_room != nullptr && !str_cmp(corpse->short_descr + 14, name))
+            corpse->in_room != nullptr && !compare(corpse->short_descr + 14, name))
         {
             if (!fp)
             {
@@ -2058,11 +2058,11 @@ void load_corpses(void)
                     break;
                 }
                 word = fread_word(fpArea);
-                if (!str_cmp(word, "CORPSE"))
+                if (!compare(word, "CORPSE"))
                     fread_obj(nullptr, fpArea, OS_CORPSE);
-                else if (!str_cmp(word, "OBJECT"))
+                else if (!compare(word, "OBJECT"))
                     fread_obj(nullptr, fpArea, OS_CARRY);
-                else if (!str_cmp(word, "END"))
+                else if (!compare(word, "END"))
                     break;
                 else
                 {
@@ -2124,9 +2124,9 @@ void load_plr_home(CHAR_DATA* ch)
             }
 
             word = fread_word(fph);
-            if (!str_cmp(word, "OBJECT")) /* Objects  */
+            if (!compare(word, "OBJECT")) /* Objects  */
                 fread_obj(supermob, fph, OS_CARRY);
-            else if (!str_cmp(word, "END"))  /* Done     */
+            else if (!compare(word, "END"))  /* Done     */
                 break;
             else
             {

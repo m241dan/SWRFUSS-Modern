@@ -946,7 +946,7 @@ void load_helps(FILE* fp)
             continue;
         }
 
-        if (!str_cmp(pHelp->keyword, "greeting"))
+        if (!compare(pHelp->keyword, "greeting"))
             help_greeting = pHelp->text;
         add_help(pHelp);
     }
@@ -3061,7 +3061,7 @@ bool is_valid_filename(CHAR_DATA* ch, const char* direct, const char* filename)
     /* Length restrictions */
     if (!filename || filename[0] == '\0' || strlen(filename) < 3)
     {
-        if (!filename || !str_cmp(filename, ""))
+        if (!filename || !compare(filename, ""))
             send_to_char("Empty filename is not valid.\r\n", ch);
         else
             ch_printf(ch, "%s: Filename is too short.\r\n", filename);
@@ -3389,7 +3389,7 @@ void do_memory(CHAR_DATA* ch, const char* argument)
     ch_printf(ch, "MaxEver %5d    Topsn   %5d (%d)\r\n", sysdata.alltimemax, top_sn, MAX_SKILL);
     ch_printf(ch, "MaxEver time recorded at:   %s\r\n", sysdata.time_of_max);
 
-    if (!str_cmp(arg, "check"))
+    if (!compare(arg, "check"))
     {
 #ifdef HASHSTR
         send_to_char(check_hash(argument), ch);
@@ -3398,7 +3398,7 @@ void do_memory(CHAR_DATA* ch, const char* argument)
 #endif
         return;
     }
-    if (!str_cmp(arg, "showhigh"))
+    if (!compare(arg, "showhigh"))
     {
 #ifdef HASHSTR
         show_high_hash(atoi(argument));
@@ -3411,7 +3411,7 @@ void do_memory(CHAR_DATA* ch, const char* argument)
         hash = atoi(argument);
     else
         hash = -1;
-    if (!str_cmp(arg, "hash"))
+    if (!compare(arg, "hash"))
     {
 #ifdef HASHSTR
         ch_printf(ch, "Hash statistics:\r\n%s", hash_stats());
@@ -3616,7 +3616,7 @@ const char* show_tilde(const char* str)
  * Return TRUE if different
  *   (compatibility with historical functions).
  */
-bool str_cmp(std::string_view astr, std::string_view bstr)
+bool compare(std::string_view astr, std::string_view bstr)
 {
 
     if (astr.length() != bstr.length())
@@ -3687,7 +3687,7 @@ bool str_suffix(const char* astr, const char* bstr)
 
     sstr1 = strlen(astr);
     sstr2 = strlen(bstr);
-    if (sstr1 <= sstr2 && !str_cmp(astr, bstr + sstr2 - sstr1))
+    if (sstr1 <= sstr2 && !compare(astr, bstr + sstr2 - sstr1))
         return FALSE;
     else
         return TRUE;
@@ -4107,7 +4107,7 @@ void make_wizlist()
                 ilevel = fread_number(gfp);
                 fread_to_eol(gfp);
                 word       = feof(gfp) ? "End" : fread_word(gfp);
-                if (!str_cmp(word, "Pcflags"))
+                if (!compare(word, "Pcflags"))
                     iflags = fread_number(gfp);
                 else
                     iflags = 0;
@@ -4193,79 +4193,79 @@ void do_makewizlist(CHAR_DATA* ch, const char* argument)
 
 int mprog_name_to_type(const char* name)
 {
-    if (!str_cmp(name, "in_file_prog"))
+    if (!compare(name, "in_file_prog"))
         return IN_FILE_PROG;
-    if (!str_cmp(name, "act_prog"))
+    if (!compare(name, "act_prog"))
         return ACT_PROG;
-    if (!str_cmp(name, "speech_prog"))
+    if (!compare(name, "speech_prog"))
         return SPEECH_PROG;
-    if (!str_cmp(name, "rand_prog"))
+    if (!compare(name, "rand_prog"))
         return RAND_PROG;
-    if (!str_cmp(name, "fight_prog"))
+    if (!compare(name, "fight_prog"))
         return FIGHT_PROG;
-    if (!str_cmp(name, "hitprcnt_prog"))
+    if (!compare(name, "hitprcnt_prog"))
         return HITPRCNT_PROG;
-    if (!str_cmp(name, "death_prog"))
+    if (!compare(name, "death_prog"))
         return DEATH_PROG;
-    if (!str_cmp(name, "entry_prog"))
+    if (!compare(name, "entry_prog"))
         return ENTRY_PROG;
-    if (!str_cmp(name, "greet_prog"))
+    if (!compare(name, "greet_prog"))
         return GREET_PROG;
-    if (!str_cmp(name, "all_greet_prog"))
+    if (!compare(name, "all_greet_prog"))
         return ALL_GREET_PROG;
-    if (!str_cmp(name, "give_prog"))
+    if (!compare(name, "give_prog"))
         return GIVE_PROG;
-    if (!str_cmp(name, "bribe_prog"))
+    if (!compare(name, "bribe_prog"))
         return BRIBE_PROG;
-    if (!str_cmp(name, "time_prog"))
+    if (!compare(name, "time_prog"))
         return TIME_PROG;
-    if (!str_cmp(name, "hour_prog"))
+    if (!compare(name, "hour_prog"))
         return HOUR_PROG;
-    if (!str_cmp(name, "wear_prog"))
+    if (!compare(name, "wear_prog"))
         return WEAR_PROG;
-    if (!str_cmp(name, "remove_prog"))
+    if (!compare(name, "remove_prog"))
         return REMOVE_PROG;
-    if (!str_cmp(name, "sac_prog"))
+    if (!compare(name, "sac_prog"))
         return SAC_PROG;
-    if (!str_cmp(name, "look_prog"))
+    if (!compare(name, "look_prog"))
         return LOOK_PROG;
-    if (!str_cmp(name, "exa_prog"))
+    if (!compare(name, "exa_prog"))
         return EXA_PROG;
-    if (!str_cmp(name, "zap_prog"))
+    if (!compare(name, "zap_prog"))
         return ZAP_PROG;
-    if (!str_cmp(name, "get_prog"))
+    if (!compare(name, "get_prog"))
         return GET_PROG;
-    if (!str_cmp(name, "drop_prog"))
+    if (!compare(name, "drop_prog"))
         return DROP_PROG;
-    if (!str_cmp(name, "damage_prog"))
+    if (!compare(name, "damage_prog"))
         return DAMAGE_PROG;
-    if (!str_cmp(name, "repair_prog"))
+    if (!compare(name, "repair_prog"))
         return REPAIR_PROG;
-    if (!str_cmp(name, "greet_prog"))
+    if (!compare(name, "greet_prog"))
         return GREET_PROG;
-    if (!str_cmp(name, "randiw_prog"))
+    if (!compare(name, "randiw_prog"))
         return RANDIW_PROG;
-    if (!str_cmp(name, "speechiw_prog"))
+    if (!compare(name, "speechiw_prog"))
         return SPEECHIW_PROG;
-    if (!str_cmp(name, "pull_prog"))
+    if (!compare(name, "pull_prog"))
         return PULL_PROG;
-    if (!str_cmp(name, "push_prog"))
+    if (!compare(name, "push_prog"))
         return PUSH_PROG;
-    if (!str_cmp(name, "sleep_prog"))
+    if (!compare(name, "sleep_prog"))
         return SLEEP_PROG;
-    if (!str_cmp(name, "rest_prog"))
+    if (!compare(name, "rest_prog"))
         return REST_PROG;
-    if (!str_cmp(name, "rfight_prog"))
+    if (!compare(name, "rfight_prog"))
         return FIGHT_PROG;
-    if (!str_cmp(name, "enter_prog"))
+    if (!compare(name, "enter_prog"))
         return ENTRY_PROG;
-    if (!str_cmp(name, "leave_prog"))
+    if (!compare(name, "leave_prog"))
         return LEAVE_PROG;
-    if (!str_cmp(name, "rdeath_prog"))
+    if (!compare(name, "rdeath_prog"))
         return DEATH_PROG;
-    if (!str_cmp(name, "script_prog"))
+    if (!compare(name, "script_prog"))
         return SCRIPT_PROG;
-    if (!str_cmp(name, "use_prog"))
+    if (!compare(name, "use_prog"))
         return USE_PROG;
     return (ERROR_PROG);
 }
@@ -5263,7 +5263,7 @@ EXTRA_DESCR_DATA* fread_fuss_exdesc(FILE* fp)
                 break;
 
             case '#':
-                if (!str_cmp(word, "#ENDEXDESC"))
+                if (!compare(word, "#ENDEXDESC"))
                 {
                     if (!ed->keyword)
                     {
@@ -5359,7 +5359,7 @@ void fread_fuss_exit(FILE* fp, ROOM_INDEX_DATA* pRoomIndex)
                 break;
 
             case '#':
-                if (!str_cmp(word, "#ENDEXIT"))
+                if (!compare(word, "#ENDEXIT"))
                 {
                     if (!pexit->description)
                         pexit->description = STRALLOC("");
@@ -5372,7 +5372,7 @@ void fread_fuss_exit(FILE* fp, ROOM_INDEX_DATA* pRoomIndex)
 
             case 'D':KEY("Desc", pexit->description, fread_string(fp));
                 KEY("Distance", pexit->distance, fread_number(fp));
-                if (!str_cmp(word, "Direction"))
+                if (!compare(word, "Direction"))
                 {
                     int door = get_dir(fread_flagstring(fp));
 
@@ -5388,7 +5388,7 @@ void fread_fuss_exit(FILE* fp, ROOM_INDEX_DATA* pRoomIndex)
                 break;
 
             case 'F':
-                if (!str_cmp(word, "Flags"))
+                if (!compare(word, "Flags"))
                 {
                     const char* exitflags = nullptr;
                     char      flag[MAX_INPUT_LENGTH];
@@ -5466,10 +5466,10 @@ void rprog_file_read(ROOM_INDEX_DATA* prog_target, const char* f)
         }
 
         fMatch = FALSE;
-        if (!str_cmp(word, "ENDFILE"))
+        if (!compare(word, "ENDFILE"))
             break;
 
-        if (!str_cmp(word, "MUDPROG"))
+        if (!compare(word, "MUDPROG"))
         {
             fMatch = TRUE;
             CREATE(mprg, MPROG_DATA, 1);
@@ -5484,7 +5484,7 @@ void rprog_file_read(ROOM_INDEX_DATA* prog_target, const char* f)
                     word = "#ENDPROG";
                 }
 
-                if (!str_cmp(word, "#ENDPROG"))
+                if (!compare(word, "#ENDPROG"))
                 {
                     mprg->next            = prog_target->mudprogs;
                     prog_target->mudprogs = mprg;
@@ -5498,7 +5498,7 @@ void rprog_file_read(ROOM_INDEX_DATA* prog_target, const char* f)
                         break;
 
                     case 'A':
-                        if (!str_cmp(word, "Arglist"))
+                        if (!compare(word, "Arglist"))
                         {
                             mprg->arglist  = fread_string(progfile);
                             mprg->fileprog = true;
@@ -5520,7 +5520,7 @@ void rprog_file_read(ROOM_INDEX_DATA* prog_target, const char* f)
                         break;
 
                     case 'P':
-                        if (!str_cmp(word, "Progtype"))
+                        if (!compare(word, "Progtype"))
                         {
                             mprg->type = mprog_name_to_type(fread_flagstring(progfile));
                             fMatch = TRUE;
@@ -5554,7 +5554,7 @@ void fread_fuss_roomprog(FILE* fp, MPROG_DATA* mprg, ROOM_INDEX_DATA* prog_targe
             word = "#ENDPROG";
         }
 
-        if (!str_cmp(word, "#ENDPROG"))
+        if (!compare(word, "#ENDPROG"))
             return;
 
         fMatch = FALSE;
@@ -5567,7 +5567,7 @@ void fread_fuss_roomprog(FILE* fp, MPROG_DATA* mprg, ROOM_INDEX_DATA* prog_targe
                 break;
 
             case 'A':
-                if (!str_cmp(word, "Arglist"))
+                if (!compare(word, "Arglist"))
                 {
                     mprg->arglist  = fread_string(fp);
                     mprg->fileprog = false;
@@ -5587,7 +5587,7 @@ void fread_fuss_roomprog(FILE* fp, MPROG_DATA* mprg, ROOM_INDEX_DATA* prog_targe
                 break;
 
             case 'P':
-                if (!str_cmp(word, "Progtype"))
+                if (!compare(word, "Progtype"))
                 {
                     mprg->type = mprog_name_to_type(fread_flagstring(fp));
                     SET_BIT(prog_target->progtypes, mprg->type);
@@ -5633,7 +5633,7 @@ void fread_fuss_room(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case '#':
-                if (!str_cmp(word, "#ENDROOM"))
+                if (!compare(word, "#ENDROOM"))
                 {
                     if (!pRoomIndex->description)
                         pRoomIndex->description = STRALLOC("");
@@ -5649,14 +5649,14 @@ void fread_fuss_room(FILE* fp, AREA_DATA* tarea)
                     return;
                 }
 
-                if (!str_cmp(word, "#EXIT"))
+                if (!compare(word, "#EXIT"))
                 {
                     fread_fuss_exit(fp, pRoomIndex);
                     fMatch = TRUE;
                     break;
                 }
 
-                if (!str_cmp(word, "#EXDESC"))
+                if (!compare(word, "#EXDESC"))
                 {
                     EXTRA_DESCR_DATA* ed = fread_fuss_exdesc(fp);
 
@@ -5666,7 +5666,7 @@ void fread_fuss_room(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "#MUDPROG"))
+                if (!compare(word, "#MUDPROG"))
                 {
                     MPROG_DATA* mprg;
 
@@ -5680,7 +5680,7 @@ void fread_fuss_room(FILE* fp, AREA_DATA* tarea)
                 break;
 
                 /*case 'A':
-            if( !str_cmp( word, "Affect" ) || !str_cmp( word, "AffectData" ) )
+            if( !compare( word, "Affect" ) || !compare( word, "AffectData" ) )
             {
                AFFECT_DATA *af = fread_fuss_affect( fp, word );
 
@@ -5696,7 +5696,7 @@ void fread_fuss_room(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'F':
-                if (!str_cmp(word, "Flags"))
+                if (!compare(word, "Flags"))
                 {
                     const char* rflags = fread_flagstring(fp);
 
@@ -5718,7 +5718,7 @@ void fread_fuss_room(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'R':
-                if (!str_cmp(word, "Reset"))
+                if (!compare(word, "Reset"))
                 {
                     load_room_reset(pRoomIndex, fp);
                     fMatch = TRUE;
@@ -5727,7 +5727,7 @@ void fread_fuss_room(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'S':
-                if (!str_cmp(word, "Sector"))
+                if (!compare(word, "Sector"))
                 {
                     int sector = get_secflag(fread_flagstring(fp));
 
@@ -5742,7 +5742,7 @@ void fread_fuss_room(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Stats"))
+                if (!compare(word, "Stats"))
                 {
                     char* ln = fread_line(fp);
                     int x1, x2, x3;
@@ -5760,7 +5760,7 @@ void fread_fuss_room(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'V':
-                if (!str_cmp(word, "Vnum"))
+                if (!compare(word, "Vnum"))
                 {
                     bool tmpBootDb = fBootDb;
                     fBootDb = false;
@@ -5779,7 +5779,7 @@ void fread_fuss_room(FILE* fp, AREA_DATA* tarea)
                             {
                                 word = feof(fp) ? "#ENDROOM" : fread_word(fp);
 
-                                if (!str_cmp(word, "#ENDROOM"))
+                                if (!compare(word, "#ENDROOM"))
                                     return;
                             }
                         }
@@ -5854,10 +5854,10 @@ void oprog_file_read(OBJ_INDEX_DATA* prog_target, const char* f)
             word = "ENDFILE";
         }
 
-        if (!str_cmp(word, "ENDFILE"))
+        if (!compare(word, "ENDFILE"))
             break;
 
-        if (!str_cmp(word, "MUDPROG"))
+        if (!compare(word, "MUDPROG"))
         {
             fMatch = TRUE;
             CREATE(mprg, MPROG_DATA, 1);
@@ -5872,7 +5872,7 @@ void oprog_file_read(OBJ_INDEX_DATA* prog_target, const char* f)
                     word = "#ENDPROG";
                 }
 
-                if (!str_cmp(word, "#ENDPROG"))
+                if (!compare(word, "#ENDPROG"))
                 {
                     mprg->next            = prog_target->mudprogs;
                     prog_target->mudprogs = mprg;
@@ -5886,7 +5886,7 @@ void oprog_file_read(OBJ_INDEX_DATA* prog_target, const char* f)
                         break;
 
                     case 'A':
-                        if (!str_cmp(word, "Arglist"))
+                        if (!compare(word, "Arglist"))
                         {
                             mprg->arglist  = fread_string(progfile);
                             mprg->fileprog = true;
@@ -5907,7 +5907,7 @@ void oprog_file_read(OBJ_INDEX_DATA* prog_target, const char* f)
                         break;
 
                     case 'P':
-                        if (!str_cmp(word, "Progtype"))
+                        if (!compare(word, "Progtype"))
                         {
                             mprg->type = mprog_name_to_type(fread_flagstring(progfile));
                             break;
@@ -5939,7 +5939,7 @@ void fread_fuss_objprog(FILE* fp, MPROG_DATA* mprg, OBJ_INDEX_DATA* prog_target)
             word = "#ENDPROG";
         }
 
-        if (!str_cmp(word, "#ENDPROG"))
+        if (!compare(word, "#ENDPROG"))
             return;
 
         fMatch = FALSE;
@@ -5952,7 +5952,7 @@ void fread_fuss_objprog(FILE* fp, MPROG_DATA* mprg, OBJ_INDEX_DATA* prog_target)
                 break;
 
             case 'A':
-                if (!str_cmp(word, "Arglist"))
+                if (!compare(word, "Arglist"))
                 {
                     mprg->arglist  = fread_string(fp);
                     mprg->fileprog = false;
@@ -5972,7 +5972,7 @@ void fread_fuss_objprog(FILE* fp, MPROG_DATA* mprg, OBJ_INDEX_DATA* prog_target)
                 break;
 
             case 'P':
-                if (!str_cmp(word, "Progtype"))
+                if (!compare(word, "Progtype"))
                 {
                     mprg->type = mprog_name_to_type(fread_flagstring(fp));
                     SET_BIT(prog_target->progtypes, mprg->type);
@@ -6018,7 +6018,7 @@ void fread_fuss_object(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case '#':
-                if (!str_cmp(word, "#ENDOBJECT"))
+                if (!compare(word, "#ENDOBJECT"))
                 {
                     if (!pObjIndex->description)
                         pObjIndex->description = STRALLOC("");
@@ -6035,7 +6035,7 @@ void fread_fuss_object(FILE* fp, AREA_DATA* tarea)
                     return;
                 }
 
-                if (!str_cmp(word, "#EXDESC"))
+                if (!compare(word, "#EXDESC"))
                 {
                     EXTRA_DESCR_DATA* ed = fread_fuss_exdesc(fp);
                     if (ed)
@@ -6044,7 +6044,7 @@ void fread_fuss_object(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "#MUDPROG"))
+                if (!compare(word, "#MUDPROG"))
                 {
                     MPROG_DATA* mprg;
 
@@ -6060,7 +6060,7 @@ void fread_fuss_object(FILE* fp, AREA_DATA* tarea)
 
             case 'A':KEY("Action", pObjIndex->action_desc, fread_string(fp));
 
-                if (!str_cmp(word, "Affect") || !str_cmp(word, "AffectData"))
+                if (!compare(word, "Affect") || !compare(word, "AffectData"))
                 {
                     AFFECT_DATA* af = fread_fuss_affect(fp, word);
 
@@ -6072,7 +6072,7 @@ void fread_fuss_object(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'F':
-                if (!str_cmp(word, "Flags"))
+                if (!compare(word, "Flags"))
                 {
                     const char* eflags = fread_flagstring(fp);
 
@@ -6097,7 +6097,7 @@ void fread_fuss_object(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'S':KEY("Short", pObjIndex->short_descr, fread_string(fp));
-                if (!str_cmp(word, "Spells"))
+                if (!compare(word, "Spells"))
                 {
                     switch (pObjIndex->item_type)
                     {
@@ -6122,7 +6122,7 @@ void fread_fuss_object(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Stats"))
+                if (!compare(word, "Stats"))
                 {
                     char* ln = fread_line(fp);
                     int x1, x2, x3, x4, x5;
@@ -6142,7 +6142,7 @@ void fread_fuss_object(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'T':
-                if (!str_cmp(word, "Type"))
+                if (!compare(word, "Type"))
                 {
                     value = get_otype(fread_flagstring(fp));
 
@@ -6158,7 +6158,7 @@ void fread_fuss_object(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'V':
-                if (!str_cmp(word, "Values"))
+                if (!compare(word, "Values"))
                 {
                     char* ln = fread_line(fp);
                     int x1, x2, x3, x4, x5, x6;
@@ -6177,7 +6177,7 @@ void fread_fuss_object(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Vnum"))
+                if (!compare(word, "Vnum"))
                 {
                     bool tmpBootDb = fBootDb;
                     fBootDb = false;
@@ -6196,7 +6196,7 @@ void fread_fuss_object(FILE* fp, AREA_DATA* tarea)
                             {
                                 word = feof(fp) ? "#ENDOBJECT" : fread_word(fp);
 
-                                if (!str_cmp(word, "#ENDOBJECT"))
+                                if (!compare(word, "#ENDOBJECT"))
                                     return;
                             }
                         }
@@ -6229,7 +6229,7 @@ void fread_fuss_object(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'W':
-                if (!str_cmp(word, "WFlags"))
+                if (!compare(word, "WFlags"))
                 {
                     const char* wflags = fread_flagstring(fp);
 
@@ -6291,10 +6291,10 @@ void mprog_file_read(MOB_INDEX_DATA* prog_target, const char* f)
 
         fMatch = FALSE;
 
-        if (!str_cmp(word, "ENDFILE"))
+        if (!compare(word, "ENDFILE"))
             break;
 
-        if (!str_cmp(word, "MUDPROG"))
+        if (!compare(word, "MUDPROG"))
         {
             CREATE(mprg, MPROG_DATA, 1);
 
@@ -6310,7 +6310,7 @@ void mprog_file_read(MOB_INDEX_DATA* prog_target, const char* f)
                     word = "#ENDPROG";
                 }
 
-                if (!str_cmp(word, "#ENDPROG"))
+                if (!compare(word, "#ENDPROG"))
                 {
                     mprg->next            = prog_target->mudprogs;
                     prog_target->mudprogs = mprg;
@@ -6324,7 +6324,7 @@ void mprog_file_read(MOB_INDEX_DATA* prog_target, const char* f)
                         break;
 
                     case 'A':
-                        if (!str_cmp(word, "Arglist"))
+                        if (!compare(word, "Arglist"))
                         {
                             mprg->arglist  = fread_string(progfile);
                             mprg->fileprog = true;
@@ -6345,7 +6345,7 @@ void mprog_file_read(MOB_INDEX_DATA* prog_target, const char* f)
                         break;
 
                     case 'P':
-                        if (!str_cmp(word, "Progtype"))
+                        if (!compare(word, "Progtype"))
                         {
                             mprg->type = mprog_name_to_type(fread_flagstring(progfile));
                             break;
@@ -6377,7 +6377,7 @@ void fread_fuss_mobprog(FILE* fp, MPROG_DATA* mprg, MOB_INDEX_DATA* prog_target)
             word = "#ENDPROG";
         }
 
-        if (!str_cmp(word, "#ENDPROG"))
+        if (!compare(word, "#ENDPROG"))
             return;
 
         fMatch = FALSE;
@@ -6390,7 +6390,7 @@ void fread_fuss_mobprog(FILE* fp, MPROG_DATA* mprg, MOB_INDEX_DATA* prog_target)
                 break;
 
             case 'A':
-                if (!str_cmp(word, "Arglist"))
+                if (!compare(word, "Arglist"))
                 {
                     mprg->arglist  = fread_string(fp);
                     mprg->fileprog = false;
@@ -6410,7 +6410,7 @@ void fread_fuss_mobprog(FILE* fp, MPROG_DATA* mprg, MOB_INDEX_DATA* prog_target)
                 break;
 
             case 'P':
-                if (!str_cmp(word, "Progtype"))
+                if (!compare(word, "Progtype"))
                 {
                     mprg->type = mprog_name_to_type(fread_flagstring(fp));
                     SET_BIT(prog_target->progtypes, mprg->type);
@@ -6455,7 +6455,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case '#':
-                if (!str_cmp(word, "#MUDPROG"))
+                if (!compare(word, "#MUDPROG"))
                 {
                     MPROG_DATA* mprg;
                     CREATE(mprg, MPROG_DATA, 1);
@@ -6466,7 +6466,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "#ENDMOBILE"))
+                if (!compare(word, "#ENDMOBILE"))
                 {
                     if (!pMobIndex->long_descr)
                         pMobIndex->long_descr  = STRALLOC("");
@@ -6485,7 +6485,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'A':
-                if (!str_cmp(word, "Actflags"))
+                if (!compare(word, "Actflags"))
                 {
                     const char* actflags = nullptr;
 
@@ -6504,7 +6504,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Affected"))
+                if (!compare(word, "Affected"))
                 {
                     const char* affectflags = nullptr;
 
@@ -6523,7 +6523,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Attacks"))
+                if (!compare(word, "Attacks"))
                 {
                     const char* attacks = fread_flagstring(fp);
 
@@ -6540,7 +6540,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Attribs"))
+                if (!compare(word, "Attribs"))
                 {
                     char* ln = fread_line(fp);
                     int x1, x2, x3, x4, x5, x6, x7, x8;
@@ -6564,7 +6564,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'B':
-                if (!str_cmp(word, "Bodyparts"))
+                if (!compare(word, "Bodyparts"))
                 {
                     const char* bodyparts = fread_flagstring(fp);
 
@@ -6583,7 +6583,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'D':
-                if (!str_cmp(word, "Defenses"))
+                if (!compare(word, "Defenses"))
                 {
                     const char* defenses = fread_flagstring(fp);
 
@@ -6600,7 +6600,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "DefPos"))
+                if (!compare(word, "DefPos"))
                 {
                     short position = get_npc_position(fread_flagstring(fp));
 
@@ -6622,7 +6622,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'G':
-                if (!str_cmp(word, "Gender"))
+                if (!compare(word, "Gender"))
                 {
                     short sex = get_npc_sex(fread_flagstring(fp));
 
@@ -6638,7 +6638,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'I':
-                if (!str_cmp(word, "Immune"))
+                if (!compare(word, "Immune"))
                 {
                     const char* immune = fread_flagstring(fp);
 
@@ -6663,7 +6663,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'P':
-                if (!str_cmp(word, "Position"))
+                if (!compare(word, "Position"))
                 {
                     short position = get_npc_position(fread_flagstring(fp));
 
@@ -6683,7 +6683,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'R':
-                if (!str_cmp(word, "Race"))
+                if (!compare(word, "Race"))
                 {
                     short race = get_npc_race(fread_flagstring(fp));
 
@@ -6698,7 +6698,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "RepairData"))
+                if (!compare(word, "RepairData"))
                 {
                     int        iFix;
                     REPAIR_DATA* rShop;
@@ -6720,7 +6720,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Resist"))
+                if (!compare(word, "Resist"))
                 {
                     const char* resist = fread_flagstring(fp);
 
@@ -6739,7 +6739,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'S':
-                if (!str_cmp(word, "Saves"))
+                if (!compare(word, "Saves"))
                 {
                     char* ln = fread_line(fp);
                     int x1, x2, x3, x4, x5;
@@ -6759,7 +6759,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
 
                 KEY("Short", pMobIndex->short_descr, fread_string(fp));
 
-                if (!str_cmp(word, "ShopData"))
+                if (!compare(word, "ShopData"))
                 {
                     int      iTrade;
                     SHOP_DATA* pShop;
@@ -6783,7 +6783,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Speaks"))
+                if (!compare(word, "Speaks"))
                 {
                     const char* speaks = fread_flagstring(fp);
 
@@ -6803,7 +6803,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Speaking"))
+                if (!compare(word, "Speaking"))
                 {
                     const char* speaking = fread_flagstring(fp);
 
@@ -6823,7 +6823,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Specfun"))
+                if (!compare(word, "Specfun"))
                 {
                     const char* temp = fread_flagstring(fp);
                     if (!pMobIndex)
@@ -6842,7 +6842,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Specfun2"))
+                if (!compare(word, "Specfun2"))
                 {
                     const char* temp = fread_flagstring(fp);
                     if (!pMobIndex)
@@ -6861,7 +6861,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Stats1"))
+                if (!compare(word, "Stats1"))
                 {
                     char* ln = fread_line(fp);
                     int x1, x2, x3, x4, x5, x6;
@@ -6880,7 +6880,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Stats2"))
+                if (!compare(word, "Stats2"))
                 {
                     char* ln = fread_line(fp);
                     int x1, x2, x3;
@@ -6895,7 +6895,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Stats3"))
+                if (!compare(word, "Stats3"))
                 {
                     char* ln = fread_line(fp);
                     int x1, x2, x3;
@@ -6910,7 +6910,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Stats4"))
+                if (!compare(word, "Stats4"))
                 {
                     char* ln = fread_line(fp);
                     int x1, x2, x3, x4, x5;
@@ -6928,7 +6928,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Suscept"))
+                if (!compare(word, "Suscept"))
                 {
                     const char* suscep = fread_flagstring(fp);
 
@@ -6947,7 +6947,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'V':
-                if (!str_cmp(word, "VIPFlags"))
+                if (!compare(word, "VIPFlags"))
                 {
                     const char* vip = fread_flagstring(fp);
 
@@ -6964,7 +6964,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                     break;
                 }
 
-                if (!str_cmp(word, "Vnum"))
+                if (!compare(word, "Vnum"))
                 {
                     bool tmpBootDb = fBootDb;
                     fBootDb = false;
@@ -6983,7 +6983,7 @@ void fread_fuss_mobile(FILE* fp, AREA_DATA* tarea)
                             {
                                 word = feof(fp) ? "#ENDMOBILE" : fread_word(fp);
 
-                                if (!str_cmp(word, "#ENDMOBILE"))
+                                if (!compare(word, "#ENDMOBILE"))
                                     return;
                             }
                         }
@@ -7047,7 +7047,7 @@ void fread_fuss_areadata(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case '#':
-                if (!str_cmp(word, "#ENDAREADATA"))
+                if (!compare(word, "#ENDAREADATA"))
                 {
                     tarea->age = tarea->reset_frequency;
                     return;
@@ -7058,7 +7058,7 @@ void fread_fuss_areadata(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'E':
-                if (!str_cmp(word, "Economy"))
+                if (!compare(word, "Economy"))
                 {
                     tarea->high_economy = fread_number(fp);
                     tarea->low_economy  = fread_number(fp);
@@ -7068,7 +7068,7 @@ void fread_fuss_areadata(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'F':
-                if (!str_cmp(word, "Flags"))
+                if (!compare(word, "Flags"))
                 {
                     const char* areaflags = nullptr;
                     char      flag[MAX_INPUT_LENGTH];
@@ -7094,7 +7094,7 @@ void fread_fuss_areadata(FILE* fp, AREA_DATA* tarea)
                 break;
 
             case 'R':
-                if (!str_cmp(word, "Ranges"))
+                if (!compare(word, "Ranges"))
                 {
                     int x1, x2, x3, x4;
                     char* ln;
@@ -7189,19 +7189,19 @@ AREA_DATA* fread_fuss_area(AREA_DATA* tarea, FILE* fp)
             word = "ENDAREA";
         }
 
-        if (!str_cmp(word, "AREADATA"))
+        if (!compare(word, "AREADATA"))
         {
             if (!tarea)
                 tarea = create_area();
             fread_fuss_areadata(fp, tarea);
         }
-        else if (!str_cmp(word, "MOBILE"))
+        else if (!compare(word, "MOBILE"))
             fread_fuss_mobile(fp, tarea);
-        else if (!str_cmp(word, "OBJECT"))
+        else if (!compare(word, "OBJECT"))
             fread_fuss_object(fp, tarea);
-        else if (!str_cmp(word, "ROOM"))
+        else if (!compare(word, "ROOM"))
             fread_fuss_room(fp, tarea);
-        else if (!str_cmp(word, "ENDAREA"))
+        else if (!compare(word, "ENDAREA"))
             break;
         else
         {
@@ -7242,7 +7242,7 @@ void load_area_file(AREA_DATA* tarea, const char* filename)
     word = fread_word(fpArea);
 
     // New FUSS area format support -- Samson 7/5/07
-    if (!str_cmp(word, "FUSSAREA"))
+    if (!compare(word, "FUSSAREA"))
     {
         tarea = fread_fuss_area(tarea, fpArea);
         FCLOSE(fpArea);
@@ -7253,7 +7253,7 @@ void load_area_file(AREA_DATA* tarea, const char* filename)
     }
 
     // Drop through to the old format processor
-    if (!str_cmp(word, "AREA"))
+    if (!compare(word, "AREA"))
     {
         if (fBootDb)
             tarea = load_area(fpArea, 0);
@@ -7264,10 +7264,10 @@ void load_area_file(AREA_DATA* tarea, const char* filename)
         }
     }
         // Only seen at this stage for help.are
-    else if (!str_cmp(word, "HELPS"))
+    else if (!compare(word, "HELPS"))
         load_helps(fpArea);
         // Only seen at this stage for SmaugWiz areas
-    else if (!str_cmp(word, "VERSION"))
+    else if (!compare(word, "VERSION"))
         aversion = fread_number(fpArea);
 
     for (;;)
@@ -7283,38 +7283,38 @@ void load_area_file(AREA_DATA* tarea, const char* filename)
         if (word[0] == '$')
             break;
             // Only seen at this stage for SmaugWiz areas. The format had better be right or there'll be trouble here!
-        else if (!str_cmp(word, "AREA"))
+        else if (!compare(word, "AREA"))
             tarea = load_area(fpArea, aversion);
-        else if (!str_cmp(word, "AUTHOR"))
+        else if (!compare(word, "AUTHOR"))
             load_author(tarea, fpArea);
-        else if (!str_cmp(word, "FLAGS"))
+        else if (!compare(word, "FLAGS"))
             load_flags(tarea, fpArea);
-        else if (!str_cmp(word, "RANGES"))
+        else if (!compare(word, "RANGES"))
             load_ranges(tarea, fpArea);
-        else if (!str_cmp(word, "ECONOMY"))
+        else if (!compare(word, "ECONOMY"))
             load_economy(tarea, fpArea);
-        else if (!str_cmp(word, "RESETMSG"))
+        else if (!compare(word, "RESETMSG"))
             load_resetmsg(tarea, fpArea);
             /*
        * Rennard
        */
-        else if (!str_cmp(word, "HELPS"))
+        else if (!compare(word, "HELPS"))
             load_helps(fpArea);
-        else if (!str_cmp(word, "MOBILES"))
+        else if (!compare(word, "MOBILES"))
             load_mobiles(tarea, fpArea);
-        else if (!str_cmp(word, "OBJECTS"))
+        else if (!compare(word, "OBJECTS"))
             load_objects(tarea, fpArea);
-        else if (!str_cmp(word, "RESETS"))
+        else if (!compare(word, "RESETS"))
             load_resets(tarea, fpArea);
-        else if (!str_cmp(word, "ROOMS"))
+        else if (!compare(word, "ROOMS"))
             load_rooms(tarea, fpArea);
-        else if (!str_cmp(word, "SHOPS"))
+        else if (!compare(word, "SHOPS"))
             load_shops(fpArea);
-        else if (!str_cmp(word, "REPAIRS"))
+        else if (!compare(word, "REPAIRS"))
             load_repairs(fpArea);
-        else if (!str_cmp(word, "SPECIALS"))
+        else if (!compare(word, "SPECIALS"))
             load_specials(fpArea);
-        else if (!str_cmp(word, "VERSION"))
+        else if (!compare(word, "VERSION"))
             load_version(tarea, fpArea);
         else
         {
@@ -7755,7 +7755,7 @@ void fread_sysdata(SYSTEM_DATA* sys, FILE* fp)
                 break;
 
             case 'E':
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                 {
                     if (!sys->time_of_max)
                         sys->time_of_max = str_dup("(not recorded)");
@@ -7852,12 +7852,12 @@ bool load_systemdata(SYSTEM_DATA* sys)
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "SYSTEM"))
+            if (!compare(word, "SYSTEM"))
             {
                 fread_sysdata(sys, fp);
                 break;
             }
-            else if (!str_cmp(word, "END"))
+            else if (!compare(word, "END"))
                 break;
             else
             {
@@ -7938,16 +7938,16 @@ void do_check_vnums(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg1, "room"))
+    if (!compare(arg1, "room"))
         room = TRUE;
 
-    else if (!str_cmp(arg1, "mob"))
+    else if (!compare(arg1, "mob"))
         mob = TRUE;
 
-    else if (!str_cmp(arg1, "object"))
+    else if (!compare(arg1, "object"))
         obj = TRUE;
 
-    else if (!str_cmp(arg1, "all"))
+    else if (!compare(arg1, "all"))
         all = TRUE;
     else
     {

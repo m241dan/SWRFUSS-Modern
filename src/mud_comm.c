@@ -308,7 +308,7 @@ void do_mpjunk(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (str_cmp(arg, "all") && str_prefix("all.", arg))
+    if (compare(arg, "all") && str_prefix("all.", arg))
     {
         if ((obj = get_obj_wear(ch, arg)) != nullptr)
         {
@@ -862,7 +862,7 @@ void do_mptransfer(CHAR_DATA* ch, const char* argument)
     /*
     * Put in the variable nextinroom to make this work right. -Narn
     */
-    if (!str_cmp(arg1, "all"))
+    if (!compare(arg1, "all"))
     {
         alg::for_each(ch->in_room->persons | view::drop_if(ops::same_as(ch)), [&](auto* victim)
         {
@@ -874,7 +874,7 @@ void do_mptransfer(CHAR_DATA* ch, const char* argument)
     /*
     * This will only transfer PC's in the area not Mobs --Shaddai
     */
-    if (!str_cmp(arg1, "area"))
+    if (!compare(arg1, "area"))
     {
         alg::for_each(descriptors, [&](auto* d)
         {
@@ -921,7 +921,7 @@ void do_mpforce(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "all"))
+    if (!compare(arg, "all"))
     {
         alg::for_each(ch->in_room->persons, [&](auto* vch)
         {
@@ -1787,7 +1787,7 @@ CHAR_DATA* get_char_room_mp(CHAR_DATA* ch, const char* argument)
     int      number, count, vnum;
 
     number = number_argument(argument, arg);
-    if (!str_cmp(arg, "self"))
+    if (!compare(arg, "self"))
         return ch;
 
     if (get_trust(ch) >= LEVEL_SAVIOR && is_number(arg))

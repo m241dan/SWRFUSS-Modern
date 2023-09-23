@@ -792,7 +792,7 @@ void update_space()
                     ship->shipstate = SHIP_READY;
                     STRFREE(ship->home);
                     ship->home = STRALLOC(ship->starsystem->name);
-                    if (str_cmp("Public", ship->owner))
+                    if (compare("Public", ship->owner))
                         save_ship(ship);
                 }
             }
@@ -1081,7 +1081,7 @@ void update_space()
                     for (target = ship->starsystem->first_ship; target; target = target->next_in_starsystem)
                     {
                         if (autofly(target))
-                            if (!str_cmp(target->owner, ship->owner) && target != ship)
+                            if (!compare(target->owner, ship->owner) && target != ship)
                                 if (target->target0 == nullptr && ship->target0 != target)
                                 {
                                     target->target0 = ship->target0;
@@ -1156,20 +1156,20 @@ void update_space()
                 {
                     ship->currspeed = 0;
 
-                    if (!str_cmp(ship->owner, "The Empire"))
+                    if (!compare(ship->owner, "The Empire"))
                         for (target = first_ship; target; target = target->next)
                             if (ship->starsystem == target->starsystem)
-                                if (!str_cmp(target->owner, "The New Republic"))
+                                if (!compare(target->owner, "The New Republic"))
                                 {
                                     ship->target0 = target;
                                     snprintf(buf, MAX_STRING_LENGTH, "You are being targetted by %s.", ship->name);
                                     echo_to_cockpit(AT_BLOOD, target, buf);
                                     break;
                                 }
-                    if (!str_cmp(ship->owner, "The New Republic"))
+                    if (!compare(ship->owner, "The New Republic"))
                         for (target = first_ship; target; target = target->next)
                             if (ship->starsystem == target->starsystem)
-                                if (!str_cmp(target->owner, "The Empire"))
+                                if (!compare(target->owner, "The Empire"))
                                 {
                                     snprintf(buf, MAX_STRING_LENGTH, "You are being targetted by %s.", ship->name);
                                     echo_to_cockpit(AT_BLOOD, target, buf);
@@ -1177,7 +1177,7 @@ void update_space()
                                     break;
                                 }
 
-                    if (!str_cmp(ship->owner, "Pirates"))
+                    if (!compare(ship->owner, "Pirates"))
                         for (target = first_ship; target; target = target->next)
                             if (ship->starsystem == target->starsystem)
                             {
@@ -1245,7 +1245,7 @@ SPACE_DATA* starsystem_from_name(const char* name)
     SPACE_DATA* starsystem;
 
     for (starsystem = first_starsystem; starsystem; starsystem = starsystem->next)
-        if (!str_cmp(name, starsystem->name))
+        if (!compare(name, starsystem->name))
             return starsystem;
 
     for (starsystem = first_starsystem; starsystem; starsystem = starsystem->next)
@@ -1390,7 +1390,7 @@ void fread_starsystem(SPACE_DATA* starsystem, FILE* fp)
                 break;
 
             case 'E':
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                 {
                     if (!starsystem->name)
                         starsystem->name       = STRALLOC("");
@@ -1524,12 +1524,12 @@ bool load_starsystem(const char* starsystemfile)
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "SPACE"))
+            if (!compare(word, "SPACE"))
             {
                 fread_starsystem(starsystem, fp);
                 break;
             }
-            else if (!str_cmp(word, "END"))
+            else if (!compare(word, "END"))
                 break;
             else
             {
@@ -1621,21 +1621,21 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "doc1a"))
+    if (!compare(arg2, "doc1a"))
     {
         starsystem->doc1a = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "doc1b"))
+    if (!compare(arg2, "doc1b"))
     {
         starsystem->doc1b = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "doc1c"))
+    if (!compare(arg2, "doc1c"))
     {
         starsystem->doc1c = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1643,21 +1643,21 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "doc2a"))
+    if (!compare(arg2, "doc2a"))
     {
         starsystem->doc2a = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "doc2b"))
+    if (!compare(arg2, "doc2b"))
     {
         starsystem->doc2b = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "doc2c"))
+    if (!compare(arg2, "doc2c"))
     {
         starsystem->doc2c = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1665,21 +1665,21 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "doc3a"))
+    if (!compare(arg2, "doc3a"))
     {
         starsystem->doc3a = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "doc3b"))
+    if (!compare(arg2, "doc3b"))
     {
         starsystem->doc3b = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "doc3c"))
+    if (!compare(arg2, "doc3c"))
     {
         starsystem->doc3c = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1687,21 +1687,21 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "s1x"))
+    if (!compare(arg2, "s1x"))
     {
         starsystem->s1x = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "s1y"))
+    if (!compare(arg2, "s1y"))
     {
         starsystem->s1y = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "s1z"))
+    if (!compare(arg2, "s1z"))
     {
         starsystem->s1z = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1709,21 +1709,21 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "s2x"))
+    if (!compare(arg2, "s2x"))
     {
         starsystem->s2x = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "s2y"))
+    if (!compare(arg2, "s2y"))
     {
         starsystem->s2y = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "s2z"))
+    if (!compare(arg2, "s2z"))
     {
         starsystem->s2z = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1731,21 +1731,21 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "p1x"))
+    if (!compare(arg2, "p1x"))
     {
         starsystem->p1x = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "p1y"))
+    if (!compare(arg2, "p1y"))
     {
         starsystem->p1y = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "p1z"))
+    if (!compare(arg2, "p1z"))
     {
         starsystem->p1z = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1753,21 +1753,21 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "p2x"))
+    if (!compare(arg2, "p2x"))
     {
         starsystem->p2x = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "p2y"))
+    if (!compare(arg2, "p2y"))
     {
         starsystem->p2y = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "p2z"))
+    if (!compare(arg2, "p2z"))
     {
         starsystem->p2z = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1775,21 +1775,21 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "p3x"))
+    if (!compare(arg2, "p3x"))
     {
         starsystem->p3x = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "p3y"))
+    if (!compare(arg2, "p3y"))
     {
         starsystem->p3y = atoi(argument);
         send_to_char("Done.\r\n", ch);
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "p3z"))
+    if (!compare(arg2, "p3z"))
     {
         starsystem->p3z = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1797,7 +1797,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "xpos"))
+    if (!compare(arg2, "xpos"))
     {
         starsystem->xpos = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1805,7 +1805,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "ypos"))
+    if (!compare(arg2, "ypos"))
     {
         starsystem->ypos = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1813,7 +1813,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "gravitys1"))
+    if (!compare(arg2, "gravitys1"))
     {
         starsystem->gravitys1 = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1821,7 +1821,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "gravitys2"))
+    if (!compare(arg2, "gravitys2"))
     {
         starsystem->gravitys2 = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1829,7 +1829,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "gravityp1"))
+    if (!compare(arg2, "gravityp1"))
     {
         starsystem->gravityp1 = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1837,7 +1837,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "gravityp2"))
+    if (!compare(arg2, "gravityp2"))
     {
         starsystem->gravityp2 = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1845,7 +1845,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "gravityp3"))
+    if (!compare(arg2, "gravityp3"))
     {
         starsystem->gravityp3 = atoi(argument);
         send_to_char("Done.\r\n", ch);
@@ -1853,7 +1853,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "name"))
+    if (!compare(arg2, "name"))
     {
         STRFREE(starsystem->name);
         starsystem->name = STRALLOC(argument);
@@ -1862,7 +1862,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "star1"))
+    if (!compare(arg2, "star1"))
     {
         STRFREE(starsystem->star1);
         starsystem->star1 = STRALLOC(argument);
@@ -1871,7 +1871,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "star2"))
+    if (!compare(arg2, "star2"))
     {
         STRFREE(starsystem->star2);
         starsystem->star2 = STRALLOC(argument);
@@ -1880,7 +1880,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "planet1"))
+    if (!compare(arg2, "planet1"))
     {
         STRFREE(starsystem->planet1);
         starsystem->planet1 = STRALLOC(argument);
@@ -1889,7 +1889,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "planet2"))
+    if (!compare(arg2, "planet2"))
     {
         STRFREE(starsystem->planet2);
         starsystem->planet2 = STRALLOC(argument);
@@ -1898,7 +1898,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "planet3"))
+    if (!compare(arg2, "planet3"))
     {
         STRFREE(starsystem->planet3);
         starsystem->planet3 = STRALLOC(argument);
@@ -1907,7 +1907,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "location1a"))
+    if (!compare(arg2, "location1a"))
     {
         STRFREE(starsystem->location1a);
         starsystem->location1a = STRALLOC(argument);
@@ -1915,7 +1915,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "location1b"))
+    if (!compare(arg2, "location1b"))
     {
         STRFREE(starsystem->location1b);
         starsystem->location1b = STRALLOC(argument);
@@ -1923,7 +1923,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "location1c"))
+    if (!compare(arg2, "location1c"))
     {
         STRFREE(starsystem->location1c);
         starsystem->location1c = STRALLOC(argument);
@@ -1932,7 +1932,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "location2a"))
+    if (!compare(arg2, "location2a"))
     {
         STRFREE(starsystem->location2a);
         starsystem->location2a = STRALLOC(argument);
@@ -1940,7 +1940,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "location2b"))
+    if (!compare(arg2, "location2b"))
     {
         STRFREE(starsystem->location2a);
         starsystem->location2b = STRALLOC(argument);
@@ -1948,7 +1948,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "location2c"))
+    if (!compare(arg2, "location2c"))
     {
         STRFREE(starsystem->location2c);
         starsystem->location2c = STRALLOC(argument);
@@ -1957,7 +1957,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "location3a"))
+    if (!compare(arg2, "location3a"))
     {
         STRFREE(starsystem->location3a);
         starsystem->location3a = STRALLOC(argument);
@@ -1965,7 +1965,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "location3b"))
+    if (!compare(arg2, "location3b"))
     {
         STRFREE(starsystem->location3b);
         starsystem->location3b = STRALLOC(argument);
@@ -1973,7 +1973,7 @@ void do_setstarsystem(CHAR_DATA* ch, const char* argument)
         save_starsystem(starsystem);
         return;
     }
-    if (!str_cmp(arg2, "location3c"))
+    if (!compare(arg2, "location3c"))
     {
         STRFREE(starsystem->location3c);
         starsystem->location3c = STRALLOC(argument);
@@ -2283,7 +2283,7 @@ SHIP_DATA* ship_in_room(ROOM_INDEX_DATA* room, const char* name)
         return nullptr;
 
     for (ship = room->first_ship; ship; ship = ship->next_in_room)
-        if (!str_cmp(name, ship->name))
+        if (!compare(name, ship->name))
             return ship;
 
     for (ship = room->first_ship; ship; ship = ship->next_in_room)
@@ -2301,7 +2301,7 @@ SHIP_DATA* get_ship(const char* name)
     SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
-        if (!str_cmp(name, ship->name))
+        if (!compare(name, ship->name))
             return ship;
 
     for (ship = first_ship; ship; ship = ship->next)
@@ -2322,7 +2322,7 @@ SHIP_DATA* get_ship_here(const char* name, SPACE_DATA* starsystem)
         return nullptr;
 
     for (ship = starsystem->first_ship; ship; ship = ship->next_in_starsystem)
-        if (!str_cmp(name, ship->name))
+        if (!compare(name, ship->name))
             return ship;
 
     for (ship = starsystem->first_ship; ship; ship = ship->next_in_starsystem)
@@ -2340,11 +2340,11 @@ SHIP_DATA* ship_from_pilot(const char* name)
     SHIP_DATA* ship;
 
     for (ship = first_ship; ship; ship = ship->next)
-        if (!str_cmp(name, ship->pilot))
+        if (!compare(name, ship->pilot))
             return ship;
-    if (!str_cmp(name, ship->copilot))
+    if (!compare(name, ship->copilot))
         return ship;
-    if (!str_cmp(name, ship->owner))
+    if (!compare(name, ship->owner))
         return ship;
     return nullptr;
 }
@@ -2577,7 +2577,7 @@ void fread_ship(SHIP_DATA* ship, FILE* fp)
             case 'E':KEY("Engineroom", ship->engineroom, fread_number(fp));
                 KEY("Entrance", ship->entrance, fread_number(fp));
                 KEY("Energy", ship->energy, fread_number(fp));
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                 {
                     if (!ship->home)
                         ship->home         = STRALLOC("");
@@ -2743,12 +2743,12 @@ bool load_ship_file(const char* shipfile)
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "SHIP"))
+            if (!compare(word, "SHIP"))
             {
                 fread_ship(ship, fp);
                 break;
             }
-            else if (!str_cmp(word, "END"))
+            else if (!compare(word, "END"))
                 break;
             else
             {
@@ -2764,7 +2764,7 @@ bool load_ship_file(const char* shipfile)
     else
     {
         LINK(ship, first_ship, last_ship, next, prev);
-        if (!str_cmp("Public", ship->owner) || ship->type == MOB_SHIP)
+        if (!compare("Public", ship->owner) || ship->type == MOB_SHIP)
         {
             if (ship->ship_class != SHIP_PLATFORM && ship->type != MOB_SHIP && ship->ship_class != CAPITAL_SHIP)
             {
@@ -2926,7 +2926,7 @@ void resetship(SHIP_DATA* ship)
     ship->autotrack    = FALSE;
     ship->autospeed    = FALSE;
 
-    if (str_cmp("Public", ship->owner) && ship->type != MOB_SHIP)
+    if (compare("Public", ship->owner) && ship->type != MOB_SHIP)
     {
         CLAN_DATA* clan;
 
@@ -2946,12 +2946,12 @@ void resetship(SHIP_DATA* ship)
         ship->copilot = STRALLOC("");
     }
 
-    if (ship->type == SHIP_REPUBLIC || (ship->type == MOB_SHIP && !str_cmp(ship->owner, "the new republic")))
+    if (ship->type == SHIP_REPUBLIC || (ship->type == MOB_SHIP && !compare(ship->owner, "the new republic")))
     {
         STRFREE(ship->home);
         ship->home = STRALLOC("coruscant");
     }
-    else if (ship->type == SHIP_IMPERIAL || (ship->type == MOB_SHIP && !str_cmp(ship->owner, "the empire")))
+    else if (ship->type == SHIP_IMPERIAL || (ship->type == MOB_SHIP && !compare(ship->owner, "the empire")))
     {
         STRFREE(ship->home);
         ship->home = STRALLOC("byss");
@@ -3029,7 +3029,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "owner"))
+    if (!compare(arg2, "owner"))
     {
         CLAN_DATA* clan;
         if (ship->type != MOB_SHIP && (clan = get_clan(ship->owner)) != nullptr)
@@ -3053,7 +3053,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "home"))
+    if (!compare(arg2, "home"))
     {
         STRFREE(ship->home);
         ship->home = STRALLOC(argument);
@@ -3062,7 +3062,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "pilot"))
+    if (!compare(arg2, "pilot"))
     {
         STRFREE(ship->pilot);
         ship->pilot = STRALLOC(argument);
@@ -3071,7 +3071,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "copilot"))
+    if (!compare(arg2, "copilot"))
     {
         STRFREE(ship->copilot);
         ship->copilot = STRALLOC(argument);
@@ -3080,7 +3080,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "firstroom"))
+    if (!compare(arg2, "firstroom"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3105,7 +3105,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "lastroom"))
+    if (!compare(arg2, "lastroom"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3143,7 +3143,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "cockpit"))
+    if (!compare(arg2, "cockpit"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3171,7 +3171,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "pilotseat"))
+    if (!compare(arg2, "pilotseat"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3198,7 +3198,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         save_ship(ship);
         return;
     }
-    if (!str_cmp(arg2, "coseat"))
+    if (!compare(arg2, "coseat"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3225,7 +3225,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         save_ship(ship);
         return;
     }
-    if (!str_cmp(arg2, "navseat"))
+    if (!compare(arg2, "navseat"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3252,7 +3252,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         save_ship(ship);
         return;
     }
-    if (!str_cmp(arg2, "gunseat"))
+    if (!compare(arg2, "gunseat"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3280,7 +3280,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "entrance"))
+    if (!compare(arg2, "entrance"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3303,7 +3303,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "turret1"))
+    if (!compare(arg2, "turret1"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3337,7 +3337,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "turret2"))
+    if (!compare(arg2, "turret2"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3371,7 +3371,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hanger"))
+    if (!compare(arg2, "hanger"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3405,7 +3405,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "engineroom"))
+    if (!compare(arg2, "engineroom"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3434,7 +3434,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "shipyard"))
+    if (!compare(arg2, "shipyard"))
     {
         tempnum   = atoi(argument);
         roomindex = get_room_index(tempnum);
@@ -3449,15 +3449,15 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "type"))
+    if (!compare(arg2, "type"))
     {
-        if (!str_cmp(argument, "republic"))
+        if (!compare(argument, "republic"))
             ship->type = SHIP_REPUBLIC;
-        else if (!str_cmp(argument, "imperial"))
+        else if (!compare(argument, "imperial"))
             ship->type = SHIP_IMPERIAL;
-        else if (!str_cmp(argument, "civilian"))
+        else if (!compare(argument, "civilian"))
             ship->type = SHIP_CIVILIAN;
-        else if (!str_cmp(argument, "mob"))
+        else if (!compare(argument, "mob"))
             ship->type = MOB_SHIP;
         else
         {
@@ -3469,7 +3469,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "name"))
+    if (!compare(arg2, "name"))
     {
         STRFREE(ship->name);
         ship->name = STRALLOC(argument);
@@ -3478,7 +3478,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "filename"))
+    if (!compare(arg2, "filename"))
     {
         DISPOSE(ship->filename);
         ship->filename = str_dup(argument);
@@ -3488,7 +3488,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "desc"))
+    if (!compare(arg2, "desc"))
     {
         STRFREE(ship->description);
         ship->description = STRALLOC(argument);
@@ -3497,7 +3497,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "manuever"))
+    if (!compare(arg2, "manuever"))
     {
         ship->manuever = URANGE(0, atoi(argument), 120);
         send_to_char("Done.\r\n", ch);
@@ -3505,7 +3505,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "lasers"))
+    if (!compare(arg2, "lasers"))
     {
         ship->lasers = URANGE(0, atoi(argument), 10);
         send_to_char("Done.\r\n", ch);
@@ -3513,7 +3513,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "class"))
+    if (!compare(arg2, "class"))
     {
         ship->ship_class = URANGE(0, atoi(argument), 9);
         send_to_char("Done.\r\n", ch);
@@ -3521,7 +3521,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "missiles"))
+    if (!compare(arg2, "missiles"))
     {
         ship->maxmissiles = URANGE(0, atoi(argument), 255);
         ship->missiles    = URANGE(0, atoi(argument), 255);
@@ -3530,7 +3530,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "torpedos"))
+    if (!compare(arg2, "torpedos"))
     {
         ship->maxtorpedos = URANGE(0, atoi(argument), 255);
         ship->torpedos    = URANGE(0, atoi(argument), 255);
@@ -3539,7 +3539,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "rockets"))
+    if (!compare(arg2, "rockets"))
     {
         ship->maxrockets = URANGE(0, atoi(argument), 255);
         ship->rockets    = URANGE(0, atoi(argument), 255);
@@ -3548,7 +3548,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "speed"))
+    if (!compare(arg2, "speed"))
     {
         ship->realspeed = URANGE(0, atoi(argument), 150);
         send_to_char("Done.\r\n", ch);
@@ -3556,7 +3556,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "tractorbeam"))
+    if (!compare(arg2, "tractorbeam"))
     {
         ship->tractorbeam = URANGE(0, atoi(argument), 255);
         send_to_char("Done.\r\n", ch);
@@ -3564,7 +3564,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hyperspeed"))
+    if (!compare(arg2, "hyperspeed"))
     {
         ship->hyperspeed = URANGE(0, atoi(argument), 255);
         send_to_char("Done.\r\n", ch);
@@ -3572,7 +3572,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "shield"))
+    if (!compare(arg2, "shield"))
     {
         ship->maxshield = URANGE(0, atoi(argument), 1000);
         send_to_char("Done.\r\n", ch);
@@ -3580,7 +3580,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "hull"))
+    if (!compare(arg2, "hull"))
     {
         ship->hull    = URANGE(1, atoi(argument), 20000);
         ship->maxhull = URANGE(1, atoi(argument), 20000);
@@ -3589,7 +3589,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "energy"))
+    if (!compare(arg2, "energy"))
     {
         ship->energy    = URANGE(1, atoi(argument), 30000);
         ship->maxenergy = URANGE(1, atoi(argument), 30000);
@@ -3598,7 +3598,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "sensor"))
+    if (!compare(arg2, "sensor"))
     {
         ship->sensor = URANGE(0, atoi(argument), 255);
         send_to_char("Done.\r\n", ch);
@@ -3606,7 +3606,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "astroarray"))
+    if (!compare(arg2, "astroarray"))
     {
         ship->astro_array = URANGE(0, atoi(argument), 255);
         send_to_char("Done.\r\n", ch);
@@ -3614,7 +3614,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "comm"))
+    if (!compare(arg2, "comm"))
     {
         ship->comm = URANGE(0, atoi(argument), 255);
         send_to_char("Done.\r\n", ch);
@@ -3622,7 +3622,7 @@ void do_setship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "chaff"))
+    if (!compare(arg2, "chaff"))
     {
         ship->chaff    = URANGE(0, atoi(argument), 25);
         ship->maxchaff = URANGE(0, atoi(argument), 25);
@@ -3856,9 +3856,9 @@ void do_ships(CHAR_DATA* ch, const char* argument)
         send_to_char("\r\n&WShip                               Owner\r\n", ch);
         for (ship = first_ship; ship; ship = ship->next)
         {
-            if (str_cmp(ship->owner, ch->name))
+            if (compare(ship->owner, ch->name))
             {
-                if (!ch->pcdata || !ch->pcdata->clan || str_cmp(ship->owner, ch->pcdata->clan->name)
+                if (!ch->pcdata || !ch->pcdata->clan || compare(ship->owner, ch->pcdata->clan->name)
                     || ship->ship_class > SHIP_PLATFORM)
                     continue;
             }
@@ -3911,11 +3911,11 @@ void do_ships(CHAR_DATA* ch, const char* argument)
             ch_printf(ch, "\r\n");
             continue;
         }
-        if (!str_cmp(ship->owner, "Public"))
+        if (!compare(ship->owner, "Public"))
         {
             ch_printf(ch, "%ld to rent.\r\n", get_ship_value(ship) / 100);
         }
-        else if (str_cmp(ship->owner, ""))
+        else if (compare(ship->owner, ""))
             ch_printf(ch, "%s", "\r\n");
         else
             ch_printf(ch, "%ld to buy.\r\n", get_ship_value(ship));
@@ -3941,9 +3941,9 @@ void do_speeders(CHAR_DATA* ch, const char* argument)
         send_to_char("\r\n&WVehicle                            Owner\r\n", ch);
         for (ship = first_ship; ship; ship = ship->next)
         {
-            if (str_cmp(ship->owner, ch->name))
+            if (compare(ship->owner, ch->name))
             {
-                if (!ch->pcdata || !ch->pcdata->clan || str_cmp(ship->owner, ch->pcdata->clan->name)
+                if (!ch->pcdata || !ch->pcdata->clan || compare(ship->owner, ch->pcdata->clan->name)
                     || ship->ship_class <= SHIP_PLATFORM)
                     continue;
             }
@@ -3993,11 +3993,11 @@ void do_speeders(CHAR_DATA* ch, const char* argument)
 
         ch_printf(ch, "%-35s %-15s", ship->name, ship->owner);
 
-        if (!str_cmp(ship->owner, "Public"))
+        if (!compare(ship->owner, "Public"))
         {
             ch_printf(ch, "%ld to rent.\r\n", get_ship_value(ship) / 100);
         }
-        else if (str_cmp(ship->owner, ""))
+        else if (compare(ship->owner, ""))
             ch_printf(ch, "%s", "\r\n");
         else
             ch_printf(ch, "%ld to buy.\r\n", get_ship_value(ship));
@@ -4036,11 +4036,11 @@ void do_allspeeders(CHAR_DATA* ch, const char* argument)
 
         ch_printf(ch, "%-35s %-15s ", ship->name, ship->owner);
 
-        if (!str_cmp(ship->owner, "Public"))
+        if (!compare(ship->owner, "Public"))
         {
             ch_printf(ch, "%ld to rent.\r\n", get_ship_value(ship) / 100);
         }
-        else if (str_cmp(ship->owner, ""))
+        else if (compare(ship->owner, ""))
             ch_printf(ch, "%s", "\r\n");
         else
             ch_printf(ch, "%ld to buy.\r\n", get_ship_value(ship));
@@ -4090,11 +4090,11 @@ void do_allships(CHAR_DATA* ch, const char* argument)
             ch_printf(ch, "\r\n");
             continue;
         }
-        if (!str_cmp(ship->owner, "Public"))
+        if (!compare(ship->owner, "Public"))
         {
             ch_printf(ch, "%ld to rent.\r\n", get_ship_value(ship) / 100);
         }
-        else if (str_cmp(ship->owner, ""))
+        else if (compare(ship->owner, ""))
             ch_printf(ch, "%s", "\r\n");
         else
             ch_printf(ch, "%ld to buy.\r\n", get_ship_value(ship));
@@ -4248,7 +4248,7 @@ void extract_missile(MISSILE_DATA* missile)
 
 bool is_rental(CHAR_DATA* ch, SHIP_DATA* ship)
 {
-    if (!str_cmp("Public", ship->owner))
+    if (!compare("Public", ship->owner))
         return TRUE;
 
     return FALSE;
@@ -4256,19 +4256,19 @@ bool is_rental(CHAR_DATA* ch, SHIP_DATA* ship)
 
 bool check_pilot(CHAR_DATA* ch, SHIP_DATA* ship)
 {
-    if (!str_cmp(ch->name, ship->owner) || !str_cmp(ch->name, ship->pilot)
-        || !str_cmp(ch->name, ship->copilot) || !str_cmp("Public", ship->owner))
+    if (!compare(ch->name, ship->owner) || !compare(ch->name, ship->pilot)
+        || !compare(ch->name, ship->copilot) || !compare("Public", ship->owner))
         return TRUE;
 
     if (!IS_NPC(ch) && ch->pcdata && ch->pcdata->clan)
     {
-        if (!str_cmp(ch->pcdata->clan->name, ship->owner))
+        if (!compare(ch->pcdata->clan->name, ship->owner))
         {
-            if (!str_cmp(ch->pcdata->clan->leader, ch->name))
+            if (!compare(ch->pcdata->clan->leader, ch->name))
                 return TRUE;
-            if (!str_cmp(ch->pcdata->clan->number1, ch->name))
+            if (!compare(ch->pcdata->clan->number1, ch->name))
                 return TRUE;
-            if (!str_cmp(ch->pcdata->clan->number2, ch->name))
+            if (!compare(ch->pcdata->clan->number2, ch->name))
                 return TRUE;
             if (ch->pcdata->bestowments && is_name("pilot", ch->pcdata->bestowments))
                 return TRUE;
@@ -4706,7 +4706,7 @@ void do_launch(CHAR_DATA* ch, const char* argument)
                 price += 50;
         }
 
-        if (ch->pcdata && ch->pcdata->clan && !str_cmp(ch->pcdata->clan->name, ship->owner))
+        if (ch->pcdata && ch->pcdata->clan && !compare(ch->pcdata->clan->name, ship->owner))
         {
             if (ch->pcdata->clan->funds < price)
             {
@@ -4726,7 +4726,7 @@ void do_launch(CHAR_DATA* ch, const char* argument)
                 price
             );
         }
-        else if (str_cmp(ship->owner, "Public"))
+        else if (compare(ship->owner, "Public"))
         {
             if (ch->gold < price)
             {
@@ -5216,7 +5216,7 @@ void landship(SHIP_DATA* ship, const char* arg)
 
     ship->energy = ship->energy - 25 - 25 * ship->ship_class;
 
-    if (!str_cmp("Public", ship->owner))
+    if (!compare("Public", ship->owner))
     {
         ship->energy       = ship->maxenergy;
         ship->chaff        = ship->maxchaff;
@@ -5499,7 +5499,7 @@ void do_buyship(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (str_cmp(ship->owner, "") || ship->type == MOB_SHIP)
+    if (compare(ship->owner, "") || ship->type == MOB_SHIP)
     {
         send_to_char("&RThat ship isn't for sale!", ch);
         return;
@@ -5508,11 +5508,11 @@ void do_buyship(CHAR_DATA* ch, const char* argument)
 
     if (ship->type == SHIP_IMPERIAL)
     {
-        if (!ch->pcdata->clan || str_cmp(ch->pcdata->clan->name, "the empire"))
+        if (!ch->pcdata->clan || compare(ch->pcdata->clan->name, "the empire"))
         {
             if (!ch->pcdata->clan ||
                 !ch->pcdata->clan->mainclan ||
-                str_cmp(ch->pcdata->clan->mainclan->name, "The Empire"))
+                compare(ch->pcdata->clan->mainclan->name, "The Empire"))
             {
                 send_to_char("&RThat ship may only be purchaced by the Empire!\r\n", ch);
                 return;
@@ -5521,10 +5521,10 @@ void do_buyship(CHAR_DATA* ch, const char* argument)
     }
     else if (ship->type == SHIP_REPUBLIC)
     {
-        if (!ch->pcdata->clan || str_cmp(ch->pcdata->clan->name, "the new republic"))
+        if (!ch->pcdata->clan || compare(ch->pcdata->clan->name, "the new republic"))
         {
             if (!ch->pcdata->clan || !ch->pcdata->clan->mainclan
-                || str_cmp(ch->pcdata->clan->mainclan->name, "The New Republic"))
+                || compare(ch->pcdata->clan->mainclan->name, "The New Republic"))
             {
                 send_to_char("&RThat ship may only be purchaced by The New Republic!\r\n", ch);
                 return;
@@ -5535,16 +5535,16 @@ void do_buyship(CHAR_DATA* ch, const char* argument)
     {
         if (ch->pcdata->clan &&
             (
-                !str_cmp(ch->pcdata->clan->name, "the new republic") ||
-                (ch->pcdata->clan->mainclan && !str_cmp(ch->pcdata->clan->mainclan->name, "the new republic"))))
+                !compare(ch->pcdata->clan->name, "the new republic") ||
+                (ch->pcdata->clan->mainclan && !compare(ch->pcdata->clan->mainclan->name, "the new republic"))))
         {
             send_to_char("&RAs a member of the New Republic you may only purchase NR Ships!\r\n", ch);
             return;
         }
         if (ch->pcdata->clan &&
             (
-                !str_cmp(ch->pcdata->clan->name, "the empire") ||
-                (ch->pcdata->clan->mainclan && !str_cmp(ch->pcdata->clan->mainclan->name, "the empire"))))
+                !compare(ch->pcdata->clan->name, "the empire") ||
+                (ch->pcdata->clan->mainclan && !compare(ch->pcdata->clan->mainclan->name, "the empire"))))
         {
             send_to_char("&RAs a member of the Empire you may only purchase Imperial Ships!\r\n", ch);
             return;
@@ -5592,7 +5592,7 @@ void do_clanbuyship(CHAR_DATA* ch, const char* argument)
 
     if ((
             ch->pcdata->bestowments
-            && is_name("clanbuyship", ch->pcdata->bestowments)) || !str_cmp(ch->name, clan->leader));
+            && is_name("clanbuyship", ch->pcdata->bestowments)) || !compare(ch->name, clan->leader));
     else
     {
         send_to_char("&RYour organization hasn't seen fit to bestow you with that ability.\r\n", ch);
@@ -5611,31 +5611,31 @@ void do_clanbuyship(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (str_cmp(ship->owner, "") || ship->type == MOB_SHIP)
+    if (compare(ship->owner, "") || ship->type == MOB_SHIP)
     {
         send_to_char("&RThat ship isn't for sale!\r\n", ch);
         return;
     }
 
-    if (str_cmp(mainclan->name, "The Empire") && ship->type == SHIP_IMPERIAL)
+    if (compare(mainclan->name, "The Empire") && ship->type == SHIP_IMPERIAL)
     {
         send_to_char("&RThat ship may only be purchaced by the Empire!\r\n", ch);
         return;
     }
 
-    if (str_cmp(mainclan->name, "The New Republic") && ship->type == SHIP_REPUBLIC)
+    if (compare(mainclan->name, "The New Republic") && ship->type == SHIP_REPUBLIC)
     {
         send_to_char("&RThat ship may only be purchaced by The New Republic!\r\n", ch);
         return;
     }
 
-    if (!str_cmp(mainclan->name, "The Empire") && ship->type != SHIP_IMPERIAL)
+    if (!compare(mainclan->name, "The Empire") && ship->type != SHIP_IMPERIAL)
     {
         send_to_char("&RDue to contractual agreements that ship may not be purchaced by the empire!\r\n", ch);
         return;
     }
 
-    if (!str_cmp(mainclan->name, "The New Republic") && ship->type != SHIP_REPUBLIC)
+    if (!compare(mainclan->name, "The New Republic") && ship->type != SHIP_REPUBLIC)
     {
         send_to_char("&RBecause of contractual agreements, the NR can only purchase NR ships!\r\n", ch);
         return;
@@ -5676,7 +5676,7 @@ void do_sellship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (str_cmp(ship->owner, ch->name))
+    if (compare(ship->owner, ch->name))
     {
         send_to_char("&RThat isn't your ship!", ch);
         return;
@@ -5810,20 +5810,20 @@ void do_autorecharge(CHAR_DATA* ch, const char* argument)
 
     act(AT_PLAIN, "$n flips a switch on the control panell.", ch, nullptr, argument, TO_ROOM);
 
-    if (!str_cmp(argument, "on"))
+    if (!compare(argument, "on"))
     {
         ship->autorecharge = TRUE;
         send_to_char("&GYou power up the shields.\r\n", ch);
         echo_to_cockpit(AT_YELLOW, ship, "Shields ON. Autorecharge ON.");
     }
-    else if (!str_cmp(argument, "off"))
+    else if (!compare(argument, "off"))
     {
         ship->autorecharge = FALSE;
         send_to_char("&GYou shutdown the shields.\r\n", ch);
         echo_to_cockpit(AT_YELLOW, ship, "Shields OFF. Shield strength set to 0. Autorecharge OFF.");
         ship->shield = 0;
     }
-    else if (!str_cmp(argument, "idle"))
+    else if (!compare(argument, "idle"))
     {
         ship->autorecharge = FALSE;
         send_to_char("&GYou let the shields idle.\r\n", ch);
@@ -5907,7 +5907,7 @@ void do_openhatch(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* ship;
     char     buf[MAX_STRING_LENGTH];
 
-    if (!argument || argument[0] == '\0' || !str_cmp(argument, "hatch"))
+    if (!argument || argument[0] == '\0' || !compare(argument, "hatch"))
     {
         ship = ship_from_entrance(ch->in_room->vnum);
         if (ship == nullptr)
@@ -5986,7 +5986,7 @@ void do_closehatch(CHAR_DATA* ch, const char* argument)
     SHIP_DATA* ship;
     char     buf[MAX_STRING_LENGTH];
 
-    if (!argument || argument[0] == '\0' || !str_cmp(argument, "hatch"))
+    if (!argument || argument[0] == '\0' || !compare(argument, "hatch"))
     {
         ship = ship_from_entrance(ch->in_room->vnum);
         if (ship == nullptr)
@@ -6320,7 +6320,7 @@ void do_target(CHAR_DATA* ch, const char* argument)
                 return;
             }
 
-            if (!str_cmp(arg, "none"))
+            if (!compare(arg, "none"))
             {
                 send_to_char("&GTarget set to none.\r\n", ch);
                 if (ch->in_room->vnum == ship->gunseat)
@@ -6345,7 +6345,7 @@ void do_target(CHAR_DATA* ch, const char* argument)
                 return;
             }
 
-            if (!str_cmp(target->owner, ship->owner) && str_cmp(target->owner, ""))
+            if (!compare(target->owner, ship->owner) && compare(target->owner, ""))
             {
                 send_to_char("&RThat ship has the same owner... try targetting an enemy ship instead!\r\n", ch);
                 return;
@@ -7196,9 +7196,9 @@ void do_repairship(CHAR_DATA* ch, const char* argument)
                 return;
             }
 
-            if (str_cmp(argument, "hull") && str_cmp(argument, "drive") &&
-                str_cmp(argument, "launcher") && str_cmp(argument, "laser") &&
-                str_cmp(argument, "turret 1") && str_cmp(argument, "turret 2"))
+            if (compare(argument, "hull") && compare(argument, "drive") &&
+                compare(argument, "launcher") && compare(argument, "laser") &&
+                compare(argument, "turret 1") && compare(argument, "turret 2"))
             {
                 send_to_char("&RYou need to spceify something to repair:\r\n", ch);
                 send_to_char("&rTry: hull, drive, launcher, laser, turret 1, or turret 2\r\n", ch);
@@ -7210,7 +7210,7 @@ void do_repairship(CHAR_DATA* ch, const char* argument)
             {
                 send_to_char("&GYou begin your repairs\r\n", ch);
                 act(AT_PLAIN, "$n begins repairing the ships $T.", ch, nullptr, argument, TO_ROOM);
-                if (!str_cmp(arg, "hull"))
+                if (!compare(arg, "hull"))
                     add_timer(ch, TIMER_DO_FUN, 15, do_repairship, 1);
                 else
                     add_timer(ch, TIMER_DO_FUN, 5, do_repairship, 1);
@@ -7243,7 +7243,7 @@ void do_repairship(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg, "hull"))
+    if (!compare(arg, "hull"))
     {
         change = URANGE(0,
                         number_range((int)(ch->pcdata->learned[gsn_shipmaintenance] / 2),
@@ -7252,7 +7252,7 @@ void do_repairship(CHAR_DATA* ch, const char* argument)
         ch_printf(ch, "&GRepair complete.. Hull strength inreased by %d points.\r\n", change);
     }
 
-    if (!str_cmp(arg, "drive"))
+    if (!compare(arg, "drive"))
     {
         if (ship->location == ship->lastdoc)
             ship->shipstate = SHIP_DOCKED;
@@ -7261,25 +7261,25 @@ void do_repairship(CHAR_DATA* ch, const char* argument)
         send_to_char("&GShips drive repaired.\r\n", ch);
     }
 
-    if (!str_cmp(arg, "launcher"))
+    if (!compare(arg, "launcher"))
     {
         ship->missilestate = MISSILE_READY;
         send_to_char("&GMissile launcher repaired.\r\n", ch);
     }
 
-    if (!str_cmp(arg, "laser"))
+    if (!compare(arg, "laser"))
     {
         ship->statet0 = LASER_READY;
         send_to_char("&GMain laser repaired.\r\n", ch);
     }
 
-    if (!str_cmp(arg, "turret 1"))
+    if (!compare(arg, "turret 1"))
     {
         ship->statet1 = LASER_READY;
         send_to_char("&GLaser Turret 1 repaired.\r\n", ch);
     }
 
-    if (!str_cmp(arg, "turret 2"))
+    if (!compare(arg, "turret 2"))
     {
         ship->statet2 = LASER_READY;
         send_to_char("&Laser Turret 2 repaired.\r\n", ch);
@@ -7310,13 +7310,13 @@ void do_addpilot(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (str_cmp(ship->owner, ch->name))
+    if (compare(ship->owner, ch->name))
     {
 
-        if (!IS_NPC(ch) && ch->pcdata && ch->pcdata->clan && !str_cmp(ch->pcdata->clan->name, ship->owner))
-            if (!str_cmp(ch->pcdata->clan->leader, ch->name));
-            else if (!str_cmp(ch->pcdata->clan->number1, ch->name));
-            else if (!str_cmp(ch->pcdata->clan->number2, ch->name));
+        if (!IS_NPC(ch) && ch->pcdata && ch->pcdata->clan && !compare(ch->pcdata->clan->name, ship->owner))
+            if (!compare(ch->pcdata->clan->leader, ch->name));
+            else if (!compare(ch->pcdata->clan->number1, ch->name));
+            else if (!compare(ch->pcdata->clan->number2, ch->name));
             else
             {
                 send_to_char("&RThat isn't your ship!", ch);
@@ -7336,9 +7336,9 @@ void do_addpilot(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (str_cmp(ship->pilot, ""))
+    if (compare(ship->pilot, ""))
     {
-        if (str_cmp(ship->copilot, ""))
+        if (compare(ship->copilot, ""))
         {
             send_to_char("&RYou are ready have a pilot and copilot..\r\n", ch);
             send_to_char("&RTry rempilot first.\r\n", ch);
@@ -7376,13 +7376,13 @@ void do_rempilot(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (str_cmp(ship->owner, ch->name))
+    if (compare(ship->owner, ch->name))
     {
 
-        if (!IS_NPC(ch) && ch->pcdata && ch->pcdata->clan && !str_cmp(ch->pcdata->clan->name, ship->owner))
-            if (!str_cmp(ch->pcdata->clan->leader, ch->name));
-            else if (!str_cmp(ch->pcdata->clan->number1, ch->name));
-            else if (!str_cmp(ch->pcdata->clan->number2, ch->name));
+        if (!IS_NPC(ch) && ch->pcdata && ch->pcdata->clan && !compare(ch->pcdata->clan->name, ship->owner))
+            if (!compare(ch->pcdata->clan->leader, ch->name));
+            else if (!compare(ch->pcdata->clan->number1, ch->name));
+            else if (!compare(ch->pcdata->clan->number2, ch->name));
             else
             {
                 send_to_char("&RThat isn't your ship!", ch);
@@ -7402,7 +7402,7 @@ void do_rempilot(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(ship->pilot, argument))
+    if (!compare(ship->pilot, argument))
     {
         STRFREE(ship->pilot);
         ship->pilot = STRALLOC("");
@@ -7411,7 +7411,7 @@ void do_rempilot(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(ship->copilot, argument))
+    if (!compare(ship->copilot, argument))
     {
         STRFREE(ship->copilot);
         ship->copilot = STRALLOC("");
@@ -7473,27 +7473,27 @@ void do_radar(CHAR_DATA* ch, const char* argument)
     set_char_color(AT_WHITE, ch);
     ch_printf(ch, "%s\r\n\r\n", ship->starsystem->name);
     set_char_color(AT_LBLUE, ch);
-    if (ship->starsystem->star1 && str_cmp(ship->starsystem->star1, ""))
+    if (ship->starsystem->star1 && compare(ship->starsystem->star1, ""))
         ch_printf(
             ch, "%s   %d %d %d\r\n",
             ship->starsystem->star1, ship->starsystem->s1x, ship->starsystem->s1y, ship->starsystem->s1z
         );
-    if (ship->starsystem->star2 && str_cmp(ship->starsystem->star2, ""))
+    if (ship->starsystem->star2 && compare(ship->starsystem->star2, ""))
         ch_printf(
             ch, "%s   %d %d %d\r\n",
             ship->starsystem->star2, ship->starsystem->s2x, ship->starsystem->s2y, ship->starsystem->s2z
         );
-    if (ship->starsystem->planet1 && str_cmp(ship->starsystem->planet1, ""))
+    if (ship->starsystem->planet1 && compare(ship->starsystem->planet1, ""))
         ch_printf(
             ch, "%s   %d %d %d\r\n",
             ship->starsystem->planet1, ship->starsystem->p1x, ship->starsystem->p1y, ship->starsystem->p1z
         );
-    if (ship->starsystem->planet2 && str_cmp(ship->starsystem->planet2, ""))
+    if (ship->starsystem->planet2 && compare(ship->starsystem->planet2, ""))
         ch_printf(
             ch, "%s   %d %d %d\r\n",
             ship->starsystem->planet2, ship->starsystem->p2x, ship->starsystem->p2y, ship->starsystem->p2z
         );
-    if (ship->starsystem->planet3 && str_cmp(ship->starsystem->planet3, ""))
+    if (ship->starsystem->planet3 && compare(ship->starsystem->planet3, ""))
         ch_printf(
             ch, "%s   %d %d %d\r\n",
             ship->starsystem->planet3, ship->starsystem->p3x, ship->starsystem->p3y, ship->starsystem->p3z

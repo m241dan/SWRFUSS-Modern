@@ -661,7 +661,7 @@ void do_affected(CHAR_DATA* ch, const char* argument)
 
     argument = one_argument(argument, arg);
 
-    if (!str_cmp(arg, "by"))
+    if (!compare(arg, "by"))
     {
         set_char_color(AT_BLUE, ch);
         send_to_char("\r\nImbued with:\r\n", ch);
@@ -894,7 +894,7 @@ void do_homepage(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(argument, "clear"))
+    if (!compare(argument, "clear"))
     {
         if (ch->pcdata->homepage)
             DISPOSE(ch->pcdata->homepage);
@@ -1032,7 +1032,7 @@ void do_prompt(CHAR_DATA* ch, const char* argument)
      * Can add a list of pre-set prompts here if wanted.. perhaps
      * 'prompt 1' brings up a different, pre-set prompt
      */
-    if (!str_cmp(arg, "default"))
+    if (!compare(arg, "default"))
         ch->pcdata->prompt = STRALLOC("");
     else
         ch->pcdata->prompt = STRALLOC(prompt);

@@ -1062,7 +1062,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
     shop  = mob->pShop;
     value = atoi(argument);
 
-    if (!str_cmp(arg2, "buy0"))
+    if (!compare(arg2, "buy0"))
     {
         if (!is_number(argument))
             value = get_otype(argument);
@@ -1076,7 +1076,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "buy1"))
+    if (!compare(arg2, "buy1"))
     {
         if (!is_number(argument))
             value = get_otype(argument);
@@ -1090,7 +1090,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "buy2"))
+    if (!compare(arg2, "buy2"))
     {
         if (!is_number(argument))
             value = get_otype(argument);
@@ -1104,7 +1104,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "buy3"))
+    if (!compare(arg2, "buy3"))
     {
         if (!is_number(argument))
             value = get_otype(argument);
@@ -1118,7 +1118,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "buy4"))
+    if (!compare(arg2, "buy4"))
     {
         if (!is_number(argument))
             value = get_otype(argument);
@@ -1132,7 +1132,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "buy"))
+    if (!compare(arg2, "buy"))
     {
         if (value <= (shop->profit_sell + 5) || value > 1000)
         {
@@ -1144,7 +1144,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "sell"))
+    if (!compare(arg2, "sell"))
     {
         if (value < 0 || value >= (shop->profit_buy - 5))
         {
@@ -1156,7 +1156,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "open"))
+    if (!compare(arg2, "open"))
     {
         if (value < 0 || value > 23)
         {
@@ -1168,7 +1168,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "close"))
+    if (!compare(arg2, "close"))
     {
         if (value < 0 || value > 23)
         {
@@ -1180,7 +1180,7 @@ void do_shopset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "keeper"))
+    if (!compare(arg2, "keeper"))
     {
         if ((mob2 = get_mob_index(vnum)) == nullptr)
         {
@@ -1343,7 +1343,7 @@ void do_repairset(CHAR_DATA* ch, const char* argument)
     repair = mob->rShop;
     value  = atoi(argument);
 
-    if (!str_cmp(arg2, "fix0"))
+    if (!compare(arg2, "fix0"))
     {
         if (!is_number(argument))
             value = get_otype(argument);
@@ -1357,7 +1357,7 @@ void do_repairset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "fix1"))
+    if (!compare(arg2, "fix1"))
     {
         if (!is_number(argument))
             value = get_otype(argument);
@@ -1371,7 +1371,7 @@ void do_repairset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "fix2"))
+    if (!compare(arg2, "fix2"))
     {
         if (!is_number(argument))
             value = get_otype(argument);
@@ -1385,7 +1385,7 @@ void do_repairset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "profit"))
+    if (!compare(arg2, "profit"))
     {
         if (value < 1 || value > 1000)
         {
@@ -1397,7 +1397,7 @@ void do_repairset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "type"))
+    if (!compare(arg2, "type"))
     {
         if (value < 1 || value > 2)
         {
@@ -1409,7 +1409,7 @@ void do_repairset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "open"))
+    if (!compare(arg2, "open"))
     {
         if (value < 0 || value > 23)
         {
@@ -1421,7 +1421,7 @@ void do_repairset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "close"))
+    if (!compare(arg2, "close"))
     {
         if (value < 0 || value > 23)
         {
@@ -1433,7 +1433,7 @@ void do_repairset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "keeper"))
+    if (!compare(arg2, "keeper"))
     {
         if ((mob2 = get_mob_index(vnum)) == nullptr)
         {

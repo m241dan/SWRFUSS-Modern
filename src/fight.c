@@ -2086,7 +2086,7 @@ OBJ_DATA* raw_kill(CHAR_DATA* ch, CHAR_DATA* victim)
 
     for (ship = first_ship; ship; ship = ship->next)
     {
-        if (!str_cmp(ship->owner, victim->name))
+        if (!compare(ship->owner, victim->name))
         {
             STRFREE(ship->owner);
             ship->owner = STRALLOC("");
@@ -2114,7 +2114,7 @@ OBJ_DATA* raw_kill(CHAR_DATA* ch, CHAR_DATA* victim)
 
     if (victim->pcdata && victim->pcdata->clan)
     {
-        if (!str_cmp(victim->name, victim->pcdata->clan->leader))
+        if (!compare(victim->name, victim->pcdata->clan->leader))
         {
             STRFREE(victim->pcdata->clan->leader);
             if (victim->pcdata->clan->number1)
@@ -2133,7 +2133,7 @@ OBJ_DATA* raw_kill(CHAR_DATA* ch, CHAR_DATA* victim)
                 victim->pcdata->clan->leader = STRALLOC("");
         }
 
-        if (!str_cmp(victim->name, victim->pcdata->clan->number1))
+        if (!compare(victim->name, victim->pcdata->clan->number1))
         {
             STRFREE(victim->pcdata->clan->number1);
             if (victim->pcdata->clan->number2)
@@ -2146,7 +2146,7 @@ OBJ_DATA* raw_kill(CHAR_DATA* ch, CHAR_DATA* victim)
                 victim->pcdata->clan->number1 = STRALLOC("");
         }
 
-        if (!str_cmp(victim->name, victim->pcdata->clan->number2))
+        if (!compare(victim->name, victim->pcdata->clan->number2))
         {
             STRFREE(victim->pcdata->clan->number2);
             victim->pcdata->clan->number1 = STRALLOC("");
@@ -2237,7 +2237,7 @@ void group_gain(CHAR_DATA* ch, CHAR_DATA* victim)
         gch->alignment = align_compute(gch, victim);
 
         if (!IS_NPC(gch) && IS_NPC(victim) && gch->pcdata && gch->pcdata->clan
-            && !str_cmp(gch->pcdata->clan->name, victim->mob_clan))
+            && !compare(gch->pcdata->clan->name, victim->mob_clan))
         {
             xp = 0;
             send_to_char("You receive no experience for killing your organizations resources.\r\n", gch);
@@ -2726,7 +2726,7 @@ void do_murder(CHAR_DATA* ch, const char* argument)
 bool in_arena(CHAR_DATA* ch)
 {
 
-    if (!str_cmp(ch->in_room->area->filename, "arena.are"))
+    if (!compare(ch->in_room->area->filename, "arena.are"))
         return TRUE;
 
     if (ch->in_room->vnum < 29 || ch->in_room->vnum > 43)
@@ -2884,14 +2884,14 @@ void do_slay(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(arg2, "immolate"))
+    if (!compare(arg2, "immolate"))
     {
         act(AT_FIRE, "Your fireball turns $N into a blazing inferno.", ch, nullptr, victim, TO_CHAR);
         act(AT_FIRE, "$n releases a searing fireball in your direction.", ch, nullptr, victim, TO_VICT);
         act(AT_FIRE, "$n points at $N, who bursts into a flaming inferno.", ch, nullptr, victim, TO_NOTVICT);
     }
 
-    else if (!str_cmp(arg2, "shatter"))
+    else if (!compare(arg2, "shatter"))
     {
         act(
             AT_LBLUE, "You freeze $N with a glance and shatter the frozen corpse into tiny shards.", ch, nullptr, victim,
@@ -2907,7 +2907,7 @@ void do_slay(CHAR_DATA* ch, const char* argument)
         );
     }
 
-    else if (!str_cmp(arg2, "demon"))
+    else if (!compare(arg2, "demon"))
     {
         act(
             AT_IMMORT,
@@ -2943,7 +2943,7 @@ void do_slay(CHAR_DATA* ch, const char* argument)
         );
     }
 
-    else if (!str_cmp(arg2, "pounce") && get_trust(ch) >= LEVEL_ASCENDANT)
+    else if (!compare(arg2, "pounce") && get_trust(ch) >= LEVEL_ASCENDANT)
     {
         act(
             AT_BLOOD,
@@ -2971,7 +2971,7 @@ void do_slay(CHAR_DATA* ch, const char* argument)
         );
     }
 
-    else if (!str_cmp(arg2, "slit") && get_trust(ch) >= LEVEL_ASCENDANT)
+    else if (!compare(arg2, "slit") && get_trust(ch) >= LEVEL_ASCENDANT)
     {
         act(AT_BLOOD, "You calmly slit $N's throat.", ch, nullptr, victim, TO_CHAR);
         act(AT_BLOOD, "$n reaches out with a clawed finger and calmly slits your throat.", ch, nullptr, victim, TO_VICT);

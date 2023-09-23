@@ -281,15 +281,15 @@ void save_socials()
 
 int get_skill(const char* skilltype)
 {
-    if (!str_cmp(skilltype, "Spell"))
+    if (!compare(skilltype, "Spell"))
         return SKILL_SPELL;
-    if (!str_cmp(skilltype, "Skill"))
+    if (!compare(skilltype, "Skill"))
         return SKILL_SKILL;
-    if (!str_cmp(skilltype, "Weapon"))
+    if (!compare(skilltype, "Weapon"))
         return SKILL_WEAPON;
-    if (!str_cmp(skilltype, "Tongue"))
+    if (!compare(skilltype, "Tongue"))
         return SKILL_TONGUE;
-    if (!str_cmp(skilltype, "Herb"))
+    if (!compare(skilltype, "Herb"))
         return SKILL_HERB;
     return SKILL_UNKNOWN;
 }
@@ -358,7 +358,7 @@ SKILLTYPE* fread_skill(FILE* fp)
                 break;
 
             case 'A':KEY("Alignment", skill->alignment, fread_number(fp));
-                if (!str_cmp(word, "Affect"))
+                if (!compare(word, "Affect"))
                 {
                     SMAUG_AFF* aff;
 
@@ -374,7 +374,7 @@ SKILLTYPE* fread_skill(FILE* fp)
                 break;
 
             case 'C':
-                if (!str_cmp(word, "Code"))
+                if (!compare(word, "Code"))
                 {
                     SPELL_FUN * spellfun;
                     DO_FUN    * dofun;
@@ -412,7 +412,7 @@ SKILLTYPE* fread_skill(FILE* fp)
                 break;
 
             case 'E':
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                     return skill;
                 break;
 
@@ -498,7 +498,7 @@ void load_skill_table()
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "SKILL"))
+            if (!compare(word, "SKILL"))
             {
                 if (top_sn >= MAX_SKILL)
                 {
@@ -509,7 +509,7 @@ void load_skill_table()
                 skill_table[top_sn++] = fread_skill(fp);
                 continue;
             }
-            else if (!str_cmp(word, "END"))
+            else if (!compare(word, "END"))
                 break;
             else
             {
@@ -552,7 +552,7 @@ void load_herb_table()
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "HERB"))
+            if (!compare(word, "HERB"))
             {
                 if (top_herb >= MAX_HERB)
                 {
@@ -565,7 +565,7 @@ void load_herb_table()
                     herb_table[top_herb - 1]->slot = top_herb - 1;
                 continue;
             }
-            else if (!str_cmp(word, "END"))
+            else if (!compare(word, "END"))
                 break;
             else
             {
@@ -607,7 +607,7 @@ void fread_social(FILE* fp)
                 break;
 
             case 'E':
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                 {
                     if (!social->name)
                     {
@@ -670,12 +670,12 @@ void load_socials()
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "SOCIAL"))
+            if (!compare(word, "SOCIAL"))
             {
                 fread_social(fp);
                 continue;
             }
-            else if (!str_cmp(word, "END"))
+            else if (!compare(word, "END"))
                 break;
             else
             {
@@ -715,7 +715,7 @@ void fread_command(FILE* fp)
                 break;
 
             case 'E':
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                 {
                     if (!command->name)
                     {
@@ -789,12 +789,12 @@ void load_commands()
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "COMMAND"))
+            if (!compare(word, "COMMAND"))
             {
                 fread_command(fp);
                 continue;
             }
-            else if (!str_cmp(word, "END"))
+            else if (!compare(word, "END"))
                 break;
             else
             {

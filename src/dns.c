@@ -51,8 +51,8 @@ void prune_dns(void)
         /*
          * Stay in cache for 14 days
          */
-        if (current_time - cache->time >= 1209600 || !str_cmp(cache->ip, "Unknown??")
-            || !str_cmp(cache->name, "Unknown??"))
+        if (current_time - cache->time >= 1209600 || !compare(cache->ip, "Unknown??")
+            || !compare(cache->name, "Unknown??"))
         {
             STRFREE(cache->ip);
             STRFREE(cache->name);
@@ -92,7 +92,7 @@ char* in_dns_cache(char* ip)
 
     for (cache = first_cache; cache; cache = cache->next)
     {
-        if (!str_cmp(ip, cache->ip))
+        if (!compare(ip, cache->ip))
         {
             strncpy(dnsbuf, cache->name, MAX_STRING_LENGTH);
             break;
@@ -118,7 +118,7 @@ void fread_dns(DNS_DATA* cache, FILE* fp)
                 break;
 
             case 'E':
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                 {
                     if (!cache->ip)
                         cache->ip   = STRALLOC("Unknown??");
@@ -175,14 +175,14 @@ void load_dns(void)
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "CACHE"))
+            if (!compare(word, "CACHE"))
             {
                 CREATE(cache, DNS_DATA, 1);
                 fread_dns(cache, fp);
                 LINK(cache, first_cache, last_cache, next, prev);
                 continue;
             }
-            else if (!str_cmp(word, "END"))
+            else if (!compare(word, "END"))
                 break;
             else
             {

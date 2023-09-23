@@ -1424,7 +1424,7 @@ void nanny_get_name(DESCRIPTOR_DATA* d, const char* orig_argument)
         return;
     }
 
-    if (!str_cmp(argument, "New"))
+    if (!compare(argument, "New"))
     {
         if (d->newstate == 0)
         {
@@ -1552,7 +1552,7 @@ void nanny_get_old_password(DESCRIPTOR_DATA* d, const char* argument)
 
     write_to_buffer(d, "\r\n", 2);
 
-    if (str_cmp(sha256_crypt(argument), ch->pcdata->pwd))
+    if (compare(sha256_crypt(argument), ch->pcdata->pwd))
     {
         write_to_buffer(d, "Wrong password, disconnecting.\r\n", 0);
         /*
@@ -1683,7 +1683,7 @@ void nanny_confirm_new_password(DESCRIPTOR_DATA* d, const char* argument)
 
     write_to_buffer(d, "\r\n", 2);
 
-    if (str_cmp(sha256_crypt(argument), ch->pcdata->pwd))
+    if (compare(sha256_crypt(argument), ch->pcdata->pwd))
     {
         write_to_buffer(d, "Passwords don't match.\r\nRetype password: ", 0);
         d->connected = CON_GET_NEW_PASSWORD;
@@ -1754,7 +1754,7 @@ void nanny_get_new_race(DESCRIPTOR_DATA* d, const char* argument)
     ch       = d->character;
     argument = one_argument(argument, arg);
 
-    if (!str_cmp(arg, "help"))
+    if (!compare(arg, "help"))
     {
         do_help(ch, argument);
         write_to_buffer(d, "Please choose a race: ", 0);
@@ -1812,7 +1812,7 @@ void nanny_get_new_class(DESCRIPTOR_DATA* d, const char* argument)
 
     argument = one_argument(argument, arg);
 
-    if (!str_cmp(arg, "help"))
+    if (!compare(arg, "help"))
     {
         do_help(ch, argument);
         write_to_buffer(d, "Please choose an ability class: ", 0);
@@ -2203,9 +2203,9 @@ void nanny_read_motd(DESCRIPTOR_DATA* d, const char* argument)
                 }
 
                 word = fread_word(fph);
-                if (!str_cmp(word, "OBJECT")) /* Objects  */
+                if (!compare(word, "OBJECT")) /* Objects  */
                     fread_obj(supermob, fph, OS_CARRY);
-                else if (!str_cmp(word, "END"))  /* Done     */
+                else if (!compare(word, "END"))  /* Done     */
                     break;
                 else
                 {
@@ -2293,7 +2293,7 @@ short check_reconnect(DESCRIPTOR_DATA* d, const char* name, bool fConn)
 {
     for (auto* ch : characters)
     {
-        if (!IS_NPC(ch) && (!fConn || !ch->desc) && ch->name && !str_cmp(name, ch->name))
+        if (!IS_NPC(ch) && (!fConn || !ch->desc) && ch->name && !compare(name, ch->name))
         {
             if (fConn && ch->switched)
             {
@@ -2346,10 +2346,10 @@ bool check_multi(DESCRIPTOR_DATA* d, const char* name)
     {
         if (dold != d
             && (dold->character || dold->original)
-            && str_cmp(
+            && compare(
             name, dold->original
                   ? dold->original->name : dold->character->name
-        ) && !str_cmp(dold->host, d->host))
+        ) && !compare(dold->host, d->host))
         {
             const char* ok  = "194.234.177";
             const char* ok2 = "209.183.133.229";
@@ -2395,7 +2395,7 @@ short check_playing(DESCRIPTOR_DATA* d, const char* name, bool kick)
     {
         if (dold != d
             && (dold->character || dold->original)
-            && !str_cmp(name, dold->original ? dold->original->name : dold->character->name))
+            && !compare(name, dold->original ? dold->original->name : dold->character->name))
         {
             auto cstate = dold->connected;
             ch     = dold->original ? dold->original : dold->character;
@@ -2818,7 +2818,7 @@ void do_name(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_cmp(ch->name, ucase_argument))
+    if (!compare(ch->name, ucase_argument))
     {
         send_to_char("That's already your name!\r\n", ch);
         return;
@@ -2826,7 +2826,7 @@ void do_name(CHAR_DATA* ch, const char* argument)
 
     auto tmp_iter = alg::find_if(
         characters,
-        [&](const auto* name) {return !str_cmp(ucase_argument, name);},
+        [&](const auto* name) {return !compare(ucase_argument, name);},
         &char_data::name
     );
 

@@ -211,7 +211,7 @@ void do_get(CHAR_DATA* ch, const char* argument)
     /*
     * munch optional words
     */
-    if (!str_cmp(arg2, "from") && argument[0] != '\0')
+    if (!compare(arg2, "from") && argument[0] != '\0')
         argument = one_argument(argument, arg2);
 
     /*
@@ -228,7 +228,7 @@ void do_get(CHAR_DATA* ch, const char* argument)
 
     if (arg2[0] == '\0')
     {
-        if (number <= 1 && str_cmp(arg1, "all") && str_prefix("all.", arg1))
+        if (number <= 1 && compare(arg1, "all") && str_prefix("all.", arg1))
         {
             /*
           * 'get obj'
@@ -257,7 +257,7 @@ void do_get(CHAR_DATA* ch, const char* argument)
                 send_to_char("The gods frown upon such a display of greed!\r\n", ch);
                 return;
             }
-            if (!str_cmp(arg1, "all"))
+            if (!compare(arg1, "all"))
                 fAll = TRUE;
             else
                 fAll = FALSE;
@@ -306,7 +306,7 @@ void do_get(CHAR_DATA* ch, const char* argument)
         /*
        * 'get ... container'
        */
-        if (!str_cmp(arg2, "all") || !str_prefix("all.", arg2))
+        if (!compare(arg2, "all") || !str_prefix("all.", arg2))
         {
             send_to_char("You can't do that.\r\n", ch);
             return;
@@ -345,7 +345,7 @@ void do_get(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        if (number <= 1 && str_cmp(arg1, "all") && str_prefix("all.", arg1))
+        if (number <= 1 && compare(arg1, "all") && str_prefix("all.", arg1))
         {
             /*
           * 'get obj container'
@@ -387,7 +387,7 @@ void do_get(CHAR_DATA* ch, const char* argument)
                 send_to_char("The gods frown upon such an act of greed!\r\n", ch);
                 return;
             }
-            if (!str_cmp(arg1, "all"))
+            if (!compare(arg1, "all"))
                 fAll = TRUE;
             else
                 fAll = FALSE;
@@ -477,7 +477,7 @@ void do_put(CHAR_DATA* ch, const char* argument)
     /*
     * munch optional words
     */
-    if ((!str_cmp(arg2, "into") || !str_cmp(arg2, "inside") || !str_cmp(arg2, "in")) && argument[0] != '\0')
+    if ((!compare(arg2, "into") || !compare(arg2, "inside") || !compare(arg2, "in")) && argument[0] != '\0')
         argument = one_argument(argument, arg2);
 
     if (arg1[0] == '\0' || arg2[0] == '\0')
@@ -489,7 +489,7 @@ void do_put(CHAR_DATA* ch, const char* argument)
     if (ms_find_obj(ch))
         return;
 
-    if (!str_cmp(arg2, "all") || !str_prefix("all.", arg2))
+    if (!compare(arg2, "all") || !str_prefix("all.", arg2))
     {
         send_to_char("You can't do that.\r\n", ch);
         return;
@@ -527,7 +527,7 @@ void do_put(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (number <= 1 && str_cmp(arg1, "all") && str_prefix("all.", arg1))
+    if (number <= 1 && compare(arg1, "all") && str_prefix("all.", arg1))
     {
         /*
        * 'put obj container'
@@ -600,7 +600,7 @@ void do_put(CHAR_DATA* ch, const char* argument)
         bool fAll;
         char * chk;
 
-        if (!str_cmp(arg1, "all"))
+        if (!compare(arg1, "all"))
             fAll = TRUE;
         else
             fAll = FALSE;
@@ -711,7 +711,7 @@ void do_drop(CHAR_DATA* ch, const char* argument)
        * 'drop NNNN coins'
        */
 
-        if (!str_cmp(arg, "credits") || !str_cmp(arg, "credit"))
+        if (!compare(arg, "credits") || !compare(arg, "credit"))
         {
             if (ch->gold < number)
             {
@@ -746,7 +746,7 @@ void do_drop(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (number <= 1 && str_cmp(arg, "all") && str_prefix("all.", arg))
+    if (number <= 1 && compare(arg, "all") && str_prefix("all.", arg))
     {
         /*
        * 'drop obj'
@@ -788,7 +788,7 @@ void do_drop(CHAR_DATA* ch, const char* argument)
         char * chk;
         bool fAll;
 
-        if (!str_cmp(arg, "all"))
+        if (!compare(arg, "all"))
             fAll = TRUE;
         else
             fAll = FALSE;
@@ -866,7 +866,7 @@ void do_give(CHAR_DATA* ch, const char* argument)
 
     argument     = one_argument(argument, arg1);
     argument     = one_argument(argument, arg2);
-    if (!str_cmp(arg2, "to") && argument[0] != '\0')
+    if (!compare(arg2, "to") && argument[0] != '\0')
         argument = one_argument(argument, arg2);
 
     if (arg1[0] == '\0' || arg2[0] == '\0')
@@ -886,14 +886,14 @@ void do_give(CHAR_DATA* ch, const char* argument)
         int amount;
 
         amount = atoi(arg1);
-        if (amount <= 0 || (str_cmp(arg2, "credits") && str_cmp(arg2, "credit")))
+        if (amount <= 0 || (compare(arg2, "credits") && compare(arg2, "credit")))
         {
             send_to_char("Sorry, you can't do that.\r\n", ch);
             return;
         }
 
         argument     = one_argument(argument, arg2);
-        if (!str_cmp(arg2, "to") && argument[0] != '\0')
+        if (!compare(arg2, "to") && argument[0] != '\0')
             argument = one_argument(argument, arg2);
         if (arg2[0] == '\0')
         {
@@ -1884,7 +1884,7 @@ void do_wear(CHAR_DATA* ch, const char* argument)
 
     argument     = one_argument(argument, arg1);
     argument     = one_argument(argument, arg2);
-    if ((!str_cmp(arg2, "on") || !str_cmp(arg2, "upon") || !str_cmp(arg2, "around")) && argument[0] != '\0')
+    if ((!compare(arg2, "on") || !compare(arg2, "upon") || !compare(arg2, "around")) && argument[0] != '\0')
         argument = one_argument(argument, arg2);
 
     if (arg1[0] == '\0')
@@ -1896,7 +1896,7 @@ void do_wear(CHAR_DATA* ch, const char* argument)
     if (ms_find_obj(ch))
         return;
 
-    if (!str_cmp(arg1, "all"))
+    if (!compare(arg1, "all"))
     {
         OBJ_DATA* obj_next;
 
@@ -1939,7 +1939,7 @@ void do_remove(CHAR_DATA* ch, const char* argument)
     if (ms_find_obj(ch))
         return;
 
-    if (!str_cmp(arg, "all"))  /* SB Remove all */
+    if (!compare(arg, "all"))  /* SB Remove all */
     {
         for (obj = ch->first_carrying; obj != nullptr; obj = obj_next)
         {
@@ -2045,7 +2045,7 @@ void do_sacrifice(CHAR_DATA* ch, const char* argument)
 
     one_argument(argument, arg);
 
-    if (arg[0] == '\0' || !str_cmp(arg, ch->name))
+    if (arg[0] == '\0' || !compare(arg, ch->name))
     {
         act(AT_ACTION, "$n offers $mself to $s deity, who graciously declines.", ch, nullptr, nullptr, TO_ROOM);
         send_to_char("Your deity appreciates your offer and may accept it later.", ch);
@@ -2389,7 +2389,7 @@ void do_auction(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (IS_IMMORTAL(ch) && !str_cmp(arg1, "stop"))
+    if (IS_IMMORTAL(ch) && !compare(arg1, "stop"))
     {
         if (auction->item == nullptr)
         {
@@ -2414,7 +2414,7 @@ void do_auction(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (!str_cmp(arg1, "bid"))
+    if (!compare(arg1, "bid"))
     {
         if (auction->item != nullptr)
         {

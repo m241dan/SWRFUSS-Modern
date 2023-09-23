@@ -187,12 +187,12 @@ bool load_mssp_data(void)
             }
 
             word = fread_word(fp);
-            if (!str_cmp(word, "MSSP_INFO"))
+            if (!compare(word, "MSSP_INFO"))
             {
                 fread_mssp_info(fp);
                 break;
             }
-            else if (!str_cmp(word, "END"))
+            else if (!compare(word, "END"))
                 break;
             else
             {
@@ -230,7 +230,7 @@ void fread_mssp_info(FILE* fp)
                 break;
 
             case 'E':KEY("EquipmentSystem", mssp_info->equipmentSystem, fread_string_nohash(fp));
-                if (!str_cmp(word, "End"))
+                if (!compare(word, "End"))
                     return;
                 break;
 
@@ -372,7 +372,7 @@ void do_setmssp(CHAR_DATA* ch, const char* argument)
 
     argument = one_argument(argument, arg1);
 
-    if ((arg1[0] == '\0') || !str_cmp(arg1, "show")) //Here you go Conner :)
+    if ((arg1[0] == '\0') || !compare(arg1, "show")) //Here you go Conner :)
     {
         show_mssp(ch);
         return;
@@ -396,33 +396,33 @@ void do_setmssp(CHAR_DATA* ch, const char* argument)
 
         return;
     }
-    if (!str_cmp(arg1, "mudname"))
+    if (!compare(arg1, "mudname"))
         strptr = &mssp_info->mudname;
-    else if (!str_cmp(arg1, "hostname"))
+    else if (!compare(arg1, "hostname"))
         strptr = &mssp_info->hostname;
-    else if (!str_cmp(arg1, "contact"))
+    else if (!compare(arg1, "contact"))
         strptr = &mssp_info->contact;
-    else if (!str_cmp(arg1, "icon"))
+    else if (!compare(arg1, "icon"))
         strptr = &mssp_info->icon;
-    else if (!str_cmp(arg1, "language"))
+    else if (!compare(arg1, "language"))
         strptr = &mssp_info->language;
-    else if (!str_cmp(arg1, "location"))
+    else if (!compare(arg1, "location"))
         strptr = &mssp_info->location;
-    else if (!str_cmp(arg1, "website"))
+    else if (!compare(arg1, "website"))
         strptr = &mssp_info->website;
-    else if (!str_cmp(arg1, "family"))
+    else if (!compare(arg1, "family"))
         strptr = &mssp_info->family;
-    else if (!str_cmp(arg1, "genre"))
+    else if (!compare(arg1, "genre"))
         strptr = &mssp_info->genre;
-    else if (!str_cmp(arg1, "gameplay"))
+    else if (!compare(arg1, "gameplay"))
         strptr = &mssp_info->gamePlay;
-    else if (!str_cmp(arg1, "game_system"))
+    else if (!compare(arg1, "game_system"))
         strptr = &mssp_info->gameSystem;
-    else if (!str_cmp(arg1, "intermud"))
+    else if (!compare(arg1, "intermud"))
         strptr = &mssp_info->intermud;
-    else if (!str_cmp(arg1, "status"))
+    else if (!compare(arg1, "status"))
         strptr = &mssp_info->status;
-    else if (!str_cmp(arg1, "subgenre"))
+    else if (!compare(arg1, "subgenre"))
         strptr = &mssp_info->subgenre;
 
     if (strptr != nullptr)
@@ -433,64 +433,64 @@ void do_setmssp(CHAR_DATA* ch, const char* argument)
         save_mssp_info();
         return;
     }
-    if (!str_cmp(arg1, "ansi"))
+    if (!compare(arg1, "ansi"))
         ynptr = &mssp_info->ansi;
-    else if (!str_cmp(arg1, "mccp"))
+    else if (!compare(arg1, "mccp"))
         ynptr = &mssp_info->mccp;
-    else if (!str_cmp(arg1, "mcp"))
+    else if (!compare(arg1, "mcp"))
         ynptr = &mssp_info->mcp;
-    else if (!str_cmp(arg1, "msp"))
+    else if (!compare(arg1, "msp"))
         ynptr = &mssp_info->msp;
-    else if (!str_cmp(arg1, "ssl"))
+    else if (!compare(arg1, "ssl"))
         ynptr = &mssp_info->ssl;
-    else if (!str_cmp(arg1, "mxp"))
+    else if (!compare(arg1, "mxp"))
         ynptr = &mssp_info->mxp;
-    else if (!str_cmp(arg1, "pueblo"))
+    else if (!compare(arg1, "pueblo"))
         ynptr = &mssp_info->pueblo;
-    else if (!str_cmp(arg1, "vt100"))
+    else if (!compare(arg1, "vt100"))
         ynptr = &mssp_info->vt100;
-    else if (!str_cmp(arg1, "xterm256"))
+    else if (!compare(arg1, "xterm256"))
         ynptr = &mssp_info->xterm256;
-    else if (!str_cmp(arg1, "pay2play"))
+    else if (!compare(arg1, "pay2play"))
         ynptr = &mssp_info->pay2play;
-    else if (!str_cmp(arg1, "pay4perks"))
+    else if (!compare(arg1, "pay4perks"))
         ynptr = &mssp_info->pay4perks;
-    else if (!str_cmp(arg1, "hiring_builders"))
+    else if (!compare(arg1, "hiring_builders"))
         ynptr = &mssp_info->hiringBuilders;
-    else if (!str_cmp(arg1, "hiring_coders"))
+    else if (!compare(arg1, "hiring_coders"))
         ynptr = &mssp_info->hiringCoders;
-    else if (!str_cmp(arg1, "adult_material"))
+    else if (!compare(arg1, "adult_material"))
         ynptr = &mssp_info->adultMaterial;
-    else if (!str_cmp(arg1, "multiclassing"))
+    else if (!compare(arg1, "multiclassing"))
         ynptr = &mssp_info->multiclassing;
-    else if (!str_cmp(arg1, "newbie_friendly"))
+    else if (!compare(arg1, "newbie_friendly"))
         ynptr = &mssp_info->newbieFriendly;
-    else if (!str_cmp(arg1, "player_cities"))
+    else if (!compare(arg1, "player_cities"))
         ynptr = &mssp_info->playerCities;
-    else if (!str_cmp(arg1, "player_clans"))
+    else if (!compare(arg1, "player_clans"))
         ynptr = &mssp_info->playerClans;
-    else if (!str_cmp(arg1, "player_crafting"))
+    else if (!compare(arg1, "player_crafting"))
         ynptr = &mssp_info->playerCrafting;
-    else if (!str_cmp(arg1, "player_guilds"))
+    else if (!compare(arg1, "player_guilds"))
         ynptr = &mssp_info->playerGuilds;
 
     if (ynptr != nullptr)
     {
         bool newvalue = FALSE;
 
-        if (str_cmp(argument, "yes") && str_cmp(argument, "no"))
+        if (compare(argument, "yes") && compare(argument, "no"))
         {
             ch_printf(ch, "You must specify 'yes' or 'no' for the %s value!\r\n", arg1);
             return;
         }
-        newvalue = !str_cmp(argument, "yes") ? TRUE : FALSE;
+        newvalue = !compare(argument, "yes") ? TRUE : FALSE;
         *ynptr = newvalue;
         ch_printf(ch, "MSSP value, %s has been changed to: %s\r\n", arg1, argument);
         save_mssp_info();
         return;
     }
 
-    if (!str_cmp(arg1, "worlds"))
+    if (!compare(arg1, "worlds"))
     {
         int value;
 
@@ -507,7 +507,7 @@ void do_setmssp(CHAR_DATA* ch, const char* argument)
         save_mssp_info();
         return;
     }
-    else if (!str_cmp(arg1, "created"))
+    else if (!compare(arg1, "created"))
     {
         int value;
 
@@ -523,14 +523,14 @@ void do_setmssp(CHAR_DATA* ch, const char* argument)
         save_mssp_info();
         return;
     }
-    else if (!str_cmp(arg1, "multiplaying") || !str_cmp(arg1, "player_killing"))
+    else if (!compare(arg1, "multiplaying") || !compare(arg1, "player_killing"))
     {
-        if (strcmp(argument, "None") && strcmp(argument, "Restricted") && str_cmp(argument, "Full"))
+        if (strcmp(argument, "None") && strcmp(argument, "Restricted") && compare(argument, "Full"))
         {
             ch_printf(ch, "Valid choices for %s are: None, Restricted or Full\r\n", arg1);
             return;
         }
-        if (!str_cmp(arg1, "multiplaying"))
+        if (!compare(arg1, "multiplaying"))
         {
             DISPOSE(mssp_info->multiplaying);
             mssp_info->multiplaying = str_dup(argument);
@@ -544,17 +544,17 @@ void do_setmssp(CHAR_DATA* ch, const char* argument)
         save_mssp_info();
         return;
     }
-    else if (!str_cmp(arg1, "training_system") || !str_cmp(arg1, "equipment_system"))
+    else if (!compare(arg1, "training_system") || !compare(arg1, "equipment_system"))
     {
         if (strcmp(argument, "None") &&
             strcmp(argument, "Level") &&
-            str_cmp(argument, "Skill") &&
-            str_cmp(argument, "Both"))
+            compare(argument, "Skill") &&
+            compare(argument, "Both"))
         {
             ch_printf(ch, "Valid choices for %s are: None, Level, Skill or Both\r\n", arg1);
             return;
         }
-        if (!str_cmp(arg1, "training_system"))
+        if (!compare(arg1, "training_system"))
         {
             DISPOSE(mssp_info->trainingSystem);
             mssp_info->trainingSystem = str_dup(argument);
@@ -568,12 +568,12 @@ void do_setmssp(CHAR_DATA* ch, const char* argument)
         save_mssp_info();
         return;
     }
-    else if (!str_cmp(arg1, "quest_system"))
+    else if (!compare(arg1, "quest_system"))
     {
         if (strcmp(argument, "None") &&
             strcmp(argument, "Immortal Run") &&
-            str_cmp(argument, "Automated") &&
-            str_cmp(argument, "Integrated"))
+            compare(argument, "Automated") &&
+            compare(argument, "Integrated"))
         {
             ch_printf(ch, "Valid choices for %s are: None, Immortal Run, Automated or Integrated\r\n", arg1);
             return;
@@ -584,12 +584,12 @@ void do_setmssp(CHAR_DATA* ch, const char* argument)
         save_mssp_info();
         return;
     }
-    else if (!str_cmp(arg1, "roleplaying"))
+    else if (!compare(arg1, "roleplaying"))
     {
         if (strcmp(argument, "None") &&
             strcmp(argument, "Accepted") &&
-            str_cmp(argument, "Encouraged") &&
-            str_cmp(argument, "Enforced"))
+            compare(argument, "Encouraged") &&
+            compare(argument, "Enforced"))
         {
             ch_printf(ch, "Valid choices for %s are: None, Accepted, Encouraged or Enforced\r\n", arg1);
             return;
@@ -600,12 +600,12 @@ void do_setmssp(CHAR_DATA* ch, const char* argument)
         save_mssp_info();
         return;
     }
-    else if (!str_cmp(arg1, "world_originality"))
+    else if (!compare(arg1, "world_originality"))
     {
         if (strcmp(argument, "All Stock") &&
             strcmp(argument, "Mostly Stock") &&
-            str_cmp(argument, "Mostly Original") &&
-            str_cmp(argument, "All Original"))
+            compare(argument, "Mostly Original") &&
+            compare(argument, "All Original"))
         {
             ch_printf(
                 ch,
@@ -621,7 +621,7 @@ void do_setmssp(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    else if (!str_cmp(arg1, "min_age"))
+    else if (!compare(arg1, "min_age"))
     {
         int value;
 
