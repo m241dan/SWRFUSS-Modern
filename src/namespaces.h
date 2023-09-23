@@ -149,6 +149,16 @@ namespace view {
         return filter(not_pred);
     }
 
+    struct _lowercase : __adaptor::_RangeAdaptorClosure
+    {
+        constexpr auto operator() [[nodiscard]] (std::string_view r) const
+        {
+            return transform(r, [](char c) {return std::tolower(c);});
+        }
+    };
+
+    inline constexpr _lowercase lowercase;
+
 }
 
 namespace ops {
