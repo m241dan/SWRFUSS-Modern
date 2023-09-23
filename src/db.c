@@ -3618,20 +3618,13 @@ const char* show_tilde(const char* str)
  */
 bool str_cmp(std::string_view astr, std::string_view bstr)
 {
-    using namespace ops;
 
     if (astr.length() != bstr.length())
     {
         return true;
     }
 
-    return !alg::all_true(
-        view::zip_transform(
-            _eq_,
-            astr | view::lowercase,
-            bstr | view::lowercase
-        )
-    );
+    return str_prefix(astr, bstr);
 }
 
 /*
