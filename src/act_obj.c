@@ -228,7 +228,7 @@ void do_get(CHAR_DATA* ch, const char* argument)
 
     if (arg2[0] == '\0')
     {
-        if (number <= 1 && compare(arg1, "all") && str_prefix("all.", arg1))
+        if (number <= 1 && compare(arg1, "all") && prefix("all.", arg1))
         {
             /*
           * 'get obj'
@@ -306,7 +306,7 @@ void do_get(CHAR_DATA* ch, const char* argument)
         /*
        * 'get ... container'
        */
-        if (!compare(arg2, "all") || !str_prefix("all.", arg2))
+        if (!compare(arg2, "all") || !prefix("all.", arg2))
         {
             send_to_char("You can't do that.\r\n", ch);
             return;
@@ -345,7 +345,7 @@ void do_get(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        if (number <= 1 && compare(arg1, "all") && str_prefix("all.", arg1))
+        if (number <= 1 && compare(arg1, "all") && prefix("all.", arg1))
         {
             /*
           * 'get obj container'
@@ -489,7 +489,7 @@ void do_put(CHAR_DATA* ch, const char* argument)
     if (ms_find_obj(ch))
         return;
 
-    if (!compare(arg2, "all") || !str_prefix("all.", arg2))
+    if (!compare(arg2, "all") || !prefix("all.", arg2))
     {
         send_to_char("You can't do that.\r\n", ch);
         return;
@@ -527,7 +527,7 @@ void do_put(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (number <= 1 && compare(arg1, "all") && str_prefix("all.", arg1))
+    if (number <= 1 && compare(arg1, "all") && prefix("all.", arg1))
     {
         /*
        * 'put obj container'
@@ -746,7 +746,7 @@ void do_drop(CHAR_DATA* ch, const char* argument)
         }
     }
 
-    if (number <= 1 && compare(arg, "all") && str_prefix("all.", arg))
+    if (number <= 1 && compare(arg, "all") && prefix("all.", arg))
     {
         /*
        * 'drop obj'

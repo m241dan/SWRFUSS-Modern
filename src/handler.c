@@ -503,7 +503,7 @@ bool is_name_prefix(const char* str, const char* namelist)
         namelist = one_argument(namelist, name);
         if (name[0] == '\0')
             return FALSE;
-        if (!str_prefix(str, name))
+        if (!prefix(str, name))
             return TRUE;
     }
 }
@@ -535,7 +535,7 @@ bool is_name2_prefix(const char* str, const char* namelist)
         namelist = one_argument2(namelist, name);
         if (name[0] == '\0')
             return FALSE;
-        if (!str_prefix(str, name))
+        if (!prefix(str, name))
             return TRUE;
     }
 }

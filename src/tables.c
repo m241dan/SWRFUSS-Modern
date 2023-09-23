@@ -381,13 +381,13 @@ SKILLTYPE* fread_skill(FILE* fp)
                     const char* w = fread_word(fp);
 
                     fMatch = TRUE;
-                    if (!str_prefix("do_", w) && (dofun = skill_function(w)) != skill_notfound)
+                    if (!prefix("do_", w) && (dofun = skill_function(w)) != skill_notfound)
                     {
                         skill->skill_fun      = dofun;
                         skill->spell_fun      = nullptr;
                         skill->skill_fun_name = str_dup(w);
                     }
-                    else if (str_prefix("do_", w) && (spellfun = spell_function(w)) != spell_notfound)
+                    else if (prefix("do_", w) && (spellfun = spell_function(w)) != spell_notfound)
                     {
                         skill->spell_fun      = spellfun;
                         skill->skill_fun      = nullptr;

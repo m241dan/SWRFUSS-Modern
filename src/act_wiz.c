@@ -120,7 +120,7 @@ void do_restrict(CHAR_DATA* ch, const char* argument)
     hash     = arg[0] % 126;
     for (cmd = command_hash[hash]; cmd; cmd = cmd->next)
     {
-        if (!str_prefix(arg, cmd->name) && cmd->level <= get_trust(ch))
+        if (!prefix(arg, cmd->name) && cmd->level <= get_trust(ch))
         {
             found = TRUE;
             break;
@@ -129,7 +129,7 @@ void do_restrict(CHAR_DATA* ch, const char* argument)
 
     if (found)
     {
-        if (!str_prefix(arg2, "show"))
+        if (!prefix(arg2, "show"))
         {
             snprintf(buf, MAX_STRING_LENGTH, "%s show", cmd->name);
             do_cedit(ch, buf);
@@ -156,7 +156,7 @@ CHAR_DATA* get_waiting_desc(CHAR_DATA* ch, char* name)
     number_of_hits = 0;
     for (auto* d : descriptors)
     {
-        if (d->character && (!str_prefix(name, d->character->name)) && IS_WAITING_FOR_AUTH(d->character))
+        if (d->character && (!prefix(name, d->character->name)) && IS_WAITING_FOR_AUTH(d->character))
         {
             if (++number_of_hits > 1)
             {
@@ -1531,7 +1531,7 @@ void do_owhere(CHAR_DATA* ch, const char* argument)
     argument = one_argument(argument, arg1);
 
     set_pager_color(AT_PLAIN, ch);
-    if (arg1[0] != '\0' && !str_prefix(arg1, "nesthunt"))
+    if (arg1[0] != '\0' && !prefix(arg1, "nesthunt"))
     {
         if (!(obj = get_obj_world(ch, arg)))
         {
@@ -2296,7 +2296,7 @@ void do_advance(CHAR_DATA* ch, const char* argument)
     ability       = -1;
     for (iAbility = 0; iAbility < MAX_ABILITY; iAbility++)
     {
-        if (!str_prefix(arg3, ability_name[iAbility]))
+        if (!prefix(arg3, ability_name[iAbility]))
         {
             ability = iAbility;
             break;
@@ -3201,7 +3201,7 @@ void do_users(CHAR_DATA* ch, const char* argument)
         else
         {
             if ((get_trust(ch) >= LEVEL_SUPREME || (d->character && can_see(ch, d->character)))
-                && (!str_prefix(argument, d->host) || (d->character && !str_prefix(argument, d->character->name))))
+                && (!prefix(argument, d->host) || (d->character && !prefix(argument, d->character->name))))
             {
                 count++;
                 pager_printf(
@@ -4632,7 +4632,7 @@ void do_for(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_prefix("quit", argument))
+    if (!prefix("quit", argument))
     {
         send_to_char("Are you trying to crash the MUD or something?\r\n", ch);
         return;
@@ -4846,14 +4846,14 @@ void do_cset(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_prefix(arg, "guild_overseer"))
+    if (!prefix(arg, "guild_overseer"))
     {
         STRFREE(sysdata.guild_overseer);
         sysdata.guild_overseer = str_dup(argument);
         send_to_char("Ok.\r\n", ch);
         return;
     }
-    if (!str_prefix(arg, "guild_advisor"))
+    if (!prefix(arg, "guild_advisor"))
     {
         STRFREE(sysdata.guild_advisor);
         sysdata.guild_advisor = str_dup(argument);
@@ -4863,7 +4863,7 @@ void do_cset(CHAR_DATA* ch, const char* argument)
 
     level = (short)atoi(argument);
 
-    if (!str_prefix(arg, "savefrequency"))
+    if (!prefix(arg, "savefrequency"))
     {
         sysdata.save_frequency = level;
         send_to_char("Ok.\r\n", ch);
@@ -5065,9 +5065,9 @@ void do_hell(CHAR_DATA* ch, const char* argument)
         return;
     }
     argument                     = one_argument(argument, arg);
-    if (!*arg || !str_prefix(arg, "hours"))
+    if (!*arg || !prefix(arg, "hours"))
         h_d                      = TRUE;
-    else if (str_prefix(arg, "days"))
+    else if (prefix(arg, "days"))
     {
         send_to_char("Is that value in hours or days?\r\n", ch);
         return;

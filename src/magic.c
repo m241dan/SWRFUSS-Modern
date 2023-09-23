@@ -68,7 +68,7 @@ int ch_slookup(CHAR_DATA* ch, const char* name)
         if (!skill_table[sn]->name)
             break;
         if (ch->pcdata->learned[sn] > 0
-            && LOWER(name[0]) == LOWER(skill_table[sn]->name[0]) && !str_prefix(name, skill_table[sn]->name))
+            && LOWER(name[0]) == LOWER(skill_table[sn]->name[0]) && !prefix(name, skill_table[sn]->name))
             return sn;
     }
 
@@ -86,7 +86,7 @@ int herb_lookup(const char* name)
     {
         if (!herb_table[sn] || !herb_table[sn]->name)
             return -1;
-        if (LOWER(name[0]) == LOWER(herb_table[sn]->name[0]) && !str_prefix(name, herb_table[sn]->name))
+        if (LOWER(name[0]) == LOWER(herb_table[sn]->name[0]) && !prefix(name, herb_table[sn]->name))
             return sn;
     }
     return -1;
@@ -117,7 +117,7 @@ int skill_lookup(const char* name)
                         if (!skill_table[sn] || !skill_table[sn]->name)
                             return -1;
                         if (LOWER(name[0]) == LOWER(skill_table[sn]->name[0]) &&
-                            !str_prefix(name, skill_table[sn]->name))
+                            !prefix(name, skill_table[sn]->name))
                             return sn;
                     }
                     return -1;
@@ -153,7 +153,7 @@ int bsearch_skill(const char* name, int first, int top)
         sn = (first + top) >> 1;
         if (!IS_VALID_SN(sn))
             return -1;
-        if (LOWER(name[0]) == LOWER(skill_table[sn]->name[0]) && !str_prefix(name, skill_table[sn]->name))
+        if (LOWER(name[0]) == LOWER(skill_table[sn]->name[0]) && !prefix(name, skill_table[sn]->name))
             return sn;
         if (first >= top)
             return -1;
@@ -203,7 +203,7 @@ int ch_bsearch_skill(CHAR_DATA* ch, const char* name, int first, int top)
         sn = (first + top) >> 1;
 
         if (LOWER(name[0]) == LOWER(skill_table[sn]->name[0])
-            && !str_prefix(name, skill_table[sn]->name) && ch->pcdata->learned[sn] > 0)
+            && !prefix(name, skill_table[sn]->name) && ch->pcdata->learned[sn] > 0)
             return sn;
         if (first >= top)
             return -1;

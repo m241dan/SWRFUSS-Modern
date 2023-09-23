@@ -165,7 +165,7 @@ bool check_skill(CHAR_DATA* ch, const char* command, const char* argument)
         sn = (first + top) >> 1;
 
         if (LOWER(command[0]) == LOWER(skill_table[sn]->name[0])
-            && !str_prefix(command, skill_table[sn]->name)
+            && !prefix(command, skill_table[sn]->name)
             && (skill_table[sn]->skill_fun || skill_table[sn]->spell_fun != spell_null)
             && (IS_NPC(ch) || (ch->pcdata->learned[sn] > 0)))
             break;
@@ -779,7 +779,7 @@ void do_sset(CHAR_DATA* ch, const char* argument)
             SPELL_FUN* spellfun;
             DO_FUN   * dofun;
 
-            if (!str_prefix("do_", argument) && (dofun = skill_function(argument)) != skill_notfound)
+            if (!prefix("do_", argument) && (dofun = skill_function(argument)) != skill_notfound)
             {
                 skill->skill_fun = dofun;
                 skill->spell_fun = nullptr;

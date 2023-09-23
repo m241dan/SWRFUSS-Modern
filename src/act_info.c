@@ -3012,7 +3012,7 @@ void do_commands(CHAR_DATA* ch, const char* argument)
             for (command = command_hash[hash]; command; command = command->next)
                 if (command->level < LEVEL_HERO
                     && command->level <= get_trust(ch)
-                    && !str_prefix(argument, command->name) && (command->name[0] != 'm' && command->name[1] != 'p'))
+                    && !prefix(argument, command->name) && (command->name[0] != 'm' && command->name[1] != 'p'))
                 {
                     pager_printf(ch, "%-12s", command->name);
                     found = TRUE;
@@ -3395,37 +3395,37 @@ void do_config(CHAR_DATA* ch, const char* argument)
             return;
         }
 
-        if (!str_prefix(arg + 1, "autoexit"))
+        if (!prefix(arg + 1, "autoexit"))
             bit = PLR_AUTOEXIT;
-        else if (!str_prefix(arg + 1, "autoloot"))
+        else if (!prefix(arg + 1, "autoloot"))
             bit = PLR_AUTOLOOT;
-        else if (!str_prefix(arg + 1, "autosac"))
+        else if (!prefix(arg + 1, "autosac"))
             bit = PLR_AUTOSAC;
-        else if (!str_prefix(arg + 1, "autocred"))
+        else if (!prefix(arg + 1, "autocred"))
             bit = PLR_AUTOGOLD;
-        else if (!str_prefix(arg + 1, "blank"))
+        else if (!prefix(arg + 1, "blank"))
             bit = PLR_BLANK;
-        else if (!str_prefix(arg + 1, "brief"))
+        else if (!prefix(arg + 1, "brief"))
             bit = PLR_BRIEF;
-        else if (!str_prefix(arg + 1, "combine"))
+        else if (!prefix(arg + 1, "combine"))
             bit = PLR_COMBINE;
-        else if (!str_prefix(arg + 1, "prompt"))
+        else if (!prefix(arg + 1, "prompt"))
             bit = PLR_PROMPT;
-        else if (!str_prefix(arg + 1, "telnetga"))
+        else if (!prefix(arg + 1, "telnetga"))
             bit = PLR_TELNET_GA;
-        else if (!str_prefix(arg + 1, "ansi"))
+        else if (!prefix(arg + 1, "ansi"))
             bit = PLR_ANSI;
-        else if (!str_prefix(arg + 1, "sound"))
+        else if (!prefix(arg + 1, "sound"))
             bit = PLR_SOUND;
-        else if (!str_prefix(arg + 1, "flee"))
+        else if (!prefix(arg + 1, "flee"))
             bit = PLR_FLEE;
-        else if (!str_prefix(arg + 1, "nice"))
+        else if (!prefix(arg + 1, "nice"))
             bit = PLR_NICE;
-        else if (!str_prefix(arg + 1, "shovedrag"))
+        else if (!prefix(arg + 1, "shovedrag"))
             bit = PLR_SHOVEDRAG;
-        else if (IS_IMMORTAL(ch) && !str_prefix(arg + 1, "vnum"))
+        else if (IS_IMMORTAL(ch) && !prefix(arg + 1, "vnum"))
             bit = PLR_ROOMVNUM;
-        else if (IS_IMMORTAL(ch) && !str_prefix(arg + 1, "map"))
+        else if (IS_IMMORTAL(ch) && !prefix(arg + 1, "map"))
             bit = PLR_AUTOMAP;   /* maps */
 
         if (bit)
@@ -3440,17 +3440,17 @@ void do_config(CHAR_DATA* ch, const char* argument)
         }
         else
         {
-            if (!str_prefix(arg + 1, "norecall"))
+            if (!prefix(arg + 1, "norecall"))
                 bit = PCFLAG_NORECALL;
-            else if (!str_prefix(arg + 1, "nointro"))
+            else if (!prefix(arg + 1, "nointro"))
                 bit = PCFLAG_NOINTRO;
-            else if (!str_prefix(arg + 1, "nosummon"))
+            else if (!prefix(arg + 1, "nosummon"))
                 bit = PCFLAG_NOSUMMON;
-            else if (!str_prefix(arg + 1, "gag"))
+            else if (!prefix(arg + 1, "gag"))
                 bit = PCFLAG_GAG;
-            else if (!str_prefix(arg + 1, "pager"))
+            else if (!prefix(arg + 1, "pager"))
                 bit = PCFLAG_PAGERON;
-            else if (!str_prefix(arg + 1, "roomflags") && (IS_IMMORTAL(ch)))
+            else if (!prefix(arg + 1, "roomflags") && (IS_IMMORTAL(ch)))
                 bit = PCFLAG_ROOM;
             else
             {

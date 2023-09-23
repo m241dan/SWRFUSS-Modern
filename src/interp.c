@@ -198,7 +198,7 @@ void interpret(CHAR_DATA* ch, const char* argument)
          */
         trust    = get_trust(ch);
         for (cmd = command_hash[LOWER(command[0]) % 126]; cmd; cmd = cmd->next)
-            if (!str_prefix(command, cmd->name)
+            if (!prefix(command, cmd->name)
                 && (
                     cmd->level <= trust
                     || (
@@ -376,7 +376,7 @@ CMDTYPE* find_command(const char* command)
     hash = LOWER(command[0]) % 126;
 
     for (cmd = command_hash[hash]; cmd; cmd = cmd->next)
-        if (!str_prefix(command, cmd->name))
+        if (!prefix(command, cmd->name))
             return cmd;
 
     return nullptr;
@@ -395,7 +395,7 @@ SOCIALTYPE* find_social(const char* command)
         hash = (c - 'a') + 1;
 
     for (social = social_index[hash]; social; social = social->next)
-        if (!str_prefix(command, social->name))
+        if (!prefix(command, social->name))
             return social;
 
     return nullptr;

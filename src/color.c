@@ -452,7 +452,7 @@ void do_color(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_prefix(arg, "_reset_"))
+    if (!prefix(arg, "_reset_"))
     {
         reset_colors(ch);
         send_to_pager("All color types reset to default colors.\r\n", ch);
@@ -467,7 +467,7 @@ void do_color(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (!str_prefix(arg, "_all_"))
+    if (!prefix(arg, "_all_"))
     {
         dMatch = TRUE;
         count  = -1;
@@ -493,7 +493,7 @@ void do_color(CHAR_DATA* ch, const char* argument)
          */
         for (count = 0; count < MAX_COLORS; count++)
         {
-            if (!str_prefix(arg, pc_displays[count]))
+            if (!prefix(arg, pc_displays[count]))
             {
                 dMatch = TRUE;
                 break;

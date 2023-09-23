@@ -1249,7 +1249,7 @@ SPACE_DATA* starsystem_from_name(const char* name)
             return starsystem;
 
     for (starsystem = first_starsystem; starsystem; starsystem = starsystem->next)
-        if (!str_prefix(name, starsystem->name))
+        if (!prefix(name, starsystem->name))
             return starsystem;
 
     return nullptr;
@@ -5054,14 +5054,14 @@ void do_land(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (str_prefix(argument, ship->starsystem->location1a) &&
-        str_prefix(argument, ship->starsystem->location2a) &&
-        str_prefix(argument, ship->starsystem->location3a) &&
-        str_prefix(argument, ship->starsystem->location1b) &&
-        str_prefix(argument, ship->starsystem->location2b) &&
-        str_prefix(argument, ship->starsystem->location3b) &&
-        str_prefix(argument, ship->starsystem->location1c) &&
-        str_prefix(argument, ship->starsystem->location2c) && str_prefix(argument, ship->starsystem->location3c))
+    if (prefix(argument, ship->starsystem->location1a) &&
+        prefix(argument, ship->starsystem->location2a) &&
+        prefix(argument, ship->starsystem->location3a) &&
+        prefix(argument, ship->starsystem->location1b) &&
+        prefix(argument, ship->starsystem->location2b) &&
+        prefix(argument, ship->starsystem->location3b) &&
+        prefix(argument, ship->starsystem->location1c) &&
+        prefix(argument, ship->starsystem->location2c) && prefix(argument, ship->starsystem->location3c))
     {
         target = get_ship_here(argument, ship->starsystem);
         if (target == nullptr)
@@ -5099,22 +5099,22 @@ void do_land(CHAR_DATA* ch, const char* argument)
     }
     else
     {
-        if (!str_prefix(argument, ship->starsystem->location3a) ||
-            !str_prefix(argument, ship->starsystem->location3b) || !str_prefix(argument, ship->starsystem->location3c))
+        if (!prefix(argument, ship->starsystem->location3a) ||
+            !prefix(argument, ship->starsystem->location3b) || !prefix(argument, ship->starsystem->location3c))
         {
             vx = ship->starsystem->p3x;
             vy = ship->starsystem->p3y;
             vz = ship->starsystem->p3z;
         }
-        if (!str_prefix(argument, ship->starsystem->location2a) ||
-            !str_prefix(argument, ship->starsystem->location2b) || !str_prefix(argument, ship->starsystem->location2c))
+        if (!prefix(argument, ship->starsystem->location2a) ||
+            !prefix(argument, ship->starsystem->location2b) || !prefix(argument, ship->starsystem->location2c))
         {
             vx = ship->starsystem->p2x;
             vy = ship->starsystem->p2y;
             vz = ship->starsystem->p2z;
         }
-        if (!str_prefix(argument, ship->starsystem->location1a) ||
-            !str_prefix(argument, ship->starsystem->location1b) || !str_prefix(argument, ship->starsystem->location1c))
+        if (!prefix(argument, ship->starsystem->location1a) ||
+            !prefix(argument, ship->starsystem->location1b) || !prefix(argument, ship->starsystem->location1c))
         {
             vx = ship->starsystem->p1x;
             vy = ship->starsystem->p1y;
@@ -5167,23 +5167,23 @@ void landship(SHIP_DATA* ship, const char* arg)
     char     buf[MAX_STRING_LENGTH];
     int      destination = 0;
 
-    if (!str_prefix(arg, ship->starsystem->location3a))
+    if (!prefix(arg, ship->starsystem->location3a))
         destination = ship->starsystem->doc3a;
-    if (!str_prefix(arg, ship->starsystem->location3b))
+    if (!prefix(arg, ship->starsystem->location3b))
         destination = ship->starsystem->doc3b;
-    if (!str_prefix(arg, ship->starsystem->location3c))
+    if (!prefix(arg, ship->starsystem->location3c))
         destination = ship->starsystem->doc3c;
-    if (!str_prefix(arg, ship->starsystem->location2a))
+    if (!prefix(arg, ship->starsystem->location2a))
         destination = ship->starsystem->doc2a;
-    if (!str_prefix(arg, ship->starsystem->location2b))
+    if (!prefix(arg, ship->starsystem->location2b))
         destination = ship->starsystem->doc2b;
-    if (!str_prefix(arg, ship->starsystem->location2c))
+    if (!prefix(arg, ship->starsystem->location2c))
         destination = ship->starsystem->doc2c;
-    if (!str_prefix(arg, ship->starsystem->location1a))
+    if (!prefix(arg, ship->starsystem->location1a))
         destination = ship->starsystem->doc1a;
-    if (!str_prefix(arg, ship->starsystem->location1b))
+    if (!prefix(arg, ship->starsystem->location1b))
         destination = ship->starsystem->doc1b;
-    if (!str_prefix(arg, ship->starsystem->location1c))
+    if (!prefix(arg, ship->starsystem->location1c))
         destination = ship->starsystem->doc1c;
 
     target          = get_ship_here(arg, ship->starsystem);
@@ -6472,7 +6472,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
             + ch->pcdata->learned[gsn_spacecombat2] / 3 + ch->pcdata->learned[gsn_spacecombat3] / 3
         );
 
-    if (ch->in_room->vnum == ship->gunseat && !str_prefix(argument, "lasers"))
+    if (ch->in_room->vnum == ship->gunseat && !prefix(argument, "lasers"))
     {
 
         if (ship->statet0 == LASER_DAMAGED)
@@ -6553,7 +6553,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (ch->in_room->vnum == ship->gunseat && !str_prefix(argument, "missile"))
+    if (ch->in_room->vnum == ship->gunseat && !prefix(argument, "missile"))
     {
         if (ship->missilestate == MISSILE_DAMAGED)
         {
@@ -6632,7 +6632,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
 
         return;
     }
-    if (ch->in_room->vnum == ship->gunseat && !str_prefix(argument, "torpedo"))
+    if (ch->in_room->vnum == ship->gunseat && !prefix(argument, "torpedo"))
     {
         if (ship->missilestate == MISSILE_DAMAGED)
         {
@@ -6711,7 +6711,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (ch->in_room->vnum == ship->gunseat && !str_prefix(argument, "rocket"))
+    if (ch->in_room->vnum == ship->gunseat && !prefix(argument, "rocket"))
     {
         if (ship->missilestate == MISSILE_DAMAGED)
         {
@@ -6791,7 +6791,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (ch->in_room->vnum == ship->turret1 && !str_prefix(argument, "lasers"))
+    if (ch->in_room->vnum == ship->turret1 && !prefix(argument, "lasers"))
     {
         if (ship->statet1 == LASER_DAMAGED)
         {
@@ -6866,7 +6866,7 @@ void do_fire(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (ch->in_room->vnum == ship->turret2 && !str_prefix(argument, "lasers"))
+    if (ch->in_room->vnum == ship->turret2 && !prefix(argument, "lasers"))
     {
         if (ship->statet2 == LASER_DAMAGED)
         {

@@ -679,7 +679,7 @@ void new_descriptor(int new_desc)
 
     for (pban = first_ban; pban; pban = pban->next)
     {
-        if ((!str_prefix(pban->name, dnew->host) || !str_suffix(pban->name, dnew->host)) &&
+        if ((!prefix(pban->name, dnew->host) || !str_suffix(pban->name, dnew->host)) &&
             pban->level >= LEVEL_SUPREME)
         {
             write_to_descriptor(dnew, "Your site has been banned from this Mud.\r\n", 0);
@@ -1479,7 +1479,7 @@ void nanny_get_name(DESCRIPTOR_DATA* d, const char* orig_argument)
     for (pban = first_ban; pban; pban = pban->next)
     {
         if ((
-                !str_prefix(pban->name, d->host)
+                !prefix(pban->name, d->host)
                 || !str_suffix(pban->name, d->host)) && pban->level >= ch->top_level)
         {
             write_to_buffer(d, "Your site has been banned from this Mud.\r\n", 0);
@@ -1763,7 +1763,7 @@ void nanny_get_new_race(DESCRIPTOR_DATA* d, const char* argument)
 
     const auto race_iter = alg::find_if(race_table, [&](const race_type& race_info)
     {
-        return !str_prefix(arg, race_info.race_name);
+        return !prefix(arg, race_info.race_name);
     });
 
     if (race_iter != race_table.end())
@@ -1821,7 +1821,7 @@ void nanny_get_new_class(DESCRIPTOR_DATA* d, const char* argument)
 
     for (iClass = 0; iClass < MAX_ABILITY; iClass++)
     {
-        if (toupper(arg[0]) == toupper(ability_name[iClass][0]) && !str_prefix(arg, ability_name[iClass]))
+        if (toupper(arg[0]) == toupper(ability_name[iClass][0]) && !prefix(arg, ability_name[iClass]))
         {
             ch->main_ability = iClass;
             break;

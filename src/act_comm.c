@@ -2196,20 +2196,20 @@ void do_speak(CHAR_DATA* ch, const char* argument)
         send_to_char("Now speaking all languages.\r\n", ch);
         return;
     }
-    if (!str_prefix(arg, "common") && ch->race == RACE_WOOKIEE)
+    if (!prefix(arg, "common") && ch->race == RACE_WOOKIEE)
     {
         set_char_color(AT_SAY, ch);
         send_to_char("Wookiees cannot speak common even though some can understand it.\r\n", ch);
         return;
     }
-    if (!str_prefix(arg, "twilek") && ch->race != RACE_TWI_LEK)
+    if (!prefix(arg, "twilek") && ch->race != RACE_TWI_LEK)
     {
         set_char_color(AT_SAY, ch);
         send_to_char("To speak the Twi'lek language requires body parts that you don't have.\r\n", ch);
         return;
     }
     for (langs = 0; lang_array[langs] != LANG_UNKNOWN; langs++)
-        if (!str_prefix(arg, lang_names[langs]))
+        if (!prefix(arg, lang_names[langs]))
             if (knows_language(ch, lang_array[langs], ch))
             {
                 if (lang_array[langs] == LANG_CLAN && (IS_NPC(ch) || !ch->pcdata->clan))
@@ -2230,7 +2230,7 @@ void do_languages(CHAR_DATA* ch, const char* argument)
     int  sn;
 
     argument = one_argument(argument, arg);
-    if (arg[0] != '\0' && !str_prefix(arg, "learn") && !IS_IMMORTAL(ch) && !IS_NPC(ch))
+    if (arg[0] != '\0' && !prefix(arg, "learn") && !IS_IMMORTAL(ch) && !IS_NPC(ch))
     {
         char     arg2[MAX_INPUT_LENGTH];
         int      prct;
@@ -2245,7 +2245,7 @@ void do_languages(CHAR_DATA* ch, const char* argument)
         {
             if (lang_array[lang] == LANG_CLAN)
                 continue;
-            if (!str_prefix(arg2, lang_names[lang]))
+            if (!prefix(arg2, lang_names[lang]))
                 break;
         }
         if (lang_array[lang] == LANG_UNKNOWN)

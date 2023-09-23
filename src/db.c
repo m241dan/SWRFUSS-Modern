@@ -3624,7 +3624,7 @@ bool compare(std::string_view astr, std::string_view bstr)
         return true;
     }
 
-    return str_prefix(astr, bstr);
+    return prefix(astr, bstr);
 }
 
 /*
@@ -3632,7 +3632,7 @@ bool compare(std::string_view astr, std::string_view bstr)
  * Return TRUE if astr not a prefix of bstr
  *   (compatibility with historical functions).
  */
-bool str_prefix(std::string_view astr, std::string_view bstr)
+bool prefix(std::string_view astr, std::string_view bstr)
 {
     using namespace ops;
 
@@ -3669,7 +3669,7 @@ bool str_infix(const char* astr, const char* bstr)
     sstr2 = strlen(bstr);
 
     for (ichar = 0; ichar <= sstr2 - sstr1; ichar++)
-        if (c0 == LOWER(bstr[ichar]) && !str_prefix(astr, bstr + ichar))
+        if (c0 == LOWER(bstr[ichar]) && !prefix(astr, bstr + ichar))
             return FALSE;
 
     return TRUE;

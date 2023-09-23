@@ -308,7 +308,7 @@ void do_mpjunk(CHAR_DATA* ch, const char* argument)
         return;
     }
 
-    if (compare(arg, "all") && str_prefix("all.", arg))
+    if (compare(arg, "all") && prefix("all.", arg))
     {
         if ((obj = get_obj_wear(ch, arg)) != nullptr)
         {

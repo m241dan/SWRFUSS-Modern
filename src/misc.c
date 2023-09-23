@@ -924,7 +924,7 @@ void do_fill(CHAR_DATA* ch, const char* argument)
 
     if (arg2[0] != '\0')
     {
-        if (dest_item == ITEM_CONTAINER && (!compare(arg2, "all") || !str_prefix("all.", arg2)))
+        if (dest_item == ITEM_CONTAINER && (!compare(arg2, "all") || !prefix("all.", arg2)))
         {
             all    = TRUE;
             source = nullptr;
@@ -2934,7 +2934,7 @@ void do_bank(CHAR_DATA* ch, const char* argument)
     if (arg2[0] != '\0')
         amount = atoi(arg2);
 
-    if (!str_prefix(arg1, "deposit"))
+    if (!prefix(arg1, "deposit"))
     {
         if (amount <= 0)
         {
@@ -2955,7 +2955,7 @@ void do_bank(CHAR_DATA* ch, const char* argument)
         ch_printf(ch, "You deposit %ld credits into your account.\r\n", amount);
         return;
     }
-    else if (!str_prefix(arg1, "withdraw"))
+    else if (!prefix(arg1, "withdraw"))
     {
         if (amount <= 0)
         {
@@ -2977,7 +2977,7 @@ void do_bank(CHAR_DATA* ch, const char* argument)
         return;
 
     }
-    else if (!str_prefix(arg1, "balance"))
+    else if (!prefix(arg1, "balance"))
     {
         ch_printf(ch, "You have %ld credits in your account.\r\n", ch->pcdata->bank);
         return;
