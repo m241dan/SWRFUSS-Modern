@@ -3616,31 +3616,22 @@ const char* show_tilde(const char* str)
  * Return TRUE if different
  *   (compatibility with historical functions).
  */
-bool str_cmp(const char* astr, const char* bstr)
+bool str_cmp(std::string_view astr, std::string_view bstr)
 {
-    if (!astr)
+    using namespace ops;
+
+    if (astr.length() != bstr.length())
     {
-        bug("%s: null astr.", __func__);
-        if (bstr)
-            fprintf(stderr, "str_cmp: astr: (null)  bstr: %s\n", bstr);
-        return TRUE;
+        return true;
     }
 
-    if (!bstr)
-    {
-        bug("%s: null bstr.", __func__);
-        if (astr)
-            fprintf(stderr, "str_cmp: astr: %s  bstr: (null)\n", astr);
-        return TRUE;
-    }
-
-    for (; *astr || *bstr; astr++, bstr++)
-    {
-        if (LOWER(*astr) != LOWER(*bstr))
-            return TRUE;
-    }
-
-    return FALSE;
+    return !alg::all_true(
+        view::zip_transform(
+            _eq_,
+            astr | view::lowercase,
+            bstr | view::lowercase
+        )
+    );
 }
 
 /*
