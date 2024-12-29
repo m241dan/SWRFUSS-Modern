@@ -11,4 +11,4 @@ add_executable(swreality ${c_sources})
 
 target_compile_options(swreality PRIVATE -std=c++23 -fpermissive)
 
-target_link_libraries(swreality PRIVATE ZLIB::ZLIB)
+target_link_libraries(swreality PRIVATE ZLIB::ZLIB ksd::ksd)
