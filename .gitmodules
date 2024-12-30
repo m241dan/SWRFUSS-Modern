@@ -1,0 +1,3 @@
+[submodule "deps/ksd"]
+	path = deps/ksd
+	url = https://github.com/m241dan/ksd.git

@@ -29,7 +29,5 @@ CPMAddPackage(
     URL https://github.com/jimmy-park/zlib-cmake/archive/main.tar.gz
 )
 
-# Add ksd
-CPMAddPackage("gh:m241dan/ksd@0.1.0")
-
+add_subdirectory(deps/ksd)
 add_subdirectory(src)
